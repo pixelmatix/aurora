@@ -185,8 +185,8 @@ Many thanks to all of the fantastic hardware and open source software libraries 
 * [Time Library] by Paul Stoffregen
 * [DS1307RTC Library]
 
-[Aurora.hex]:https://bitbucket.org/Pup05/aurora/src/ba3488b0b68201927cfd7874f54dc417c0c9b508/releases/Aurora.hex?at=master
-[Aurora MicroSD Card]:https://bitbucket.org/Pup05/aurora/src/ba3488b0b682/sd/?at=master 
+[Aurora.hex]:https://github.com/pup05/aurora/blob/master/bin/Aurora.hex
+[Aurora MicroSD Card]:https://github.com/pup05/aurora/tree/master/sd 
 [Teensy Loader Application]:https://www.pjrc.com/teensy/loader.html
 [Teensyduino Software]:https://www.pjrc.com/teensy/td_download.html
 [Arduino Software]:http://www.arduino.cc/en/Main/Software
