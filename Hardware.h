@@ -21,4 +21,4 @@
  */
 
 #define SD_CARD_CS 15
-#define IR_RECV_PIN 0
+#define IR_RECV_PIN 18
