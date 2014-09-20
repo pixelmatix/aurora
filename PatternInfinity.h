@@ -20,28 +20,35 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef PatternInfinity_H
-
-class PatternInfinity : public Drawable {
-public:
-    String Drawable::name = "Infinity";
-    virtual unsigned int drawFrame();
-};
-
-unsigned int PatternInfinity::drawFrame() {
-    effects.DimAll(250);
-
-    byte time = 0;
-    effects.MoveOscillators();
-    int maxY = MATRIX_HEIGHT / 2;
-    int x = 31 - effects.p[1];
-    int y = map8(sin8(effects.osci[3]), 8, 23);
-    byte hue = sin8(effects.osci[5]);
-    effects.Pixel(x, y, hue);
+    #ifndef PatternInfinity_H
     
-    time++;
+    class PatternInfinity : public Drawable {
+    public:
+        unsigned int drawFrame() {
+            // dim all pixels on the display slightly 
+            // to 250/255 (98%) of their current brightness
+            effects.DimAll(250);
 
-    return 15;
-}
+            // the Effects class has some sample oscillators
+            // that move from 0 to 255 at different speeds
+            effects.MoveOscillators();
+            
+            // the horizontal position of the head of the infinity sign
+            // oscillates from 0 to the maximum horizontal and back
+            int x = (MATRIX_WIDTH - 1) - effects.p[1];
 
-#endif
+            // the vertical position of the head oscillates
+            // from 8 to 23 and back (hard-coded for a 32x32 matrix)
+            int y = map8(sin8(effects.osci[3]), 8, 23);
+            
+            // the hue oscillates from 0 to 255, overflowing back to 0
+            byte hue = sin8(effects.osci[5]);
+    
+            // draw a pixel at x,y using a color from the current palette
+            effects.Pixel(x, y, hue);
+    
+            return 15;
+        }
+    };
+    
+    #endif
