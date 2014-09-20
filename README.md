@@ -41,7 +41,7 @@ Micro SD Card
 
 Aurora makes use of an optional MicroSD card to display animated GIF images and to store user preferences and settings.  Aurora will still work fine if no MicroSD card is inserted into the slot, but obviously no animated GIFs will be displayed, and changes to any settings will not be retained if the display loses power.
 
-Aurora includes and makes use of several optional files and example animated GIF images which can be downloaded and copied into the root of your MicroSD card:
+Aurora includes and makes use of several optional files and example animated GIF images which can be downloaded, unzipped, and copied into the root of your MicroSD card:
 
 [Aurora MicroSD Card]
 
@@ -185,8 +185,8 @@ Many thanks to all of the fantastic hardware and open source software libraries 
 * [Time Library] by Paul Stoffregen
 * [DS1307RTC Library]
 
-[Aurora.hex]:https://github.com/pup05/aurora/blob/master/bin/Aurora.hex
-[Aurora MicroSD Card]:https://github.com/pup05/aurora/tree/master/sd 
+[Aurora.hex]:https://raw.githubusercontent.com/pup05/aurora/master/bin/Aurora.hex
+[Aurora MicroSD Card]:https://github.com/pup05/aurora/blob/master/sd/sd.zip 
 [Teensy Loader Application]:https://www.pjrc.com/teensy/loader.html
 [Teensyduino Software]:https://www.pjrc.com/teensy/td_download.html
 [Arduino Software]:http://www.arduino.cc/en/Main/Software
