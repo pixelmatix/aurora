@@ -200,8 +200,14 @@ A huge thank you to all of the projects and open source software that are used i
 * [LED Effects] by Robert Atkins
 * [The Nature of Code] by [Daniel Shiffman]
 
+[Aurora Source Code]:https://github.com/pup05/aurora/archive/master.zip
+[Sparkfun Infrared Remote Control]:https://www.sparkfun.com/products/11759
+[Sparkfun Infrared Remote Image]:https://cdn.sparkfun.com/r/92-92/assets/parts/7/9/8/6/11759-01.jpg
+[Aurora.hex]:https://github.com/pup05/aurora/raw/master/bin/Aurora.hex
 [Aurora MicroSD Card]:https://github.com/pup05/aurora/blob/master/sd/sd.zip?raw=true
 [Teensyduino Software]:https://www.pjrc.com/teensy/td_download.html
+[Installing Additional Arduino Libraries]:http://arduino.cc/en/Guide/Libraries
+[Teensy Loader Application]:https://www.pjrc.com/teensy/loader.html
 [Arduino Software]:http://www.arduino.cc/en/Main/Software
 [SmartMatrix Library]:https://github.com/pixelmatix/SmartMatrix
 [SmartMatrix SD Shield]:http://docs.pixelmatix.com/SmartMatrix/shield-sd.html
@@ -211,6 +217,8 @@ A huge thank you to all of the projects and open source software that are used i
 [Time Library]:https://github.com/PaulStoffregen/Time
 [DS1307RTC Library]:https://www.pjrc.com/teensy/td_libs_DS1307RTC.html
 [Teensy v3.1]:https://www.pjrc.com/teensy/index.html
+[Power Symbol]:http://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/IEC5009_Standby_Symbol.svg/16px-IEC5009_Standby_Symbol.svg.png
+[Kill A Watt]:http://www.p3international.com/products/p4400.html
 [Light Appliance]:https://github.com/CraigLindley/LightAppliance
 [Funky Clouds]:https://gist.github.com/anonymous/876f908333cd95315c35
 [Stefan Petrick]:http://www.stefan-petrick.de/wordpress_beta
