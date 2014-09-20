@@ -200,6 +200,10 @@ A huge thank you to all of the projects and open source software that are used i
 * [LED Effects] by Robert Atkins
 * [The Nature of Code] by [Daniel Shiffman]
 
+Thanks to these fine game companies for allowing us to use and distribute their pixel art to showcase Aurora!
+* [Tiny Barbarian] by [StarQuail Games]
+* [Chasm] by [Discord Games]
+
 [Aurora Source Code]:https://github.com/pup05/aurora/archive/master.zip
 [Sparkfun Infrared Remote Control]:https://www.sparkfun.com/products/11759
 [Sparkfun Infrared Remote Image]:https://cdn.sparkfun.com/r/92-92/assets/parts/7/9/8/6/11759-01.jpg
@@ -219,6 +223,7 @@ A huge thank you to all of the projects and open source software that are used i
 [Teensy v3.1]:https://www.pjrc.com/teensy/index.html
 [Power Symbol]:http://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/IEC5009_Standby_Symbol.svg/16px-IEC5009_Standby_Symbol.svg.png
 [Kill A Watt]:http://www.p3international.com/products/p4400.html
+
 [Light Appliance]:https://github.com/CraigLindley/LightAppliance
 [Funky Clouds]:https://gist.github.com/anonymous/876f908333cd95315c35
 [Stefan Petrick]:http://www.stefan-petrick.de/wordpress_beta
@@ -228,3 +233,8 @@ A huge thank you to all of the projects and open source software that are used i
 [LED Effects]:https://bitbucket.org/ratkins/ledeffects
 [The Nature of Code]:http://natureofcode.com/
 [Daniel Shiffman]:http://shiffman.net/
+
+[Tiny Barbarian]:http://www.tinybarbarian.com/
+[StarQuail Games]:http://www.starquail.com/
+[Chasm]:http://chasmgame.com/
+[Discord Games]:http://discordgames.com/
