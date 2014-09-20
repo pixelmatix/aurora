@@ -196,6 +196,7 @@ A huge thank you to all of the projects and open source software that are used i
 * [Funky Clouds] by [Stefan Petrick]
 * [Rainbow Smoke] by [Jozsef Fejes]
 * [LED Effects] by Robert Atkins
+* [The Nature of Code] by [Daniel Shiffman]
 
 [Aurora Source Code]:https://github.com/pup05/aurora
 [Aurora.hex]:https://raw.githubusercontent.com/pup05/aurora/master/bin/Aurora.hex
@@ -225,3 +226,5 @@ A huge thank you to all of the projects and open source software that are used i
 [Rainbow Smoke Codegolf]:http://codegolf.stackexchange.com/a/22326
 [Jozsef Fejes]:http://joco.name/
 [LED Effects]:https://bitbucket.org/ratkins/ledeffects
+[The Nature of Code]:http://natureofcode.com/
+[Daniel Shiffman]:http://shiffman.net/
