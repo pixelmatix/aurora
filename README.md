@@ -181,7 +181,7 @@ Acknowledgements
 
 Many thanks to all of the fantastic hardware and open source software libraries used in Aurora!
 
-* [SmartMatrix] by Louis Beaudoin
+* [SmartMatrix SD Shield] by Louis Beaudoin
 * [SmartMatrix Library] by Louis Beaudoin
 * [FastLED v2.1 Library] by Daniel Garcia and Mark Kriegsman
 * [IR Remote Library] by Ken Shirriff
@@ -190,23 +190,20 @@ Many thanks to all of the fantastic hardware and open source software libraries 
 * [Teensyduino Software] by Paul Stoffregen
 * [Time Library] by Paul Stoffregen
 * [DS1307RTC Library]
+* [Teensyduino Software]
+* [Arduino Software]
  
 A huge thank you to all of the projects and open source software that are used in and inspired Aurora!
 * [Light Appliance] by Craig Lindley
 * [Funky Clouds] by [Stefan Petrick]
 * [Rainbow Smoke] by [Jozsef Fejes]
 * [LED Effects] by Robert Atkins
+* [The Nature of Code] by [Daniel Shiffman]
 
-[Aurora Source Code]:https://github.com/pup05/aurora
-[Aurora.hex]:https://raw.githubusercontent.com/pup05/aurora/master/bin/Aurora.hex
-[Aurora MicroSD Card]:https://github.com/pup05/aurora/raw/master/sd/sd.zip 
-[Teensy Loader Application]:https://www.pjrc.com/teensy/loader.html
+[Aurora MicroSD Card]:https://github.com/pup05/aurora/blob/master/sd/sd.zip?raw=true
 [Teensyduino Software]:https://www.pjrc.com/teensy/td_download.html
 [Arduino Software]:http://www.arduino.cc/en/Main/Software
-[Installing Additional Arduino Libraries]:http://arduino.cc/en/Guide/Libraries
-[SmartMatrix]:http://docs.pixelmatix.com/SmartMatrix/
 [SmartMatrix Library]:https://github.com/pixelmatix/SmartMatrix
-[SmartMatrix Library Documentation]:http://docs.pixelmatix.com/SmartMatrix/library.html
 [SmartMatrix SD Shield]:http://docs.pixelmatix.com/SmartMatrix/shield-sd.html
 [FastLED v2.1 Library]:https://github.com/FastLED/FastLED/tree/FastLED2.1
 [IR Remote Library]:https://github.com/shirriff/Arduino-IRremote
@@ -215,13 +212,11 @@ A huge thank you to all of the projects and open source software that are used i
 [DS1307RTC Library]:https://www.pjrc.com/teensy/td_libs_DS1307RTC.html
 [Teensy v3.1]:https://www.pjrc.com/teensy/index.html
 [Light Appliance]:https://github.com/CraigLindley/LightAppliance
-[Sparkfun Infrared Remote Control]:https://www.sparkfun.com/products/11759
-[Sparkfun Infrared Remote Image]:https://cdn.sparkfun.com/r/92-92/assets/parts/7/9/8/6/11759-01.jpg
-[Power Symbol]:http://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/IEC5009_Standby_Symbol.svg/16px-IEC5009_Standby_Symbol.svg.png
-[Kill A Watt]:http://www.p3international.com/products/p4400.html
 [Funky Clouds]:https://gist.github.com/anonymous/876f908333cd95315c35
 [Stefan Petrick]:http://www.stefan-petrick.de/wordpress_beta
 [Rainbow Smoke]:http://rainbowsmoke.hu
 [Rainbow Smoke Codegolf]:http://codegolf.stackexchange.com/a/22326
 [Jozsef Fejes]:http://joco.name/
 [LED Effects]:https://bitbucket.org/ratkins/ledeffects
+[The Nature of Code]:http://natureofcode.com/
+[Daniel Shiffman]:http://shiffman.net/
