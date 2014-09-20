@@ -200,6 +200,7 @@ A huge thank you to all of the projects and open source software that are used i
 * [LED Effects] by Robert Atkins
 * [The Nature of Code] by [Daniel Shiffman]
 
+[Aurora MicroSD Card]:https://github.com/pup05/aurora/blob/master/sd/sd.zip?raw=true
 [Teensyduino Software]:https://www.pjrc.com/teensy/td_download.html
 [Arduino Software]:http://www.arduino.cc/en/Main/Software
 [SmartMatrix Library]:https://github.com/pixelmatix/SmartMatrix
