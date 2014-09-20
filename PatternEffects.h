@@ -1,0 +1,171 @@
+/*
+ * Aurora: https://github.com/pixelmatix/aurora
+ * Copyright (c) 2014 Jason Coon
+ *
+ * Portions of this code are adapted from "Funky Clouds" by Stefan Petrick: https://gist.github.com/anonymous/876f908333cd95315c35
+ * Copyright (c) 2014 Stefan Petrick
+ * http://www.stefan-petrick.de/wordpress_beta
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+#ifndef PatternEffects_H
+#define PatternEffects_H
+
+class PatternGhost : public Drawable {
+public:
+    unsigned int drawFrame() {
+        effects.HorizontalStream(125);
+
+        effects.MoveOscillators();
+
+        //if (random(255) < 120)
+        effects.Pixel((effects.p[2] + effects.p[0] + effects.p[1]) / 3, (effects.p[1] + effects.p[3] + effects.p[2]) / 3, effects.osci[3]);
+
+        effects.SpiralStream(MATRIX_WIDTH / 2 - 5, MATRIX_HEIGHT / 2 - 5, 5, 140);
+        effects.SpiralStream(MATRIX_WIDTH / 2 + 5, MATRIX_HEIGHT / 2 + 5, 5, 140);
+
+        return 15;
+    }
+};
+
+// 2 oscillators flying arround one ;)
+class PatternDots1 : public Drawable {
+private:
+    CRGB color1 = effects.HsvToRgb(1, 255, 255);
+    CRGB color2 = effects.HsvToRgb(1, 255, 150);
+
+public:
+    unsigned int drawFrame() {
+        effects.HorizontalStream(125);
+        effects.MoveOscillators();
+        //2 lissajous dots red
+        effects.leds[effects.XY(effects.p[0], effects.p[1])] = color1;
+        effects.leds[effects.XY(effects.p[2], effects.p[3])] = color2;
+        //average of the coordinates in yellow
+        effects.Pixel((effects.p[2] + effects.p[0]) / 2, (effects.p[1] + effects.p[3]) / 2, 50);
+
+        return 20;
+    }
+};
+
+// x and y based on 3 sine waves
+class PatternDots2 : public Drawable {
+public:
+    unsigned int drawFrame() {
+
+        effects.HorizontalStream(125);
+        effects.MoveOscillators();
+        effects.Pixel((effects.p[2] + effects.p[0] + effects.p[1]) / 3, (effects.p[1] + effects.p[3] + effects.p[2]) / 3, effects.osci[3]);
+
+        return 20;
+    }
+};
+
+// red, 4 spirals, one dot emitter
+// demonstrates SpiralStream and Caleidoscope
+// (psychedelic)
+class PatternSlowMandala : public Drawable {
+private:
+    int i = 0;
+    int j = 0;
+public:
+    unsigned int drawFrame() {
+        effects.leds[effects.XY(i, j)] = effects.ColorFromCurrentPalette(255); // COLOR_RED;
+        effects.SpiralStream(8, 8, 8, 127);
+        effects.Caleidoscope1();
+
+        i++;
+        if (i >= MATRIX_WIDTH / 2) {
+            i = 0;
+            j++;
+            if (j >= MATRIX_HEIGHT / 2) {
+                j = 0;
+            }
+        }
+
+        return 50;
+    }
+};
+
+class PatternSlowMandala2 : public Drawable {
+private:
+    int i = 1;
+    int j = 0;
+public:
+    // beautifull but periodic
+    unsigned int drawFrame() {
+        effects.MoveOscillators();
+        effects.Pixel(j, i, (effects.osci[0] + effects.osci[1]) / 2);
+        effects.SpiralStream(8, 8, 8, 127);
+        effects.Caleidoscope2();
+
+        i++;
+        if (i >= MATRIX_WIDTH / 2) {
+            i = 1;
+            j++;
+        }
+
+        if (j >= MATRIX_HEIGHT / 2) {
+            j = 0;
+        }
+
+        return 20;
+    }
+};
+
+class PatternSlowMandala3 : public Drawable {
+private:
+    int i = 0;
+    int j = 0;
+public:
+    unsigned int drawFrame() {
+        effects.MoveOscillators();
+        effects.Pixel(j, j, (effects.osci[0] + effects.osci[1]) / 2);
+        effects.SpiralStream(8, 8, 8, 127);
+        effects.Caleidoscope2();
+
+        i++;
+        if (i >= MATRIX_WIDTH / 2) {
+            i = 0;
+            j++;
+            if (j >= MATRIX_HEIGHT / 2) {
+                j = 0;
+            }
+        }
+
+        return 20;
+    }
+};
+
+class PatternMandala8 : public Drawable {
+public:
+    // 2 lissajou dots *2 *4
+    unsigned int drawFrame() {
+        effects.MoveOscillators();
+        effects.Pixel(effects.p[0], effects.p[1], effects.osci[2]);
+        effects.Pixel(effects.p[2], effects.p[3], effects.osci[3]);
+        effects.Caleidoscope5();
+        effects.Caleidoscope2();
+        effects.HorizontalStream(110);
+
+        return 0;
+    }
+};
+
+#endif

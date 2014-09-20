@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{B0C98204-D78F-4B9E-AAB9-0A8453BB16EC}</ProjectGuid>
+    <RootNamespace>Aurora</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>F:\Arduino\hardware\teensy\cores\teensy3;F:\Arduino\hardware\teensy\cores\teensy3\utils;F:\Arduino\hardware\teensy\cores\teensy3\avr;C:\Users\Jason\Documents\Arduino\libraries\SmartMatrix;C:\Users\Jason\Documents\Arduino\libraries\SmartMatrix\utility;C:\Users\Jason\Documents\Arduino\libraries\FastLED;C:\Users\Jason\Documents\Arduino\libraries\FastLED\utility;C:\Users\Jason\Documents\Arduino\libraries\IRremote;C:\Users\Jason\Documents\Arduino\libraries\IRremote\utility;C:\Users\Jason\Documents\Arduino\libraries\SdFat;C:\Users\Jason\Documents\Arduino\libraries\SdFat\utility;F:\Arduino\libraries\Wire;F:\Arduino\libraries\Wire\utility;F:\Arduino\libraries\Time;F:\Arduino\libraries\Time\utility;C:\Users\Jason\Documents\Arduino\libraries\DS1307RTC;C:\Users\Jason\Documents\Arduino\libraries\DS1307RTC\utility;F:\Arduino\libraries;F:\Arduino\hardware\teensy\libraries;F:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers;C:\Users\Jason\Documents\Arduino\libraries;F:\Arduino\hardware\tools\arm-none-eabi\arm-none-eabi\include;F:\Arduino\hardware\tools\arm-none-eabi\arm-none-eabi\include;F:\Arduino\hardware\tools\arm-none-eabi\lib\gcc\arm-none-eabi\4.7.2\include;F:\Arduino\hardware\tools\arm-none-eabi\lib\gcc\arm-none-eabi\4.7.2\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>C:\Users\Jason\Documents\Arduino\Aurora-mf-release\Visual Micro\.Aurora-mf-release.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
+      <PreprocessorDefinitions>ARDUINO=105;ARDUINO_MAIN;__AVR__;__avr__;F_CPU=48000000;USB_SERIAL;LAYOUT_US_ENGLISH;__cplusplus;__MK20DX256__;TEENSYDUINO=118;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>F:\Arduino\hardware\teensy\cores\teensy3;F:\Arduino\hardware\teensy\cores\teensy3\utils;F:\Arduino\hardware\teensy\cores\teensy3\avr;C:\Users\Jason\Documents\Arduino\libraries\SmartMatrix;C:\Users\Jason\Documents\Arduino\libraries\SmartMatrix\utility;C:\Users\Jason\Documents\Arduino\libraries\FastLED;C:\Users\Jason\Documents\Arduino\libraries\FastLED\utility;C:\Users\Jason\Documents\Arduino\libraries\IRremote;C:\Users\Jason\Documents\Arduino\libraries\IRremote\utility;C:\Users\Jason\Documents\Arduino\libraries\SdFat;C:\Users\Jason\Documents\Arduino\libraries\SdFat\utility;F:\Arduino\libraries\Wire;F:\Arduino\libraries\Wire\utility;F:\Arduino\libraries\Time;F:\Arduino\libraries\Time\utility;C:\Users\Jason\Documents\Arduino\libraries\DS1307RTC;C:\Users\Jason\Documents\Arduino\libraries\DS1307RTC\utility;F:\Arduino\libraries;F:\Arduino\hardware\teensy\libraries;F:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers;C:\Users\Jason\Documents\Arduino\libraries;F:\Arduino\hardware\tools\arm-none-eabi\arm-none-eabi\include;F:\Arduino\hardware\tools\arm-none-eabi\arm-none-eabi\include;F:\Arduino\hardware\tools\arm-none-eabi\lib\gcc\arm-none-eabi\4.7.2\include;F:\Arduino\hardware\tools\arm-none-eabi\lib\gcc\arm-none-eabi\4.7.2\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>C:\Users\Jason\Documents\Arduino\Aurora\Visual Micro\.Aurora.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <PreprocessorDefinitions>ARDUINO=105;ARDUINO_MAIN;__AVR__;__avr__;F_CPU=48000000;USB_SERIAL;LAYOUT_US_ENGLISH;__cplusplus;__MK20DX256__;TEENSYDUINO=118;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="Aurora.ino">
+      <FileType>CppCode</FileType>
+    </None>
+    <None Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Bitmaps.h" />
+    <ClInclude Include="Boid.h" />
+    <ClInclude Include="ClockDigitalShort.h" />
+    <ClInclude Include="ClockDisplay.h" />
+    <ClInclude Include="Drawable.h" />
+    <ClInclude Include="Effects.h" />
+    <ClInclude Include="GifPlayer.h" />
+    <ClInclude Include="Animations.h" />
+    <ClInclude Include="Hardware.h" />
+    <ClInclude Include="IrCodes.h" />
+    <ClInclude Include="Menu.h" />
+    <ClInclude Include="MenuItem.h" />
+    <ClInclude Include="PatternEffects.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="PatternFire.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="PatternFlock.h" />
+    <ClInclude Include="PatternInfinity.h" />
+    <ClInclude Include="PatternInvaders.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="PatternLife.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="PatternMaze.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="PatternPlasma.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="PatternPulse.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="PatternRainbowSmoke.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Patterns.h" />
+    <ClInclude Include="PatternSimplexNoise.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="PatternSnake.h" />
+    <ClInclude Include="PatternSpark.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="PatternSpiral.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Playlist.h" />
+    <ClInclude Include="Runnable.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Settings.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="SettingsBackgroundBrightness.h" />
+    <ClInclude Include="SettingsBrightness.h" />
+    <ClInclude Include="SettingsChooseClock.h" />
+    <ClInclude Include="SettingsClock24Hour.h" />
+    <ClInclude Include="SettingsClockColor.h" />
+    <ClInclude Include="SettingsMoveClock.h" />
+    <ClInclude Include="SettingsSetTime.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Vector.h" />
+    <ClInclude Include="Visual Micro\.Aurora-mf-release.vsarduino.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="LICENSE.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties arduino.upload.port="COM6" VM_ADDITIONAL_PREPROC="F_CPU=48000000;USB_SERIAL;LAYOUT_US_ENGLISH" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

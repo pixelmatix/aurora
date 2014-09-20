@@ -1,0 +1,7 @@
+Debug
+Visual Micro
+*.suo
+*.sdf
+*.opensdf
+*.vcxproj.filters
+*.vcxproj.user
