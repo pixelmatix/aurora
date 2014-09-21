@@ -200,9 +200,9 @@ A huge thank you to all of the projects and open source software that are used i
 * [LED Effects] by Robert Atkins
 * [The Nature of Code] by [Daniel Shiffman]
 
-Thanks to these fine game companies for allowing us to use and distribute their pixel art to showcase Aurora!
-* [Tiny Barbarian] by [StarQuail Games]
-* [Chasm] by [Discord Games]
+Thanks to these fine game companies for allowing us to use and distribute their pixel art to showcase Aurora!  
+![Tiny Barbarian](https://github.com/pixelmatix/aurora/blob/master/sd/gifs/TinyFlex.gif) [Tiny Barbarian] by [StarQuail Games]  
+![Chasm](https://github.com/pixelmatix/aurora/blob/master/sd/gifs/ChasmDaltynCrouch.gif) [Chasm] by [Discord Games]
 
 [Aurora Source Code]:https://github.com/pixelmatix/aurora/archive/master.zip
 [Sparkfun Infrared Remote Control]:https://www.sparkfun.com/products/11759
