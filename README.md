@@ -78,25 +78,25 @@ Aurora utilizes the [Sparkfun Infrared Remote Control]
 
 Button functions:
 
-* Power ![Power Symbol]
+* ![Power Symbol] Power
     * Press to turn on the display.
     * Press to toggle through brightness presets:
         * Off, 1%, 25%, 50%, 75%, 100%
     * Hold to turn off the display without changing the brightness.
     * Unless unplugged, the display is never completely powered off. It enters a low-power state, where it uses
        just enough power to poll the infrared sensor.
-* Up ^
+* **^** Up
     * Move to the previous menu item.
-* Down v
+* **v** Down
     * Move to the next menu item.
-* Left <
+* **<** Left
     * Switch to the previous content (Pattern or Animation).
-* Right >
+* **>** Right
     * Switch to the next content (Pattern or Animation).
-* Select O
+* **O** Select
     * Selects the currently displayed content, hiding the main menu.
     * Returns to the main menu from displayed content.
-* A
+* **A**
     * Press the A button to toggle through playback modes:
         * Pause
             * Stay on the current content until the left or right button is pressed.
@@ -104,10 +104,10 @@ Button functions:
             * Automatically switches to the next content after a short time.
         * Random
             * Automatically switches to a random content after a short time.
-* B
+* **B**
     * Switch to the next color palette in Pattern mode.
     * Most, but not all Patterns support multiple color palettes such as Rainbow, Fire, Ice, Forest, etc.
-* C
+* **C**
     * Shows and hides the clock display when content is selected and the main menu is hidden.
 
 Aurora Menu
@@ -204,11 +204,11 @@ Thanks to these fine game companies for allowing us to use and distribute their 
 * [Tiny Barbarian] by [StarQuail Games]
 * [Chasm] by [Discord Games]
 
-[Aurora Source Code]:https://github.com/pup05/aurora/archive/master.zip
+[Aurora Source Code]:https://github.com/pixelmatix/aurora/archive/master.zip
 [Sparkfun Infrared Remote Control]:https://www.sparkfun.com/products/11759
 [Sparkfun Infrared Remote Image]:https://cdn.sparkfun.com/r/92-92/assets/parts/7/9/8/6/11759-01.jpg
-[Aurora.hex]:https://github.com/pup05/aurora/raw/master/bin/Aurora.hex
-[Aurora MicroSD Card]:https://github.com/pup05/aurora/blob/master/sd/sd.zip?raw=true
+[Aurora.hex]:https://github.com/pixelmatix/aurora/raw/master/bin/Aurora.hex
+[Aurora MicroSD Card]:https://github.com/pixelmatix/aurora/blob/master/sd/sd.zip?raw=true
 [Teensyduino Software]:https://www.pjrc.com/teensy/td_download.html
 [Installing Additional Arduino Libraries]:http://arduino.cc/en/Guide/Libraries
 [Teensy Loader Application]:https://www.pjrc.com/teensy/loader.html
@@ -225,7 +225,7 @@ Thanks to these fine game companies for allowing us to use and distribute their 
 [Kill A Watt]:http://www.p3international.com/products/p4400.html
 
 [Light Appliance]:https://github.com/CraigLindley/LightAppliance
-[Funky Clouds]:https://gist.github.com/anonymous/876f908333cd95315c35
+[Funky Clouds]:https://gist.github.com/anonymous/2eb826070e108b09b8fd
 [Stefan Petrick]:http://www.stefan-petrick.de/wordpress_beta
 [Rainbow Smoke]:http://rainbowsmoke.hu
 [Rainbow Smoke Codegolf]:http://codegolf.stackexchange.com/a/22326
