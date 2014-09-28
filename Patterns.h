@@ -72,7 +72,7 @@ private:
     int currentIndex = 0;
     Drawable* currentItem;
 
-    static const int PATTERN_COUNT = 23;
+    static const int PATTERN_COUNT = 21;
 
     Drawable* items[PATTERN_COUNT] = {
         &wave,
