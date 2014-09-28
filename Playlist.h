@@ -25,6 +25,10 @@
 
 class Playlist : public Drawable {
 public:
+    virtual bool isPlaylist() {
+        return true;
+    }
+
     virtual void move(int step) = 0;
     virtual void moveRandom() = 0;
 };

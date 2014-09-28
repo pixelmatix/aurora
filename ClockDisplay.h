@@ -29,6 +29,7 @@
 class ClockDisplay : public Playlist {
 public:
     unsigned int lastRead = 0;
+    const unsigned int readInterval = 250; // ms
 
     int currentIndex = 0;
 
@@ -76,9 +77,9 @@ public:
     }
 
     void readTime() {
-        // not sure how long it takes, but there's no point in reading from the RTC every frame
+        // reading from the RTC only takes 1-2ms, but there's no point in reading it every frame
         // so we'll only check it every so often, and then cache the time text
-        if (millis() - lastRead > 250) {
+        if (millis() - lastRead > readInterval) {
             if (RTC.read(time)) {
                 isTimeAvailable = true;
                 lastRead = millis();

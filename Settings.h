@@ -46,15 +46,24 @@ private:
 
     static const int itemCount = 7;
 
-    MenuItem menuItems[itemCount] = {
-        MenuItem("Brightness", &brightness),
-        MenuItem("BG Brightness", &backgroundBrightness),
-        //MenuItem("Clock Face", &chooseClock),
-        MenuItem("Move Clock", &moveClock),
-        MenuItem("Clock Color", &clockColor),
-        MenuItem("12/24 Hour Clock", &set24Hour),
-        MenuItem("Set Time", &setTime),
-        MenuItem("Exit Settings", &exit, true),
+    MenuItem menuItemBrightness = MenuItem("Brightness", &brightness);
+    MenuItem menuItemBgBrightness = MenuItem("BG Brightness", &backgroundBrightness);
+    //MenuItem menuItemClockFace = MenuItem("Clock Face", &chooseClock);
+    MenuItem menuItemMoveClock = MenuItem("Move Clock", &moveClock);
+    MenuItem menuItemClockColor = MenuItem("Clock Color", &clockColor);
+    MenuItem menuItemClock24Hour = MenuItem("12/24 Hour Clock", &set24Hour);
+    MenuItem menuItemSetTime = MenuItem("Set Time", &setTime);
+    MenuItem menuItemExit = MenuItem("Exit Settings", &exit, true);
+
+    MenuItem* menuItems[itemCount] = {
+        &menuItemBrightness,
+        &menuItemBgBrightness,
+        // &menuItemClockFace,
+        &menuItemMoveClock,
+        &menuItemClockColor,
+        &menuItemClock24Hour,
+        &menuItemSetTime,
+        &menuItemExit,
     };
 
     SdFile imageFile;
@@ -93,6 +102,11 @@ public:
     char* Drawable::name = "Settings";
 
     void run() {
+        menuItemMoveClock.visible = isTimeAvailable;
+        menuItemClockColor.visible = isTimeAvailable;
+        menuItemClock24Hour.visible = isTimeAvailable;
+        menuItemSetTime.visible = isTimeAvailable;
+
         settingsMenu.run(menuItems, itemCount);
     }
 

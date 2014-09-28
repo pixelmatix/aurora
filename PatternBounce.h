@@ -20,41 +20,50 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef SettingsClock24Hour_H
-#define SettingsClock24Hour_H
+#ifndef PatternBounce_H
 
-class SettingsClock24Hour : public Runnable {
+class PatternBounce : public Drawable {
 private:
+    static const int count = 32;
+    Boid boids[count];
+    PVector gravity = PVector(0, 0.0125);
+
 public:
-    void run() {
-        while (true) {
-            drawFrame();
-            clockDisplay.drawFrame();
-            clockDisplay.drawSetTimeIndicator(SetHour);
-
-            matrix.swapBuffers();
-            matrix.displayForegroundDrawing(false);
-
-            unsigned long irCode = readIRCode(defaultHoldDelay);
-
-            switch (irCode) {
-                case IRCODE_UP:
-                case IRCODE_DOWN:
-                    clockDigitalShort.twentyFourHour = !clockDigitalShort.twentyFourHour;
-                    clockDigitalShort.saveTwentyFourHourSetting();
-                    break;
-
-                case IRCODE_A:
-                case IRCODE_SELECT:
-                case IRCODE_POWER:
-                    return;
-            }
+    void start() {
+        unsigned int colorWidth = 256 / count;
+        for (int i = 0; i < count; i++) {
+            Boid boid = Boid(i, 0);
+            boid.velocity.x = 0;
+            boid.velocity.y = i * -0.01;
+            boid.colorIndex = colorWidth * i;
+            boid.maxforce = 10;
+            boid.maxspeed = 10;
+            boids[i] = boid;
         }
     }
 
     unsigned int drawFrame() {
-        matrix.fillScreen(CRGB(CRGB::Black));
-        return 0;
+        // dim all pixels on the display
+        effects.DimAll(170);
+
+        for (int i = 0; i < count; i++) {
+            Boid boid = boids[i];
+
+            boid.applyForce(gravity);
+
+            boid.update();
+
+            matrix.drawPixel(boid.location.x, boid.location.y, effects.ColorFromCurrentPalette(boid.colorIndex));
+            
+            if (boid.location.y >= MATRIX_HEIGHT - 1) {
+                boid.location.y = MATRIX_HEIGHT - 1;
+                boid.velocity.y *= -1.0;
+            }
+            
+            boids[i] = boid;
+        }
+
+        return 15;
     }
 };
 

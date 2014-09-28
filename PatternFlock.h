@@ -35,17 +35,27 @@
 #ifndef PatternFlock_H
 
 Boid boids[boidCount];
+Boid predator;
 
 class PatternFlock : public Drawable {
 public:
     PVector wind;
     byte hue = 0;
+    bool predatorPresent = true;
 
-    String Drawable::name = "Infinity";
-
-    PatternFlock() {
+    void start() {
         for (int i = 0; i < boidCount; i++) {
             boids[i] = Boid(15, 15);
+        }
+
+        predatorPresent = random(0, 2) >= 1;
+        if (predatorPresent) {
+            predator = Boid(31, 31);
+            predatorPresent = true;
+            predator.maxforce *= 1.6666666;
+            //predator.maxspeed *= 2.0;
+            predator.neighbordist = 16.0;
+            predator.desiredseparation = 0.0;
         }
     }
 
@@ -63,6 +73,12 @@ public:
 
         for (int i = 0; i < boidCount; i++) {
             Boid * boid = &boids[i];
+
+            if (predatorPresent) {
+                // flee from predator
+                boid->repelForce(predator.location, 10);
+            }
+
             boid->run(boids);
             PVector location = boid->location;
             PVector velocity = boid->velocity;
@@ -72,6 +88,14 @@ public:
                 boid->applyForce(wind);
                 applyWind = false;
             }
+        }
+
+        if (predatorPresent) {
+            predator.run(boids);
+            color = effects.ColorFromCurrentPalette((byte) (hue + 128));
+            PVector location = predator.location;
+            PVector velocity = predator.velocity;
+            matrix.drawLine(location.x, location.y, location.x - velocity.x, location.y - velocity.y, color);
         }
 
         hue++;

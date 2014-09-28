@@ -37,6 +37,7 @@ public:
             clockDisplay.drawSetTimeIndicator(state);
 
             matrix.swapBuffers();
+            matrix.displayForegroundDrawing(false);
 
             unsigned long irCode = readIRCode(defaultHoldDelay);
 

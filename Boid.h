@@ -39,12 +39,13 @@ public:
     PVector location;
     PVector velocity;
     PVector acceleration;
-    float r;
     float maxforce;    // Maximum steering force
     float maxspeed;    // Maximum speed
 
     float desiredseparation = 4;
     float neighbordist = 8;
+    byte colorIndex = 0;
+    float mass;
 
     Boid() {}
 
@@ -52,7 +53,6 @@ public:
         acceleration = PVector(0, 0);
         velocity = PVector(randomf(), randomf());
         location = PVector(x, y);
-        r = 3.0;
         maxspeed = 1.5;
         maxforce = 0.05;
     }
@@ -68,7 +68,7 @@ public:
     void run(Boid boids []) {
         flock(boids);
         update();
-        borders();
+        wrapAroundBorders();
         render();
     }
 
@@ -86,6 +86,28 @@ public:
     void applyForce(PVector force) {
         // We could add mass here if we want A = F / M
         acceleration += force;
+    }
+
+    void repelForce(PVector obstacle, float radius) {
+        //Force that drives boid away from obstacle.
+
+        PVector futPos = location + velocity; //Calculate future position for more effective behavior.
+        PVector dist = obstacle - futPos;
+        float d = dist.mag();
+        
+        if (d <= radius) {
+            PVector repelVec = location - obstacle;
+            repelVec.normalize();
+            if (d != 0) { //Don't divide by zero.
+                float scale = 1.0 / d; //The closer to the obstacle, the stronger the force.
+                repelVec.normalize();
+                repelVec *= (maxforce * 7);
+                if (repelVec.mag() < 0) { //Don't let the boids turn around to avoid the obstacle.
+                    repelVec.y = 0;
+                }
+            }
+            applyForce(repelVec);
+        }
     }
 
     // We accumulate a new acceleration each time based on three rules
@@ -222,11 +244,39 @@ public:
     }
 
     // Wraparound
-    void borders() {
-        if (location.x < -r) location.x = MATRIX_WIDTH + r;
-        if (location.y < -r) location.y = MATRIX_HEIGHT + r;
-        if (location.x > MATRIX_WIDTH + r) location.x = -r;
-        if (location.y > MATRIX_HEIGHT + r) location.y = -r;
+    void wrapAroundBorders() {
+        if (location.x < 0) location.x = MATRIX_WIDTH - 1;
+        if (location.y < 0) location.y = MATRIX_HEIGHT - 1;
+        if (location.x >= MATRIX_WIDTH) location.x = 0;
+        if (location.y >= MATRIX_HEIGHT) location.y = 0;
+    }
+
+    bool bounceOffBorders() {
+        bool bounced = false;
+
+        if (location.x >= MATRIX_WIDTH) {
+            location.x = MATRIX_WIDTH - 1;
+            velocity.x *= -1;
+            bounced = true;
+        }
+        else if (location.x < 0) {
+            location.x = 0;
+            velocity.x *= -1;
+            bounced = true;
+        }
+
+        if (location.y >= MATRIX_HEIGHT) {
+            location.y = MATRIX_HEIGHT - 1;
+            velocity.y *= -1;
+            bounced = true;
+        }
+        else if (location.y < 0) {
+            location.y = 0;
+            velocity.y *= -1;
+            bounced = true;
+        }
+
+        return bounced;
     }
 
     void render() {

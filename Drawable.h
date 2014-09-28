@@ -30,6 +30,10 @@ public:
     virtual bool isRunnable() {
         return false;
     }
+    
+    virtual bool isPlaylist() {
+        return false;
+    }
 
     // a single frame should be drawn as fast as possible, without any delay or blocking
     // return how many millisecond delay is requested before the next call to drawFrame()

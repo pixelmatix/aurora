@@ -39,10 +39,9 @@ SetTimeState SetTimeStates[SetTimeStatesCount] = {
 
 class ClockDigitalShort : public Drawable {
 public:
-    char timeBuffer[5];
+    char timeBuffer[9];
     int16_t y = 11;
     rgb24 color = CRGB(CRGB::White);
-    bool hasShownError = false;
 
     bool twentyFourHour = false;
 
@@ -50,34 +49,29 @@ public:
         drawFrame(y);
     }
 
-    unsigned int drawFrame(int y) {
+    unsigned int drawFrame(const int cy) {
+        int x = 1;
+
         if (isTimeAvailable) {
             uint8_t hour = time.Hour;
             if (!twentyFourHour && hour > 12)
                 hour -= 12;
 
-            sprintf(timeBuffer, "%d:%02d", hour, time.Minute, time.Second);
-            matrix.setScrollOffsetFromEdge(MATRIX_HEIGHT);
             matrix.setForegroundFont(gohufont11b);
-            matrix.setScrollColor(color);
-            matrix.clearForeground();
+            sprintf(timeBuffer, "%d:%02d", hour, time.Minute, time.Second);
 
-            int x = 1;
             if (hour < 10)
-                x = 5;
-
-            matrix.drawForegroundString(x, y, timeBuffer, true);
-
-            // push change to the foreground, no need to wait for the copy to complete as we clear and redraw each time
-            matrix.displayForegroundDrawing(false);
+                x = 4;
         }
-        else if (!hasShownError) {
-            hasShownError = true;
-            matrix.setScrollMode(wrapForwardFromLeft);
-            matrix.setScrollFont(gohufont11b);
-            matrix.setScrollColor(color);
-            matrix.scrollText("No Clock", 1);
+        else {
+            matrix.setForegroundFont(font3x5);
+            sprintf(timeBuffer, "No Clock");
         }
+
+        matrix.setScrollOffsetFromEdge(MATRIX_HEIGHT);
+        matrix.setScrollColor(color);
+        matrix.clearForeground();
+        matrix.drawForegroundString(x, cy, timeBuffer, true);
 
         return 0;
     }

@@ -27,6 +27,7 @@ struct MenuItem{
     char *name;
     Drawable *drawable;
     bool exit = false;
+    bool visible = true;
 
     MenuItem() {
     }

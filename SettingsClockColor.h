@@ -122,6 +122,7 @@ public:
             }
 
             matrix.swapBuffers();
+            matrix.displayForegroundDrawing(false);
 
             unsigned long irCode = readIRCode(defaultHoldDelay);
 

@@ -103,56 +103,6 @@ public:
     }
 };
 
-class PatternSlowMandala2 : public Drawable {
-private:
-    int i = 1;
-    int j = 0;
-public:
-    // beautifull but periodic
-    unsigned int drawFrame() {
-        effects.MoveOscillators();
-        effects.Pixel(j, i, (effects.osci[0] + effects.osci[1]) / 2);
-        effects.SpiralStream(8, 8, 8, 127);
-        effects.Caleidoscope2();
-
-        i++;
-        if (i >= MATRIX_WIDTH / 2) {
-            i = 1;
-            j++;
-        }
-
-        if (j >= MATRIX_HEIGHT / 2) {
-            j = 0;
-        }
-
-        return 20;
-    }
-};
-
-class PatternSlowMandala3 : public Drawable {
-private:
-    int i = 0;
-    int j = 0;
-public:
-    unsigned int drawFrame() {
-        effects.MoveOscillators();
-        effects.Pixel(j, j, (effects.osci[0] + effects.osci[1]) / 2);
-        effects.SpiralStream(8, 8, 8, 127);
-        effects.Caleidoscope2();
-
-        i++;
-        if (i >= MATRIX_WIDTH / 2) {
-            i = 0;
-            j++;
-            if (j >= MATRIX_HEIGHT / 2) {
-                j = 0;
-            }
-        }
-
-        return 20;
-    }
-};
-
 class PatternMandala8 : public Drawable {
 public:
     // 2 lissajou dots *2 *4

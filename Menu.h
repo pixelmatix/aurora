@@ -34,8 +34,9 @@ public:
     };
 
     int menuStart = 13;
-    MenuItem currentMenuItem;
+    MenuItem* currentMenuItem;
     Playlist* currentPlaylist;
+    bool isPlaylist = false;
     Runnable* currentRunnable;
     bool isRunnable = false;
 
@@ -64,143 +65,62 @@ public:
 
     rgb24 color = CRGB(CRGB::Green);
 
-    void run(MenuItem menuItems [], int menuItemsCount) {
+    void run(MenuItem* menuItems [], int menuItemsCount) {
         while (true) {
-            if (showingPausedIndicator && millis() >= pauseIndicatorTimout) {
-                showingPausedIndicator = false;
-                updateScrollText = true;
-            }
-
-            if (showingBrightnessIndicator && millis() >= brightnessIndicatorTimout) {
-                showingBrightnessIndicator = false;
-                updateScrollText = true;
-            }
-
-            if (currentIndex != previousIndex || updateScrollText || pausedChanged || brightnessChanged) {
-                updateScrollText = false;
-
-                matrix.clearForeground();
-                matrix.displayForegroundDrawing(false);
-
-                if (currentIndex != previousIndex) {
-                    if (currentMenuItem.drawable)
-                        currentMenuItem.drawable->stop();
-
-                    previousIndex = currentIndex;
-                    currentMenuItem = menuItems[currentIndex];
-
-                    if (currentMenuItem.drawable)
-                        currentMenuItem.drawable->start();
-
-                    currentPlaylist = static_cast<Playlist*>(currentMenuItem.drawable);
-                    currentRunnable = static_cast<Runnable*>(currentMenuItem.drawable);
-                    isRunnable = currentMenuItem.drawable->isRunnable();
-
-                    if (playbackState != Paused) {
-                        autoPlayTimout = millis() + (autoPlayDurationSeconds * 1000);
-                    }
+            if (currentIndex != previousIndex) {
+                if (currentMenuItem && currentMenuItem->drawable) {
+                    currentMenuItem->drawable->stop();
                 }
 
-                if (brightnessChanged || showingBrightnessIndicator) {
-                    brightnessChanged = false;
-                    matrix.setForegroundFont(gohufont11b);
-                    matrix.setScrollColor({ 255, 255, 255 });
-                    matrix.setScrollOffsetFromEdge(MATRIX_HEIGHT);
-                    matrix.setBackgroundBrightness(backgroundBrightness);
-
-                    int level = ((float) getBrightnessLevel() / (float) (brightnessCount - 1)) * 100;
-                    if (level < 1 && brightness > 0)
-                        level = 1;
-
-                    char text[4];
-                    sprintf(text, "%3d%%", level);
-
-                    matrix.drawForegroundString(4, 11, text, true);
+                if (currentIndex >= menuItemsCount) {
+                    currentIndex = 0;
                 }
-                else if (pausedChanged || showingPausedIndicator) {
-                    pausedChanged = false;
-                    matrix.setForegroundFont(font3x5);
-                    matrix.setScrollColor(color);
-                    matrix.setScrollOffsetFromEdge(MATRIX_HEIGHT);
-                    matrix.setBackgroundBrightness(backgroundBrightness);
-
-                    switch (playbackState) {
-                        case Paused:
-                            matrix.drawForegroundMonoBitmap(12, 10, pauseBitmapWidth, pauseBitmapHeight, pauseBitmap, true);
-                            matrix.drawForegroundString(0, 18, "  Pause", true);
-                            break;
-                        case Autoplay:
-                            matrix.drawForegroundMonoBitmap(12, 10, playBitmapWidth, playBitmapHeight, playBitmap, true);
-                            matrix.drawForegroundString(0, 18, "Autoplay", true);
-                            break;
-                        case Random:
-                            matrix.drawForegroundMonoBitmap(12, 10, playBitmapWidth, playBitmapHeight, playBitmap, true);
-                            matrix.drawForegroundString(0, 18, " Random", true);
-                            break;
-                    }
+                else if (currentIndex < 0) {
+                    currentIndex = menuItemsCount - 1;
                 }
-                else if (visible) {
-                    // Scroll the current item
-                    char *name = currentMenuItem.name;
-                    int length = strlen((const char *) name);
 
-                    if (length * 5 > 31) {
-                        matrix.setScrollMode(wrapForwardFromLeft); /* wrapForward, bounceForward, bounceReverse, stopped, off, wrapForwardFromLeft */
-                    }
-                    else {
-                        matrix.setScrollMode(stopped);
-                    }
-
-                    matrix.setScrollSpeed(scrollSpeed);
-                    matrix.setScrollFont(font5x7);
-                    matrix.setScrollColor(color);
-                    matrix.setScrollOffsetFromEdge(menuStart);
-
-                    matrix.setBackgroundBrightness(backgroundBrightness);
-                    matrix.scrollText(name, -1);
+                // skip hidden menu items
+                while (!menuItems[currentIndex]->visible) {
+                    currentIndex++;
                 }
-                else if (clockVisible) {
-                    matrix.scrollText("", 1);
-                    matrix.setBackgroundBrightness(backgroundBrightness);
-                }
-                else {
-                    matrix.scrollText("", 1);
-                    matrix.setBackgroundBrightness(255);
+
+                currentMenuItem = menuItems[currentIndex];
+
+                if (currentMenuItem->drawable)
+                    currentMenuItem->drawable->start();
+
+                currentPlaylist = static_cast<Playlist*>(currentMenuItem->drawable);
+                isPlaylist = currentMenuItem->drawable->isPlaylist();
+                currentRunnable = static_cast<Runnable*>(currentMenuItem->drawable);
+                isRunnable = currentMenuItem->drawable->isRunnable();
+
+                if (playbackState != Paused) {
+                    autoPlayTimout = millis() + (autoPlayDurationSeconds * 1000);
                 }
             }
 
-            unsigned int requestedDelay = draw(currentIndex, menuItems, menuItemsCount);
+            unsigned int requestedDelay = draw();
             unsigned int requestedDelayTimeout = millis() + requestedDelay;
 
             while (true) {
+                updateForeground(menuItems, menuItemsCount);
+
                 unsigned long irCode = readIRCode(defaultHoldDelay);
 
                 if (irCode == IRCODE_UP) {
                     if (visible) {
                         currentIndex--;
-                        if (currentIndex < 0) {
-                            currentIndex = menuItemsCount - 1;
-                        }
                         break;
                     }
-                    /*else {
-                        adjustBrightness(1);
-                        }*/
                 }
                 else if (irCode == IRCODE_DOWN) {
                     if (visible) {
                         currentIndex++;
-                        if (currentIndex >= menuItemsCount) {
-                            currentIndex = 0;
-                        }
                         break;
                     }
-                    /*else {
-                        adjustBrightness(-1);
-                        }*/
                 }
                 else if (irCode == IRCODE_LEFT) {
-                    if (currentPlaylist) {
+                    if (isPlaylist) {
                         if (playbackState == Random)
                             currentPlaylist->moveRandom();
                         else
@@ -213,9 +133,9 @@ public:
                     break;
                 }
                 else if (irCode == IRCODE_RIGHT) {
-                    if (currentPlaylist) {
+                    if (isPlaylist) {
                         if (playbackState == Random)
-                            currentPlaylist-> moveRandom();
+                            currentPlaylist->moveRandom();
                         else
                             currentPlaylist->move(1);
 
@@ -226,11 +146,11 @@ public:
                     break;
                 }
                 else if (irCode == IRCODE_SELECT) {
-                    if (currentMenuItem.exit) {
+                    if (currentMenuItem->exit) {
                         currentIndex = 0;
                         previousIndex = -1;
-                        if (currentMenuItem.drawable)
-                            currentMenuItem.drawable->stop();
+                        if (currentMenuItem->drawable)
+                            currentMenuItem->drawable->stop();
                         return;
                     }
                     else if (isRunnable) {
@@ -249,8 +169,8 @@ public:
                         heldButtonHasBeenHandled();
                         powerOff();
                         previousIndex = -1;
-                        if (currentMenuItem.drawable)
-                            currentMenuItem.drawable->stop();
+                        if (currentMenuItem->drawable)
+                            currentMenuItem->drawable->stop();
                     }
 
                     if (!wasHolding) {
@@ -277,19 +197,19 @@ public:
                     if (!visible) {
                         clockVisible = !clockVisible;
                         updateScrollText = true;
-                        // if the clock is not available, show the error message again
-                        clockDigitalShort.hasShownError = false;
-                        if (!isTimeAvailable)
-                            clockVisible = true;
+                        //// if the clock is not available, show the error message again
+                        //clockDigitalShort.hasShownError = false;
+                        //if (!isTimeAvailable)
+                        //    clockVisible = true;
                     }
                 }
                 else {
                     if (playbackState != Paused && millis() >= autoPlayTimout) {
-                        if (currentPlaylist) {
-                            if(playbackState == Autoplay)
+                        if (isPlaylist) {
+                            if (playbackState == Autoplay)
                                 currentPlaylist->move(1);
                             else
-                                currentPlaylist-> moveRandom();
+                                currentPlaylist->moveRandom();
                         }
                         autoPlayTimout = millis() + (autoPlayDurationSeconds * 1000);
                         break;
@@ -304,28 +224,106 @@ public:
 
 private:
 
-    void animate(int currentIndex, MenuItem menuItems [], int menuItemsCount, int offset) {
-        for (int i = 1; i < 7; i++) {
-            drawAt(currentIndex, menuItems, menuItemsCount, menuStart + offset * i, true);
+    void updateForeground(MenuItem* menuItems [], int menuItemsCount) {
+        if (showingPausedIndicator && millis() >= pauseIndicatorTimout) {
+            showingPausedIndicator = false;
+            updateScrollText = true;
+        }
+
+        if (showingBrightnessIndicator && millis() >= brightnessIndicatorTimout) {
+            showingBrightnessIndicator = false;
+            updateScrollText = true;
+        }
+
+        if (currentIndex != previousIndex || updateScrollText || pausedChanged || brightnessChanged) {
+            previousIndex = currentIndex;
+            updateScrollText = false;
+
+            matrix.clearForeground();
+
+            if (brightnessChanged || showingBrightnessIndicator) {
+                brightnessChanged = false;
+                matrix.setForegroundFont(gohufont11b);
+                matrix.setScrollColor({ 255, 255, 255 });
+                matrix.setScrollOffsetFromEdge(MATRIX_HEIGHT);
+                matrix.setBackgroundBrightness(backgroundBrightness);
+
+                int level = ((float) getBrightnessLevel() / (float) (brightnessCount - 1)) * 100;
+                if (level < 1 && brightness > 0)
+                    level = 1;
+
+                char text[4];
+                sprintf(text, "%3d%%", level);
+
+                matrix.drawForegroundString(4, 11, text, true);
+            }
+            else if (pausedChanged || showingPausedIndicator) {
+                pausedChanged = false;
+                matrix.setForegroundFont(font3x5);
+                matrix.setScrollColor(color);
+                matrix.setScrollOffsetFromEdge(MATRIX_HEIGHT);
+                matrix.setBackgroundBrightness(backgroundBrightness);
+
+                switch (playbackState) {
+                    case Paused:
+                        matrix.drawForegroundMonoBitmap(12, 10, pauseBitmapWidth, pauseBitmapHeight, pauseBitmap, true);
+                        matrix.drawForegroundString(0, 18, "  Pause", true);
+                        break;
+                    case Autoplay:
+                        matrix.drawForegroundMonoBitmap(12, 10, playBitmapWidth, playBitmapHeight, playBitmap, true);
+                        matrix.drawForegroundString(0, 18, "Autoplay", true);
+                        break;
+                    case Random:
+                        matrix.drawForegroundMonoBitmap(12, 10, playBitmapWidth, playBitmapHeight, playBitmap, true);
+                        matrix.drawForegroundString(0, 18, " Random", true);
+                        break;
+                }
+            }
+            else if (visible) {
+                // Scroll the current item
+                char *name = currentMenuItem->name;
+                int length = strlen((const char *) name);
+
+                if (length * 5 > 31) {
+                    matrix.setScrollMode(wrapForwardFromLeft); /* wrapForward, bounceForward, bounceReverse, stopped, off, wrapForwardFromLeft */
+                }
+                else {
+                    matrix.setScrollMode(stopped);
+                }
+
+                matrix.setScrollSpeed(scrollSpeed);
+                matrix.setScrollFont(font5x7);
+                matrix.setScrollColor(color);
+                matrix.setScrollOffsetFromEdge(menuStart);
+
+                matrix.setBackgroundBrightness(backgroundBrightness);
+                matrix.scrollText(name, -1);
+            }
+            else if (clockVisible) {
+                matrix.scrollText("", 1);
+                matrix.setBackgroundBrightness(backgroundBrightness);
+            }
+            else {
+                matrix.scrollText("", 1);
+                matrix.setBackgroundBrightness(255);
+            }
+
+            if (!visible && !showingPausedIndicator && !showingBrightnessIndicator && clockVisible) {
+                clockDisplay.drawFrame();
+            }
+
+            matrix.displayForegroundDrawing(false);
         }
     }
 
-    unsigned int draw(int currentIndex, MenuItem menuItems [], int menuItemsCount) {
-        return drawAt(currentIndex, menuItems, menuItemsCount, menuStart, false);
-    }
-
-    unsigned int drawAt(int currentIndex, MenuItem menuItems [], int menuItemsCount, int start, bool isAnimating) {
+    unsigned int draw() {
         effects.PrepareFrame();
 
         // account for any time spent drawing the clock, swapping buffers, etc.
         unsigned int startTime = millis();
 
         // draw the current item
-        unsigned int requestedDelay = currentMenuItem.drawable->drawFrame();
-
-        if (!visible && !showingPausedIndicator && !showingBrightnessIndicator && clockVisible) {
-            clockDisplay.drawFrame();
-        }
+        unsigned int requestedDelay = currentMenuItem->drawable->drawFrame();
 
         effects.ShowFrame();
 

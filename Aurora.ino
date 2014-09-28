@@ -1,7 +1,7 @@
 /*
  * Aurora: https://github.com/pixelmatix/aurora
  * Copyright (c) 2014 Jason Coon
- * 
+ *
  * Designed in collaboration with Pixelmatix using the SmartMatrix Library: http://pixelmatix.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -84,11 +84,16 @@ Settings settings;
 #include "SettingsSetTime.h"
 #include "SettingsMoveClock.h"
 
+
+MenuItem menuItemPatterns = MenuItem("Patterns", &patterns);
+MenuItem menuItemAnimations = MenuItem("Animations", &animations);
+MenuItem menuItemSettings = MenuItem("Settings", &settings);
+
 // Main Menu
-MenuItem mainMenuItems [] = {
-    MenuItem("Patterns", &patterns),
-    MenuItem("Animations", &animations),
-    MenuItem("Settings", &settings),
+MenuItem* mainMenuItems [] = {
+    &menuItemPatterns,
+    &menuItemAnimations,
+    &menuItemSettings,
 };
 
 int mainMenuItemCount;
@@ -120,7 +125,7 @@ void setup()
     // setup the effects generator
     effects.CyclePalette();
 
-    mainMenuItemCount = sizeof(mainMenuItems) / sizeof(MenuItem);
+    mainMenuItemCount = sizeof(mainMenuItems) / sizeof(MenuItem*);
 
     // initialize realtime clock
     // switch pins to use 16/17 for I2C instead of 18/19
@@ -128,6 +133,8 @@ void setup()
     pinMode(19, INPUT);
     CORE_PIN16_CONFIG = (PORT_PCR_MUX(2) | PORT_PCR_PE | PORT_PCR_PS);
     CORE_PIN17_CONFIG = (PORT_PCR_MUX(2) | PORT_PCR_PE | PORT_PCR_PS);
+
+    clockDisplay.readTime();
 
     if (sdAvailable)
         loadSettings();

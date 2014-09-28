@@ -25,7 +25,11 @@
 
 #include "Vector.h"
 #include "Boid.h"
+#include "Attractor.h"
 
+#include "PatternWave.h"
+#include "PatternAttract.h"
+#include "PatternBounce.h"
 #include "PatternFlock.h"
 #include "PatternInfinity.h"
 #include "PatternPlasma.h"
@@ -43,6 +47,9 @@
 
 class Patterns : public Playlist {
 private:
+    PatternWave wave;
+    PatternAttract attract;
+    PatternBounce bounce;
     PatternFlock flock;
     PatternInfinity infinity;
     PatternPlasma plasma;
@@ -60,16 +67,17 @@ private:
     PatternDots1 dots1;
     PatternDots2 dots2;
     PatternSlowMandala slowMandala;
-    //PatternSlowMandala2 slowMandala2;
-    //PatternSlowMandala3 slowMandala3;
     PatternMandala8 mandala8;
 
     int currentIndex = 0;
     Drawable* currentItem;
 
-    static const int PATTERN_COUNT = 18;
+    static const int PATTERN_COUNT = 23;
 
     Drawable* items[PATTERN_COUNT] = {
+        &wave,
+        &attract,
+        &bounce,
         &flock,
         &infinity,
         &plasma,
@@ -87,14 +95,13 @@ private:
         &dots1,
         &dots2,
         &slowMandala,
-        //&slowMandala2,
-        //&slowMandala3,
         &mandala8,
     };
 
 public:
     Patterns() {
         this->currentItem = items[0];
+        this->currentItem->start();
     }
 
     char* Drawable::name = "Patterns";

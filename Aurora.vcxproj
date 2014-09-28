@@ -79,6 +79,7 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Attractor.h" />
     <ClInclude Include="Bitmaps.h" />
     <ClInclude Include="Boid.h" />
     <ClInclude Include="ClockDigitalShort.h" />
@@ -91,6 +92,8 @@
     <ClInclude Include="IrCodes.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="MenuItem.h" />
+    <ClInclude Include="PatternAttract.h" />
+    <ClInclude Include="PatternBounce.h" />
     <ClInclude Include="PatternEffects.h">
       <FileType>CppCode</FileType>
     </ClInclude>
@@ -128,6 +131,7 @@
     <ClInclude Include="PatternSpiral.h">
       <FileType>CppCode</FileType>
     </ClInclude>
+    <ClInclude Include="PatternWave.h" />
     <ClInclude Include="Playlist.h" />
     <ClInclude Include="Runnable.h">
       <FileType>CppCode</FileType>

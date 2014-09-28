@@ -20,41 +20,50 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef SettingsClock24Hour_H
-#define SettingsClock24Hour_H
+#ifndef PatternAttract_H
 
-class SettingsClock24Hour : public Runnable {
+class PatternAttract : public Drawable {
 private:
+    static const int count = 8;
+    Boid boids[count];
+    Attractor attractor;
+    byte dim;
+
 public:
-    void run() {
-        while (true) {
-            drawFrame();
-            clockDisplay.drawFrame();
-            clockDisplay.drawSetTimeIndicator(SetHour);
+    void start() {
+        int direction = random(0, 2);
+        if (direction == 0)
+            direction = -1;
 
-            matrix.swapBuffers();
-            matrix.displayForegroundDrawing(false);
-
-            unsigned long irCode = readIRCode(defaultHoldDelay);
-
-            switch (irCode) {
-                case IRCODE_UP:
-                case IRCODE_DOWN:
-                    clockDigitalShort.twentyFourHour = !clockDigitalShort.twentyFourHour;
-                    clockDigitalShort.saveTwentyFourHourSetting();
-                    break;
-
-                case IRCODE_A:
-                case IRCODE_SELECT:
-                case IRCODE_POWER:
-                    return;
-            }
+        for (int i = 0; i < count; i++) {
+            Boid boid = Boid(15, 31 - i);
+            boid.mass = 1; // random(0.1, 2);
+            boid.velocity.x = ((float) random(40, 50)) / 100.0;
+            boid.velocity.x *= direction;
+            boid.velocity.y = 0;
+            boid.colorIndex = i * 32;
+            boids[i] = boid;
+            dim = random(170, 250);
         }
     }
 
     unsigned int drawFrame() {
-        matrix.fillScreen(CRGB(CRGB::Black));
-        return 0;
+        // dim all pixels on the display
+        effects.DimAll(dim);
+
+        for (int i = 0; i < count; i++) {
+            Boid boid = boids[i];
+
+            PVector force = attractor.attract(boid);
+            boid.applyForce(force);
+
+            boid.update();
+            matrix.drawPixel(boid.location.x, boid.location.y, effects.ColorFromCurrentPalette(boid.colorIndex));
+
+            boids[i] = boid;
+        }
+
+        return 15;
     }
 };
 
