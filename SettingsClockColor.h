@@ -124,28 +124,27 @@ public:
             matrix.swapBuffers();
             matrix.displayForegroundDrawing(false);
 
-            unsigned long irCode = readIRCode(defaultHoldDelay);
+            InputCommand command = readCommand(defaultHoldDelay);
 
-            switch (irCode) {
-                case IRCODE_LEFT:
+            switch (command) {
+                case InputCommand::Left:
                     cursorX -= 1;
                     break;
 
-                case IRCODE_RIGHT:
+                case InputCommand::Right:
                     cursorX += 1;
                     break;
 
-                case IRCODE_UP:
+                case InputCommand::Up:
                     cursorY -= 1;
                     break;
 
-                case IRCODE_DOWN:
+                case InputCommand::Down:
                     cursorY += 1;
                     break;
 
-                case IRCODE_A:
-                case IRCODE_SELECT:
-                case IRCODE_POWER:
+                case InputCommand::Select:
+                case InputCommand::Back:
                     save(selectedColor);
                     return;
             }

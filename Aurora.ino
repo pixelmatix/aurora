@@ -156,7 +156,9 @@ void powerOff()
     matrix.displayForegroundDrawing(false);
 
     while (true) {
-        if (readIRCode() == IRCODE_POWER)
+        InputCommand command = readCommand();
+        if (command == InputCommand::Power ||
+            command == InputCommand::Brightness)
             return;
 
         // go idle for a while, converve power
@@ -198,10 +200,10 @@ int getBackgroundBrightnessLevel() {
     return level;
 }
 
-void adjustBrightness(int d) {
+void adjustBrightness(int delta) {
     int level = getBrightnessLevel();
 
-    level += d;
+    level += delta;
     if (level < 0)
         level = brightnessCount - 1;
     if (level >= brightnessCount)

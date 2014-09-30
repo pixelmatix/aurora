@@ -105,21 +105,21 @@ public:
             while (true) {
                 updateForeground(menuItems, menuItemsCount);
 
-                unsigned long irCode = readIRCode(defaultHoldDelay);
+                InputCommand command = readCommand(defaultHoldDelay);
 
-                if (irCode == IRCODE_UP) {
+                if (command == InputCommand::Up) {
                     if (visible) {
                         currentIndex--;
                         break;
                     }
                 }
-                else if (irCode == IRCODE_DOWN) {
+                else if (command == InputCommand::Down) {
                     if (visible) {
                         currentIndex++;
                         break;
                     }
                 }
-                else if (irCode == IRCODE_LEFT) {
+                else if (command == InputCommand::Left) {
                     if (isPlaylist) {
                         if (playbackState == Random)
                             currentPlaylist->moveRandom();
@@ -132,7 +132,7 @@ public:
                     }
                     break;
                 }
-                else if (irCode == IRCODE_RIGHT) {
+                else if (command == InputCommand::Right) {
                     if (isPlaylist) {
                         if (playbackState == Random)
                             currentPlaylist->moveRandom();
@@ -145,7 +145,7 @@ public:
                     }
                     break;
                 }
-                else if (irCode == IRCODE_SELECT) {
+                else if (command == InputCommand::Select) {
                     if (currentMenuItem->exit) {
                         currentIndex = 0;
                         previousIndex = -1;
@@ -163,7 +163,21 @@ public:
                     updateScrollText = true;
                     break;
                 }
-                else if (irCode == IRCODE_POWER) {
+                else if (command == InputCommand::Back) {
+                    if (visible) {
+                        currentIndex = 0;
+                        previousIndex = -1;
+                        if (currentMenuItem->drawable)
+                            currentMenuItem->drawable->stop();
+                        return;
+                    }
+                    else {
+                        visible = true;
+                    }
+                    updateScrollText = true;
+                    break;
+                }
+                else if (command == InputCommand::Brightness) {
                     bool wasHolding = isHolding;
                     if (isHolding || cycleBrightness() == 0) {
                         heldButtonHasBeenHandled();
@@ -179,7 +193,25 @@ public:
                         brightnessIndicatorTimout = millis() + brightnessIndicatorDuration;
                     }
                 }
-                else if (irCode == IRCODE_A) { // toggle pause/play
+                else if (command == InputCommand::Power) {
+                    powerOff();
+                    previousIndex = -1;
+                    if (currentMenuItem->drawable)
+                        currentMenuItem->drawable->stop();
+                }
+                else if (command == InputCommand::BrightnessUp) {
+                    adjustBrightness(1);
+                    brightnessChanged = true;
+                    showingBrightnessIndicator = true;
+                    brightnessIndicatorTimout = millis() + brightnessIndicatorDuration;
+                }
+                else if (command == InputCommand::BrightnessDown) {
+                    adjustBrightness(-1);
+                    brightnessChanged = true;
+                    showingBrightnessIndicator = true;
+                    brightnessIndicatorTimout = millis() + brightnessIndicatorDuration;
+                }
+                else if (command == InputCommand::PlayMode) { // toggle pause/play
                     playbackState++;
                     if (playbackState > Random)
                         playbackState = Paused;
@@ -190,10 +222,10 @@ public:
                     showingPausedIndicator = true;
                     pauseIndicatorTimout = millis() + pauseIndicatorDuration;
                 }
-                else if (irCode == IRCODE_B) { // cycle color pallete
+                else if (command == InputCommand::Palette) { // cycle color pallete
                     effects.CyclePalette();
                 }
-                else if (irCode == IRCODE_C) { // toggle clock visibility
+                else if (command == InputCommand::Clock) { // toggle clock visibility
                     if (!visible) {
                         clockVisible = !clockVisible;
                         updateScrollText = true;

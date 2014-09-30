@@ -69,20 +69,19 @@ public:
             matrix.drawString(4, 11, { 255, 255, 255 }, text);
             matrix.swapBuffers();
 
-            unsigned long irCode = readIRCode(defaultHoldDelay);
-
-            switch (irCode) {
-                case IRCODE_UP:
+            InputCommand command = readCommand(defaultHoldDelay);
+            
+            switch (command) {
+                case InputCommand::Up:
                     adjustBrightness(1);
                     break;
 
-                case IRCODE_DOWN:
+                case InputCommand::Down:
                     adjustBrightness(-1);
                     break;
 
-                case IRCODE_A:
-                case IRCODE_SELECT:
-                case IRCODE_POWER:
+                case InputCommand::Select:
+                case InputCommand::Back:
                     return;
             }
         }

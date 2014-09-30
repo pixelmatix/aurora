@@ -461,71 +461,6 @@ private:
         return frameDelay * 10;
     }
 
-    // Parse gif data
-    unsigned long parseData() {
-
-#if DEBUG == 1
-        Serial.println("\nParsing Data Block");
-#endif
-
-        boolean done = false;
-        while (!done) {
-
-            // Determine what kind of data to process
-            byte b = readByte();
-
-            if (b == 0x2c) {
-                // Parse table based image
-                unsigned long fdelay = parseTableBasedImage();
-
-                delay(frameDelay);
-            }
-            else if (b == 0x21) {
-                // Parse extension
-                b = readByte();
-
-                // Determine which kind of extension to parse
-                switch (b) {
-                    case 0x01:
-                        // Plain test extension
-                        parsePlainTextExtension();
-                        break;
-                    case 0xf9:
-                        // Graphic control extension
-                        parseGraphicControlExtension();
-                        break;
-                    case 0xfe:
-                        // Comment extension
-                        parseCommentExtension();
-                        break;
-                    case 0xff:
-                        // Application extension
-                        parseApplicationExtension();
-                        break;
-                    default:
-#if DEBUG == 1
-                        Serial.print("Unknown control extension: ");
-                        Serial.println(b, HEX);
-#endif
-                        return ERROR_UNKNOWNCONTROLEXT;
-                }
-            }
-            else	{
-                done = true;
-
-                // Push unprocessed byte back into the stream for later processing
-                backUpStream(1);
-            }
-
-            int input = readIRCode();
-            if (input == IRCODE_POWER || input == IRCODE_LEFT || input == IRCODE_RIGHT || input == IRCODE_SELECT) {
-                done = true;
-                return input;
-            }
-        }
-        return ERROR_NONE;
-    }
-
     // LZW constants
     // NOTE: LZW_MAXBITS set to 10 to save memory
 #define LZW_MAXBITS    10
@@ -757,7 +692,7 @@ public:
         lsdAspectRatio = readByte();
 
 #if DEBUG == 1
-        Serial.print("lsdWidth: "); 
+        Serial.print("lsdWidth: ");
         Serial.println(lsdWidth);
         Serial.print("lsdHeight: ");
         Serial.println(lsdHeight);
@@ -847,53 +782,6 @@ public:
             }
         }
         return ERROR_NONE;
-    }
-
-    unsigned long play(const char *filename) {
-        // Initialize variables
-        keyFrame = true;
-        prevDisposalMethod = DISPOSAL_NONE;
-        transparentColorIndex = NO_TRANSPARENT_INDEX;
-
-        Serial.print("Pathname: ");
-        Serial.println(filename);
-
-        file.close();
-
-        // Attempt to open the file for reading
-        if (!file.open(filename)) {
-            Serial.println("Error opening GIF file");
-            return ERROR_FILEOPEN;
-        }
-        // Validate the header
-        if (!parseGifHeader()) {
-            Serial.println("Not a GIF file");
-            file.close();
-            return ERROR_FILENOTGIF;
-        }
-        // If we get here we have a gif file to process
-
-        // Parse the logical screen descriptor
-        parseLogicalScreenDescriptor();
-
-        // Parse the global color table
-        parseGlobalColorTable();
-
-        // Parse gif data
-        unsigned long result = parseData();
-        if (result != ERROR_NONE) {
-            Serial.println("Error: ");
-            Serial.println(result);
-            Serial.println(" occurred during parsing of data");
-            file.close();
-            return result;
-        }
-        // Parse the gif file terminator
-        result = parseGIFFileTerminator();
-        file.close();
-
-        Serial.println("Success");
-        return result;
     }
 };
 

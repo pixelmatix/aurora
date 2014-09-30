@@ -75,20 +75,19 @@ public:
             matrix.drawForegroundString(4, 11, text, true);
             matrix.displayForegroundDrawing(false);
 
-            unsigned long irCode = readIRCode(defaultHoldDelay);
+            InputCommand command = readCommand(defaultHoldDelay);
 
-            switch (irCode) {
-                case IRCODE_UP:
+            switch (command) {
+                case InputCommand::Up:
                     adjustBackgroundBrightness(1);
                     break;
 
-                case IRCODE_DOWN:
+                case InputCommand::Down:
                     adjustBackgroundBrightness(-1);
                     break;
 
-                case IRCODE_A:
-                case IRCODE_SELECT:
-                case IRCODE_POWER:
+                case InputCommand::Select:
+                case InputCommand::Back:
                     return;
             }
         }
