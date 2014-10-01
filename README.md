@@ -81,11 +81,17 @@ The Aurora software should now be running on your display.
 Remote Control
 --------------
 
-Aurora utilizes the [Sparkfun Infrared Remote Control]
+Aurora can use:
 
-![Sparkfun Infrared Remote Image]
+[![SparkFun Infrared Remote Control](https://cdn.sparkfun.com/r/92-92/assets/parts/7/9/8/6/11759-01.jpg)](https://www.sparkfun.com/products/11759)  
 
-Button functions:
+[SparkFun Infrared Remote Control]  
+
+[![Adafruit Infrared Remote Control](http://www.adafruit.com/images/230x173/389-00.jpg)](http://www.adafruit.com/products/389)  
+
+[Adafruit Infrared Remote Control]
+
+SparkFun remote button functions:
 
 * ![Power Symbol] Power
     * Press to turn on the display.
@@ -173,7 +179,7 @@ Source code and libraries:
 
 * [Aurora Source Code]
 * [SmartMatrix Library]
-* [FastLED v2.1 Library]
+* [FastLED v2.1 Library] **(make sure you use the 2.1 branch!)**
 * [IR Remote Library]
 * [SdFat Library]
 * [Time Library]
@@ -214,8 +220,10 @@ Thanks to these fine game companies for allowing us to use and distribute their 
 ![Chasm](https://github.com/pixelmatix/aurora/blob/master/sd/gifs/ChasmDaltynCrouch.gif) [Chasm] by [Discord Games]
 
 [Aurora Source Code]:https://github.com/pixelmatix/aurora/archive/master.zip
-[Sparkfun Infrared Remote Control]:https://www.sparkfun.com/products/11759
-[Sparkfun Infrared Remote Image]:https://cdn.sparkfun.com/r/92-92/assets/parts/7/9/8/6/11759-01.jpg
+[SparkFun Infrared Remote Control]:https://www.sparkfun.com/products/11759
+[SparkFun Infrared Remote Image]:https://cdn.sparkfun.com/r/92-92/assets/parts/7/9/8/6/11759-01.jpg
+[Adafruit Infrared Remote Control]:http://www.adafruit.com/products/389
+[Adafruit Infrared Remote Image]:http://www.adafruit.com/images/230x173/389-00.jpg
 [Aurora.hex]:https://github.com/pixelmatix/aurora/raw/master/bin/Aurora.hex
 [Aurora MicroSD Card]:https://github.com/pixelmatix/aurora/blob/master/sd/sd.zip?raw=true
 [Teensyduino Software]:https://www.pjrc.com/teensy/td_download.html
