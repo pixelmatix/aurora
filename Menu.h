@@ -48,7 +48,7 @@ public:
 
     unsigned int playbackState = Paused;
     unsigned int autoPlayTimout = 0;
-    int autoPlayDurationSeconds = 10;
+    int autoPlayDurationSeconds = 5;
     bool pausedChanged = false;
     bool showingPausedIndicator = false;
     unsigned int pauseIndicatorTimout = 0;

@@ -179,7 +179,7 @@ Source code and libraries:
 
 * [Aurora Source Code]
 * [SmartMatrix Library]
-* [FastLED v2.1 Library] **(make sure you use the 2.1 branch!)**
+* [FastLED v2.1 Library]
 * [IR Remote Library]
 * [SdFat Library]
 * [Time Library]

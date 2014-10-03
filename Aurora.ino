@@ -84,7 +84,6 @@ Settings settings;
 #include "SettingsSetTime.h"
 #include "SettingsMoveClock.h"
 
-
 MenuItem menuItemPatterns = MenuItem("Patterns", &patterns);
 MenuItem menuItemAnimations = MenuItem("Animations", &animations);
 MenuItem menuItemSettings = MenuItem("Settings", &settings);

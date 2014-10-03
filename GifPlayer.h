@@ -26,6 +26,8 @@
 #ifndef GifPlayer_H
 #define GifPlayer_H
 
+#define DEBUG 0
+
 class GifPlayer{
 public:
 
@@ -94,7 +96,7 @@ private:
     int colorCount;
     _RGB gifPalette[256];
 
-    byte lzwImageData[1024];
+    byte lzwImageData[1280];
     char tempBuffer[260];
 
     SdFile file;
@@ -433,12 +435,35 @@ private:
         int offset = 0;
         int dataBlockSize = readByte();
         while (dataBlockSize != 0) {
+#if DEBUG == 1
+            Serial.print("dataBlockSize: ");
+            Serial.println(dataBlockSize);
+#endif
             backUpStream(1);
             dataBlockSize++;
-            readIntoBuffer(lzwImageData + offset, dataBlockSize);
+            // quick fix to prevent a crash if lzwImageData is not large enough
+            if (offset + dataBlockSize <= sizeof(lzwImageData)) {
+                readIntoBuffer(lzwImageData + offset, dataBlockSize);
+            }
+            else {
+                int i;
+                // discard the data block that would cause a buffer overflow
+                for (i = 0; i < dataBlockSize; i++)
+                    file.read();
+#if DEBUG == 1
+                Serial.print("******* Prevented lzwImageData Overflow ******");
+#endif
+            }
+
             offset += dataBlockSize;
             dataBlockSize = readByte();
         }
+
+#if DEBUG == 1
+        Serial.print("total lzwImageData Size: ");
+        Serial.println(offset);
+#endif
+
         // Process the animation frame for display
 
         // Initialize the LZW decoder for this frame
@@ -462,8 +487,8 @@ private:
     }
 
     // LZW constants
-    // NOTE: LZW_MAXBITS set to 10 to save memory
-#define LZW_MAXBITS    10
+    // NOTE: LZW_MAXBITS set to 11 to support more GIFs with 6k RAM increase (initially 10 to save memory)
+#define LZW_MAXBITS    11
 #define LZW_SIZTABLE  (1 << LZW_MAXBITS)
 
     // Masks for 0 .. 16 bits
@@ -592,6 +617,11 @@ private:
                     if (cursize < LZW_MAXBITS) {
                         top_slot <<= 1;
                         curmask = mask[++cursize];
+                    }
+                    else {
+#if DEBUG == 1
+                        Serial.println("****** cursize >= MAXBITS *******");
+#endif
                     }
                 }
             }
@@ -734,11 +764,19 @@ public:
         boolean done = false;
         while (!done) {
 
+#if 0 && DEBUG == 1
+            Serial.println("\nPress Key For Next");
+            while (Serial.read() <= 0);
+#endif
+
             // Determine what kind of data to process
             byte b = readByte();
 
             if (b == 0x2c) {
                 // Parse table based image
+#if DEBUG == 1
+                Serial.println("\nParsing Table Based");
+#endif
                 unsigned int fdelay = parseTableBasedImage();
                 return fdelay;
             }
@@ -773,6 +811,9 @@ public:
                 }
             }
             else	{
+#if DEBUG == 1
+                Serial.println("\nParsing Done");
+#endif
                 done = true;
 
                 // Push unprocessed byte back into the stream for later processing
