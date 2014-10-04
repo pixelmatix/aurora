@@ -303,28 +303,6 @@ void Effects::Caleidoscope5() {
         j--;
         k++;
     }
-
-    //for (int x = 1; x < halfWidth; x++) {
-    //    leds[XY(7 - x, 7)] += leds[XY(x, 0)];
-    //} //a
-    //for (int x = 2; x < halfWidth; x++) {
-    //    leds[XY(7 - x, 6)] += leds[XY(x, 1)];
-    //} //b
-    //for (int x = 3; x < halfWidth; x++) {
-    //    leds[XY(7 - x, 5)] += leds[XY(x, 2)];
-    //} //c
-    //for (int x = 4; x < halfWidth; x++) {
-    //    leds[XY(7 - x, 4)] += leds[XY(x, 3)];
-    //} //d
-    //for (int x = 5; x < halfWidth; x++) {
-    //    leds[XY(7 - x, 3)] += leds[XY(x, 4)];
-    //} //e
-    //for (int x = 6; x < halfWidth; x++) {
-    //    leds[XY(7 - x, 2)] += leds[XY(x, 5)];
-    //} //f
-    //for (int x = 7; x < halfWidth; x++) {
-    //    leds[XY(7 - x, 1)] += leds[XY(x, 6)];
-    //} //g
 }
 
 

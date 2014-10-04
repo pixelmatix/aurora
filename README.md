@@ -1,7 +1,8 @@
 Aurora
 ======
 
-Aurora is a bright and aesthetically-pleasing display, driven by 1,024 RGB LEDS behind a diffusion screen. It's built using the [SmartMatrix SD Shield] and a 32x32 RGB LED matrix.
+Aurora is a bright and aesthetically-pleasing display, driven by 1,024 RGB LEDS behind a diffusion screen. It's built using the [SmartMatrix SD Shield]
+and a 32x32 RGB LED matrix.
 
 Features
 --------
@@ -12,7 +13,7 @@ Features
 * Optional Clock display in the foreground, over animation and pattern slideshows (requires real-time clock chip for keeping accurate time).
 
 Patterns  
-[![Animations](http://img.youtube.com/vi/yucr3tPudL4/0.jpg)](http://www.youtube.com/watch?v=yucr3tPudL4)  
+[![Patterns](http://img.youtube.com/vi/yucr3tPudL4/0.jpg)](http://www.youtube.com/watch?v=yucr3tPudL4)  
 
 Animations  
 [![Animations](http://img.youtube.com/vi/veYClVCJSAs/0.jpg)](http://www.youtube.com/watch?v=veYClVCJSAs)  
@@ -23,7 +24,9 @@ Settings
 Micro SD Card
 -------------
 
-Aurora makes use of an optional MicroSD card to display animated GIF images and to store user preferences and settings.  Aurora will still work fine if no MicroSD card is inserted into the slot, but obviously no animated GIFs will be displayed, and changes to any settings will not be retained if the display loses power.
+Aurora makes use of an optional MicroSD card to display animated GIF images and to store user preferences and settings.  Aurora will still work fine if
+no MicroSD card is inserted into the slot, but obviously no animated GIFs will be displayed, and changes to any settings will not be retained if the display
+loses power.
 
 Animated GIF Image support
 --------------------------
@@ -42,7 +45,8 @@ Aurora stores settings in a directory named Aurora in the root of the MicroSD ca
 Installation
 ------------
 
-Aurora includes and makes use of several optional files and example animated GIF images which can be downloaded, extracted, and copied into the root of your MicroSD card:
+Aurora includes and makes use of several optional files and example animated GIF images which can be downloaded, extracted, and copied into the
+root of your MicroSD card:
 
 1. Download the [Aurora MicroSD Card] zip file.
 2. Extract all contents of the zip file.
@@ -52,14 +56,16 @@ Aurora includes and makes use of several optional files and example animated GIF
 5. Prepare the MicroSD card for safe removal from your computer by first ejecting, unmounting, etc.
     * Removing the MicroSD card from your computer without first preparing it can cause the corruption and/or loss of data.
 6. Remove the MicroSD card from your computer.
-7. Insert the MicroSD card into the MicroSD card slot on the SmartMatrix board. It's located underneath the Micro USB port.      Make sure the label on the MicroSD card is facing up, and it's inserted with the narrower end with the contacts first.
+7. Insert the MicroSD card into the MicroSD card slot on the SmartMatrix board. It's located underneath the Micro USB port.
+   Make sure the label on the MicroSD card is facing up, and it's inserted with the narrower end with the contacts first.
 
 Connect the display to power:
 
 1.  Insert the power cable into the power port on the back of the display.
 2.  Plug the power cable in to a wall power outlet (the display does not draw power from the Micro USB cable).
 
-The display will likey not light up or do anything, as the Aurora software did not come pre-installed on your display.  Next we'll install the Aurora software.  First connect your display to your computer:
+The display will likey not light up or do anything, as the Aurora software did not come pre-installed on your display.
+Next we'll install the Aurora software.  First connect your display to your computer:
 
 1.  Insert the smaller end of a Micro USB cable into the Micro USB port on the back of the display.
 2.  Insert the larger end of the Micro USB cable into one of your computer's USB ports.
@@ -161,7 +167,8 @@ Aurora Menu
 Power Utilization
 -----------------
 
-Aurora requires a 5 volt power supply, capable of providing 4 amps of peak power.  When in idle, low power mode, Aurora uses only 1.2 watts.  When turned on, power use depends on the brightness and pattern displayed.  When on 100% brightness with every LED on full white, it can draw as much as 20 watts, which is still only half of what a standard (40W) incandescent light bulb uses.
+Aurora requires a 5 volt power supply, capable of providing 4 amps of peak power.  When in idle, low power mode, Aurora uses only 1.2 watts.
+When turned on, power use depends on the brightness and pattern displayed.  When on 100% brightness with every LED on full white, it can draw as much as 20 watts, which is still only half of what a standard (40W) incandescent light bulb uses.
 
 All power use was measured using a [Kill A Watt].
 
@@ -179,17 +186,26 @@ Source code and libraries:
 
 * [Aurora Source Code]
 * [SmartMatrix Library]
-* [FastLED v2.1 Library]
+* [FastLED v2.1 Library] **(make sure you use the 2.1 branch!)**
 * [IR Remote Library]
 * [SdFat Library]
 * [Time Library]
 * [DS1307RTC Library]
 
-After downloading and installing all of the software, download all of the required libraries and extract/place them in your Arduino libraries directory on your computer.  For more information, see [Installing Additional Arduino Libraries]
+After downloading and installing all of the software, download all of the required libraries and extract/place them in your 
+Arduino libraries directory on your computer.  For more information, see [Installing Additional Arduino Libraries]
 
 Next, connect your Aurora display. See installation instructions above for more information.
 
 Finally, open Aurora.ino in the Arduino IDE and click the Upload button.
+
+Troubleshooting
+---------------
+
+If you have any problems using Aurora (crashes, glitches, etc), please search the [Aurora Issue Tracker] before creating a new issue.    
+    
+If you have any problems compiling Aurora, please make sure all the above libraries are properly installed.
+Please refer to [Installing Additional Arduino Libraries], and [SmartMatrix External Libraries] for more troubleshooting information.
 
 Acknowledgements
 ----------------
@@ -220,6 +236,7 @@ Thanks to these fine game companies for allowing us to use and distribute their 
 ![Chasm](https://github.com/pixelmatix/aurora/blob/master/sd/gifs/ChasmDaltynCrouch.gif) [Chasm] by [Discord Games]
 
 [Aurora Source Code]:https://github.com/pixelmatix/aurora/archive/master.zip
+[Aurora Issue Tracker]:https://github.com/pixelmatix/aurora/issues
 [SparkFun Infrared Remote Control]:https://www.sparkfun.com/products/11759
 [SparkFun Infrared Remote Image]:https://cdn.sparkfun.com/r/92-92/assets/parts/7/9/8/6/11759-01.jpg
 [Adafruit Infrared Remote Control]:http://www.adafruit.com/products/389
@@ -232,6 +249,7 @@ Thanks to these fine game companies for allowing us to use and distribute their 
 [Arduino Software]:http://www.arduino.cc/en/Main/Software
 [SmartMatrix Library]:https://github.com/pixelmatix/SmartMatrix
 [SmartMatrix SD Shield]:http://docs.pixelmatix.com/SmartMatrix/shield-sd.html
+[SmartMatrix External Libraries]:http://docs.pixelmatix.com/SmartMatrix/#external-libraries
 [FastLED v2.1 Library]:https://github.com/FastLED/FastLED/tree/FastLED2.1
 [IR Remote Library]:https://github.com/shirriff/Arduino-IRremote
 [SdFat Library]:https://github.com/greiman/SdFat/tree/master/SdFat
