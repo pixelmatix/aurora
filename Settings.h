@@ -66,20 +66,19 @@ private:
         &menuItemExit,
     };
 
-    SdFile imageFile;
+    File imageFile;
 
     void openImageFile() {
-        if (imageFile.isOpen())
+        if (imageFile.available())
             imageFile.close();
 
         const char filepath [] = "/aurora/gearblue.gif"; // gearblu2.gif
-        //Serial.print(filepath);
-        //Serial.print(" exists: ");
-        //Serial.println(sd.exists(filepath));
-        if (!imageFile.open(filepath))
+        
+        imageFile = SD.open(filepath);
+        if (!imageFile)
             return;
 
-        if (!imageFile.isFile()){
+        if (imageFile.isDirectory()){
             imageFile.close();
             return;
         }
@@ -111,7 +110,7 @@ public:
     }
 
     unsigned int drawFrame() {
-        if (!imageFile.isOpen())
+        if (!imageFile.available())
             return 0;
 
         unsigned long result = gifPlayer.drawFrame();
@@ -131,7 +130,7 @@ public:
     }
 
     void stop() {
-        if (imageFile.isOpen())
+        if (imageFile.available())
             imageFile.close();
     }
 };

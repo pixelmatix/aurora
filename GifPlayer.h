@@ -99,14 +99,14 @@ private:
     byte lzwImageData[1280];
     char tempBuffer[260];
 
-    SdFile file;
+    File file;
 
     byte imageData[1024];
     byte imageDataBU[1024];
 
     // Backup the read stream by n bytes
     void backUpStream(int n) {
-        file.seekCur(-n);
+        file.seek(file.position() - n);
     }
 
     // Read a file byte
@@ -692,7 +692,7 @@ private:
     }
 
 public:
-    void setFile(SdFile imageFile) {
+    void setFile(File imageFile) {
         file = imageFile;
     }
 

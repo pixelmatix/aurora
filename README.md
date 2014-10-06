@@ -188,7 +188,7 @@ Source code and libraries:
 * [SmartMatrix Library]
 * [FastLED v2.1 Library] **(make sure you use the 2.1 branch!)**
 * [IR Remote Library]
-* [SdFat Library]
+* [SD Library]
 * [Time Library]
 * [DS1307RTC Library]
 
@@ -216,7 +216,7 @@ Many thanks to all of the fantastic hardware and open source software libraries 
 * [SmartMatrix Library] by Louis Beaudoin
 * [FastLED v2.1 Library] by Daniel Garcia and Mark Kriegsman
 * [IR Remote Library] by Ken Shirriff
-* [SdFat Library] by Bill Greiman
+* [SD Library] by Bill Greiman
 * [Teensy v3.1] by Paul Stoffregen
 * [Teensyduino Software] by Paul Stoffregen
 * [Time Library] by Paul Stoffregen
@@ -252,7 +252,7 @@ Thanks to these fine game companies for allowing us to use and distribute their 
 [SmartMatrix External Libraries]:http://docs.pixelmatix.com/SmartMatrix/#external-libraries
 [FastLED v2.1 Library]:https://github.com/FastLED/FastLED/tree/FastLED2.1
 [IR Remote Library]:https://github.com/shirriff/Arduino-IRremote
-[SdFat Library]:https://github.com/greiman/SdFat/tree/master/SdFat
+[SD Library]:https://github.com/adafruit/SD
 [Time Library]:https://github.com/PaulStoffregen/Time
 [DS1307RTC Library]:https://www.pjrc.com/teensy/td_libs_DS1307RTC.html
 [Teensy v3.1]:https://www.pjrc.com/teensy/index.html

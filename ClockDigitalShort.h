@@ -88,14 +88,14 @@ public:
                 if (hour > 9)
                     x = 2;
                 else
-                    x = 0;
+                    x = -1;
                 break;
 
             case SetMinute:
                 if (hour > 9)
                     x = 20;
                 else
-                    x = 18;
+                    x = 17;
                 break;
         }
 
@@ -139,8 +139,8 @@ public:
     }
 
     void boundY() {
-        if (y < 0)
-            y = 0;
+        if (y < -1)
+            y = -1;
         else if (y > 23)
             y = 23;
     }

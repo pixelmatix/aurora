@@ -34,13 +34,13 @@ uint8_t backgroundBrightnessMap[brightnessCount] = { 1, 16, 32, 64, 128 };
 #include <SmartMatrix.h>
 #include <FastLED.h>
 #include <IRremote.h>
-#include <SdFat.h>
+#include <SPI.h>
+#include <SD.h>
 
 #include <Wire.h>
 #include <Time.h>
 #include <DS1307RTC.h>
 
-SdFat sd;
 bool sdAvailable = false;
 SmartMatrix matrix;
 IRrecv irReceiver(IR_RECV_PIN);
@@ -117,7 +117,8 @@ void setup()
     matrix.setFont(gohufont11b);
     matrix.setScrollStartOffsetFromLeft(8);
 
-    sdAvailable = sd.begin(SD_CARD_CS, SPI_HALF_SPEED);
+    pinMode(SD_CARD_CS, OUTPUT);
+    sdAvailable = SD.begin(SD_CARD_CS);
     if (sdAvailable)
         animations.setup("/gifs/");
 
@@ -266,28 +267,23 @@ void saveBackgroundBrightnessSetting() {
     saveIntSetting("/aurora/", "/aurora/bckbrght.txt", backgroundBrightness);
 }
 
-int loadIntSetting(const char* dir, const char* settingPath, int maxLength, int defaultValue) {
+int loadIntSetting(char* dir, const char* settingPath, int maxLength, int defaultValue) {
     if (!sdAvailable)
         return defaultValue;
 
     int intValue = defaultValue;
 
-    /* used to test initial file creation
-    SdFile temp;
-    temp.open(dir);
-    temp.rmRfStar();*/
-
-    if (!sd.exists(dir)) {
+    if (!SD.exists(dir)) {
         //Serial.println(F("aurora dir doesn't exist"));
-        sd.mkdir(dir);
+        SD.mkdir(dir);
     }
     //Serial.print(dir);
     //Serial.print(" exists: ");
     //Serial.println(sd.exists(dir));
 
-    SdFile file;
+    File file = SD.open(settingPath);
     //Serial.println(settingPath);
-    if (file.open(settingPath)) {
+    if (file) {
         //Serial.println(F(" exists, reading..."));
         String value;
         char c = file.read();
@@ -307,21 +303,21 @@ int loadIntSetting(const char* dir, const char* settingPath, int maxLength, int 
     return intValue;
 }
 
-void saveIntSetting(const char* dir, const char* settingPath, int value) {
+void saveIntSetting(char* dir, const char* settingPath, int value) {
     if (!sdAvailable)
         return;
 
-    if (!sd.exists(dir)) {
+    if (!SD.exists(dir)) {
         //Serial.print(dir);
         //Serial.println(F(" dir doesn't exist"));
-        sd.mkdir(dir);
+        SD.mkdir(dir);
     }
     //Serial.print("exists: ");
     //Serial.println(sd.exists(dir));
 
-    SdFile file;
+    File file = SD.open(settingPath, O_CREAT | O_TRUNC | O_WRITE);
     Serial.println(settingPath);
-    if (file.open(settingPath, O_CREAT | O_TRUNC | O_WRITE)) {
+    if (file) {
         //Serial.println(value);
         file.print(value, 10);
         file.close();

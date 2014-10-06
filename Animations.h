@@ -58,7 +58,7 @@ public:
             return 0;
         }
 
-        if (!imageFile.isOpen())
+        if (!imageFile.available())
             return 0;
 
         unsigned long result = gifPlayer.drawFrame();
@@ -77,7 +77,7 @@ public:
     }
 
     void stop() {
-        if (imageFile.isOpen())
+        if (imageFile.available())
             imageFile.close();
     }
 
@@ -110,7 +110,7 @@ private:
 
     const char* path;
 
-    SdFile imageFile;
+    File imageFile;
 
     int currentIndex = 0;
     int imageCount = 1;
@@ -123,28 +123,21 @@ private:
     int countFiles(const char* directoryName) {
         int count = 0;
 
-        // Set the current working directory
-        if (!sd.chdir(directoryName, true)) {
-            return 0;
-        }
+        File directory = SD.open(directoryName);
 
-        sd.vwd()->rewind();
-
-        SdFile file;
-        char filename[13];
-        while (file.openNext(sd.vwd(), O_READ)) {
-            if (file.isFile()) {
-                file.getFilename(filename);
-                if (isAnimationFile(filename)) {
+        File file = directory.openNextFile();
+        while (file) {
+            if (!file.isDirectory()) {
+                if (isAnimationFile(file.name())) {
                     count++;
                 }
             }
 
             file.close();
+            file = directory.openNextFile();
         }
 
-        // Set the current working directory
-        sd.chdir("/", true);
+        directory.close();
 
         return count;
     }
@@ -153,7 +146,7 @@ private:
         if (!sdAvailable)
             return;
 
-        if (imageFile.isOpen())
+        if (imageFile.available())
             imageFile.close();
 
         char name[13];
@@ -163,10 +156,11 @@ private:
         strcpy(filepath, path);
         strcat(filepath, name);
 
-        if (!imageFile.open(filepath))
+        imageFile = SD.open(filepath);
+        if (!imageFile)
             return;
 
-        if (!imageFile.isFile()){
+        if (imageFile.isDirectory()){
             imageFile.close();
             return;
         }
@@ -184,60 +178,35 @@ private:
 
     // Get the name of the GIF file with specified index
     void getNameByIndex(const char *directoryName, int index, char *nameBuffer, int numberOfFiles) {
-        //Serial.println("getNameByIndex");
-        char filename[13];
-
         // Make sure index is in range
-        //Serial.println("Make sure index is in range");
-        if ((index >= 0) && (index < numberOfFiles)) {
-            //Serial.println("index is in range");
+        if ((index < 0) || (index >= numberOfFiles))
+            return;
 
-            // Set the current working directory
-            //Serial.println("Set the current working directory");
-            if (!sd.chdir(directoryName, true)) {
-                //Serial.println("Could not change to directory");
-                sd.errorHalt("Could not change to directory");
-            }
+        File directory = SD.open(directoryName);
+        if(!directory)
+            return;
 
             // Make sure file is closed before starting
-            SdFile file;
+        File file = directory.openNextFile();
 
-            // Rewind the directory to the beginning
-            //Serial.println("Rewind the directory to the beginning");
-            sd.vwd()->rewind();
+        while (file && (index >= 0)) {
+            if (file.isDirectory()) {
+                file.close();
+                continue;
+            }
 
-            //Serial.println("opening file");
-            while ((file.openNext(sd.vwd(), O_READ)) && (index >= 0)) {
-                if (file.isFile()) {
-                    //Serial.println("getting filename");
-                    file.getFilename(filename);
+            if (isAnimationFile(file.name())) {
+                index--;
 
-                    //Serial.print("filename: ");
-                    //Serial.println(filename);
-
-                    if (isAnimationFile(filename)) {
-                        index--;
-                    }
+                // Copy the filename name into the buffer
+                strcpy(nameBuffer, file.name());
                 }
 
-                //Serial.println("closing file");
                 file.close();
+            file = directory.openNextFile();
             }
 
-            // Set the current working directory back to root
-            //Serial.println("Setting the current working directory back to root");
-            if (!sd.chdir("/", true)) {
-                //Serial.println("Could not change to root directory");
-                sd.errorHalt("Could not change to root directory");
-            }
-
-            // Copy the filename to the name buffer
-            //Serial.println("Copying the filename to the name buffer");
-            strcpy(nameBuffer, filename);
-            //Serial.println("Copied the filename to the name buffer");
-            //Serial.print("name buffer:");
-            //Serial.println(nameBuffer);
-        }
+        directory.close();
     }
 };
 
