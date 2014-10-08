@@ -58,9 +58,6 @@ public:
             return 0;
         }
 
-        if (!imageFile.available())
-            return 0;
-
         unsigned long result = gifPlayer.drawFrame();
         if (result == ERROR_FINISHED) {
             openImageFile();
@@ -77,10 +74,9 @@ public:
     }
 
     void stop() {
-        if (imageFile.available())
+        if (imageFile)
             imageFile.close();
     }
-
 
     void setup(const char* directoryName) {
         path = directoryName;
@@ -136,7 +132,7 @@ private:
             file.close();
             file = directory.openNextFile();
         }
-
+        file.close();
         directory.close();
 
         return count;
@@ -146,7 +142,7 @@ private:
         if (!sdAvailable)
             return;
 
-        if (imageFile.available())
+        if (imageFile)
             imageFile.close();
 
         char name[13];
@@ -159,11 +155,6 @@ private:
         imageFile = SD.open(filepath);
         if (!imageFile)
             return;
-
-        if (imageFile.isDirectory()){
-            imageFile.close();
-            return;
-        }
 
         gifPlayer.setFile(imageFile);
 
@@ -206,6 +197,7 @@ private:
             file = directory.openNextFile();
             }
 
+        file.close();
         directory.close();
     }
 };

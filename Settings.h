@@ -69,7 +69,7 @@ private:
     File imageFile;
 
     void openImageFile() {
-        if (imageFile.available())
+        if (imageFile)
             imageFile.close();
 
         const char filepath [] = "/aurora/gearblue.gif"; // gearblu2.gif
@@ -130,7 +130,7 @@ public:
     }
 
     void stop() {
-        if (imageFile.available())
+        if (imageFile)
             imageFile.close();
     }
 };
