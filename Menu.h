@@ -109,12 +109,14 @@ public:
 
                 if (command == InputCommand::Up) {
                     if (visible) {
+                        currentPlaylist->stop();
                         currentIndex--;
                         break;
                     }
                 }
                 else if (command == InputCommand::Down) {
                     if (visible) {
+                        currentPlaylist->stop();
                         currentIndex++;
                         break;
                     }

@@ -27,6 +27,7 @@
 #include "Boid.h"
 #include "Attractor.h"
 
+#include "PatternBitmap.h"
 #include "PatternWave.h"
 #include "PatternAttract.h"
 #include "PatternBounce.h"
@@ -47,6 +48,7 @@
 
 class Patterns : public Playlist {
 private:
+    PatternBitmap bitmap;
     PatternWave wave;
     PatternAttract attract;
     PatternBounce bounce;
@@ -72,9 +74,10 @@ private:
     int currentIndex = 0;
     Drawable* currentItem;
 
-    static const int PATTERN_COUNT = 21;
+    static const int PATTERN_COUNT = 22;
 
     Drawable* items[PATTERN_COUNT] = {
+        &bitmap,
         &wave,
         &attract,
         &bounce,
@@ -105,6 +108,16 @@ public:
     }
 
     char* Drawable::name = "Patterns";
+
+    void stop() {
+        if (currentItem)
+            currentItem->stop();
+    }
+
+    void start() {
+        if (currentItem)
+            currentItem->start();
+    }
 
     void move(int step) {
         currentIndex += step;

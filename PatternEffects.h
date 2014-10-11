@@ -30,7 +30,7 @@
 class PatternGhost : public Drawable {
 public:
     unsigned int drawFrame() {
-        effects.HorizontalStream(125);
+        effects.StreamRight(125);
 
         effects.MoveOscillators();
 
@@ -52,7 +52,7 @@ private:
 
 public:
     unsigned int drawFrame() {
-        effects.HorizontalStream(125);
+        effects.StreamRight(125);
         effects.MoveOscillators();
         //2 lissajous dots red
         effects.leds[effects.XY(effects.p[0], effects.p[1])] = color1;
@@ -69,7 +69,7 @@ class PatternDots2 : public Drawable {
 public:
     unsigned int drawFrame() {
 
-        effects.HorizontalStream(125);
+        effects.StreamRight(125);
         effects.MoveOscillators();
         effects.Pixel((effects.p[2] + effects.p[0] + effects.p[1]) / 3, (effects.p[1] + effects.p[3] + effects.p[2]) / 3, effects.osci[3]);
 
@@ -112,7 +112,7 @@ public:
         effects.Pixel(effects.p[2], effects.p[3], effects.osci[3]);
         effects.Caleidoscope5();
         effects.Caleidoscope2();
-        effects.HorizontalStream(110);
+        effects.StreamRight(110);
 
         return 0;
     }

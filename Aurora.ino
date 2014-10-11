@@ -53,6 +53,11 @@ Effects effects;
 #include "GifPlayer.h"
 GifPlayer gifPlayer;
 
+#include "BitmapPlayer.h"
+BitmapPlayer bitmapPlayer;
+
+#include "Logo.h"
+
 #include "Drawable.h"
 #include "Playlist.h"
 #include "Runnable.h"
@@ -112,10 +117,14 @@ void setup()
     matrix.begin();
     matrix.setBrightness(brightness);
     matrix.setColorCorrection(cc24);
-    matrix.fillScreen(CRGB(CRGB::Black));
+    drawLogo();
     matrix.swapBuffers();
     matrix.setFont(gohufont11b);
     matrix.setScrollStartOffsetFromLeft(8);
+    matrix.setScrollOffsetFromTop(25);
+    matrix.setScrollSpeed(60);
+    matrix.setScrollMode(wrapForward);
+    matrix.scrollText("Aurora by Pixelmatix", 1);
 
     pinMode(SD_CARD_CS, OUTPUT);
     sdAvailable = SD.begin(SD_CARD_CS);
@@ -138,6 +147,8 @@ void setup()
 
     if (sdAvailable)
         loadSettings();
+
+    while (matrix.getScrollStatus() != 0) {}
 }
 
 void loop()

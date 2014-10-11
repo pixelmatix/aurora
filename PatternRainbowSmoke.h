@@ -303,7 +303,7 @@ private:
 public:
     unsigned int drawFrame() {
         if (currentColorIndex == 0) {
-            randomSeed(analogRead(5));
+            //randomSeed(analogRead(5));
 
             matrix.fillScreen({ 0, 0, 0 });
             createPalette();

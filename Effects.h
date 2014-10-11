@@ -108,52 +108,8 @@ public:
     // sin8(osci) swinging between 0 to MATRIX_WIDTH - 1
     byte p[6];
 
-    virtual void MoveOscillators();
-
-    virtual int XY(int x, int y);
-
-    virtual void DimAll(byte value);
-    virtual void Caleidoscope1();
-    virtual void Caleidoscope2();
-    virtual void Caleidoscope3();
-    virtual void Caleidoscope4();
-    virtual void Caleidoscope5();
-    virtual void Caleidoscope6();
-    virtual void SpiralStream(int x, int y, int r, byte dimm);
-    virtual void HorizontalStream(byte scale, int fromX = 0, int toX = MATRIX_WIDTH, int fromY = 0, int toY = MATRIX_HEIGHT);
-    virtual void HorizontalStreamLeft(byte scale, int fromX = 0, int toX = MATRIX_WIDTH, int fromY = 0, int toY = MATRIX_HEIGHT);
-    virtual void VerticalStream(byte dimm);
-    virtual void VerticalMove();
-    virtual void VerticalMoveFrom(int start, int end);
-    virtual void Copy(byte x0, byte y0, byte x1, byte y1, byte x2, byte y2);
-    virtual void RotateTriangle();
-    virtual void MirrorTriangle();
-    virtual void RainbowTriangle();
-
-    virtual void BresenhamLine(int x0, int y0, int x1, int y1, byte color);
-    virtual void BresenhamLine(int x0, int y0, int x1, int y1, CRGB color);
-
-    virtual void Pixel(int x, int y, byte colorIndex);
-
-    virtual void Expand(int x, int y, int r, byte dimm);
-
-    virtual void PrepareFrame();
-    virtual void ShowFrame();
-
-    CRGB ColorFromCurrentPalette(uint8_t index = 0, uint8_t brightness = 255, TBlendType blendType = BLEND);
-
-    CRGB HeatRgb24(uint8_t temperature);
-
-    CRGB HsvToRgb(uint8_t h, uint8_t s, uint8_t v);
-
-private:
-
-};
-
-#endif
-
 // set the speeds (and by that ratios) of the oscillators here
-void Effects::MoveOscillators() {
+    void MoveOscillators() {
     osci[0] = osci[0] + 5;
     osci[1] = osci[1] + 2;
     osci[2] = osci[2] + 3;
@@ -166,18 +122,18 @@ void Effects::MoveOscillators() {
     }
 }
 
-void Effects::PrepareFrame() {
+    void PrepareFrame() {
     leds = (CRGB*) matrix.backBuffer();
 }
 
-void Effects::ShowFrame() {
+    void ShowFrame() {
     matrix.swapBuffers();
     leds = (CRGB*) matrix.backBuffer();
     LEDS.countFPS();
 }
 
 // translates from x, y into an index into the LED array
-int Effects::XY(int x, int y) {
+    int XY(int x, int y) {
     if (y >= MATRIX_HEIGHT) { y = MATRIX_HEIGHT - 1; }
     if (y < 0) { y = 0; }
     if (x >= MATRIX_WIDTH) { x = MATRIX_WIDTH - 1; }
@@ -186,31 +142,8 @@ int Effects::XY(int x, int y) {
     return (y * MATRIX_WIDTH) + x;
 }
 
-/*
--------------------------------------------------------------------
-Functions for manipulating existing data within the screenbuffer:
-
-DimAll scales the brightness of the screenbuffer down
-Caleidoscope1 mirror one quarter to the other 3 (and overwrite them)
-Caleidoscope2 rotate one quarter to the other 3 (and overwrite them)
-Caleidoscope3 useless bullshit?!
-Caleidoscope4 rotate and add the complete screenbuffer 3 times
-Caleidoscope5 copy a triangle from the first quadrant to the other half
-Caleidoscope6
-SpiralStream stream = give it a nice fading tail
-HorizontalStream
-VerticalStream
-VerticalMove move = just move it as it is one line down
-Copy copy a rectangle
-RotateTriangle copy + rotate a triangle (in 8*8)
-MirrorTriangle copy + mirror a triangle (in 8*8)
-RainbowTriangle static draw for debugging
-
--------------------------------------------------------------------
-*/
-
 // scale the brightness of the screenbuffer down
-void Effects::DimAll(byte value)
+    void DimAll(byte value)
 {
     for (int i = 0; i < ledCount; i++)
     {
@@ -231,7 +164,7 @@ y
 |_______________ x
 
 */
-void Effects::Caleidoscope1() {
+    void Caleidoscope1() {
     for (int x = 0; x < MATRIX_WIDTH / 2; x++) {
         for (int y = 0; y < MATRIX_HEIGHT / 2; y++) {
             leds[XY(MATRIX_WIDTH - 1 - x, y)] = leds[XY(x, y)]; // copy to A
@@ -254,7 +187,7 @@ y
 |_______________ x
 
 */
-void Effects::Caleidoscope2() {
+    void Caleidoscope2() {
     for (int x = 0; x < MATRIX_WIDTH / 2; x++) {
         for (int y = 0; y < MATRIX_HEIGHT / 2; y++) {
             leds[XY(MATRIX_WIDTH - 1 - x, y)] = leds[XY(y, x)]; // rotate to A
@@ -265,7 +198,7 @@ void Effects::Caleidoscope2() {
 }
 
 // adds the color of one quarter to the other 3
-void Effects::Caleidoscope3() {
+    void Caleidoscope3() {
     for (int x = 0; x < MATRIX_WIDTH / 2; x++) {
         for (int y = 0; y < MATRIX_HEIGHT / 2; y++) {
             leds[XY(MATRIX_WIDTH - 1 - x, y)] += leds[XY(y, x)]; // rotate to A
@@ -276,7 +209,8 @@ void Effects::Caleidoscope3() {
 }
 
 // add the complete screenbuffer 3 times while rotating
-void Effects::Caleidoscope4() {
+    // rotate and add the complete screenbuffer 3 times
+    void Caleidoscope4() {
     for (int x = 0; x < MATRIX_WIDTH; x++) {
         for (int y = 0; y < MATRIX_HEIGHT; y++) {
             leds[XY(MATRIX_WIDTH - 1 - x, y)] += leds[XY(y, x)]; // rotate to A
@@ -288,7 +222,7 @@ void Effects::Caleidoscope4() {
 
 // rotate, duplicate and copy over a triangle from first sector into the other half
 // (crappy code)
-void Effects::Caleidoscope5() {
+    void Caleidoscope5() {
     int halfWidth = MATRIX_WIDTH / 2;
     int halfWidthMinus1 = halfWidth - 1;
 
@@ -305,8 +239,7 @@ void Effects::Caleidoscope5() {
     }
 }
 
-
-void Effects::Caleidoscope6() {
+    void Caleidoscope6() {
     for (int x = 1; x < MATRIX_WIDTH / 2; x++) {
         leds[XY(7 - x, 7)] = leds[XY(x, 0)];
     } //a
@@ -332,7 +265,7 @@ void Effects::Caleidoscope6() {
 
 // create a square twister to the left or counter-clockwise
 // x and y for center, r for radius
-void Effects::SpiralStream(int x, int y, int r, byte dimm) {
+    void SpiralStream(int x, int y, int r, byte dimm) {
     for (int d = r; d >= 0; d--) { // from the outside to the inside
         for (int i = x - d; i <= x + d; i++) {
             leds[XY(i, y - d)] += leds[XY(i + 1, y - d)]; // lowest row to the right
@@ -354,7 +287,7 @@ void Effects::SpiralStream(int x, int y, int r, byte dimm) {
 }
 
 // expand everything within a circle
-void Effects::Expand(int centerX, int centerY, int radius, byte dimm) {
+    void Expand(int centerX, int centerY, int radius, byte dimm) {
     if (radius == 0)
         return;
 
@@ -412,22 +345,9 @@ void Effects::Expand(int centerX, int centerY, int radius, byte dimm) {
         currentRadius--;
     }
 }
-//
-//// give it a linear tail to the side
-//void Effects::HorizontalStream(byte scale)
-//{
-//    for (int x = 1; x < MATRIX_WIDTH; x++) {
-//        for (int y = 0; y < MATRIX_HEIGHT; y++) {
-//            leds[XY(x, y)] += leds[XY(x - 1, y)];
-//            leds[XY(x, y)].nscale8(scale);
-//        }
-//    }
-//    for (int y = 0; y < MATRIX_HEIGHT; y++)
-//        leds[XY(0, y)].nscale8(scale);
-//}
 
 // give it a linear tail to the right
-void Effects::HorizontalStream(byte scale, int fromX, int toX, int fromY, int toY)
+    void StreamRight(byte scale, int fromX = 0, int toX = MATRIX_WIDTH, int fromY = 0, int toY = MATRIX_HEIGHT)
 {
     for (int x = fromX + 1; x < toX; x++) {
         for (int y = fromY; y < toY; y++) {
@@ -440,7 +360,7 @@ void Effects::HorizontalStream(byte scale, int fromX, int toX, int fromY, int to
 }
 
 // give it a linear tail to the left
-void Effects::HorizontalStreamLeft(byte scale, int fromX, int toX, int fromY, int toY)
+    void StreamLeft(byte scale, int fromX = MATRIX_WIDTH, int toX = 0, int fromY = 0, int toY = MATRIX_HEIGHT)
 {
     for (int x = toX; x < fromX; x++) {
         for (int y = fromY; y < toY; y++) {
@@ -453,7 +373,7 @@ void Effects::HorizontalStreamLeft(byte scale, int fromX, int toX, int fromY, in
 }
 
 // give it a linear tail downwards
-void Effects::VerticalStream(byte scale)
+    void StreamDown(byte scale)
 {
     for (int x = 0; x < MATRIX_WIDTH; x++) {
         for (int y = 1; y < MATRIX_HEIGHT; y++) {
@@ -465,8 +385,54 @@ void Effects::VerticalStream(byte scale)
         leds[XY(x, 0)].nscale8(scale);
 }
 
+    // give it a linear tail upwards
+    void StreamUp(byte scale)
+    {
+        for (int x = 0; x < MATRIX_WIDTH; x++) {
+            for (int y = MATRIX_HEIGHT - 2; y >= 0; y--) {
+                leds[XY(x, y)] += leds[XY(x, y + 1)];
+                leds[XY(x, y)].nscale8(scale);
+            }
+        }
+        for (int x = 0; x < MATRIX_WIDTH; x++)
+            leds[XY(x, MATRIX_HEIGHT - 1)].nscale8(scale);
+    }
+
+    // give it a linear tail up and to the left
+    void StreamUpAndLeft(byte scale)
+    {
+        for (int x = 0; x < MATRIX_WIDTH - 1; x++) {
+            for (int y = MATRIX_HEIGHT - 2; y >= 0; y--) {
+                leds[XY(x, y)] += leds[XY(x + 1, y + 1)];
+                leds[XY(x, y)].nscale8(scale);
+            }
+        }
+        for (int x = 0; x < MATRIX_WIDTH; x++)
+            leds[XY(x, MATRIX_HEIGHT - 1)].nscale8(scale);
+        for (int y = 0; y < MATRIX_HEIGHT; y++)
+            leds[XY(MATRIX_WIDTH - 1, y)].nscale8(scale);
+    }
+
+    // give it a linear tail up and to the right
+    void StreamUpAndRight(byte scale)
+    {
+        for (int x = 0; x < MATRIX_WIDTH - 1; x++) {
+            for (int y = MATRIX_HEIGHT - 2; y >= 0; y--) {
+                leds[XY(x + 1, y)] += leds[XY(x, y + 1)];
+                leds[XY(x, y)].nscale8(scale);
+            }
+        }
+        // fade the bottom row
+        for (int x = 0; x < MATRIX_WIDTH; x++)
+            leds[XY(x, MATRIX_HEIGHT - 1)].nscale8(scale);
+
+        // fade the right column
+        for (int y = 0; y < MATRIX_HEIGHT; y++)
+            leds[XY(MATRIX_WIDTH - 1, y)].nscale8(scale);
+    }
+
 // just move everything one line down
-void Effects::VerticalMove() {
+    void MoveDown() {
     for (int y = MATRIX_HEIGHT - 1; y > 0; y--) {
         for (int x = 0; x < MATRIX_WIDTH; x++) {
             leds[XY(x, y)] = leds[XY(x, y - 1)];
@@ -475,7 +441,7 @@ void Effects::VerticalMove() {
 }
 
 // just move everything one line down
-void Effects::VerticalMoveFrom(int start, int end) {
+    void VerticalMoveFrom(int start, int end) {
     for (int y = end; y > start; y--) {
         for (int x = 0; x < MATRIX_WIDTH; x++) {
             leds[XY(x, y)] = leds[XY(x, y - 1)];
@@ -485,7 +451,7 @@ void Effects::VerticalMoveFrom(int start, int end) {
 
 // copy the rectangle defined with 2 points x0, y0, x1, y1
 // to the rectangle beginning at x2, x3
-void Effects::Copy(byte x0, byte y0, byte x1, byte y1, byte x2, byte y2) {
+    void Copy(byte x0, byte y0, byte x1, byte y1, byte x2, byte y2) {
     for (int y = y0; y < y1 + 1; y++) {
         for (int x = x0; x < x1 + 1; x++) {
             leds[XY(x + x2 - x0, y + y2 - y0)] = leds[XY(x, y)];
@@ -494,7 +460,7 @@ void Effects::Copy(byte x0, byte y0, byte x1, byte y1, byte x2, byte y2) {
 }
 
 // rotate + copy triangle (MATRIX_WIDTH / 2*MATRIX_WIDTH / 2)
-void Effects::RotateTriangle() {
+    void RotateTriangle() {
     for (int x = 1; x < MATRIX_WIDTH / 2; x++) {
         for (int y = 0; y < x; y++) {
             leds[XY(x, 7 - y)] = leds[XY(7 - x, y)];
@@ -503,16 +469,17 @@ void Effects::RotateTriangle() {
 }
 
 // mirror + copy triangle (MATRIX_WIDTH / 2*MATRIX_WIDTH / 2)
-void Effects::MirrorTriangle() {
+    void MirrorTriangle() {
     for (int x = 1; x < MATRIX_WIDTH / 2; x++) {
         for (int y = 0; y < x; y++) {
             leds[XY(7 - y, x)] = leds[XY(7 - x, y)];
         }
     }
 }
+
 // draw static rainbow triangle pattern (MATRIX_WIDTH / 2xWIDTH / 2)
 // (just for debugging)
-void Effects::RainbowTriangle() {
+    void RainbowTriangle() {
     for (int i = 0; i < MATRIX_WIDTH / 2; i++) {
         for (int j = 0; j <= i; j++) {
             Pixel(7 - i, j, i*j * 4);
@@ -520,12 +487,12 @@ void Effects::RainbowTriangle() {
     }
 }
 
-void Effects::BresenhamLine(int x0, int y0, int x1, int y1, byte colorIndex)
+    void BresenhamLine(int x0, int y0, int x1, int y1, byte colorIndex)
 {
     BresenhamLine(x0, y0, x1, y1, ColorFromCurrentPalette(colorIndex));
 }
 
-void Effects::BresenhamLine(int x0, int y0, int x1, int y1, CRGB color)
+    void BresenhamLine(int x0, int y0, int x1, int y1, CRGB color)
 {
     int dx = abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
     int dy = -abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
@@ -540,17 +507,20 @@ void Effects::BresenhamLine(int x0, int y0, int x1, int y1, CRGB color)
 }
 
 // write one pixel with the specified color from the current palette to coordinates
-void Effects::Pixel(int x, int y, uint8_t colorIndex) {
+    void Pixel(int x, int y, uint8_t colorIndex) {
     leds[XY(x, y)] = ColorFromCurrentPalette(colorIndex);
 }
 
-CRGB Effects::ColorFromCurrentPalette(uint8_t index, uint8_t brightness, TBlendType blendType) {
+    CRGB ColorFromCurrentPalette(uint8_t index = 0, uint8_t brightness = 255, TBlendType blendType = BLEND) {
     return ColorFromPalette(currentPalette, index, brightness, currentBlendType);
 }
 
-CRGB Effects::HsvToRgb(uint8_t h, uint8_t s, uint8_t v) {
+    CRGB HsvToRgb(uint8_t h, uint8_t s, uint8_t v) {
     CHSV hsv = CHSV(h, s, v);
     CRGB rgb;
     hsv2rgb_spectrum(hsv, rgb);
     return rgb;
 }
+};
+
+#endif

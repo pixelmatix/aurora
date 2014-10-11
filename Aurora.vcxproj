@@ -44,7 +44,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>F:\Arduino-1.0.6\hardware\teensy\cores\teensy3;F:\Arduino-1.0.6\hardware\teensy\cores\teensy3\utils;F:\Arduino-1.0.6\hardware\teensy\cores\teensy3\avr;C:\Users\Jason\Documents\Arduino\libraries\SmartMatrix;C:\Users\Jason\Documents\Arduino\libraries\SmartMatrix\utility;C:\Users\Jason\Documents\Arduino\libraries\FastLED;C:\Users\Jason\Documents\Arduino\libraries\FastLED\utility;C:\Users\Jason\Documents\Arduino\libraries\IRremote;C:\Users\Jason\Documents\Arduino\libraries\IRremote\utility;F:\Arduino-1.0.6\libraries\SdFat;F:\Arduino-1.0.6\libraries\SdFat\utility;F:\Arduino-1.0.6\libraries\Wire;F:\Arduino-1.0.6\libraries\Wire\utility;C:\Users\Jason\Documents\Arduino\libraries\Time;C:\Users\Jason\Documents\Arduino\libraries\Time\utility;C:\Users\Jason\Documents\Arduino\libraries\DS1307RTC;C:\Users\Jason\Documents\Arduino\libraries\DS1307RTC\utility;F:\Arduino-1.0.6\libraries;F:\Arduino-1.0.6\hardware\teensy\libraries;F:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers;C:\Users\Jason\Documents\Arduino\libraries;F:\Arduino-1.0.6\hardware\tools\arm-none-eabi\arm-none-eabi\include;F:\Arduino-1.0.6\hardware\tools\arm-none-eabi\arm-none-eabi\include;F:\Arduino-1.0.6\hardware\tools\arm-none-eabi\lib\gcc\arm-none-eabi\4.7.2\include;F:\Arduino-1.0.6\hardware\tools\arm-none-eabi\lib\gcc\arm-none-eabi\4.7.2\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>F:\Arduino-1.0.6\hardware\teensy\cores\teensy3;F:\Arduino-1.0.6\hardware\teensy\cores\teensy3\utils;F:\Arduino-1.0.6\hardware\teensy\cores\teensy3\avr;C:\Users\Jason\Documents\Arduino\libraries\SmartMatrix;C:\Users\Jason\Documents\Arduino\libraries\SmartMatrix\utility;C:\Users\Jason\Documents\Arduino\libraries\FastLED;C:\Users\Jason\Documents\Arduino\libraries\FastLED\utility;C:\Users\Jason\Documents\Arduino\libraries\IRremote;C:\Users\Jason\Documents\Arduino\libraries\IRremote\utility;F:\Arduino-1.0.6\libraries\SPI;F:\Arduino-1.0.6\libraries\SPI\utility;F:\Arduino-1.0.6\libraries\SD;F:\Arduino-1.0.6\libraries\SD\utility;F:\Arduino-1.0.6\libraries\Wire;F:\Arduino-1.0.6\libraries\Wire\utility;C:\Users\Jason\Documents\Arduino\libraries\Time;C:\Users\Jason\Documents\Arduino\libraries\Time\utility;C:\Users\Jason\Documents\Arduino\libraries\DS1307RTC;C:\Users\Jason\Documents\Arduino\libraries\DS1307RTC\utility;F:\Arduino-1.0.6\libraries;F:\Arduino-1.0.6\hardware\teensy\libraries;F:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers;C:\Users\Jason\Documents\Arduino\libraries;F:\Arduino-1.0.6\hardware\tools\arm-none-eabi\arm-none-eabi\include;F:\Arduino-1.0.6\hardware\tools\arm-none-eabi\arm-none-eabi\include;F:\Arduino-1.0.6\hardware\tools\arm-none-eabi\lib\gcc\arm-none-eabi\4.7.2\include;F:\Arduino-1.0.6\hardware\tools\arm-none-eabi\lib\gcc\arm-none-eabi\4.7.2\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>C:\Users\Jason\Documents\Arduino\Aurora-mf-release\Visual Micro\.Aurora-mf-release.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <PreprocessorDefinitions>ARDUINO=106;ARDUINO_MAIN;__AVR__;__avr__;F_CPU=48000000;USB_SERIAL;LAYOUT_US_ENGLISH;__cplusplus;__MK20DX256__;TEENSYDUINO=120;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -80,6 +80,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Attractor.h" />
+    <ClInclude Include="BitmapPlayer.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
     <ClInclude Include="Bitmaps.h" />
     <ClInclude Include="Boid.h" />
     <ClInclude Include="ClockDigitalShort.h" />
@@ -90,9 +93,15 @@
     <ClInclude Include="Animations.h" />
     <ClInclude Include="Hardware.h" />
     <ClInclude Include="IrCodes.h" />
+    <ClInclude Include="Logo.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
     <ClInclude Include="Menu.h" />
     <ClInclude Include="MenuItem.h" />
     <ClInclude Include="PatternAttract.h" />
+    <ClInclude Include="PatternBitmap.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
     <ClInclude Include="PatternBounce.h" />
     <ClInclude Include="PatternEffects.h">
       <FileType>CppCode</FileType>
@@ -159,7 +168,7 @@
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties arduino.upload.port="COM6" VM_ADDITIONAL_PREPROC="F_CPU=48000000;USB_SERIAL;LAYOUT_US_ENGLISH" />
+      <UserProperties arduino.upload.port="COM10" VM_ADDITIONAL_PREPROC="F_CPU=48000000;USB_SERIAL;LAYOUT_US_ENGLISH" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
