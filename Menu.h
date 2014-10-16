@@ -45,6 +45,7 @@ public:
 
     bool visible = true;
     bool clockVisible = false;
+    bool messageVisible = false;
 
     unsigned int playbackState = Paused;
     unsigned int autoPlayTimout = 0;
@@ -227,14 +228,17 @@ public:
                 else if (command == InputCommand::Palette) { // cycle color pallete
                     effects.CyclePalette();
                 }
-                else if (command == InputCommand::Clock) { // toggle clock visibility
+                else if (command == InputCommand::Clock) { // toggle clock visibility, cycle through messages
                     if (!visible) {
+                        if (clockVisible || messageVisible) {
+                            messageVisible = messagePlayer.loadNextMessage();
+                            clockVisible = false;
+                        }
+                        else {
                         clockVisible = !clockVisible;
+                        }
+
                         updateScrollText = true;
-                        //// if the clock is not available, show the error message again
-                        //clockDigitalShort.hasShownError = false;
-                        //if (!isTimeAvailable)
-                        //    clockVisible = true;
                     }
                 }
                 else {
@@ -279,7 +283,7 @@ private:
                 brightnessChanged = false;
                 matrix.setForegroundFont(gohufont11b);
                 matrix.setScrollColor({ 255, 255, 255 });
-                matrix.setScrollOffsetFromEdge(MATRIX_HEIGHT);
+                matrix.setScrollOffsetFromTop(MATRIX_HEIGHT);
                 matrix.setBackgroundBrightness(backgroundBrightness);
 
                 int level = ((float) getBrightnessLevel() / (float) (brightnessCount - 1)) * 100;
@@ -295,7 +299,7 @@ private:
                 pausedChanged = false;
                 matrix.setForegroundFont(font3x5);
                 matrix.setScrollColor(color);
-                matrix.setScrollOffsetFromEdge(MATRIX_HEIGHT);
+                matrix.setScrollOffsetFromTop(MATRIX_HEIGHT);
                 matrix.setBackgroundBrightness(backgroundBrightness);
 
                 switch (playbackState) {
@@ -313,23 +317,23 @@ private:
                         break;
                 }
             }
+            else if (messageVisible) {
+                char *name = messagePlayer.message;
+                matrix.setScrollMode(messagePlayer.scrollMode);
+                matrix.setScrollSpeed(messagePlayer.scrollSpeed);
+                matrix.setScrollFont(messagePlayer.getFont());
+                matrix.setScrollColor(messagePlayer.color);
+                matrix.setScrollOffsetFromTop(messagePlayer.offsetFromTop);
+                matrix.setBackgroundBrightness(backgroundBrightness);
+                matrix.scrollText(name, -1);
+            }
             else if (visible) {
-                // Scroll the current item
                 char *name = currentMenuItem->name;
-                int length = strlen((const char *) name);
-
-                if (length * 5 > 31) {
                     matrix.setScrollMode(wrapForwardFromLeft); /* wrapForward, bounceForward, bounceReverse, stopped, off, wrapForwardFromLeft */
-                }
-                else {
-                    matrix.setScrollMode(stopped);
-                }
-
                 matrix.setScrollSpeed(scrollSpeed);
                 matrix.setScrollFont(font5x7);
                 matrix.setScrollColor(color);
-                matrix.setScrollOffsetFromEdge(menuStart);
-
+                matrix.setScrollOffsetFromTop(menuStart);
                 matrix.setBackgroundBrightness(backgroundBrightness);
                 matrix.scrollText(name, -1);
             }

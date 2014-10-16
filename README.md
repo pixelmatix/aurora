@@ -10,7 +10,7 @@ Features
 * Procedural pattern viewer
 * Animated GIF slideshow viewer
 * Remote control, allowing for ease of use.
-* Optional Clock display in the foreground, over animation and pattern slideshows (requires real-time clock chip for keeping accurate time).
+* Optional Clock display in the foreground, over animation and pattern slideshows (**requires real-time clock chip**).
 
 Patterns  
 [![Patterns](http://img.youtube.com/vi/yucr3tPudL4/0.jpg)](http://www.youtube.com/watch?v=yucr3tPudL4)  
@@ -20,6 +20,15 @@ Animations
 
 Settings  
 [![Settings](http://img.youtube.com/vi/sOlAI7qmnBM/0.jpg)](http://www.youtube.com/watch?v=sOlAI7qmnBM)  
+
+Clock
+-----
+
+Clock display and settings require an optional real-time clock (RTC) module.  If one is not present, clock display and settings will not be available. 
+Aurora uses the [DS1307RTC Library], which supports DS1307, DS1337 and DS3231 real time clock chips that use the I2C interface. 
+Here are some compatible boards that are available:
+* [ChronoDot] Ultra-precise Real Time Clock
+* [DS1307] Real Time Clock
 
 Micro SD Card
 -------------
@@ -241,6 +250,8 @@ Thanks to these fine game companies for allowing us to use and distribute their 
 [SparkFun Infrared Remote Image]:https://cdn.sparkfun.com/r/92-92/assets/parts/7/9/8/6/11759-01.jpg
 [Adafruit Infrared Remote Control]:http://www.adafruit.com/products/389
 [Adafruit Infrared Remote Image]:http://www.adafruit.com/images/230x173/389-00.jpg
+[ChronoDot]:http://www.adafruit.com/products/255
+[DS1307]:https://www.adafruit.com/product/264
 [Aurora.hex]:https://github.com/pixelmatix/aurora/raw/master/bin/Aurora.hex
 [Aurora MicroSD Card]:https://github.com/pixelmatix/aurora/blob/master/sd/sd.zip?raw=true
 [Teensyduino Software]:https://www.pjrc.com/teensy/td_download.html

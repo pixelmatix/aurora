@@ -1,0 +1,9 @@
+text=CLOSED
+red=255
+green=0
+blue=0
+top=0
+left=0
+font=gohufont11b
+speed=80
+mode=bounceForward

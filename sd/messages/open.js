@@ -1,0 +1,11 @@
+{
+  "text":"OPEN",
+  "red":255,
+  "green":255,
+  "blue":255,
+  "top":20,
+  "left":4,
+  "font":"gohufont11b",
+  "speed":28,
+  "mode":"bounceReverse"
+}

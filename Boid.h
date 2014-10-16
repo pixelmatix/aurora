@@ -79,7 +79,7 @@ public:
         // Limit speed
         velocity.limit(maxspeed);
         location += velocity;
-        // Reset accelerationelertion to 0 each cycle
+        // Reset acceleration to 0 each cycle
         acceleration *= 0;
     }
 

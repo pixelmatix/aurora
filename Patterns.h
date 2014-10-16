@@ -27,6 +27,9 @@
 #include "Boid.h"
 #include "Attractor.h"
 
+#include "PatternFlowField.h"
+#include "PatternSpin.h"
+#include "PatternSimplexNoise.h"
 #include "PatternBitmap.h"
 #include "PatternWave.h"
 #include "PatternAttract.h"
@@ -41,13 +44,15 @@
 #include "PatternMaze.h"
 #include "PatternPulse.h"
 #include "PatternRainbowSmoke.h"
-#include "PatternSimplexNoise.h"
 #include "PatternSpark.h"
 #include "PatternSpiral.h"
 #include "PatternEffects.h"
 
 class Patterns : public Playlist {
 private:
+    PatternFlowField flowField;
+    PatternSpin spin;
+    PatternSimplexNoise simplexNoise;
     PatternBitmap bitmap;
     PatternWave wave;
     PatternAttract attract;
@@ -62,7 +67,6 @@ private:
     PatternMaze maze;
     PatternPulse pulse;
     PatternRainbowSmoke rainbowSmoke;
-    PatternSimplexNoise simplexNoise;
     PatternSpark spark;
     PatternSpiral spiral;
     PatternGhost ghost;
@@ -74,10 +78,13 @@ private:
     int currentIndex = 0;
     Drawable* currentItem;
 
-    static const int PATTERN_COUNT = 22;
+    static const int PATTERN_COUNT = 24;
 
     Drawable* items[PATTERN_COUNT] = {
+        &flowField,
+        &spin,
         &bitmap,
+        &simplexNoise,
         &wave,
         &attract,
         &bounce,
@@ -91,7 +98,6 @@ private:
         &maze,
         &pulse,
         &rainbowSmoke,
-        &simplexNoise,
         &spark,
         &spiral,
         &ghost,

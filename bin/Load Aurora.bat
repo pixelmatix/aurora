@@ -1,0 +1,1 @@
+F:\arduino-1.0.6\hardware\tools\teensy_post_compile.exe -file="Aurora" -path="C:\Users\Jason\Documents\Arduino\Aurora\bin" -tools="F:\arduino-1.0.6\hardware\tools"

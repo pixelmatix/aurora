@@ -68,7 +68,7 @@ public:
             sprintf(timeBuffer, "No Clock");
         }
 
-        matrix.setScrollOffsetFromEdge(MATRIX_HEIGHT);
+        matrix.setScrollOffsetFromTop(MATRIX_HEIGHT);
         matrix.setScrollColor(color);
         matrix.clearForeground();
         matrix.drawForegroundString(x, cy, timeBuffer, true);

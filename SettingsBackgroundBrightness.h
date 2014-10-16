@@ -68,7 +68,7 @@ public:
             char text[4];
             sprintf(text, "%3d%%", level);
 
-            matrix.setScrollOffsetFromEdge(MATRIX_HEIGHT);
+            matrix.setScrollOffsetFromTop(MATRIX_HEIGHT);
             matrix.setForegroundFont(gohufont11b);
             matrix.setScrollColor({ 255, 255, 255 });
             matrix.clearForeground();

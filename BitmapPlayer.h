@@ -51,7 +51,7 @@ private:
     }
 
 public:
-    uint32_t drawBitmap(char *filename, uint8_t x = 0, uint8_t y = 0) {
+    uint32_t drawBitmap(char *filename, uint8_t x = 0, uint8_t y = 0, bool transparency = false, rgb24 transparentColor = { 0, 0, 0 }) {
         File   bmpFile;
         int      bmpWidth, bmpHeight;   // W+H in pixels
         uint8_t  bmpDepth;              // Bit depth (currently must be 24)
@@ -73,7 +73,7 @@ public:
         Serial.println('\'');
 
         // Open requested file on SD card
-        bmpFile = SD.open(filename, O_READ);
+        bmpFile = SD.open(filename, FILE_READ);
         if (!bmpFile) {
             return 0;
         }
@@ -143,6 +143,12 @@ public:
                             color.blue = sdbuffer[buffidx++];
                             color.green = sdbuffer[buffidx++];
                             color.red = sdbuffer[buffidx++];
+
+                            if (transparency &&
+                                transparentColor.red == color.red &&
+                                transparentColor.red == color.green &&
+                                transparentColor.red == color.blue)
+                                continue;
 
                             matrix.drawPixel(x + col, y + row, color);
 

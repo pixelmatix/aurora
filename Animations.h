@@ -119,7 +119,7 @@ private:
     int countFiles(const char* directoryName) {
         int count = 0;
 
-        File directory = SD.open(directoryName);
+        File directory = SD.open(directoryName, FILE_READ);
 
         File file = directory.openNextFile();
         while (file) {
@@ -152,7 +152,7 @@ private:
         strcpy(filepath, path);
         strcat(filepath, name);
 
-        imageFile = SD.open(filepath);
+        imageFile = SD.open(filepath, FILE_READ);
         if (!imageFile)
             return;
 
@@ -173,7 +173,7 @@ private:
         if ((index < 0) || (index >= numberOfFiles))
             return;
 
-        File directory = SD.open(directoryName);
+        File directory = SD.open(directoryName, FILE_READ);
         if(!directory)
             return;
 

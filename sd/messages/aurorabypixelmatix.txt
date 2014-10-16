@@ -1,0 +1,2 @@
+text=Aurora by Pixelmatix
+blue=255

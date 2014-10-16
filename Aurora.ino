@@ -37,6 +37,9 @@ uint8_t backgroundBrightnessMap[brightnessCount] = { 1, 16, 32, 64, 128 };
 #include <SPI.h>
 #include <SD.h>
 
+const int MATRIX_CENTER_X = MATRIX_WIDTH / 2;
+const int MATRIX_CENTER_Y = MATRIX_HEIGHT / 2;
+
 #include <Wire.h>
 #include <Time.h>
 #include <DS1307RTC.h>
@@ -44,6 +47,8 @@ uint8_t backgroundBrightnessMap[brightnessCount] = { 1, 16, 32, 64, 128 };
 bool sdAvailable = false;
 SmartMatrix matrix;
 IRrecv irReceiver(IR_RECV_PIN);
+
+#include "aJSON.h"
 
 #include "IrCodes.h"
 
@@ -55,6 +60,9 @@ GifPlayer gifPlayer;
 
 #include "BitmapPlayer.h"
 BitmapPlayer bitmapPlayer;
+
+#include "MessagePlayer.h"
+MessagePlayer messagePlayer;
 
 #include "Logo.h"
 
@@ -102,6 +110,8 @@ MenuItem* mainMenuItems [] = {
 
 int mainMenuItemCount;
 
+bool enableStartupSplash = false;
+
 void setup()
 {
     // Setup serial interface
@@ -117,19 +127,28 @@ void setup()
     matrix.begin();
     matrix.setBrightness(brightness);
     matrix.setColorCorrection(cc24);
-    drawLogo();
-    matrix.swapBuffers();
     matrix.setFont(gohufont11b);
     matrix.setScrollStartOffsetFromLeft(8);
     matrix.setScrollOffsetFromTop(25);
-    matrix.setScrollSpeed(60);
+    matrix.setScrollSpeed(80);
     matrix.setScrollMode(wrapForward);
+
+    if (enableStartupSplash) {
+        drawLogo();
     matrix.scrollText("Aurora by Pixelmatix", 1);
+    }
+    else {
+        matrix.fillScreen(rgb24{ 0, 0, 0 });
+    }
+
+    matrix.swapBuffers();
 
     pinMode(SD_CARD_CS, OUTPUT);
     sdAvailable = SD.begin(SD_CARD_CS);
-    if (sdAvailable)
+    if (sdAvailable) {
         animations.setup("/gifs/");
+        messagePlayer.setup("/messages/");
+    }
 
     // setup the effects generator
     effects.CyclePalette();
@@ -148,7 +167,9 @@ void setup()
     if (sdAvailable)
         loadSettings();
 
+    if (enableStartupSplash) {
     while (matrix.getScrollStatus() != 0) {}
+}
 }
 
 void loop()
@@ -292,7 +313,7 @@ int loadIntSetting(char* dir, const char* settingPath, int maxLength, int defaul
     //Serial.print(" exists: ");
     //Serial.println(sd.exists(dir));
 
-    File file = SD.open(settingPath);
+    File file = SD.open(settingPath, FILE_READ);
     //Serial.println(settingPath);
     if (file) {
         //Serial.println(F(" exists, reading..."));

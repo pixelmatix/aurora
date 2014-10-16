@@ -34,11 +34,11 @@
 
 #ifndef PatternFlock_H
 
+class PatternFlock : public Drawable {
+public:
 Boid boids[boidCount];
 Boid predator;
 
-class PatternFlock : public Drawable {
-public:
     PVector wind;
     byte hue = 0;
     bool predatorPresent = true;

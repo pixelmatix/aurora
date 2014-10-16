@@ -51,7 +51,7 @@ public:
 
     // speed - how fast time moves forward
     // scale - how far apart the pixels in our noise matrix are
-    void loop(uint16_t speed = 1, uint16_t scale = 13) {
+    void loop(uint16_t speed = 1, uint16_t scale = 26) {
         // We're using the x/y dimensions to map to the x/y pixels on the matrix.  We'll
         // use the z-axis for "time".  speed determines how fast time moves forward.  Try
         // 1 for a very slow moving effect, or 60 for something that ends up looking like

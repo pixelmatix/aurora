@@ -74,7 +74,7 @@ private:
 
         const char filepath [] = "/aurora/gearblue.gif"; // gearblu2.gif
         
-        imageFile = SD.open(filepath);
+        imageFile = SD.open(filepath, FILE_READ);
         if (!imageFile)
             return;
 
