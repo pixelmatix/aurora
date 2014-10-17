@@ -43,7 +43,7 @@ public:
     void moveRandom() {
         random16_add_entropy(analogRead(0));
         currentIndex = random(0, imageCount);
-        
+
         if (currentIndex >= imageCount) currentIndex = 0;
         else if (currentIndex < 0) currentIndex = imageCount - 1;
 
@@ -55,7 +55,19 @@ public:
             matrix.fillScreen({ 0, 0, 0 });
             matrix.setFont(font5x7);
             matrix.drawString(4, 24, { 255, 255, 255 }, "No SD");
-            return 0;
+            return 30;
+        }
+        else if (imageCount < 0) {
+            matrix.fillScreen({ 0, 0, 0 });
+            matrix.setFont(font3x5);
+            matrix.drawString(3, 24, { 255, 255, 255 }, "No dir");
+            return 30;
+        }
+        else if (imageCount < 1) {
+            matrix.fillScreen({ 0, 0, 0 });
+            matrix.setFont(font3x5);
+            matrix.drawString(3, 24, { 255, 255, 255 }, "No gifs");
+            return 30;
         }
 
         unsigned long result = gifPlayer.drawFrame();
@@ -78,7 +90,7 @@ public:
             imageFile.close();
     }
 
-    void setup(const char* directoryName) {
+    void setup(char* directoryName) {
         path = directoryName;
 
         imageCount = countFiles(directoryName);
@@ -116,10 +128,15 @@ private:
     bool paused = true;
 
     // count the number of files
-    int countFiles(const char* directoryName) {
+    int countFiles(char* directoryName) {
         int count = 0;
 
+        if (!SD.exists(directoryName))
+            return -1;
+
         File directory = SD.open(directoryName, FILE_READ);
+        if (!directory)
+            return -1;
 
         File file = directory.openNextFile();
         while (file) {
@@ -139,7 +156,7 @@ private:
     }
 
     void openImageFile() {
-        if (!sdAvailable)
+        if (!sdAvailable || imageCount < 1)
             return;
 
         if (imageFile)
@@ -174,10 +191,10 @@ private:
             return;
 
         File directory = SD.open(directoryName, FILE_READ);
-        if(!directory)
+        if (!directory)
             return;
 
-            // Make sure file is closed before starting
+        // Make sure file is closed before starting
         File file = directory.openNextFile();
 
         while (file && (index >= 0)) {
@@ -191,11 +208,11 @@ private:
 
                 // Copy the filename name into the buffer
                 strcpy(nameBuffer, file.name());
-                }
-
-                file.close();
-            file = directory.openNextFile();
             }
+
+            file.close();
+            file = directory.openNextFile();
+        }
 
         file.close();
         directory.close();

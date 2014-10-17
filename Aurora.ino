@@ -135,7 +135,7 @@ void setup()
 
     if (enableStartupSplash) {
         drawLogo();
-    matrix.scrollText("Aurora by Pixelmatix", 1);
+        matrix.scrollText("Aurora by Pixelmatix", 1);
     }
     else {
         matrix.fillScreen(rgb24{ 0, 0, 0 });
@@ -168,8 +168,8 @@ void setup()
         loadSettings();
 
     if (enableStartupSplash) {
-    while (matrix.getScrollStatus() != 0) {}
-}
+        while (matrix.getScrollStatus() != 0) {}
+    }
 }
 
 void loop()

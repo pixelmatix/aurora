@@ -59,7 +59,7 @@ public:
     byte scrollSpeed;
     ScrollMode scrollMode;
 
-    void setup(const char* directoryName) {
+    void setup(char* directoryName) {
         path = directoryName;
 
         count = countFiles(directoryName);
@@ -69,10 +69,15 @@ public:
     }
 
     // count the number of files
-    int countFiles(const char* directoryName) {
+    int countFiles(char* directoryName) {
         int count = 0;
+        
+        if(!SD.exists(directoryName))
+            return 0;
 
         File directory = SD.open(directoryName, FILE_READ);
+        if(!directory)
+            return 0;
 
         File file = directory.openNextFile();
         while (file) {
