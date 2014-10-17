@@ -69,11 +69,17 @@ private:
     File imageFile;
 
     void openImageFile() {
+        if(!sdAvailable)
+            return;
+
         if (imageFile)
             imageFile.close();
 
-        const char filepath [] = "/aurora/gearblue.gif"; // gearblu2.gif
+        char filepath [] = "/aurora/gearblue.gif"; // gearblu2.gif
         
+        if(!SD.exists(filepath))
+            return;
+
         imageFile = SD.open(filepath, FILE_READ);
         if (!imageFile)
             return;
@@ -110,15 +116,15 @@ public:
     }
 
     unsigned int drawFrame() {
-        if (!imageFile.available())
-            return 0;
+        if (!imageFile && !imageFile.available())
+            return 30;
 
         unsigned long result = gifPlayer.drawFrame();
         if (result == ERROR_FINISHED) {
             openImageFile();
         }
         else if (result < 0) {
-            return 0;
+            return 30;
         }
 
         return result;
