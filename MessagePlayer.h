@@ -71,7 +71,7 @@ public:
     // count the number of files
     int countFiles(char* directoryName) {
         int count = 0;
-        
+
         if(!SD.exists(directoryName))
             return 0;
 

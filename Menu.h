@@ -73,18 +73,6 @@ public:
                     currentMenuItem->drawable->stop();
                 }
 
-                if (currentIndex >= menuItemsCount) {
-                    currentIndex = 0;
-                }
-                else if (currentIndex < 0) {
-                    currentIndex = menuItemsCount - 1;
-                }
-
-                // skip hidden menu items
-                while (!menuItems[currentIndex]->visible) {
-                    currentIndex++;
-                }
-
                 currentMenuItem = menuItems[currentIndex];
 
                 if (currentMenuItem->drawable)
@@ -111,14 +99,14 @@ public:
                 if (command == InputCommand::Up) {
                     if (visible) {
                         currentPlaylist->stop();
-                        currentIndex--;
+                        move(menuItems, menuItemsCount, -1);
                         break;
                     }
                 }
                 else if (command == InputCommand::Down) {
                     if (visible) {
                         currentPlaylist->stop();
-                        currentIndex++;
+                        move(menuItems, menuItemsCount, 1);
                         break;
                     }
                 }
@@ -235,7 +223,7 @@ public:
                             clockVisible = false;
                         }
                         else {
-                        clockVisible = !clockVisible;
+                            clockVisible = !clockVisible;
                         }
 
                         updateScrollText = true;
@@ -261,6 +249,22 @@ public:
     }
 
 private:
+
+    void move(MenuItem* menuItems [], int menuItemsCount, int delta) {
+        currentIndex += delta;
+
+        if (currentIndex >= menuItemsCount) {
+            currentIndex = 0;
+        }
+        else if (currentIndex < 0) {
+            currentIndex = menuItemsCount - 1;
+        }
+
+        // skip hidden menu items
+        while (!menuItems[currentIndex]->visible) {
+            currentIndex += delta;
+        }
+    }
 
     void updateForeground(MenuItem* menuItems [], int menuItemsCount) {
         if (showingPausedIndicator && millis() >= pauseIndicatorTimout) {
@@ -288,7 +292,7 @@ private:
 
                 int level = ((float) getBrightnessLevel() / (float) (brightnessCount - 1)) * 100;
                 if (level < 1 && brightness > 0)
-                    level = 1;
+                    level = 10;
 
                 char text[4];
                 sprintf(text, "%3d%%", level);
@@ -329,7 +333,7 @@ private:
             }
             else if (visible) {
                 char *name = currentMenuItem->name;
-                    matrix.setScrollMode(wrapForwardFromLeft); /* wrapForward, bounceForward, bounceReverse, stopped, off, wrapForwardFromLeft */
+                matrix.setScrollMode(wrapForwardFromLeft); /* wrapForward, bounceForward, bounceReverse, stopped, off, wrapForwardFromLeft */
                 matrix.setScrollSpeed(scrollSpeed);
                 matrix.setScrollFont(font5x7);
                 matrix.setScrollColor(color);

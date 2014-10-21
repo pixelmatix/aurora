@@ -79,7 +79,7 @@ private:
         
         if(!SD.exists(filepath))
             return;
-
+        
         imageFile = SD.open(filepath, FILE_READ);
         if (!imageFile)
             return;
