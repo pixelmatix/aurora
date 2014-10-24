@@ -38,7 +38,20 @@ public:
     unsigned int drawFrame() {
         if (!loaded) {
             loaded = true;
+
+            matrix.fillScreen({ 0, 0, 0 });
+
+            if (sdAvailable) {
+                if (SD.exists("/aurora/pmlogo32.bmp")) {
             bitmapPlayer.drawBitmap("/aurora/pmlogo32.bmp");
+        }
+                else {
+                    matrix.drawString(0, 0, { 255, 255, 255 }, "No file");
+                }
+            }
+            else {
+                matrix.drawString(0, 0, { 255, 255, 255 }, "No SD");
+            }
         }
 
         return 30;

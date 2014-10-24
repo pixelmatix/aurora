@@ -73,18 +73,6 @@ public:
                     currentMenuItem->drawable->stop();
                 }
 
-                if (currentIndex >= menuItemsCount) {
-                    currentIndex = 0;
-                }
-                else if (currentIndex < 0) {
-                    currentIndex = menuItemsCount - 1;
-                }
-
-                // skip hidden menu items
-                while (!menuItems[currentIndex]->visible) {
-                    currentIndex++;
-                }
-
                 currentMenuItem = menuItems[currentIndex];
 
                 if (currentMenuItem->drawable)
@@ -111,14 +99,14 @@ public:
                 if (command == InputCommand::Up) {
                     if (visible) {
                         currentPlaylist->stop();
-                        currentIndex--;
+                        move(menuItems, menuItemsCount, -1);
                         break;
                     }
                 }
                 else if (command == InputCommand::Down) {
                     if (visible) {
                         currentPlaylist->stop();
-                        currentIndex++;
+                        move(menuItems, menuItemsCount, 1);
                         break;
                     }
                 }
@@ -230,12 +218,20 @@ public:
                 }
                 else if (command == InputCommand::Clock) { // toggle clock visibility, cycle through messages
                     if (!visible) {
-                        if (clockVisible || messageVisible) {
-                            messageVisible = messagePlayer.loadNextMessage();
+                        if(isHolding) {
+                            // turn of the clock or message if the button is held
+                            messageVisible = false;
                             clockVisible = false;
                         }
+                        else if (!clockVisible && !messageVisible) {
+                            // if neither are visible, just show the current (clock or message)
+                            clockVisible = messagePlayer.currentIndex == -1;
+                            messageVisible = !clockVisible;
+                        }
                         else {
-                        clockVisible = !clockVisible;
+                            // clock or message is visible, move to the next one
+                            messageVisible = messagePlayer.loadNextMessage();
+                            clockVisible = false;
                         }
 
                         updateScrollText = true;
@@ -261,6 +257,22 @@ public:
     }
 
 private:
+
+    void move(MenuItem* menuItems [], int menuItemsCount, int delta) {
+        currentIndex += delta;
+
+        if (currentIndex >= menuItemsCount) {
+            currentIndex = 0;
+        }
+        else if (currentIndex < 0) {
+            currentIndex = menuItemsCount - 1;
+        }
+
+        // skip hidden menu items
+        while (!menuItems[currentIndex]->visible) {
+            currentIndex += delta;
+        }
+    }
 
     void updateForeground(MenuItem* menuItems [], int menuItemsCount) {
         if (showingPausedIndicator && millis() >= pauseIndicatorTimout) {
@@ -288,7 +300,7 @@ private:
 
                 int level = ((float) getBrightnessLevel() / (float) (brightnessCount - 1)) * 100;
                 if (level < 1 && brightness > 0)
-                    level = 1;
+                    level = 10;
 
                 char text[4];
                 sprintf(text, "%3d%%", level);
@@ -317,6 +329,16 @@ private:
                         break;
                 }
             }
+            else if (visible) {
+                char *name = currentMenuItem->name;
+                matrix.setScrollMode(wrapForwardFromLeft); /* wrapForward, bounceForward, bounceReverse, stopped, off, wrapForwardFromLeft */
+                matrix.setScrollSpeed(scrollSpeed);
+                matrix.setScrollFont(font5x7);
+                matrix.setScrollColor(color);
+                matrix.setScrollOffsetFromTop(menuStart);
+                matrix.setBackgroundBrightness(backgroundBrightness);
+                matrix.scrollText(name, -1);
+            }
             else if (messageVisible) {
                 char *name = messagePlayer.message;
                 matrix.setScrollMode(messagePlayer.scrollMode);
@@ -324,16 +346,6 @@ private:
                 matrix.setScrollFont(messagePlayer.getFont());
                 matrix.setScrollColor(messagePlayer.color);
                 matrix.setScrollOffsetFromTop(messagePlayer.offsetFromTop);
-                matrix.setBackgroundBrightness(backgroundBrightness);
-                matrix.scrollText(name, -1);
-            }
-            else if (visible) {
-                char *name = currentMenuItem->name;
-                    matrix.setScrollMode(wrapForwardFromLeft); /* wrapForward, bounceForward, bounceReverse, stopped, off, wrapForwardFromLeft */
-                matrix.setScrollSpeed(scrollSpeed);
-                matrix.setScrollFont(font5x7);
-                matrix.setScrollColor(color);
-                matrix.setScrollOffsetFromTop(menuStart);
                 matrix.setBackgroundBrightness(backgroundBrightness);
                 matrix.scrollText(name, -1);
             }

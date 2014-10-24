@@ -61,7 +61,7 @@ public:
 
             int level = ((float) getBrightnessLevel() / (float) (brightnessCount - 1)) * 100;
             if (level < 1 && brightness > 0)
-                level = 1;
+                level = 10;
 
             char text[4];
             sprintf(text, "%3d%%", level);

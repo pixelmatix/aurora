@@ -25,7 +25,6 @@
 
 class MessagePlayer {
 private:
-    uint8_t currentIndex = -1;
     uint8_t count = 0;
     const char* path;
 
@@ -51,6 +50,7 @@ private:
     }
 
 public:
+    int currentIndex = -1;
     char message[textLayerMaxStringLength];
     rgb24 color;
     int offsetFromTop;

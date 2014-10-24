@@ -28,10 +28,10 @@ uint8_t brightness = 255;
 uint8_t backgroundBrightness = 63;
 
 const uint8_t brightnessCount = 5;
-uint8_t brightnessMap[brightnessCount] = { 1, 32, 64, 128, 255 };
-uint8_t backgroundBrightnessMap[brightnessCount] = { 1, 16, 32, 64, 128 };
+uint8_t brightnessMap[brightnessCount] = { 16, 32, 64, 128, 255 };
+uint8_t backgroundBrightnessMap[brightnessCount] = { 8, 16, 32, 64, 128 };
 
-#include <SmartMatrix.h>
+#include <SmartMatrix_32x32.h>
 #include <FastLED.h>
 #include <IRremote.h>
 #include <SPI.h>

@@ -30,7 +30,7 @@
 #include "PatternFlowField.h"
 #include "PatternSpin.h"
 #include "PatternSimplexNoise.h"
-#include "PatternBitmap.h"
+//#include "PatternBitmap.h"
 #include "PatternWave.h"
 #include "PatternAttract.h"
 #include "PatternBounce.h"
@@ -53,7 +53,7 @@ private:
     PatternFlowField flowField;
     PatternSpin spin;
     PatternSimplexNoise simplexNoise;
-    PatternBitmap bitmap;
+    //PatternBitmap bitmap;
     PatternWave wave;
     PatternAttract attract;
     PatternBounce bounce;
@@ -78,12 +78,12 @@ private:
     int currentIndex = 0;
     Drawable* currentItem;
 
-    static const int PATTERN_COUNT = 24;
+    static const int PATTERN_COUNT = 23;
 
     Drawable* items[PATTERN_COUNT] = {
         &flowField,
         &spin,
-        &bitmap,
+        //&bitmap,
         &simplexNoise,
         &wave,
         &attract,
