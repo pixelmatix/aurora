@@ -60,32 +60,39 @@ private:
     }
 
 public:
-    PatternSpiral() {
+    void start() {
         // set all counting directions positive for the beginning
         for (int i = 0; i < timers; i++) multiTimer[i].delta = 1;
 
         // set range (up/down), speed (takt=ms between steps) and starting point of all oszillators
 
+        unsigned long now = millis();
+
+        multiTimer[0].lastMillis = now;
         multiTimer[0].takt = 42;     //x1
         multiTimer[0].up = MATRIX_WIDTH - 1;
         multiTimer[0].down = 0;
         multiTimer[0].count = 0;
 
+        multiTimer[1].lastMillis = now;
         multiTimer[1].takt = 55;     //y1
         multiTimer[1].up = MATRIX_HEIGHT - 1;
         multiTimer[1].down = 0;
         multiTimer[1].count = 0;
 
+        multiTimer[2].lastMillis = now;
         multiTimer[2].takt = 3;      //color
         multiTimer[2].up = 255;
         multiTimer[2].down = 0;
         multiTimer[2].count = 0;
 
+        multiTimer[3].lastMillis = now;
         multiTimer[3].takt = 71;     //x2  
         multiTimer[3].up = MATRIX_WIDTH - 1;
         multiTimer[3].down = 0;
         multiTimer[3].count = 0;
 
+        multiTimer[4].lastMillis = now;
         multiTimer[4].takt = 89;     //y2
         multiTimer[4].up = MATRIX_HEIGHT - 1;
         multiTimer[4].down = 0;
