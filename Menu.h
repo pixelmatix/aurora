@@ -66,6 +66,8 @@ public:
 
     rgb24 color = CRGB(CRGB::Green);
 
+    bool canMoveBack = false;
+
     void run(MenuItem* menuItems [], int menuItemsCount) {
         while (true) {
             if (currentIndex != previousIndex) {
@@ -155,18 +157,20 @@ public:
                     break;
                 }
                 else if (command == InputCommand::Back) {
-                    if (visible) {
-                        currentIndex = 0;
-                        previousIndex = -1;
-                        if (currentMenuItem->drawable)
-                            currentMenuItem->drawable->stop();
-                        return;
+                    if (!visible || canMoveBack) {
+                        if (visible) {
+                            currentIndex = 0;
+                            previousIndex = -1;
+                            if (currentMenuItem->drawable)
+                                currentMenuItem->drawable->stop();
+                            return;
+                        }
+                        else {
+                            visible = true;
+                        }
+                        updateScrollText = true;
+                        break;
                     }
-                    else {
-                        visible = true;
-                    }
-                    updateScrollText = true;
-                    break;
                 }
                 else if (command == InputCommand::Brightness) {
                     bool wasHolding = isHolding;
@@ -218,8 +222,8 @@ public:
                 }
                 else if (command == InputCommand::Clock) { // toggle clock visibility, cycle through messages
                     if (!visible) {
-                        if(isHolding) {
-                            // turn of the clock or message if the button is held
+                        if (isHolding) {
+                            // turn off the clock or message if the button is held
                             messageVisible = false;
                             clockVisible = false;
                         }

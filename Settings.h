@@ -69,17 +69,17 @@ private:
     File imageFile;
 
     void openImageFile() {
-        if(!sdAvailable)
+        if (!sdAvailable)
             return;
 
         if (imageFile)
             imageFile.close();
 
         char filepath [] = "/aurora/gearblue.gif"; // gearblu2.gif
-        
-        if(!SD.exists(filepath))
+
+        if (!SD.exists(filepath))
             return;
-        
+
         imageFile = SD.open(filepath, FILE_READ);
         if (!imageFile)
             return;
@@ -112,6 +112,7 @@ public:
         menuItemClock24Hour.visible = isTimeAvailable;
         menuItemSetTime.visible = isTimeAvailable;
 
+        settingsMenu.canMoveBack = true;
         settingsMenu.run(menuItems, itemCount);
     }
 

@@ -42,7 +42,7 @@ public:
         z = random16();
 
         for (int i = 0; i < boidCount; i++) {
-            boids[i] = Boid(random(MATRIX_WIDTH), random(MATRIX_HEIGHT));
+            boids[i] = Boid(random(MATRIX_WIDTH), 0);
         }
     }
 
@@ -62,7 +62,7 @@ public:
             boid->velocity.x = cos8(angle) * 0.005;
             boid->velocity.y = sin8(angle) * 0.005;
             boid->update();
-            
+
             //PVector location = boid->location;
             //PVector velocity = boid->velocity;
             //matrix.drawLine(location.x, location.y, location.x - velocity.x, location.y - velocity.y, color);
@@ -72,8 +72,8 @@ public:
                 boid->location.x > MATRIX_WIDTH ||
                 boid->location.y < 0 ||
                 boid->location.y > MATRIX_HEIGHT) {
-                boid->location.x = random(MATRIX_WIDTH * 1.2);
-                boid->location.y = random(MATRIX_HEIGHT);
+                boid->location.x = random(MATRIX_WIDTH);
+                boid->location.y = 0;
             }
 
         }
