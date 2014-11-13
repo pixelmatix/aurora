@@ -1,7 +1,9 @@
 Aurora
 ======
 
-Aurora is a bright and aesthetically-pleasing display, driven by 1,024 RGB LEDS behind a diffusion screen. It's built using the [SmartMatrix SD Shield]
+Aurora is a beautiful, dynamic art display. It's controllable, customizable, and extendable, allowing you to display your own animations and messages.
+
+Aurora is driven by 1,024 bright RGB LEDS behind a diffusion screen. It's built using the [SmartMatrix SD Shield]
 and a 32x32 RGB LED matrix.
 
 Features
