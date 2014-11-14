@@ -1,7 +1,9 @@
 Aurora
 ======
 
-Aurora is a bright and aesthetically-pleasing display, driven by 1,024 RGB LEDS behind a diffusion screen. It's built using the [SmartMatrix SD Shield]
+Aurora is a beautiful, dynamic art display. It's controllable, customizable, and extendable, allowing you to display your own animations and messages.
+
+Aurora is driven by 1,024 bright RGB LEDS behind a diffusion screen. It's built using the [SmartMatrix SD Shield]
 and a 32x32 RGB LED matrix.
 
 Features
@@ -195,7 +197,7 @@ Source code and libraries:
 
 * [Aurora Source Code]
 * [SmartMatrix Library]
-* [FastLED v2.1 Library] **(make sure you use the 2.1 branch!)**
+* [FastLED Library]
 * [IR Remote Library]
 * [SD Library]
 * [Time Library]
@@ -223,7 +225,7 @@ Many thanks to all of the fantastic hardware and open source software libraries 
 
 * [SmartMatrix SD Shield] by Louis Beaudoin
 * [SmartMatrix Library] by Louis Beaudoin
-* [FastLED v2.1 Library] by Daniel Garcia and Mark Kriegsman
+* [FastLED Library] by Daniel Garcia and Mark Kriegsman
 * [IR Remote Library] by Ken Shirriff
 * [SD Library] by Bill Greiman
 * [Teensy v3.1] by Paul Stoffregen
@@ -261,7 +263,7 @@ Thanks to these fine game companies for allowing us to use and distribute their 
 [SmartMatrix Library]:https://github.com/pixelmatix/SmartMatrix
 [SmartMatrix SD Shield]:http://docs.pixelmatix.com/SmartMatrix/shield-sd.html
 [SmartMatrix External Libraries]:http://docs.pixelmatix.com/SmartMatrix/#external-libraries
-[FastLED v2.1 Library]:https://github.com/FastLED/FastLED/tree/FastLED2.1
+[FastLED Library]:https://github.com/FastLED/FastLED
 [IR Remote Library]:https://github.com/shirriff/Arduino-IRremote
 [SD Library]:https://github.com/adafruit/SD
 [Time Library]:https://github.com/PaulStoffregen/Time

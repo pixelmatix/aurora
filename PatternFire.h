@@ -2,7 +2,7 @@
  * Aurora: https://github.com/pixelmatix/aurora
  * Copyright (c) 2014 Jason Coon
  *
- * Portions of this code are adapted from FastLED Fire2012 example by Mark Kriegsman: https://github.com/FastLED/FastLED/tree/FastLED2.1/examples/Fire2012WithPalette
+ * Portions of this code are adapted from FastLED Fire2012 example by Mark Kriegsman: https://github.com/FastLED/FastLED/tree/master/examples/Fire2012WithPalette
  * Copyright (c) 2013 FastLED
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of

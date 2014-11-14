@@ -2,7 +2,7 @@
  * Aurora: https://github.com/pixelmatix/aurora
  * Copyright (c) 2014 Jason Coon
  *
- * Portions of this code are adapted from FastLED Fire2012 example by Mark Kriegsman: https://github.com/FastLED/FastLED/blob/FastLED2.1/examples/Noise/Noise.ino
+ * Portions of this code are adapted from FastLED Fire2012 example by Mark Kriegsman: https://github.com/FastLED/FastLED/blob/master/examples/Noise/Noise.ino
  * Copyright (c) 2013 FastLED
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
