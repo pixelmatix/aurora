@@ -14,14 +14,10 @@ Features
 * Remote control, allowing for ease of use.
 * Optional Clock display in the foreground, over animation and pattern slideshows (**requires real-time clock chip**).
 
-Patterns  
-[![Patterns](http://img.youtube.com/vi/yucr3tPudL4/0.jpg)](http://www.youtube.com/watch?v=yucr3tPudL4)  
+Demo Video
+-------------------------
 
-Animations  
-[![Animations](http://img.youtube.com/vi/veYClVCJSAs/0.jpg)](http://www.youtube.com/watch?v=veYClVCJSAs)  
-
-Settings  
-[![Settings](http://img.youtube.com/vi/sOlAI7qmnBM/0.jpg)](http://www.youtube.com/watch?v=sOlAI7qmnBM)  
+[![Aurora Demo Video](http://img.youtube.com/vi/dRn1rFWGPWk/0.jpg)](http://www.youtube.com/watch?v=dRn1rFWGPWk) 
 
 More Information
 ----------------
