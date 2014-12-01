@@ -368,6 +368,13 @@ private:
 
             matrix.displayForegroundDrawing(false);
         }
+        else if (!visible && !showingPausedIndicator && !showingBrightnessIndicator && clockVisible) {
+            matrix.clearForeground();
+
+            clockDisplay.drawFrame();
+
+            matrix.displayForegroundDrawing(false);
+        }
     }
 
     unsigned int draw() {
