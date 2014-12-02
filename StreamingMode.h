@@ -1,9 +1,8 @@
 /*
+ * TPM2 support added by J.B. Langston: https://github.com/jblang/aurora
+ *
  * Aurora: https://github.com/pixelmatix/aurora
  * Copyright (c) 2014 Jason Coon
- *
- * Portions of this code are adapted from FastLED Fire2012 example by Mark Kriegsman: https://github.com/FastLED/FastLED/tree/master/examples/Fire2012WithPalette
- * Copyright (c) 2013 FastLED
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -23,12 +22,8 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef PatternTPM2_H
-#define PatternTPM2_H
-
-#ifndef Effects_H
-#include "Effects.h"
-#endif
+#ifndef StreamingMode_H
+#define StreamingMode_H
 
 #define tpm2Header 0xc9
 #define tpm2netHeader 0x9c
@@ -39,7 +34,7 @@
 #define tpm2Acknowledge 0xac
 
 
-class PatternTPM2 : public Drawable {
+class StreamingMode : public Drawable {
 private:
     unsigned long lastData = 0;
 

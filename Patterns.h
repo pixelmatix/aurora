@@ -47,7 +47,6 @@
 #include "PatternSpark.h"
 #include "PatternSpiral.h"
 #include "PatternEffects.h"
-#include "PatternTPM2.h"
 
 class Patterns : public Playlist {
 private:
@@ -75,12 +74,11 @@ private:
     PatternDots2 dots2;
     PatternSlowMandala slowMandala;
     PatternMandala8 mandala8;
-    PatternTPM2 tpm2;
 
     int currentIndex = 0;
     Drawable* currentItem;
 
-    static const int PATTERN_COUNT = 24;
+    static const int PATTERN_COUNT = 23;
 
     Drawable* items[PATTERN_COUNT] = {
         &flowField,
@@ -106,8 +104,7 @@ private:
         &dots1,
         &dots2,
         &slowMandala,
-        &mandala8,
-        &tpm2
+        &mandala8
     };
 
 public:
