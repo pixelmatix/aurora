@@ -37,7 +37,7 @@ public:
         if (currentIndex >= imageCount) currentIndex = 0;
         else if (currentIndex < 0) currentIndex = imageCount - 1;
 
-        openImageFile();
+        openImageFile(false);
     }
 
     void moveRandom() {
@@ -47,7 +47,7 @@ public:
         if (currentIndex >= imageCount) currentIndex = 0;
         else if (currentIndex < 0) currentIndex = imageCount - 1;
 
-        openImageFile();
+        openImageFile(false);
     }
 
     unsigned int drawFrame() {
@@ -72,7 +72,7 @@ public:
 
         unsigned long result = gifPlayer.drawFrame();
         if (result == ERROR_FINISHED) {
-            openImageFile();
+            openImageFile(true);
         }
         else if (result < 0) {
             return 0;
@@ -82,7 +82,7 @@ public:
     }
 
     void start() {
-        openImageFile();
+        openImageFile(false);
     }
 
     void stop() {
@@ -127,6 +127,8 @@ private:
 
     bool paused = true;
 
+    char filepath[255];
+
     // count the number of files
     int countFiles(char* directoryName) {
         int count = 0;
@@ -155,25 +157,29 @@ private:
         return count;
     }
 
-    void openImageFile() {
+    void openImageFile(boolean reopen) {
         if (!sdAvailable || imageCount < 1)
             return;
 
-        if (imageFile)
-            imageFile.close();
+        if (reopen) {
+            imageFile.seek(0);
+        }
+        else {
+            if (imageFile)
+                imageFile.close();
 
-        char name[13];
-        getNameByIndex(path, currentIndex, name, imageCount);
+            char name[13];
+            getNameByIndex(path, currentIndex, name, imageCount);
 
-        char filepath[255];
-        strcpy(filepath, path);
-        strcat(filepath, name);
+            strcpy(filepath, path);
+            strcat(filepath, name);
 
-        imageFile = SD.open(filepath, FILE_READ);
-        if (!imageFile)
-            return;
+            imageFile = SD.open(filepath, FILE_READ);
+            if (!imageFile)
+                return;
 
-        gifPlayer.setFile(imageFile);
+            gifPlayer.setFile(imageFile);
+        }
 
         if (!gifPlayer.parseGifHeader()) {
             imageFile.close();

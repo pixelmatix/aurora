@@ -122,7 +122,7 @@ unsigned long readIRCode() {
 unsigned long lastIrCode = 0;
 
 unsigned int holdStartTime = 0;
-unsigned int defaultHoldDelay = 250;
+unsigned int defaultHoldDelay = 500;
 bool isHolding = false;
 
 unsigned int zeroStartTime = 0;
