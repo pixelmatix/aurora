@@ -115,6 +115,7 @@
     <ClInclude Include="PatternMaze.h">
       <FileType>CppCode</FileType>
     </ClInclude>
+    <ClInclude Include="PatternPendulumWave.h" />
     <ClInclude Include="PatternPlasma.h">
       <FileType>CppCode</FileType>
     </ClInclude>
