@@ -27,6 +27,11 @@
 #define GifPlayer_H
 
 #define DEBUG 0
+#include "Aurora.h"
+#include "pixeltypes.h"
+
+extern SmartMatrix matrix;
+
 
 class GifPlayer{
 public:
@@ -199,9 +204,7 @@ private:
 
 #if DEBUG == 1
         Serial.println("\nProcessing Graphic Control Extension");
-#endif
         int len = readByte();	// Check length
-#if DEBUG == 1
         if (len != 4) {
             Serial.println("Bad graphic control extension");
         }
@@ -442,7 +445,7 @@ private:
             backUpStream(1);
             dataBlockSize++;
             // quick fix to prevent a crash if lzwImageData is not large enough
-            if (offset + dataBlockSize <= sizeof(lzwImageData)) {
+            if (offset + dataBlockSize <= (int) sizeof(lzwImageData)) {
                 readIntoBuffer(lzwImageData + offset, dataBlockSize);
             }
             else {

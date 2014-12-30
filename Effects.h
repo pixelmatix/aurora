@@ -29,6 +29,8 @@
 
 #define MAX_COLOR_VALUE 255
 
+extern SmartMatrix matrix;
+
 class Effects {
 public:
     CRGB *leds;
