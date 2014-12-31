@@ -1,4 +1,4 @@
-.DS_Store
+**/.DS_Store
 spec.d
 .ino.cpp
 Release
@@ -11,3 +11,6 @@ Visual Micro
 *.vcxproj.filters
 *.vcxproj.user
 /Release/
+.cproject
+.project
+.settings/
