@@ -2,6 +2,8 @@
  * Aurora: https://github.com/pixelmatix/aurora
  * Copyright (c) 2014 Jason Coon
  *
+ * Designed in collaboration with Pixelmatix using the SmartMatrix Library: http://pixelmatix.com
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
  * the Software without restriction, including without limitation the rights to
@@ -19,31 +21,28 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-#ifndef BITMAPS_H_
-#define BITMAPS_H_
 
-const int pauseBitmapWidth = 7;
-const int pauseBitmapHeight = 7;
-uint8_t pauseBitmap [] = {
-    _XX__XX_,
-    _XX__XX_,
-    _XX__XX_,
-    _XX__XX_,
-    _XX__XX_,
-    _XX__XX_,
-    _XX__XX_,
-};
+#ifndef AURORA_H_
+#define AURORA_H_
 
-const int playBitmapWidth = 7;
-const int playBitmapHeight = 7;
-uint8_t playBitmap [] = {
-    __X_____,
-    __XX____,
-    __XXX___,
-    __XXXX__,
-    __XXX___,
-    __XX____,
-    __X_____,
-};
+#include <SmartMatrix_32x32.h>
+const int MATRIX_CENTER_X = MATRIX_WIDTH / 2;
+const int MATRIX_CENTER_Y = MATRIX_HEIGHT / 2;
+
+
+void powerOff();
+void loadSettings();
+int getBrightnessLevel();
+int getBackgroundBrightnessLevel();
+void adjustBrightness(int delta);
+uint8_t cycleBrightness();
+void adjustBackgroundBrightness(int d);
+void boundBrightness();
+void boundBackgroundBrightness();
+void saveBrightnessSetting();
+void saveBackgroundBrightnessSetting();
+int loadIntSetting(char* dir, const char* settingPath, int maxLength, int defaultValue);
+void saveIntSetting(char* dir, const char* settingPath, int value);
+
 
 #endif

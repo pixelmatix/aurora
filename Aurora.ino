@@ -23,7 +23,7 @@
  */
 
 #include "Hardware.h"
-
+#include "Aurora.h"
 uint8_t brightness = 255;
 uint8_t backgroundBrightness = 63;
 
@@ -36,9 +36,6 @@ uint8_t backgroundBrightnessMap[brightnessCount] = { 8, 16, 32, 64, 128 };
 #include <IRremote.h>
 #include <SPI.h>
 #include <SD.h>
-
-const int MATRIX_CENTER_X = MATRIX_WIDTH / 2;
-const int MATRIX_CENTER_Y = MATRIX_HEIGHT / 2;
 
 #include <Wire.h>
 #include <Time.h>

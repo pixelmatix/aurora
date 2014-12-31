@@ -31,6 +31,8 @@
 #include "SettingsClockColor.h"
 #include "SettingsClock24Hour.h"
 
+extern GifPlayer gifPlayer;
+
 class Settings : public Runnable {
 private:
     Menu settingsMenu;

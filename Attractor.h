@@ -24,6 +24,8 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#include "Vector.h"
+
 class Attractor {
 public:
     float mass;    // Mass, tied to size

@@ -1,3 +1,6 @@
+#ifndef LOGO_H_
+#define LOGO_H_
+
 void drawLogo() {
     matrix.fillRectangle(23, 0, 25, 2, { 255, 241, 0 });
     matrix.fillRectangle(7, 28, 9, 30, { 255, 241, 0 });
@@ -27,3 +30,5 @@ void drawLogo() {
     
     matrix.fillRectangle(15, 12, 17, 14, { 238, 64, 54 });
 }
+
+#endif

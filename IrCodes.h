@@ -28,6 +28,8 @@
 #ifndef IrCodes_H
 #define IrCodes_H
 
+extern IRrecv irReceiver;
+
 enum class InputCommand {
     None,
     Up,

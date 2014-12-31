@@ -1,3 +1,8 @@
+**/.DS_Store
+spec.d
+.ino.cpp
+Release
+Arduino
 Debug
 Visual Micro
 *.suo
@@ -5,3 +10,7 @@ Visual Micro
 *.opensdf
 *.vcxproj.filters
 *.vcxproj.user
+/Release/
+.cproject
+.project
+.settings/
