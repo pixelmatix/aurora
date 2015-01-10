@@ -98,14 +98,19 @@ Settings settings;
 #include "SettingsSetTime.h"
 #include "SettingsMoveClock.h"
 
+#include "StreamingMode.h"
+StreamingMode streamingMode;
+
 MenuItem menuItemPatterns = MenuItem("Patterns", &patterns);
 MenuItem menuItemAnimations = MenuItem("Animations", &animations);
+MenuItem menuItemStreamingMode = MenuItem("Streaming Mode", &streamingMode);
 MenuItem menuItemSettings = MenuItem("Settings", &settings);
 
 // Main Menu
 MenuItem* mainMenuItems [] = {
     &menuItemPatterns,
     &menuItemAnimations,
+    &menuItemStreamingMode,
     &menuItemSettings,
 };
 

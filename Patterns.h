@@ -87,6 +87,7 @@ private:
     static const int PATTERN_COUNT = 27;
 
     Drawable* items[PATTERN_COUNT] = {
+        &life,
         &flowField,
         &pendulumWave,
         &electricMandala,
@@ -103,7 +104,6 @@ private:
         &invaders,
         &snake,
         &fire,
-        &life,
         &maze,
         &pulse,
         &rainbowSmoke,
@@ -113,7 +113,7 @@ private:
         &dots1,
         &dots2,
         &slowMandala,
-        &mandala8,
+        &mandala8
     };
 
 public:

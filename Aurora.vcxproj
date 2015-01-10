@@ -160,6 +160,7 @@
     <ClInclude Include="SettingsSetTime.h">
       <FileType>CppCode</FileType>
     </ClInclude>
+    <ClInclude Include="StreamingMode.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="Visual Micro\.Aurora-mf-release.vsarduino.h" />
     <ClInclude Include="Visual Micro\.Aurora.vsarduino.h" />
