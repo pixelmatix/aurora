@@ -26,9 +26,16 @@
 #ifndef PatternLife_H
 #define PatternLife_H
 
+class Cell {
+public:
+  byte alive : 1;
+  byte hue: 7;  
+  byte brightness;
+};
+
 class PatternLife : public Drawable {
 private:
-    byte world[MATRIX_WIDTH][MATRIX_HEIGHT][2];
+    Cell world[MATRIX_WIDTH][MATRIX_HEIGHT][2];
     long density = 50;
     int generation = 0;
 
@@ -36,25 +43,29 @@ private:
         for (int i = 0; i < MATRIX_WIDTH; i++) {
             for (int j = 0; j < MATRIX_HEIGHT; j++) {
                 if (random(100) < density) {
-                    world[i][j][0] = 1;
+                    world[i][j][0].alive = 1;
                 }
                 else {
-                    world[i][j][0] = 0;
+                    world[i][j][0].alive = 0;
                 }
-                world[i][j][1] = 0;
+                world[i][j][0].brightness = 255;
+                world[i][j][0].hue = 0;
+                world[i][j][1].brightness = 255;
+                world[i][j][1].hue = 0;
+                world[i][j][1].alive = 0;
             }
         }
     }
 
     int neighbours(int x, int y) {
-        return world[(x + 1) % MATRIX_WIDTH][y][0] +
-            world[x][(y + 1) % MATRIX_HEIGHT][0] +
-            world[(x + MATRIX_WIDTH - 1) % MATRIX_WIDTH][y][0] +
-            world[x][(y + MATRIX_HEIGHT - 1) % MATRIX_HEIGHT][0] +
-            world[(x + 1) % MATRIX_WIDTH][(y + 1) % MATRIX_HEIGHT][0] +
-            world[(x + MATRIX_WIDTH - 1) % MATRIX_WIDTH][(y + 1) % MATRIX_HEIGHT][0] +
-            world[(x + MATRIX_WIDTH - 1) % MATRIX_WIDTH][(y + MATRIX_HEIGHT - 1) % MATRIX_HEIGHT][0] +
-            world[(x + 1) % MATRIX_WIDTH][(y + MATRIX_HEIGHT - 1) % MATRIX_HEIGHT][0];
+        return (world[(x + 1) % MATRIX_WIDTH][y][0].alive) +
+            (world[x][(y + 1) % MATRIX_HEIGHT][0].alive) +
+            (world[(x + MATRIX_WIDTH - 1) % MATRIX_WIDTH][y][0].alive) +
+            (world[x][(y + MATRIX_HEIGHT - 1) % MATRIX_HEIGHT][0].alive) +
+            (world[(x + 1) % MATRIX_WIDTH][(y + 1) % MATRIX_HEIGHT][0].alive) +
+            (world[(x + MATRIX_WIDTH - 1) % MATRIX_WIDTH][(y + 1) % MATRIX_HEIGHT][0].alive) +
+            (world[(x + MATRIX_WIDTH - 1) % MATRIX_WIDTH][(y + MATRIX_HEIGHT - 1) % MATRIX_HEIGHT][0].alive) +
+            (world[(x + 1) % MATRIX_WIDTH][(y + MATRIX_HEIGHT - 1) % MATRIX_HEIGHT][0].alive);
     }
 
 public:
@@ -68,7 +79,7 @@ public:
         // Display current generation
         for (int i = 0; i < MATRIX_WIDTH; i++) {
             for (int j = 0; j < MATRIX_HEIGHT; j++) {
-                effects.leds[effects.XY(i, j)] = world[i][j][0] == 1 ? effects.ColorFromCurrentPalette(generation) : CRGB::Black;
+                effects.leds[effects.XY(i, j)] = effects.ColorFromCurrentPalette(world[i][j][0].hue * 2, world[i][j][0].brightness);
             }
         }
 
@@ -77,14 +88,18 @@ public:
             for (int y = 0; y < MATRIX_HEIGHT; y++) {
                 // Default is for cell to stay the same
                 world[x][y][1] = world[x][y][0];
+                if (world[x][y][1].brightness > 0 && world[x][y][1].alive == 0)
+                  world[x][y][1].brightness *= 0.9;
                 int count = neighbours(x, y);
-                if (count == 3 && world[x][y][0] == 0) {
+                if (count == 3 && world[x][y][0].alive == 0) {
                     // A new cell is born
-                    world[x][y][1] = 1;
+                    world[x][y][1].alive = 1;
+                    world[x][y][1].hue+=4;
+                    world[x][y][1].brightness = 255;
                 }
-                if ((count < 2 || count > 3) && world[x][y][0] == 1) {
+                if ((count < 2 || count > 3) && world[x][y][0].alive == 1) {
                     // Cell dies
-                    world[x][y][1] = 0;
+                    world[x][y][1].alive = 0;
                 }
             }
         }
