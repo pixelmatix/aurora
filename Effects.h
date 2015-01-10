@@ -29,16 +29,20 @@
 
 #define MAX_COLOR_VALUE 255
 
+extern SmartMatrix matrix;
+
 class Effects {
 public:
     CRGB *leds;
     int ledCount = MATRIX_WIDTH * MATRIX_HEIGHT;
 
     // palettes
-    static const int paletteCount = 10;
+    static const int paletteCount = 11;
     int paletteIndex = -1;
     TBlendType currentBlendType = BLEND;
     CRGBPalette16 currentPalette;
+    CRGBPalette16 targetPalette;
+    char* currentPaletteName;
 
     static const int HeatColorsPaletteIndex = 7;
 
@@ -60,44 +64,81 @@ public:
 
         switch (paletteIndex) {
             case 0:
-                currentPalette = RainbowColors_p;
+                targetPalette = RainbowColors_p;
+                currentPaletteName = "Rainbow";
                 break;
             case 1:
-                currentPalette = RainbowStripeColors_p;
+                targetPalette = RainbowStripeColors_p;
+                currentPaletteName = "RainbowStripe";
                 break;
             case 2:
-                currentPalette = OceanColors_p;
+                targetPalette = OceanColors_p;
+                currentPaletteName = "Ocean";
                 break;
             case 3:
-                currentPalette = CloudColors_p;
+                targetPalette = CloudColors_p;
+                currentPaletteName = "Cloud";
                 break;
             case 4:
-                currentPalette = ForestColors_p;
+                targetPalette = ForestColors_p;
+                currentPaletteName = "Forest";
                 break;
             case 5:
-                currentPalette = PartyColors_p;
+                targetPalette = PartyColors_p;
+                currentPaletteName = "Party";
                 break;
             case 6:
                 setupGrayscalePalette();
+                currentPaletteName = "Grey";
                 break;
             case HeatColorsPaletteIndex:
-                currentPalette = HeatColors_p;
+                targetPalette = HeatColors_p;
+                currentPaletteName = "Heat";
                 break;
             case 8:
-                currentPalette = LavaColors_p;
+                targetPalette = LavaColors_p;
+                currentPaletteName = "Lava";
                 break;
             case 9:
                 setupIcePalette();
+                currentPaletteName = "Ice";
+                break;
+            case 10:
+                setupRandomPalette3();
+                currentPaletteName = "Random";
                 break;
         }
     }
 
     void setupGrayscalePalette() {
-        currentPalette = CRGBPalette16(CRGB::Black, CRGB::White);
+        targetPalette = CRGBPalette16(CRGB::Black, CRGB::White);
     }
 
     void setupIcePalette() {
-        currentPalette = CRGBPalette16(CRGB::Black, CRGB::Blue, CRGB::Aqua, CRGB::White);
+        targetPalette = CRGBPalette16(CRGB::Black, CRGB::Blue, CRGB::Aqua, CRGB::White);
+    }
+
+    void setupRandomPalette3() {
+        targetPalette = CRGBPalette16(
+            CHSV(random8(), 255, 0),
+            CHSV(random8(), 255, 0),
+            CHSV(random8(), 255, 255),
+            CHSV(random8(), 255, 255),
+
+            CHSV(random8(), 255, 0),
+            CHSV(random8(), 255, 255),
+            CHSV(random8(), 255, 255),
+            CHSV(random8(), 255, 0),
+
+            CHSV(random8(), 255, 0),
+            CHSV(random8(), 255, 255),
+            CHSV(random8(), 255, 255),
+            CHSV(random8(), 255, 0),
+
+            CHSV(random8(), 255, 255),
+            CHSV(random8(), 255, 255),
+            CHSV(random8(), 255, 0),
+            CHSV(random8(), 255, 0));
     }
 
     // Oscillators and Emitters
@@ -127,6 +168,7 @@ public:
 }
 
     void ShowFrame() {
+        nblendPaletteTowardPalette(currentPalette, targetPalette, 24);
     matrix.swapBuffers();
     leds = (CRGB*) matrix.backBuffer();
     LEDS.countFPS();
@@ -151,114 +193,86 @@ public:
     }
 }
 
-/*
-Caleidoscope1 mirrors from source to A, B and C
 
-y
+    // All the caleidoscope functions work directly within the screenbuffer (leds array).
+    // Draw whatever you like in the area x(0-15) and y (0-15) and then copy it arround.
 
-| |
-| B | C
-|_______________
-| |
-|source | A
-|_______________ x
-
-*/
+    // rotates the first 16x16 quadrant 3 times onto a 32x32 (+90 degrees rotation for each one)
     void Caleidoscope1() {
-    for (int x = 0; x < MATRIX_WIDTH / 2; x++) {
-        for (int y = 0; y < MATRIX_HEIGHT / 2; y++) {
-            leds[XY(MATRIX_WIDTH - 1 - x, y)] = leds[XY(x, y)]; // copy to A
-            leds[XY(x, MATRIX_HEIGHT - 1 - y)] = leds[XY(x, y)]; // copy to B
-            leds[XY(MATRIX_WIDTH - 1 - x, MATRIX_HEIGHT - 1 - y)] = leds[XY(x, y)]; // copy to C
+        for (int x = 0; x < MATRIX_CENTER_X; x++) {
+            for (int y = 0; y < MATRIX_CENTER_Y; y++) {
+                leds[XY(MATRIX_WIDTH - 1 - x, y)] = leds[XY(x, y)];
+                leds[XY(MATRIX_WIDTH - 1 - x, MATRIX_HEIGHT - 1 - y)] = leds[XY(x, y)];
+                leds[XY(x, MATRIX_HEIGHT - 1 - y)] = leds[XY(x, y)];
         }
     }
 }
 
-/*
-Caleidoscope2 rotates from source to A, B and C
 
-y
-
-| |
-| C | B
-|_______________
-| |
-|source | A
-|_______________ x
-
-*/
+    // mirror the first 16x16 quadrant 3 times onto a 32x32
     void Caleidoscope2() {
-    for (int x = 0; x < MATRIX_WIDTH / 2; x++) {
-        for (int y = 0; y < MATRIX_HEIGHT / 2; y++) {
-            leds[XY(MATRIX_WIDTH - 1 - x, y)] = leds[XY(y, x)]; // rotate to A
-            leds[XY(MATRIX_WIDTH - 1 - x, MATRIX_HEIGHT - 1 - y)] = leds[XY(x, y)]; // rotate to B
-            leds[XY(x, MATRIX_HEIGHT - 1 - y)] = leds[XY(y, x)]; // rotate to C
+        for (int x = 0; x < MATRIX_CENTER_X; x++) {
+            for (int y = 0; y < MATRIX_CENTER_Y; y++) {
+                leds[XY(MATRIX_WIDTH - 1 - x, y)] = leds[XY(y, x)];
+                leds[XY(x, MATRIX_HEIGHT - 1 - y)] = leds[XY(y, x)];
+                leds[XY(MATRIX_WIDTH - 1 - x, MATRIX_HEIGHT - 1 - y)] = leds[XY(x, y)];
         }
     }
 }
 
-// adds the color of one quarter to the other 3
+    // copy one diagonal triangle into the other one within a 16x16
     void Caleidoscope3() {
-    for (int x = 0; x < MATRIX_WIDTH / 2; x++) {
-        for (int y = 0; y < MATRIX_HEIGHT / 2; y++) {
-            leds[XY(MATRIX_WIDTH - 1 - x, y)] += leds[XY(y, x)]; // rotate to A
-            leds[XY(MATRIX_WIDTH - 1 - x, MATRIX_HEIGHT - 1 - y)] += leds[XY(x, y)]; // rotate to B
-            leds[XY(x, MATRIX_HEIGHT - 1 - y)] += leds[XY(y, x)]; // rotate to C
+        for (int x = 0; x <= MATRIX_CENTRE_X; x++) {
+            for (int y = 0; y <= x; y++) {
+                leds[XY(x, y)] = leds[XY(y, x)];
         }
     }
 }
 
-// add the complete screenbuffer 3 times while rotating
-    // rotate and add the complete screenbuffer 3 times
+    // copy one diagonal triangle into the other one within a 16x16 (90 degrees rotated compared to Caleidoscope3)
     void Caleidoscope4() {
-    for (int x = 0; x < MATRIX_WIDTH; x++) {
-        for (int y = 0; y < MATRIX_HEIGHT; y++) {
-            leds[XY(MATRIX_WIDTH - 1 - x, y)] += leds[XY(y, x)]; // rotate to A
-            leds[XY(MATRIX_WIDTH - 1 - x, MATRIX_HEIGHT - 1 - y)] += leds[XY(x, y)]; // rotate to B
-            leds[XY(x, MATRIX_HEIGHT - 1 - y)] += leds[XY(y, x)]; // rotate to C
+        for (int x = 0; x <= MATRIX_CENTRE_X; x++) {
+            for (int y = 0; y <= MATRIX_CENTRE_Y - x; y++) {
+                leds[XY(MATRIX_CENTRE_Y - y, MATRIX_CENTRE_X - x)] = leds[XY(x, y)];
         }
     }
 }
 
-// rotate, duplicate and copy over a triangle from first sector into the other half
-// (crappy code)
+    // copy one diagonal triangle into the other one within a 8x8
     void Caleidoscope5() {
-    int halfWidth = MATRIX_WIDTH / 2;
-    int halfWidthMinus1 = halfWidth - 1;
-
-    int j = halfWidthMinus1;
-    int k = 0;
-
-    for (int i = 1; i < halfWidth; i++) {
-        for (int x = i; x < halfWidth; x++) {
-            leds[XY(halfWidthMinus1 - x, j)] += leds[XY(x, k)];
+        for (int x = 0; x < MATRIX_WIDTH / 4; x++) {
+            for (int y = 0; y <= x; y++) {
+                leds[XY(x, y)] = leds[XY(y, x)];
+            }
         }
 
-        j--;
-        k++;
+        for (int x = MATRIX_WIDTH / 4; x < MATRIX_WIDTH / 2; x++) {
+            for (int y = MATRIX_HEIGHT / 4; y >= 0; y--) {
+                leds[XY(x, y)] = leds[XY(y, x)];
+        }
     }
 }
 
     void Caleidoscope6() {
-    for (int x = 1; x < MATRIX_WIDTH / 2; x++) {
+        for (int x = 1; x < MATRIX_CENTER_X; x++) {
         leds[XY(7 - x, 7)] = leds[XY(x, 0)];
     } //a
-    for (int x = 2; x < MATRIX_WIDTH / 2; x++) {
+        for (int x = 2; x < MATRIX_CENTER_X; x++) {
         leds[XY(7 - x, 6)] = leds[XY(x, 1)];
     } //b
-    for (int x = 3; x < MATRIX_WIDTH / 2; x++) {
+        for (int x = 3; x < MATRIX_CENTER_X; x++) {
         leds[XY(7 - x, 5)] = leds[XY(x, 2)];
     } //c
-    for (int x = 4; x < MATRIX_WIDTH / 2; x++) {
+        for (int x = 4; x < MATRIX_CENTER_X; x++) {
         leds[XY(7 - x, 4)] = leds[XY(x, 3)];
     } //d
-    for (int x = 5; x < MATRIX_WIDTH / 2; x++) {
+        for (int x = 5; x < MATRIX_CENTER_X; x++) {
         leds[XY(7 - x, 3)] = leds[XY(x, 4)];
     } //e
-    for (int x = 6; x < MATRIX_WIDTH / 2; x++) {
+        for (int x = 6; x < MATRIX_CENTER_X; x++) {
         leds[XY(7 - x, 2)] = leds[XY(x, 5)];
     } //f
-    for (int x = 7; x < MATRIX_WIDTH / 2; x++) {
+        for (int x = 7; x < MATRIX_CENTER_X; x++) {
         leds[XY(7 - x, 1)] = leds[XY(x, 6)];
     } //g
 }
@@ -459,28 +473,28 @@ y
     }
 }
 
-// rotate + copy triangle (MATRIX_WIDTH / 2*MATRIX_WIDTH / 2)
+    // rotate + copy triangle (MATRIX_CENTER_X*MATRIX_CENTER_X)
     void RotateTriangle() {
-    for (int x = 1; x < MATRIX_WIDTH / 2; x++) {
+        for (int x = 1; x < MATRIX_CENTER_X; x++) {
         for (int y = 0; y < x; y++) {
             leds[XY(x, 7 - y)] = leds[XY(7 - x, y)];
         }
     }
 }
 
-// mirror + copy triangle (MATRIX_WIDTH / 2*MATRIX_WIDTH / 2)
+    // mirror + copy triangle (MATRIX_CENTER_X*MATRIX_CENTER_X)
     void MirrorTriangle() {
-    for (int x = 1; x < MATRIX_WIDTH / 2; x++) {
+        for (int x = 1; x < MATRIX_CENTER_X; x++) {
         for (int y = 0; y < x; y++) {
             leds[XY(7 - y, x)] = leds[XY(7 - x, y)];
         }
     }
 }
 
-// draw static rainbow triangle pattern (MATRIX_WIDTH / 2xWIDTH / 2)
+    // draw static rainbow triangle pattern (MATRIX_CENTER_XxWIDTH / 2)
 // (just for debugging)
     void RainbowTriangle() {
-    for (int i = 0; i < MATRIX_WIDTH / 2; i++) {
+        for (int i = 0; i < MATRIX_CENTER_X; i++) {
         for (int j = 0; j <= i; j++) {
             Pixel(7 - i, j, i*j * 4);
         }

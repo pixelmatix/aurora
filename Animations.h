@@ -26,6 +26,8 @@
 #ifndef Animations_H
 #define Animations_H
 
+extern GifPlayer gifPlayer;
+
 class Animations : public Playlist {
 public:
 

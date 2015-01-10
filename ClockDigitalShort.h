@@ -26,6 +26,10 @@
 #ifndef ClockDigitalShort_H
 #define ClockDigitalShort_H
 
+#include "Aurora.h"
+extern tmElements_t time;
+extern bool isTimeAvailable;
+
 enum SetTimeState{
     SetHour,
     SetMinute,
@@ -145,5 +149,6 @@ public:
             y = 23;
     }
 };
+extern ClockDigitalShort clockDigitalShort;
 
 #endif

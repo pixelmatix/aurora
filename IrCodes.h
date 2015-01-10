@@ -28,6 +28,8 @@
 #ifndef IrCodes_H
 #define IrCodes_H
 
+extern IRrecv irReceiver;
+
 enum class InputCommand {
     None,
     Up,
@@ -82,6 +84,59 @@ enum class InputCommand {
 #define IRCODE_ADAFRUIT_8           0x00FD9867 // 16619623
 #define IRCODE_ADAFRUIT_9           0x00FD58A7 // 16603303
 
+// IR Raw Key Codes for WRT8621 remote
+#define IRCODE_WRT8621_HELD         0x7FFFFFFF // 4294967295
+#define IRCODE_WRT8621_OFF          0x00FFB04F // 16756815
+#define IRCODE_WRT8621_MODE         0x00FF708F // 16740495
+#define IRCODE_WRT8621_ON           0x00FFF00F // 16773135
+#define IRCODE_WRT8621_UP1          0x00FF906F // 16748655
+#define IRCODE_WRT8621_IN           0x00FF50AF // 16732335
+#define IRCODE_WRT8621_DOWN1        0x00FFD02F // 16764975
+#define IRCODE_WRT8621_UP2          0x00FF8877 // 16746615
+#define IRCODE_WRT8621_OUT          0x00FF48B7 // 16730295
+#define IRCODE_WRT8621_DOWN2        0x00FFC837 // 16762935
+#define IRCODE_WRT8621_UP3          0x00FFA857 // 16754775
+#define IRCODE_WRT8621_ATT          0x00FF6897 // 16738455
+#define IRCODE_WRT8621_DOWN3        0x00FFE817 // 16771095
+#define IRCODE_WRT8621_UP4          0x00FF9867 // 16750695
+#define IRCODE_WRT8621_QA           0x00FF58A7 // 16734375
+#define IRCODE_WRT8621_DOWN4        0x00FFD827 // 16767015
+#define IRCODE_WRT8621_V            0x00FFB847 // 16758855
+#define IRCODE_WRT8621_T            0x00FFF807 // 16775175
+
+// IR Raw Key Codes for WRT8621-05A remote
+#define IRCODE_WRT8621_05A_HELD     0x7FFFFFFF // 4294967295
+#define IRCODE_WRT8621_05A_M        0x00FF40BF // 16728255
+#define IRCODE_WRT8621_05A_UP       0x00FFA05F // 16752735
+#define IRCODE_WRT8621_05A_LEFT     0x00FF10EF // 16716015
+#define IRCODE_WRT8621_05A_OK       0x00FF906F // 16748655
+#define IRCODE_WRT8621_05A_RIGHT    0x00FF50AF // 16732335
+#define IRCODE_WRT8621_05A_DOWN     0x00FFB04F // 16756815
+
+// IR Raw Key Codes for WRT8521-01 remote
+#define IRCODE_WRT8521_01_HELD        0x7FFFFFFF // 4294967295
+#define IRCODE_WRT8521_01_VOLUME_UP   0x00FFE21D // 16769565
+#define IRCODE_WRT8521_01_PLAY_PAUSE  0x00FF629D // 16736925
+#define IRCODE_WRT8521_01_VOLUME_DOWN 0x00FFA25D // 16753245
+#define IRCODE_WRT8521_01_SETUP       0x00FF22DD // 16720605
+#define IRCODE_WRT8521_01_UP          0x00FF02FD // 16712445
+#define IRCODE_WRT8521_01_STOP_MODE   0x00FFC23D // 16761405
+#define IRCODE_WRT8521_01_LEFT        0x00FFE01F // 16769055
+#define IRCODE_WRT8521_01_ENTER_SAVE  0x00FFA857 // 16754775
+#define IRCODE_WRT8521_01_RIGHT       0x00FF906F // 16748655
+#define IRCODE_WRT8521_01_0_10_PLUS   0x00FF6897 // 16738455
+#define IRCODE_WRT8521_01_DOWN        0x00FF9867 // 16750695
+#define IRCODE_WRT8521_01_BACK        0x00FFB04F // 16756815     
+#define IRCODE_WRT8521_01_1           0x00FF30CF // 16724175
+#define IRCODE_WRT8521_01_2           0x00FF18E7 // 16718055
+#define IRCODE_WRT8521_01_3           0x00FF7A85 // 16743045
+#define IRCODE_WRT8521_01_4           0x00FF10EF // 16716015
+#define IRCODE_WRT8521_01_5           0x00FF38C7 // 16726215
+#define IRCODE_WRT8521_01_6           0x00FF5AA5 // 16734885
+#define IRCODE_WRT8521_01_7           0x00FF42BD // 16728765
+#define IRCODE_WRT8521_01_8           0x00FF4AB5 // 16730805
+#define IRCODE_WRT8521_01_9           0x00FF52AD // 16732845
+
 // Low level IR code reading function
 // Function will return 0 if no IR code available
 unsigned long decodeIRCode() {
@@ -115,7 +170,7 @@ unsigned long readIRCode() {
     while (decodeIRCode() == code) {
         ;
     }
-    // Serial.println(code);
+    Serial.println(code);
     return code;
 }
 
@@ -212,54 +267,87 @@ unsigned long waitForIRCode() {
 InputCommand getCommand(unsigned long input) {
     switch (input) {
         case IRCODE_ADAFRUIT_UP:
+        case IRCODE_WRT8521_01_UP:
         case IRCODE_SPARKFUN_UP:
+        case IRCODE_WRT8621_IN:
+        case IRCODE_WRT8621_05A_UP:
             return InputCommand::Up;
 
         case IRCODE_ADAFRUIT_DOWN:
+        case IRCODE_WRT8521_01_DOWN:
         case IRCODE_SPARKFUN_DOWN:
+        case IRCODE_WRT8621_ATT:
+        //case IRCODE_WRT8621_05A_DOWN:
             return InputCommand::Down;
 
         case IRCODE_SPARKFUN_LEFT:
         case IRCODE_ADAFRUIT_LEFT:
+        case IRCODE_WRT8521_01_LEFT:
+        case IRCODE_WRT8621_UP2:
+        case IRCODE_WRT8621_05A_LEFT:
             return InputCommand::Left;
 
         case IRCODE_SPARKFUN_RIGHT:
         case IRCODE_ADAFRUIT_RIGHT:
+        //case IRCODE_WRT8521_01_RIGHT:
+        case IRCODE_WRT8621_DOWN2:
+        //case IRCODE_WRT8621_05A_RIGHT:
             return InputCommand::Right;
 
         case IRCODE_SPARKFUN_SELECT:
         case IRCODE_ADAFRUIT_ENTER_SAVE:
+        case IRCODE_WRT8521_01_ENTER_SAVE:
+        case IRCODE_WRT8621_OUT:
+        //case IRCODE_WRT8621_05A_OK:
             return InputCommand::Select;
 
         case IRCODE_SPARKFUN_POWER:
+        case IRCODE_WRT8621_05A_M:
             return InputCommand::Brightness;
 
         case IRCODE_SPARKFUN_A:
         case IRCODE_ADAFRUIT_STOP_MODE:
         case IRCODE_ADAFRUIT_1:
+        case IRCODE_WRT8521_01_STOP_MODE:
+        case IRCODE_WRT8521_01_1:
+        case IRCODE_WRT8621_DOWN1:
             return InputCommand::PlayMode;
 
         case IRCODE_SPARKFUN_B:
         case IRCODE_ADAFRUIT_2:
+        case IRCODE_WRT8521_01_2:
+        case IRCODE_WRT8621_QA:
             return InputCommand::Palette;
 
         case IRCODE_SPARKFUN_C:
         case IRCODE_ADAFRUIT_3:
+        case IRCODE_WRT8521_01_3:
+        case IRCODE_WRT8621_DOWN4:
             return InputCommand::Clock;
 
         case IRCODE_ADAFRUIT_PLAY_PAUSE:
+        case IRCODE_WRT8521_01_PLAY_PAUSE:
+        case IRCODE_WRT8621_MODE:
             return InputCommand::Power;
 
         case IRCODE_ADAFRUIT_BACK:
+        //case IRCODE_WRT8521_01_BACK:
+        case IRCODE_WRT8621_DOWN3:
             return InputCommand::Back;
 
         case IRCODE_ADAFRUIT_VOLUME_UP:
+        case IRCODE_WRT8521_01_VOLUME_UP:
+        case IRCODE_WRT8621_ON:
             return InputCommand::BrightnessUp;
 
         case IRCODE_ADAFRUIT_VOLUME_DOWN:
+        case IRCODE_WRT8521_01_VOLUME_DOWN:
+        case IRCODE_WRT8621_OFF:
             return InputCommand::BrightnessDown;
 
         case IRCODE_ADAFRUIT_SETUP:
+        case IRCODE_WRT8521_01_SETUP:
+        case IRCODE_WRT8621_UP1:
             return InputCommand::Menu;
     }
 

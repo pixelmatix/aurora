@@ -24,6 +24,8 @@
 
 #include "Hardware.h"
 
+#include "Aurora.h"
+
 uint8_t brightness = 255;
 uint8_t backgroundBrightness = 63;
 
@@ -36,9 +38,6 @@ uint8_t backgroundBrightnessMap[brightnessCount] = { 8, 16, 32, 64, 128 };
 #include <IRremote.h>
 #include <SPI.h>
 #include <SD.h>
-
-const int MATRIX_CENTER_X = MATRIX_WIDTH / 2;
-const int MATRIX_CENTER_Y = MATRIX_HEIGHT / 2;
 
 #include <Wire.h>
 #include <Time.h>
@@ -86,6 +85,8 @@ Patterns patterns;
 Animations animations;
 
 #include "Bitmaps.h"
+
+rgb24 menuColor = CRGB(CRGB::Blue);
 
 #include "MenuItem.h"
 #include "Menu.h"
@@ -207,6 +208,10 @@ void loadSettings() {
     boundBackgroundBrightness();
     matrix.setBackgroundBrightness(backgroundBrightness);
 
+    menuColor.red = loadIntSetting("/aurora/", "/aurora/menuR.txt", 3, 0);
+    menuColor.green = loadIntSetting("/aurora/", "/aurora/menuG.txt", 3, 0);
+    menuColor.blue = loadIntSetting("/aurora/", "/aurora/menuB.txt", 3, 255);
+
     clockDisplay.loadSettings();
 }
 
@@ -299,6 +304,24 @@ void saveBackgroundBrightnessSetting() {
     saveIntSetting("/aurora/", "/aurora/bckbrght.txt", backgroundBrightness);
 }
 
+void saveMenuColor() {
+    saveMenuR();
+    saveMenuG();
+    saveMenuB();
+}
+
+void saveMenuR() {
+    saveIntSetting("/aurora/", "/aurora/menuR.txt", menuColor.red);
+}
+
+void saveMenuG() {
+    saveIntSetting("/aurora/", "/aurora/menuG.txt", menuColor.green);
+}
+
+void saveMenuB() {
+    saveIntSetting("/aurora/", "/aurora/menuB.txt", menuColor.blue);
+}
+
 int loadIntSetting(char* dir, const char* settingPath, int maxLength, int defaultValue) {
     if (!sdAvailable)
         return defaultValue;
@@ -354,4 +377,14 @@ void saveIntSetting(char* dir, const char* settingPath, int value) {
         file.print(value, 10);
         file.close();
     }
+}
+
+// translates from x, y into an index into the LED array
+uint16_t XY(uint8_t x, uint8_t y) {
+    if (y >= MATRIX_HEIGHT) { y = MATRIX_HEIGHT - 1; }
+    if (y < 0) { y = 0; }
+    if (x >= MATRIX_WIDTH) { x = MATRIX_WIDTH - 1; }
+    if (x < 0) { x = 0; }
+
+    return (y * MATRIX_WIDTH) + x;
 }

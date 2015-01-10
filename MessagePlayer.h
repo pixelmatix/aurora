@@ -23,6 +23,8 @@
 #ifndef MessagePlayer_H
 #define MessagePlayer_H
 
+extern bool sdAvailable;
+
 class MessagePlayer {
 private:
     uint8_t count = 0;

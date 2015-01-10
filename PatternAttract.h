@@ -27,7 +27,6 @@ private:
     static const int count = 8;
     Boid boids[count];
     Attractor attractor;
-    byte dim;
 
 public:
     void start() {
@@ -43,12 +42,13 @@ public:
             boid.velocity.y = 0;
             boid.colorIndex = i * 32;
             boids[i] = boid;
-            dim = random(170, 250);
+            //dim = random(170, 250);
         }
     }
 
     unsigned int drawFrame() {
         // dim all pixels on the display
+        uint8_t dim = beatsin8(2, 170, 250);
         effects.DimAll(dim);
 
         for (int i = 0; i < count; i++) {

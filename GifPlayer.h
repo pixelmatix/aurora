@@ -27,6 +27,10 @@
 #define GifPlayer_H
 
 #define DEBUG 0
+#include "Aurora.h"
+#include "pixeltypes.h"
+
+extern SmartMatrix matrix;
 
 class GifPlayer{
 public:
@@ -115,7 +119,7 @@ private:
         int b = file.read();
 #if DEBUG == 1
         if (b == -1) {
-            Serial.println("Read error or EOF occurred");
+            Serial.println(F("Read error or EOF occurred"));
         }
 #endif
         return b;
@@ -135,7 +139,7 @@ private:
         int result = file.read(buffer, numberOfBytes);
 #if DEBUG == 1
         if (result == -1) {
-            Serial.println("Read error or EOF occurred");
+            Serial.println(F("Read error or EOF occurred"));
         }
 #endif
         return result;
@@ -178,7 +182,7 @@ private:
     void parsePlainTextExtension() {
 
 #if DEBUG == 1
-        Serial.println("\nProcessing Plain Text Extension");
+        Serial.println(F("\nProcessing Plain Text Extension"));
 #endif
         // Read plain text header length
         byte len = readByte();
@@ -198,13 +202,13 @@ private:
     void parseGraphicControlExtension() {
 
 #if DEBUG == 1
-        Serial.println("\nProcessing Graphic Control Extension");
-#endif
+        Serial.println(F("\nProcessing Graphic Control Extension"));
         int len = readByte();	// Check length
-#if DEBUG == 1
         if (len != 4) {
-            Serial.println("Bad graphic control extension");
+            Serial.println(F("Bad graphic control extension"));
         }
+#else
+        readByte();
 #endif
 
         int packedBits = readByte();
@@ -219,20 +223,20 @@ private:
         if (disposalMethod > 3) {
             disposalMethod = 0;
 #if DEBUG == 1
-            Serial.println("Invalid disposal value");
+            Serial.println(F("Invalid disposal value"));
 #endif
         }
 
         readByte();	// Toss block end
 
 #if DEBUG == 1
-        Serial.print("PacketBits: ");
+        Serial.print(F("PacketBits: "));
         Serial.println(packedBits, HEX);
-        Serial.print("Frame delay: ");
+        Serial.print(F("Frame delay: "));
         Serial.println(frameDelay);
-        Serial.print("transparentColorIndex: ");
+        Serial.print(F("transparentColorIndex: "));
         Serial.println(transparentColorIndex);
-        Serial.print("disposalMethod: ");
+        Serial.print(F("disposalMethod: "));
         Serial.println(disposalMethod);
 #endif
     }
@@ -243,7 +247,7 @@ private:
         memset(tempBuffer, 0, sizeof(tempBuffer));
 
 #if DEBUG == 1
-        Serial.println("\nProcessing Application Extension");
+        Serial.println(F("\nProcessing Application Extension"));
 #endif
 
         // Read block length
@@ -255,7 +259,7 @@ private:
 #if DEBUG == 1
         // Conditionally display the application extension string
         if (strlen(tempBuffer) != 0) {
-            Serial.print("Application Extension: ");
+            Serial.print(F("Application Extension: "));
             Serial.println(tempBuffer);
         }
 #endif
@@ -272,7 +276,7 @@ private:
     void parseCommentExtension() {
 
 #if DEBUG == 1
-        Serial.println("\nProcessing Comment Extension");
+        Serial.println(F("\nProcessing Comment Extension"));
 #endif
 
         // Read block length
@@ -287,7 +291,7 @@ private:
 #if DEBUG == 1
             // Display the comment extension string
             if (strlen(tempBuffer) != 0) {
-                Serial.print("Comment Extension: ");
+                Serial.print(F("Comment Extension: "));
                 Serial.println(tempBuffer);
             }
 #endif
@@ -300,16 +304,16 @@ private:
     int parseGIFFileTerminator() {
 
 #if DEBUG == 1
-        Serial.println("\nProcessing file terminator");
+        Serial.println(F("\nProcessing file terminator"));
 #endif
 
         byte b = readByte();
         if (b != 0x3B) {
 
 #if DEBUG == 1
-            Serial.print("Terminator byte: ");
+            Serial.print(F("Terminator byte: "));
             Serial.println(b, HEX);
-            Serial.println("Bad GIF file format - Bad terminator");
+            Serial.println(F("Bad GIF file format - Bad terminator"));
 #endif
             return ERROR_BADGIFFORMAT;
         }
@@ -322,7 +326,7 @@ private:
     unsigned long parseTableBasedImage() {
 
 #if DEBUG == 1
-        Serial.println("\nProcessing Table Based Image Descriptor");
+        Serial.println(F("\nProcessing Table Based Image Descriptor"));
 #endif
 
         // Parse image descriptor
@@ -333,15 +337,15 @@ private:
         tbiPackedBits = readByte();
 
 #if DEBUG == 1
-        Serial.print("tbiImageX: ");
+        Serial.print(F("tbiImageX: "));
         Serial.println(tbiImageX);
-        Serial.print("tbiImageY: ");
+        Serial.print(F("tbiImageY: "));
         Serial.println(tbiImageY);
-        Serial.print("tbiWidth: ");
+        Serial.print(F("tbiWidth: "));
         Serial.println(tbiWidth);
-        Serial.print("tbiHeight: ");
+        Serial.print(F("tbiHeight: "));
         Serial.println(tbiHeight);
-        Serial.print("PackedBits: ");
+        Serial.print(F("PackedBits: "));
         Serial.println(tbiPackedBits, HEX);
 #endif
 
@@ -349,7 +353,7 @@ private:
         tbiInterlaced = ((tbiPackedBits & INTERLACEFLAG) != 0);
 
 #if DEBUG == 1
-        Serial.print("Image interlaced: ");
+        Serial.print(F("Image interlaced: "));
         Serial.println((tbiInterlaced != 0) ? "Yes" : "No");
 #endif
 
@@ -361,9 +365,9 @@ private:
             colorCount = 1 << colorBits;
 
 #if DEBUG == 1
-            Serial.print("Local color table with ");
+            Serial.print(F("Local color table with "));
             Serial.print(colorCount);
-            Serial.println(" colors present");
+            Serial.println(F(" colors present"));
 #endif
             // Read colors into palette
             int colorTableBytes = sizeof(_RGB) * colorCount;
@@ -426,7 +430,7 @@ private:
         lzwCodeSize = readByte();
 
 #if DEBUG == 1
-        Serial.print("LzwCodeSize: ");
+        Serial.print(F("LzwCodeSize: "));
         Serial.println(lzwCodeSize);
 #endif
 
@@ -436,13 +440,13 @@ private:
         int dataBlockSize = readByte();
         while (dataBlockSize != 0) {
 #if DEBUG == 1
-            Serial.print("dataBlockSize: ");
+            Serial.print(F("dataBlockSize: "));
             Serial.println(dataBlockSize);
 #endif
             backUpStream(1);
             dataBlockSize++;
             // quick fix to prevent a crash if lzwImageData is not large enough
-            if (offset + dataBlockSize <= sizeof(lzwImageData)) {
+            if (offset + dataBlockSize <= (int) sizeof(lzwImageData)) {
                 readIntoBuffer(lzwImageData + offset, dataBlockSize);
             }
             else {
@@ -451,7 +455,7 @@ private:
                 for (i = 0; i < dataBlockSize; i++)
                     file.read();
 #if DEBUG == 1
-                Serial.print("******* Prevented lzwImageData Overflow ******");
+                Serial.print(F("******* Prevented lzwImageData Overflow ******"));
 #endif
             }
 
@@ -460,7 +464,7 @@ private:
         }
 
 #if DEBUG == 1
-        Serial.print("total lzwImageData Size: ");
+        Serial.print(F("total lzwImageData Size: "));
         Serial.println(offset);
 #endif
 
@@ -620,7 +624,7 @@ private:
                     }
                     else {
 #if DEBUG == 1
-                        Serial.println("****** cursize >= MAXBITS *******");
+                        Serial.println(F("****** cursize >= MAXBITS *******"));
 #endif
                     }
                 }
@@ -722,15 +726,15 @@ public:
         lsdAspectRatio = readByte();
 
 #if DEBUG == 1
-        Serial.print("lsdWidth: ");
+        Serial.print(F("lsdWidth: ")); 
         Serial.println(lsdWidth);
-        Serial.print("lsdHeight: ");
+        Serial.print(F("lsdHeight: "));
         Serial.println(lsdHeight);
-        Serial.print("lsdPackedField: ");
+        Serial.print(F("lsdPackedField: "));
         Serial.println(lsdPackedField, HEX);
-        Serial.print("lsdBackgroundIndex: ");
+        Serial.print(F("lsdBackgroundIndex: "));
         Serial.println(lsdBackgroundIndex);
-        Serial.print("lsdAspectRatio: ");
+        Serial.print(F("lsdAspectRatio: "));
         Serial.println(lsdAspectRatio);
 #endif
     }
@@ -745,9 +749,9 @@ public:
             colorCount = 1 << ((lsdPackedField & 7) + 1);
 
 #if DEBUG == 1
-            Serial.print("Global color table with ");
+            Serial.print(F("Global color table with "));
             Serial.print(colorCount);
-            Serial.println(" colors present");
+            Serial.println(F(" colors present"));
 #endif
             // Read color values into the palette array
             int colorTableBytes = sizeof(_RGB) * colorCount;
@@ -758,14 +762,14 @@ public:
     unsigned long drawFrame() {
 
 #if DEBUG == 1
-        Serial.println("\nParsing Data Block");
+        Serial.println(F("\nParsing Data Block"));
 #endif
 
         boolean done = false;
         while (!done) {
 
 #if 0 && DEBUG == 1
-            Serial.println("\nPress Key For Next");
+            Serial.println(F("\nPress Key For Next"));
             while (Serial.read() <= 0);
 #endif
 
@@ -775,7 +779,7 @@ public:
             if (b == 0x2c) {
                 // Parse table based image
 #if DEBUG == 1
-                Serial.println("\nParsing Table Based");
+                Serial.println(F("\nParsing Table Based"));
 #endif
                 unsigned int fdelay = parseTableBasedImage();
                 return fdelay;
@@ -804,7 +808,7 @@ public:
                         break;
                     default:
 #if DEBUG == 1
-                        Serial.print("Unknown control extension: ");
+                        Serial.print(F("Unknown control extension: "));
                         Serial.println(b, HEX);
 #endif
                         return ERROR_UNKNOWNCONTROLEXT;
@@ -812,7 +816,7 @@ public:
             }
             else	{
 #if DEBUG == 1
-                Serial.println("\nParsing Done");
+                Serial.println(F("\nParsing Done"));
 #endif
                 done = true;
 

@@ -27,8 +27,11 @@
 #include "Boid.h"
 #include "Attractor.h"
 
-#include "PatternFlowField.h"
+#include "PatternAnalogClock.h"
+#include "PatternSwirl.h"
 #include "PatternPendulumWave.h"
+#include "PatternElectricMandala.h"
+#include "PatternFlowField.h"
 #include "PatternSpin.h"
 #include "PatternSimplexNoise.h"
 #include "PatternWave.h"
@@ -50,8 +53,11 @@
 
 class Patterns : public Playlist {
 private:
-    PatternFlowField flowField;
+    PatternAnalogClock analogClock;
+    PatternSwirl swirl;
     PatternPendulumWave pendulumWave;
+    PatternElectricMandala electricMandala;
+    PatternFlowField flowField;
     PatternSpin spin;
     PatternSimplexNoise simplexNoise;
     PatternWave wave;
@@ -78,15 +84,18 @@ private:
     int currentIndex = 0;
     Drawable* currentItem;
 
-    static const int PATTERN_COUNT = 24;
+    static const int PATTERN_COUNT = 27;
 
     Drawable* items[PATTERN_COUNT] = {
         &flowField,
         &pendulumWave,
+        &electricMandala,
         &spin,
         &simplexNoise,
         &wave,
         &attract,
+        &analogClock,
+        &swirl,
         &bounce,
         &flock,
         &infinity,

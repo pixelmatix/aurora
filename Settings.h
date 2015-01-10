@@ -30,6 +30,9 @@
 #include "SettingsSetTime.h"
 #include "SettingsClockColor.h"
 #include "SettingsClock24Hour.h"
+#include "SettingsMenuColor.h"
+
+extern GifPlayer gifPlayer;
 
 class Settings : public Runnable {
 private:
@@ -37,6 +40,7 @@ private:
 
     SettingsBrightness brightness;
     SettingsBackgroundBrightness backgroundBrightness;
+    SettingsMenuColor menuColor;
     //SettingsChooseClock chooseClock;
     SettingsMoveClock moveClock;
     SettingsClockColor clockColor;
@@ -44,10 +48,11 @@ private:
     SettingsClock24Hour set24Hour;
     Drawable exit;
 
-    static const int itemCount = 7;
+    static const int itemCount = 8;
 
     MenuItem menuItemBrightness = MenuItem("Brightness", &brightness);
     MenuItem menuItemBgBrightness = MenuItem("BG Brightness", &backgroundBrightness);
+    MenuItem menuItemMenuColor = MenuItem("Menu Color", &menuColor);
     //MenuItem menuItemClockFace = MenuItem("Clock Face", &chooseClock);
     MenuItem menuItemMoveClock = MenuItem("Move Clock", &moveClock);
     MenuItem menuItemClockColor = MenuItem("Clock Color", &clockColor);
@@ -58,6 +63,7 @@ private:
     MenuItem* menuItems[itemCount] = {
         &menuItemBrightness,
         &menuItemBgBrightness,
+        &menuItemMenuColor,
         // &menuItemClockFace,
         &menuItemMoveClock,
         &menuItemClockColor,

@@ -23,6 +23,12 @@
 #ifndef Menu_H
 #define Menu_H
 
+extern uint8_t brightness;
+extern uint8_t backgroundBrightness;
+extern const uint8_t brightnessCount;
+extern MessagePlayer messagePlayer;
+extern ClockDisplay clockDisplay;
+
 // Menu where a single entry is shown at a time.
 class Menu {
 public:
@@ -33,7 +39,7 @@ public:
         Random,
     };
 
-    int menuStart = 13;
+    int menuStart = 11;
     MenuItem* currentMenuItem;
     Playlist* currentPlaylist;
     bool isPlaylist = false;
@@ -60,11 +66,14 @@ public:
     unsigned int brightnessIndicatorTimout = 0;
     unsigned int brightnessIndicatorDuration = 1000;
 
+    bool paletteChanged = false;
+    bool showingPaletteIndicator = false;
+    unsigned int paletteIndicatorTimout = 0;
+    unsigned int paletteIndicatorDuration = 1000;
+
     bool updateScrollText = false;
 
-    unsigned char scrollSpeed = 24;
-
-    rgb24 color = CRGB(CRGB::Green);
+    unsigned char scrollSpeed = 38;
 
     bool canMoveBack = false;
 
@@ -98,22 +107,17 @@ public:
 
                 InputCommand command = readCommand(defaultHoldDelay);
 
-                if (command == InputCommand::Up) {
-                    if (visible) {
+                if (command == InputCommand::Up && visible) {
                         currentPlaylist->stop();
                         move(menuItems, menuItemsCount, -1);
                         break;
                     }
-                }
-                else if (command == InputCommand::Down) {
-                    if (visible) {
+                else if (command == InputCommand::Down && visible) {
                         currentPlaylist->stop();
                         move(menuItems, menuItemsCount, 1);
                         break;
                     }
-                }
-                else if (command == InputCommand::Left) {
-                    if (isPlaylist) {
+                else if (command == InputCommand::Left && isPlaylist) {
                         if (playbackState == Random)
                             currentPlaylist->moveRandom();
                         else
@@ -122,11 +126,9 @@ public:
                         if (playbackState != Paused) {
                             autoPlayTimout = millis() + (autoPlayDurationSeconds * 1000);
                         }
-                    }
                     break;
                 }
-                else if (command == InputCommand::Right) {
-                    if (isPlaylist) {
+                else if (command == InputCommand::Right && isPlaylist) {
                         if (playbackState == Random)
                             currentPlaylist->moveRandom();
                         else
@@ -135,7 +137,6 @@ public:
                         if (playbackState != Paused) {
                             autoPlayTimout = millis() + (autoPlayDurationSeconds * 1000);
                         }
-                    }
                     break;
                 }
                 else if (command == InputCommand::Select) {
@@ -219,6 +220,9 @@ public:
                 }
                 else if (command == InputCommand::Palette) { // cycle color pallete
                     effects.CyclePalette();
+                    paletteChanged = true;
+                    showingPaletteIndicator = true;
+                    paletteIndicatorTimout = millis() + paletteIndicatorDuration;
                 }
                 else if (command == InputCommand::Clock) { // toggle clock visibility, cycle through messages
                     if (!visible) {
@@ -289,7 +293,7 @@ private:
             updateScrollText = true;
         }
 
-        if (currentIndex != previousIndex || updateScrollText || pausedChanged || brightnessChanged) {
+        if (currentIndex != previousIndex || updateScrollText || pausedChanged || brightnessChanged || paletteChanged) {
             previousIndex = currentIndex;
             updateScrollText = false;
 
@@ -311,10 +315,19 @@ private:
 
                 matrix.drawForegroundString(4, 11, text, true);
             }
+            else if (paletteChanged || showingPaletteIndicator) {
+                paletteChanged = false;
+                matrix.setForegroundFont(font3x5);
+                matrix.setScrollColor({ 255, 255, 255 });
+                matrix.setScrollOffsetFromTop(MATRIX_HEIGHT);
+                matrix.setBackgroundBrightness(backgroundBrightness);
+
+                matrix.drawForegroundString(0, 14, effects.currentPaletteName, true);
+            }
             else if (pausedChanged || showingPausedIndicator) {
                 pausedChanged = false;
                 matrix.setForegroundFont(font3x5);
-                matrix.setScrollColor(color);
+                matrix.setScrollColor(menuColor);
                 matrix.setScrollOffsetFromTop(MATRIX_HEIGHT);
                 matrix.setBackgroundBrightness(backgroundBrightness);
 
@@ -337,8 +350,8 @@ private:
                 char *name = currentMenuItem->name;
                 matrix.setScrollMode(wrapForwardFromLeft); /* wrapForward, bounceForward, bounceReverse, stopped, off, wrapForwardFromLeft */
                 matrix.setScrollSpeed(scrollSpeed);
-                matrix.setScrollFont(font5x7);
-                matrix.setScrollColor(color);
+                matrix.setScrollFont(gohufont11b);
+                matrix.setScrollColor(menuColor);
                 matrix.setScrollOffsetFromTop(menuStart);
                 matrix.setBackgroundBrightness(backgroundBrightness);
                 matrix.scrollText(name, -1);
@@ -362,13 +375,13 @@ private:
                 matrix.setBackgroundBrightness(255);
             }
 
-            if (!visible && !showingPausedIndicator && !showingBrightnessIndicator && clockVisible) {
+            if (!visible && !showingPausedIndicator && !showingBrightnessIndicator && !showingPaletteIndicator && clockVisible) {
                 clockDisplay.drawFrame();
             }
 
             matrix.displayForegroundDrawing(false);
         }
-        else if (!visible && !showingPausedIndicator && !showingBrightnessIndicator && clockVisible) {
+        else if (!visible && !showingPausedIndicator && !showingBrightnessIndicator && !showingPaletteIndicator && clockVisible) {
             matrix.clearForeground();
 
             clockDisplay.drawFrame();

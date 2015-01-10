@@ -37,8 +37,8 @@ public:
         //if (random(255) < 120)
         effects.Pixel((effects.p[2] + effects.p[0] + effects.p[1]) / 3, (effects.p[1] + effects.p[3] + effects.p[2]) / 3, effects.osci[3]);
 
-        effects.SpiralStream(MATRIX_WIDTH / 2 - 5, MATRIX_HEIGHT / 2 - 5, 5, 140);
-        effects.SpiralStream(MATRIX_WIDTH / 2 + 5, MATRIX_HEIGHT / 2 + 5, 5, 140);
+        effects.SpiralStream(MATRIX_CENTER_X - 5, MATRIX_CENTER_Y - 5, 5, 140);
+        effects.SpiralStream(MATRIX_CENTER_X + 5, MATRIX_CENTER_Y + 5, 5, 140);
 
         return 15;
     }
@@ -91,10 +91,10 @@ public:
         effects.Caleidoscope1();
 
         i++;
-        if (i >= MATRIX_WIDTH / 2) {
+        if (i >= MATRIX_CENTER_X) {
             i = 0;
             j++;
-            if (j >= MATRIX_HEIGHT / 2) {
+            if (j >= MATRIX_CENTER_Y) {
                 j = 0;
             }
         }

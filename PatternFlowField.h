@@ -22,6 +22,8 @@
 
 #ifndef PatternFlowField_H
 
+extern Effects effects;
+
 class PatternFlowField : public Drawable {
 public:
     uint16_t x;
