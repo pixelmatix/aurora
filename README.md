@@ -49,6 +49,7 @@ Many thanks to all of the fantastic hardware and open source software libraries 
 * [Teensyduino Software] by Paul Stoffregen
 * [Time Library] by Paul Stoffregen
 * [DS1307RTC Library]
+* [aJson Library]
 * [Teensyduino Software]
 * [Arduino Software]
  
@@ -81,6 +82,7 @@ Thanks to these fine game companies for allowing us to use and distribute their 
 [SD Library]:https://github.com/adafruit/SD
 [Time Library]:https://github.com/PaulStoffregen/Time
 [DS1307RTC Library]:https://www.pjrc.com/teensy/td_libs_DS1307RTC.html
+[aJson Library]:https://github.com/interactive-matter/aJson
 [Teensy v3.1]:https://www.pjrc.com/teensy/index.html
 [Light Appliance]:https://github.com/CraigLindley/LightAppliance
 [Funky Clouds]:https://gist.github.com/anonymous/2eb826070e108b09b8fd
