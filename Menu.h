@@ -293,6 +293,11 @@ private:
             updateScrollText = true;
         }
 
+        if (showingPaletteIndicator && millis() >= paletteIndicatorTimout) {
+            showingPaletteIndicator = false;
+            updateScrollText = true;
+        }
+
         if (currentIndex != previousIndex || updateScrollText || pausedChanged || brightnessChanged || paletteChanged) {
             previousIndex = currentIndex;
             updateScrollText = false;
@@ -318,7 +323,7 @@ private:
             else if (paletteChanged || showingPaletteIndicator) {
                 paletteChanged = false;
                 matrix.setForegroundFont(font3x5);
-                matrix.setScrollColor({ 255, 255, 255 });
+                matrix.setScrollColor(menuColor);
                 matrix.setScrollOffsetFromTop(MATRIX_HEIGHT);
                 matrix.setBackgroundBrightness(backgroundBrightness);
 
