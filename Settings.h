@@ -36,6 +36,8 @@ extern GifPlayer gifPlayer;
 
 extern GifPlayer gifPlayer;
 
+extern GifPlayer gifPlayer;
+
 class Settings : public Runnable {
 private:
     Menu settingsMenu;
