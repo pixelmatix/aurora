@@ -90,7 +90,7 @@ private:
                 // assign a color depending on the actual palette
                 CRGB pixel = ColorFromPalette(effects.currentPalette, colorrepeat * (color + colorshift), bri);
 
-                effects.leds[effects.XY(i, j)] = pixel;
+                effects.leds[XY(i, j)] = pixel;
             }
         }
     }

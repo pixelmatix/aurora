@@ -17,7 +17,7 @@ Features
 Demo Video
 -------------------------
 
-[![Aurora Demo Video](http://img.youtube.com/vi/dRn1rFWGPWk/0.jpg)](http://www.youtube.com/watch?v=dRn1rFWGPWk) 
+[![Aurora Demo Video](http://img.youtube.com/vi/dRn1rFWGPWk/0.jpg)](http://www.youtube.com/watch?v=dRn1rFWGPWk)
 
 More Information
 ----------------

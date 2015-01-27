@@ -44,7 +44,7 @@ SetTimeState SetTimeStates[SetTimeStatesCount] = {
 class ClockDigitalShort : public Drawable {
 public:
     char timeBuffer[9];
-    int16_t y = 11;
+    uint8_t y = 11;
     rgb24 color = CRGB(CRGB::White);
 
     bool twentyFourHour = false;
@@ -62,7 +62,7 @@ public:
                 hour -= 12;
 
             matrix.setForegroundFont(gohufont11b);
-            sprintf(timeBuffer, "%d:%02d", hour, time.Minute, time.Second);
+            sprintf(timeBuffer, "%d:%02d", hour, time.Minute);
 
             if (hour < 10)
                 x = 4;

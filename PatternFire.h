@@ -55,26 +55,26 @@ public:
         for (int x = 0; x < MATRIX_WIDTH; x++) {
             // Step 1.  Cool down every cell a little
             for (int y = 0; y < MATRIX_HEIGHT; y++) {
-                int xy = effects.XY(x, y);
+                int xy = XY(x, y);
                 heat[xy] = qsub8(heat[xy], random(0, ((cooling * 10) / MATRIX_HEIGHT) + 2));
             }
 
             // Step 2.  Heat from each cell drifts 'up' and diffuses a little
             for (int y = 0; y < MATRIX_HEIGHT; y++) {
-                heat[effects.XY(x, y)] = (heat[effects.XY(x, y + 1)] + heat[effects.XY(x, y + 2)] + heat[effects.XY(x, y + 2)]) / 3;
+                heat[XY(x, y)] = (heat[XY(x, y + 1)] + heat[XY(x, y + 2)] + heat[XY(x, y + 2)]) / 3;
             }
 
             // Step 2.  Randomly ignite new 'sparks' of heat
             if (random(255) < sparking) {
                 // int x = (p[0] + p[1] + p[2]) / 3;
 
-                int xy = effects.XY(x, MATRIX_HEIGHT - 1);
+                int xy = XY(x, MATRIX_HEIGHT - 1);
                 heat[xy] = qadd8(heat[xy], random(160, 255));
             }
 
             // Step 4.  Map from heat cells to LED colors
             for (int y = 0; y < MATRIX_HEIGHT; y++) {
-                int xy = effects.XY(x, y);
+                int xy = XY(x, y);
                 byte colorIndex = heat[xy];
 
                 // Recommend that you use values 0-240 rather than

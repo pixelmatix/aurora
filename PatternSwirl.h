@@ -50,14 +50,18 @@ public:
 
         // The color of each point shifts over time, each at a different speed.
         uint16_t ms = millis();
-        effects.leds[effects.XY(i, j)] += CHSV(ms / 11, 200, 255);
-        effects.leds[effects.XY(j, i)] += CHSV(ms / 13, 200, 255);
-        effects.leds[effects.XY(ni, nj)] += CHSV(ms / 17, 200, 255);
-        effects.leds[effects.XY(nj, ni)] += CHSV(ms / 29, 200, 255);
-        effects.leds[effects.XY(i, nj)] += CHSV(ms / 37, 200, 255);
-        effects.leds[effects.XY(ni, j)] += CHSV(ms / 41, 200, 255);
+        effects.leds[XY(i, j)] += CHSV(ms / 11, 200, 255);
+        effects.leds[XY(j, i)] += CHSV(ms / 13, 200, 255);
+        effects.leds[XY(ni, nj)] += CHSV(ms / 17, 200, 255);
+        effects.leds[XY(nj, ni)] += CHSV(ms / 29, 200, 255);
+        effects.leds[XY(i, nj)] += CHSV(ms / 37, 200, 255);
+        effects.leds[XY(ni, j)] += CHSV(ms / 41, 200, 255);
         
+#if FASTLED_VERSION >= 3001000
         blur2d(effects.leds, MATRIX_WIDTH, MATRIX_HEIGHT, blurAmount);
+#else
+        effects.DimAll(blurAmount);
+#endif
 
         return 0;
     }

@@ -27,7 +27,6 @@ extern bool sdAvailable;
 
 class MessagePlayer {
 private:
-    uint8_t count = 0;
     const char* path;
 
     bool colorSpecified = false;
@@ -52,6 +51,7 @@ private:
     }
 
 public:
+    uint8_t count = 0;
     int currentIndex = -1;
     char message[textLayerMaxStringLength];
     rgb24 color;
@@ -147,6 +147,14 @@ public:
             return false;
 
         return true;
+    }
+
+    void moveTo(int index) {
+        currentIndex = index;
+        
+        if (currentIndex >= count) {
+            currentIndex = 0;
+        }
     }
 
     bool loadNextMessage() {

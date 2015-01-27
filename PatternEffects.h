@@ -55,8 +55,8 @@ public:
         effects.StreamRight(125);
         effects.MoveOscillators();
         //2 lissajous dots red
-        effects.leds[effects.XY(effects.p[0], effects.p[1])] = color1;
-        effects.leds[effects.XY(effects.p[2], effects.p[3])] = color2;
+        effects.leds[XY(effects.p[0], effects.p[1])] = color1;
+        effects.leds[XY(effects.p[2], effects.p[3])] = color2;
         //average of the coordinates in yellow
         effects.Pixel((effects.p[2] + effects.p[0]) / 2, (effects.p[1] + effects.p[3]) / 2, 50);
 
@@ -86,7 +86,7 @@ private:
     int j = 0;
 public:
     unsigned int drawFrame() {
-        effects.leds[effects.XY(i, j)] = effects.ColorFromCurrentPalette(255); // COLOR_RED;
+        effects.leds[XY(i, j)] = effects.ColorFromCurrentPalette(255); // COLOR_RED;
         effects.SpiralStream(8, 8, 8, 127);
         effects.Caleidoscope1();
 

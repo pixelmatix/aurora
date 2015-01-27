@@ -75,6 +75,9 @@ bool isTimeAvailable = false;
 #include "ClockDigitalShort.h"
 ClockDigitalShort clockDigitalShort;
 
+#include "ClockText.h"
+ClockText clockText;
+
 #include "ClockDisplay.h"
 ClockDisplay clockDisplay;
 
@@ -87,6 +90,7 @@ Animations animations;
 #include "Bitmaps.h"
 
 rgb24 menuColor = CRGB(CRGB::Blue);
+int autoPlayDurationSeconds = 10;
 
 #include "MenuItem.h"
 #include "Menu.h"
@@ -123,8 +127,8 @@ void setup()
     // Setup serial interface
     Serial.begin(9600);
 
-    //delay(3000);
-    //Serial.println(F("starting..."));
+    // delay(3000);
+    // Serial.println(F("starting..."));
 
     // Initialize the IR receiver
     irReceiver.enableIRIn();
@@ -176,6 +180,11 @@ void setup()
     if (enableStartupSplash) {
         while (matrix.getScrollStatus() != 0) {}
     }
+
+    if (!HAS_IR) {
+        menu.playbackState = Menu::PlaybackState::Autoplay;
+        menu.visible = false;
+    }
 }
 
 void loop()
@@ -217,6 +226,8 @@ void loadSettings() {
     menuColor.green = loadIntSetting("/aurora/", "/aurora/menuG.txt", 3, 0);
     menuColor.blue = loadIntSetting("/aurora/", "/aurora/menuB.txt", 3, 255);
 
+    autoPlayDurationSeconds = loadIntSetting("/aurora/", "/aurora/autoplyd.txt", 3, 10);
+
     clockDisplay.loadSettings();
 }
 
@@ -254,11 +265,11 @@ void adjustBrightness(int delta) {
     brightness = brightnessMap[level];
     boundBrightness();
     matrix.setBrightness(brightness);
-    saveBrightnessSetting();
 }
 
 uint8_t cycleBrightness() {
     adjustBrightness(1);
+    saveBrightnessSetting();
 
     if (brightness == brightnessMap[0])
         return 0;
@@ -284,7 +295,6 @@ void adjustBackgroundBrightness(int d) {
     backgroundBrightness = backgroundBrightnessMap[level];
     boundBackgroundBrightness();
     matrix.setBackgroundBrightness(backgroundBrightness);
-    saveBackgroundBrightnessSetting();
 }
 
 void boundBrightness() {
@@ -325,6 +335,10 @@ void saveMenuG() {
 
 void saveMenuB() {
     saveIntSetting("/aurora/", "/aurora/menuB.txt", menuColor.blue);
+}
+
+void saveAutoPlayDurationSeconds() {
+    saveIntSetting("/aurora/", "/aurora/autoplyd.txt", autoPlayDurationSeconds);
 }
 
 int loadIntSetting(char* dir, const char* settingPath, int maxLength, int defaultValue) {

@@ -137,6 +137,29 @@ enum class InputCommand {
 #define IRCODE_WRT8521_01_8           0x00FF4AB5 // 16730805
 #define IRCODE_WRT8521_01_9           0x00FF52AD // 16732845
 
+#define IRCODE_RONIX_HELD             4294967295
+#define IRCODE_RONIX_POWER_RED_1      378130479
+#define IRCODE_RONIX_POWER_RED_2      378134559
+#define IRCODE_RONIX_POWER_RED_3      378132519
+#define IRCODE_RONIX_POWER_BLUE_1     378077439
+#define IRCODE_RONIX_POWER_BLUE_2     378126399
+#define IRCODE_RONIX_POWER_BLUE_3     378110079
+#define IRCODE_RONIX_POWER_YELLOW_1   378114159
+#define IRCODE_RONIX_POWER_YELLOW_2   378118239
+#define IRCODE_RONIX_POWER_YELLOW_3   378093759
+#define IRCODE_RONIX_ALL_RED          378097839
+#define IRCODE_RONIX_ALL_BLUE         378101919
+#define IRCODE_RONIX_ALL_YELLOW       378099879
+#define IRCODE_RONIX_SLEEP_RED        378081519
+#define IRCODE_RONIX_SELECT_RED       378091719
+#define IRCODE_RONIX_SET_RED          378116199
+#define IRCODE_RONIX_SLEEP_BLUE       378083559
+#define IRCODE_RONIX_SELECT_BLUE      378124359
+#define IRCODE_RONIX_SET_BLUE         378085599
+#define IRCODE_RONIX_SLEEP_YELLOW     378089679
+#define IRCODE_RONIX_SELECT_YELLOW    378122319
+#define IRCODE_RONIX_SET_YELLOW       378105999
+
 // Low level IR code reading function
 // Function will return 0 if no IR code available
 unsigned long decodeIRCode() {
@@ -271,6 +294,7 @@ InputCommand getCommand(unsigned long input) {
         case IRCODE_SPARKFUN_UP:
         case IRCODE_WRT8621_IN:
         case IRCODE_WRT8621_05A_UP:
+        case IRCODE_RONIX_POWER_BLUE_2:
             return InputCommand::Up;
 
         case IRCODE_ADAFRUIT_DOWN:
@@ -278,6 +302,7 @@ InputCommand getCommand(unsigned long input) {
         case IRCODE_SPARKFUN_DOWN:
         case IRCODE_WRT8621_ATT:
         //case IRCODE_WRT8621_05A_DOWN:
+        case IRCODE_RONIX_ALL_BLUE:
             return InputCommand::Down;
 
         case IRCODE_SPARKFUN_LEFT:
@@ -285,6 +310,7 @@ InputCommand getCommand(unsigned long input) {
         case IRCODE_WRT8521_01_LEFT:
         case IRCODE_WRT8621_UP2:
         case IRCODE_WRT8621_05A_LEFT:
+        case IRCODE_RONIX_POWER_YELLOW_1:
             return InputCommand::Left;
 
         case IRCODE_SPARKFUN_RIGHT:
@@ -292,6 +318,7 @@ InputCommand getCommand(unsigned long input) {
         //case IRCODE_WRT8521_01_RIGHT:
         case IRCODE_WRT8621_DOWN2:
         //case IRCODE_WRT8621_05A_RIGHT:
+        case IRCODE_RONIX_POWER_YELLOW_3:
             return InputCommand::Right;
 
         case IRCODE_SPARKFUN_SELECT:
@@ -299,6 +326,7 @@ InputCommand getCommand(unsigned long input) {
         case IRCODE_WRT8521_01_ENTER_SAVE:
         case IRCODE_WRT8621_OUT:
         //case IRCODE_WRT8621_05A_OK:
+        case IRCODE_RONIX_POWER_YELLOW_2:
             return InputCommand::Select;
 
         case IRCODE_SPARKFUN_POWER:
@@ -311,43 +339,52 @@ InputCommand getCommand(unsigned long input) {
         case IRCODE_WRT8521_01_STOP_MODE:
         case IRCODE_WRT8521_01_1:
         case IRCODE_WRT8621_DOWN1:
+        case IRCODE_RONIX_POWER_BLUE_3:
+        case IRCODE_RONIX_SLEEP_RED:
             return InputCommand::PlayMode;
 
         case IRCODE_SPARKFUN_B:
         case IRCODE_ADAFRUIT_2:
         case IRCODE_WRT8521_01_2:
         case IRCODE_WRT8621_QA:
+        case IRCODE_RONIX_SELECT_RED:
             return InputCommand::Palette;
 
         case IRCODE_SPARKFUN_C:
         case IRCODE_ADAFRUIT_3:
         case IRCODE_WRT8521_01_3:
         case IRCODE_WRT8621_DOWN4:
+        case IRCODE_RONIX_SET_RED:
             return InputCommand::Clock;
 
         case IRCODE_ADAFRUIT_PLAY_PAUSE:
         case IRCODE_WRT8521_01_PLAY_PAUSE:
         case IRCODE_WRT8621_MODE:
+        case IRCODE_RONIX_POWER_RED_2:
             return InputCommand::Power;
 
         case IRCODE_ADAFRUIT_BACK:
         //case IRCODE_WRT8521_01_BACK:
         case IRCODE_WRT8621_DOWN3:
+        case IRCODE_RONIX_ALL_YELLOW:
             return InputCommand::Back;
 
         case IRCODE_ADAFRUIT_VOLUME_UP:
         case IRCODE_WRT8521_01_VOLUME_UP:
         case IRCODE_WRT8621_ON:
+        case IRCODE_RONIX_POWER_RED_3:
             return InputCommand::BrightnessUp;
 
         case IRCODE_ADAFRUIT_VOLUME_DOWN:
         case IRCODE_WRT8521_01_VOLUME_DOWN:
         case IRCODE_WRT8621_OFF:
+        case IRCODE_RONIX_POWER_RED_1:
             return InputCommand::BrightnessDown;
 
         case IRCODE_ADAFRUIT_SETUP:
         case IRCODE_WRT8521_01_SETUP:
         case IRCODE_WRT8621_UP1:
+        case IRCODE_RONIX_POWER_BLUE_1:
             return InputCommand::Menu;
     }
 

@@ -36,8 +36,8 @@
 
 class PatternFlock : public Drawable {
 public:
-Boid boids[boidCount];
-Boid predator;
+    Boid boids[boidCount];
+    Boid predator;
 
     PVector wind;
     byte hue = 0;

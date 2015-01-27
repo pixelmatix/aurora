@@ -44,10 +44,10 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>F:\Arduino-1.0.6\hardware\teensy\cores\teensy3;F:\Arduino-1.0.6\hardware\teensy\cores\teensy3\utils;F:\Arduino-1.0.6\hardware\teensy\cores\teensy3\avr;C:\Users\Jason\Documents\Arduino\libraries\FastLED;C:\Users\Jason\Documents\Arduino\libraries\FastLED\utility;C:\Users\Jason\Documents\Arduino\libraries\IRremote;C:\Users\Jason\Documents\Arduino\libraries\IRremote\utility;F:\Arduino-1.0.6\libraries\SPI;F:\Arduino-1.0.6\libraries\SPI\utility;F:\Arduino-1.0.6\libraries\SD;F:\Arduino-1.0.6\libraries\SD\utility;F:\Arduino-1.0.6\libraries\Wire;F:\Arduino-1.0.6\libraries\Wire\utility;C:\Users\Jason\Documents\Arduino\libraries\Time;C:\Users\Jason\Documents\Arduino\libraries\Time\utility;C:\Users\Jason\Documents\Arduino\libraries\DS1307RTC;C:\Users\Jason\Documents\Arduino\libraries\DS1307RTC\utility;C:\Users\Jason\Documents\Arduino\libraries\aJson;C:\Users\Jason\Documents\Arduino\libraries\aJson\utility;C:\Users\Jason\Documents\Arduino\libraries\SmartMatrix;C:\Users\Jason\Documents\Arduino\libraries\SmartMatrix\utility;F:\Arduino-1.0.6\libraries;F:\Arduino-1.0.6\hardware\teensy\libraries;F:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers;C:\Users\Jason\Documents\Arduino\libraries;F:\Arduino-1.0.6\hardware\tools\arm-none-eabi\arm-none-eabi\include;F:\Arduino-1.0.6\hardware\tools\arm-none-eabi\arm-none-eabi\include;F:\Arduino-1.0.6\hardware\tools\arm-none-eabi\lib\gcc\arm-none-eabi\4.7.2\include;F:\Arduino-1.0.6\hardware\tools\arm-none-eabi\lib\gcc\arm-none-eabi\4.7.2\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>F:\Arduino-1.0.6\hardware\teensy\cores\teensy3;F:\Arduino-1.0.6\hardware\teensy\cores\teensy3\utils;F:\Arduino-1.0.6\hardware\teensy\cores\teensy3\avr;C:\Users\Jason\Documents\Arduino\Aurora-mf-release\Aurora;C:\Users\Jason\Documents\Arduino\libraries\FastLED;C:\Users\Jason\Documents\Arduino\libraries\FastLED\utility;C:\Users\Jason\Documents\Arduino\libraries\IRremote;C:\Users\Jason\Documents\Arduino\libraries\IRremote\utility;F:\Arduino-1.0.6\libraries\SPI;F:\Arduino-1.0.6\libraries\SPI\utility;F:\Arduino-1.0.6\libraries\SD;F:\Arduino-1.0.6\libraries\SD\utility;F:\Arduino-1.0.6\libraries\Wire;F:\Arduino-1.0.6\libraries\Wire\utility;C:\Users\Jason\Documents\Arduino\libraries\Time;C:\Users\Jason\Documents\Arduino\libraries\Time\utility;C:\Users\Jason\Documents\Arduino\libraries\DS1307RTC;C:\Users\Jason\Documents\Arduino\libraries\DS1307RTC\utility;C:\Users\Jason\Documents\Arduino\libraries\aJson;C:\Users\Jason\Documents\Arduino\libraries\aJson\utility;C:\Users\Jason\Documents\Arduino\libraries\SmartMatrix;C:\Users\Jason\Documents\Arduino\libraries\SmartMatrix\utility;F:\Arduino-1.0.6\libraries;F:\Arduino-1.0.6\hardware\teensy\libraries;F:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers;C:\Users\Jason\Documents\Arduino\libraries;F:\Arduino-1.0.6\hardware\tools\arm-none-eabi\arm-none-eabi\include;F:\Arduino-1.0.6\hardware\tools\arm-none-eabi\arm-none-eabi\include;F:\Arduino-1.0.6\hardware\tools\arm-none-eabi\lib\gcc\arm-none-eabi\4.7.2\include;F:\Arduino-1.0.6\hardware\tools\arm-none-eabi\lib\gcc\arm-none-eabi\4.7.2\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>C:\Users\Jason\Documents\Arduino\Aurora-mf-release\Aurora\Visual Micro\.Aurora.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
-      <PreprocessorDefinitions>ARDUINO=106;ARDUINO_MAIN;__AVR__;__avr__;F_CPU=48000000;USB_SERIAL;LAYOUT_US_ENGLISH;__cplusplus;__MK20DX256__;TEENSYDUINO=120;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ARDUINO=106;ARDUINO_MAIN;__AVR__;__avr__;F_CPU=48000000;USB_SERIAL;LAYOUT_US_ENGLISH;__cplusplus;GCC_VERSION=40301;ARDUINO_ARCH_AVR;ARDUINO_AVR_TEENSY31;__MK20DX256__;TEENSYDUINO=120;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -86,6 +86,7 @@
     <ClInclude Include="Boid.h" />
     <ClInclude Include="ClockDigitalShort.h" />
     <ClInclude Include="ClockDisplay.h" />
+    <ClInclude Include="ClockText.h" />
     <ClInclude Include="Drawable.h" />
     <ClInclude Include="Effects.h" />
     <ClInclude Include="GifPlayer.h" />
@@ -116,6 +117,9 @@
       <FileType>CppCode</FileType>
     </ClInclude>
     <ClInclude Include="PatternMaze.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="PatternNoiseSmearing.h">
       <FileType>CppCode</FileType>
     </ClInclude>
     <ClInclude Include="PatternPendulumWave.h" />
@@ -150,9 +154,9 @@
     <ClInclude Include="Settings.h">
       <FileType>CppCode</FileType>
     </ClInclude>
+    <ClInclude Include="SettingsAutoplayDuration.h" />
     <ClInclude Include="SettingsBackgroundBrightness.h" />
     <ClInclude Include="SettingsBrightness.h" />
-    <ClInclude Include="SettingsChooseClock.h" />
     <ClInclude Include="SettingsClock24Hour.h" />
     <ClInclude Include="SettingsClockColor.h" />
     <ClInclude Include="SettingsMenuColor.h" />

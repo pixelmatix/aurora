@@ -55,7 +55,6 @@ public:
 
     unsigned int playbackState = Paused;
     unsigned int autoPlayTimout = 0;
-    int autoPlayDurationSeconds = 5;
     bool pausedChanged = false;
     bool showingPausedIndicator = false;
     unsigned int pauseIndicatorTimout = 0;
@@ -76,6 +75,8 @@ public:
     unsigned char scrollSpeed = 38;
 
     bool canMoveBack = false;
+
+    uint8_t clockOrMessageIndex = 0;
 
     void run(MenuItem* menuItems [], int menuItemsCount) {
         while (true) {
@@ -108,35 +109,35 @@ public:
                 InputCommand command = readCommand(defaultHoldDelay);
 
                 if (command == InputCommand::Up && visible) {
-                        currentPlaylist->stop();
-                        move(menuItems, menuItemsCount, -1);
-                        break;
-                    }
+                    currentPlaylist->stop();
+                    move(menuItems, menuItemsCount, -1);
+                    break;
+                }
                 else if (command == InputCommand::Down && visible) {
-                        currentPlaylist->stop();
-                        move(menuItems, menuItemsCount, 1);
-                        break;
-                    }
+                    currentPlaylist->stop();
+                    move(menuItems, menuItemsCount, 1);
+                    break;
+                }
                 else if (command == InputCommand::Left && isPlaylist) {
-                        if (playbackState == Random)
-                            currentPlaylist->moveRandom();
-                        else
-                            currentPlaylist->move(-1);
+                    if (playbackState == Random)
+                        currentPlaylist->moveRandom();
+                    else
+                        currentPlaylist->move(-1);
 
-                        if (playbackState != Paused) {
-                            autoPlayTimout = millis() + (autoPlayDurationSeconds * 1000);
-                        }
+                    if (playbackState != Paused) {
+                        autoPlayTimout = millis() + (autoPlayDurationSeconds * 1000);
+                    }
                     break;
                 }
                 else if (command == InputCommand::Right && isPlaylist) {
-                        if (playbackState == Random)
-                            currentPlaylist->moveRandom();
-                        else
-                            currentPlaylist->move(1);
+                    if (playbackState == Random)
+                        currentPlaylist->moveRandom();
+                    else
+                        currentPlaylist->move(1);
 
-                        if (playbackState != Paused) {
-                            autoPlayTimout = millis() + (autoPlayDurationSeconds * 1000);
-                        }
+                    if (playbackState != Paused) {
+                        autoPlayTimout = millis() + (autoPlayDurationSeconds * 1000);
+                    }
                     break;
                 }
                 else if (command == InputCommand::Select) {
@@ -197,12 +198,14 @@ public:
                 }
                 else if (command == InputCommand::BrightnessUp) {
                     adjustBrightness(1);
+                    saveBrightnessSetting();
                     brightnessChanged = true;
                     showingBrightnessIndicator = true;
                     brightnessIndicatorTimout = millis() + brightnessIndicatorDuration;
                 }
                 else if (command == InputCommand::BrightnessDown) {
                     adjustBrightness(-1);
+                    saveBrightnessSetting();
                     brightnessChanged = true;
                     showingBrightnessIndicator = true;
                     brightnessIndicatorTimout = millis() + brightnessIndicatorDuration;
@@ -224,26 +227,47 @@ public:
                     showingPaletteIndicator = true;
                     paletteIndicatorTimout = millis() + paletteIndicatorDuration;
                 }
-                else if (command == InputCommand::Clock) { // toggle clock visibility, cycle through messages
-                    if (!visible) {
-                        if (isHolding) {
-                            // turn off the clock or message if the button is held
+                else if (command == InputCommand::Clock && !visible) { // cycle through clock faces and messages
+                    if (isHolding) {
+                        // turn off the clock or message if the button is held
+                        messageVisible = false;
+                        clockVisible = false;
+                    }
+                    else if (!clockVisible && !messageVisible) {
+                        // if neither are visible, just show the current clock or message
+                        clockVisible = clockOrMessageIndex < clockDisplay.itemCount;
+                        messageVisible = !clockVisible;
+                    }
+                    else {
+                        // clock or message is visible, move to next
+                        clockOrMessageIndex++;
+
+                        // if we still have clock faces left, move to the next one
+                        if (clockOrMessageIndex < clockDisplay.itemCount) {
+                            clockDisplay.moveTo(clockOrMessageIndex);
+                            clockVisible = true;
+                            messageVisible = false;
+                        }
+                        else if (messagePlayer.count > 0 && clockOrMessageIndex - clockDisplay.itemCount < messagePlayer.count - 1) {
+                            // otherwise try to move to the next message
+                            if (messagePlayer.loadNextMessage()) {
+                                messageVisible = true;
+                                clockVisible = false;
+                            }
+                            else {
+                                messageVisible = false;
+                                clockVisible = false;
+                            }
+                        }
+                        else {
+                            clockOrMessageIndex = 0;
+                            clockDisplay.moveTo(clockOrMessageIndex);
                             messageVisible = false;
                             clockVisible = false;
                         }
-                        else if (!clockVisible && !messageVisible) {
-                            // if neither are visible, just show the current (clock or message)
-                            clockVisible = messagePlayer.currentIndex == -1;
-                            messageVisible = !clockVisible;
-                        }
-                        else {
-                            // clock or message is visible, move to the next one
-                            messageVisible = messagePlayer.loadNextMessage();
-                            clockVisible = false;
-                        }
-
-                        updateScrollText = true;
                     }
+
+                    updateScrollText = true;
                 }
                 else {
                     if (playbackState != Paused && millis() >= autoPlayTimout) {
@@ -307,7 +331,7 @@ private:
             if (brightnessChanged || showingBrightnessIndicator) {
                 brightnessChanged = false;
                 matrix.setForegroundFont(gohufont11b);
-                matrix.setScrollColor({ 255, 255, 255 });
+                matrix.setScrollColor(menuColor);
                 matrix.setScrollOffsetFromTop(MATRIX_HEIGHT);
                 matrix.setBackgroundBrightness(backgroundBrightness);
 

@@ -25,6 +25,8 @@
 
 class SettingsBrightness : public Runnable {
 private:
+    boolean hasChanges = false;
+
 public:
     void run() {
         while (true) {
@@ -70,18 +72,24 @@ public:
             matrix.swapBuffers();
 
             InputCommand command = readCommand(defaultHoldDelay);
-            
+
             switch (command) {
                 case InputCommand::Up:
                     adjustBrightness(1);
+                    hasChanges = true;
                     break;
 
                 case InputCommand::Down:
                     adjustBrightness(-1);
+                    hasChanges = true;
                     break;
 
                 case InputCommand::Select:
                 case InputCommand::Back:
+                    if (hasChanges) {
+                        saveBrightnessSetting();
+                        hasChanges = false;
+                    }
                     return;
             }
         }

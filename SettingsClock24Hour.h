@@ -25,12 +25,42 @@
 
 class SettingsClock24Hour : public Runnable {
 private:
+    boolean hasChanges = false;
+
 public:
     void run() {
         while (true) {
             drawFrame();
-            clockDisplay.drawFrame();
-            clockDisplay.drawSetTimeIndicator(SetHour);
+            //clockDigitalShort.drawFrame();
+            int16_t x = 2;
+
+            uint8_t hour = 12;
+
+            if (clockDigitalShort.twentyFourHour)
+                hour = 24;
+
+            char timeBuffer[7];
+            sprintf(timeBuffer, "%d hour", hour);
+
+            int16_t y = clockDigitalShort.y;
+
+            // upper indicators (in case the clock's at the bottom)
+            matrix.drawTriangle(x + 0, y - 1, x + 1, y - 2, x + 2, y - 1, CRGB(CRGB::SlateGray));
+            matrix.drawTriangle(x + 6, y - 1, x + 7, y - 2, x + 8, y - 1, CRGB(CRGB::SlateGray));
+
+            // lower indicators (in case the clock's at the top)
+            matrix.drawTriangle(x + 0, y + 11, x + 1, y + 12, x + 2, y + 11, CRGB(CRGB::SlateGray));
+            matrix.drawTriangle(x + 6, y + 11, x + 7, y + 12, x + 8, y + 11, CRGB(CRGB::SlateGray));
+
+            y += 3;
+
+            matrix.setForegroundFont(font3x5);
+            matrix.setScrollOffsetFromTop(MATRIX_HEIGHT);
+            matrix.setScrollColor(clockDisplay.color);
+            matrix.clearForeground();
+            matrix.drawForegroundString(x, y, timeBuffer, true);
+
+            //clockDigitalShort.drawSetTimeIndicator(SetHour);
 
             matrix.swapBuffers();
             matrix.displayForegroundDrawing(false);
@@ -38,15 +68,19 @@ public:
             InputCommand command = readCommand(defaultHoldDelay);
 
             switch (command) {
-                case InputCommand::Up:
-                case InputCommand::Down:
-                    clockDigitalShort.twentyFourHour = !clockDigitalShort.twentyFourHour;
-                    clockDigitalShort.saveTwentyFourHourSetting();
-                    break;
+            case InputCommand::Up:
+            case InputCommand::Down:
+                hasChanges = true;
+                clockDigitalShort.twentyFourHour = !clockDigitalShort.twentyFourHour;
+                break;
 
-                case InputCommand::Select:
-                case InputCommand::Back:
-                    return;
+            case InputCommand::Select:
+            case InputCommand::Back:
+                if (hasChanges) {
+                    clockDigitalShort.saveTwentyFourHourSetting();
+                    hasChanges = false;
+                }
+                return;
             }
         }
     }

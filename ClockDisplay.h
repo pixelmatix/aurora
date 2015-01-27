@@ -33,10 +33,11 @@ public:
 
     int currentIndex = 0;
 
-    static const int itemCount = 1;
+    static const int itemCount = 2;
 
     Drawable* items[itemCount] = {
         &clockDigitalShort,
+        &clockText,
     };
 
     Drawable* currentItem = items[currentIndex];
@@ -49,18 +50,15 @@ public:
     }
 
     virtual void move(int step) {
-        currentIndex += step;
-
-        if (currentIndex >= itemCount)
-            currentIndex = 0;
-        else if (currentIndex < 0)
-            currentIndex = itemCount - 1;
-
-        currentItem = items[currentIndex];
+        moveTo(currentIndex + step);
     }
 
     virtual void moveRandom() {
-        currentIndex = random(0, itemCount);
+        moveTo(random(0, itemCount));
+    }
+
+    void moveTo(int index) {
+        currentIndex = index;
 
         if (currentIndex >= itemCount)
             currentIndex = 0;

@@ -27,6 +27,7 @@ class SettingsClockColor : public Runnable {
 private:
     int cursorX = 0;
     int cursorY = 0;
+    boolean hasChanges = false;
 
 public:
 
@@ -129,23 +130,30 @@ public:
             switch (command) {
                 case InputCommand::Left:
                     cursorX -= 1;
+                    hasChanges = true;
                     break;
 
                 case InputCommand::Right:
                     cursorX += 1;
+                    hasChanges = true;
                     break;
 
                 case InputCommand::Up:
                     cursorY -= 1;
+                    hasChanges = true;
                     break;
 
                 case InputCommand::Down:
                     cursorY += 1;
+                    hasChanges = true;
                     break;
 
                 case InputCommand::Select:
                 case InputCommand::Back:
-                    save(selectedColor);
+                    if (hasChanges) {
+                        save(selectedColor);
+                        hasChanges = false;
+                    }
                     return;
             }
 

@@ -25,6 +25,8 @@
 
 class SettingsBackgroundBrightness : public Runnable {
 private:
+    boolean hasChanges = false;
+
 public:
     void run() {
         while (true) {
@@ -79,15 +81,21 @@ public:
 
             switch (command) {
                 case InputCommand::Up:
+                    hasChanges = true;
                     adjustBackgroundBrightness(1);
                     break;
 
                 case InputCommand::Down:
+                    hasChanges = true;
                     adjustBackgroundBrightness(-1);
                     break;
 
                 case InputCommand::Select:
                 case InputCommand::Back:
+                    if (hasChanges) {
+                        saveBackgroundBrightnessSetting();
+                        hasChanges = false;
+                    }
                     return;
             }
         }

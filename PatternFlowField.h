@@ -64,7 +64,7 @@ public:
             boid->velocity.x = cos8(angle) * 0.005;
             boid->velocity.y = sin8(angle) * 0.005;
             boid->update();
-
+            
             //PVector location = boid->location;
             //PVector velocity = boid->velocity;
             //matrix.drawLine(location.x, location.y, location.x - velocity.x, location.y - velocity.y, color);
