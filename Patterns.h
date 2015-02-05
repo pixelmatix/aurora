@@ -31,8 +31,9 @@
 #include "PatternAnalogClock.h"
 #include "PatternSwirl.h"
 #include "PatternPendulumWave.h"
-//#include "PatternElectricMandala.h"
 #include "PatternFlowField.h"
+#include "PatternMunch.h"
+#include "PatternElectricMandala.h"
 #include "PatternSpin.h"
 #include "PatternSimplexNoise.h"
 #include "PatternWave.h"
@@ -63,8 +64,9 @@ private:
     PatternAnalogClock analogClock;
     PatternSwirl swirl;
     PatternPendulumWave pendulumWave;
-    //PatternElectricMandala electricMandala;
     PatternFlowField flowField;
+    PatternMunch munch;
+    PatternElectricMandala electricMandala;
     PatternSpin spin;
     PatternSimplexNoise simplexNoise;
     PatternWave wave;
@@ -91,7 +93,7 @@ private:
     int currentIndex = 0;
     Drawable* currentItem;
 
-    static const int PATTERN_COUNT = 32;
+    static const int PATTERN_COUNT = 34;
 
     Drawable* items[PATTERN_COUNT] = {
         &multipleStream,
@@ -103,6 +105,8 @@ private:
         &life,
         &flowField,
         &pendulumWave,
+        &munch,
+        &electricMandala,
         &spin,
         &simplexNoise,
         &wave,
@@ -126,7 +130,6 @@ private:
         &dots2,
         &slowMandala,
         &mandala8
-        //&electricMandala,
     };
 
 public:

@@ -122,6 +122,7 @@ public:
     }
 
     unsigned int drawFrame() {
+#if FASTLED_VERSION >= 3001000
         // a new parameter set every 15 seconds
         EVERY_N_SECONDS(15) {
             //SetupRandomPalette3();
@@ -131,6 +132,7 @@ public:
             scale_x[0] = random16(10000) + 2000;
             scale_y[0] = random16(10000) + 2000;
         }
+#endif
 
         y[0] += dy;
         x[0] += dx;
