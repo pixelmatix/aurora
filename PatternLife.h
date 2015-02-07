@@ -5,6 +5,8 @@
  * Portions of this code are adapted from Andrew: http://pastebin.com/f22bfe94d
  * which, in turn, was "Adapted from the Life example on the Processing.org site"
  *
+ * Made much more colorful by J.B. Langston: https://github.com/jblang/aurora/commit/6db5a884e3df5d686445c4f6b669f1668841929b
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
  * the Software without restriction, including without limitation the rights to
