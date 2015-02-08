@@ -19,6 +19,13 @@ Demo Video
 
 [![Aurora Demo Video](http://img.youtube.com/vi/dRn1rFWGPWk/0.jpg)](http://www.youtube.com/watch?v=dRn1rFWGPWk) 
 
+Installation
+------------
+See [Installation](https://github.com/pixelmatix/aurora/wiki/Installation) in the [Aurora Wiki] for instructions on how to load the pre-compiled Aurora program onto the Teensy 3.1
+
+See [Compiling](https://github.com/pixelmatix/aurora/wiki/Compiling) in the [Aurora Wiki] for instructions on how setup the Arduino IDE and all the libraries that are needed to compile Aurora.
+
+
 More Information
 ----------------
 
