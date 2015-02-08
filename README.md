@@ -29,8 +29,8 @@ See [Compiling](https://github.com/pixelmatix/aurora/wiki/Compiling) in the [Aur
 More Information
 ----------------
 
-* [Aurora Project] on GitHub for source code
 * [Aurora Wiki] on GitHub for documentation
+* [Aurora Project] on GitHub for source code
 * [Aurora Issue Tracker] on GitHub for reporting issues
 * [SmartMatrix User Community] on Google+ to ask questions, share your work, ideas, etc
 
