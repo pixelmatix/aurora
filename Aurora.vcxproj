@@ -47,7 +47,7 @@
       <AdditionalIncludeDirectories>C:\Program Files (x86)\Arduino\hardware\teensy\cores\teensy3;C:\Program Files (x86)\Arduino\hardware\teensy\cores\teensy3\utils;C:\Program Files (x86)\Arduino\hardware\teensy\cores\teensy3\avr;C:\Users\Jason\Documents\Arduino\aurora-github\Aurora;C:\Users\Jason\Documents\Arduino\libraries\FastLED;C:\Users\Jason\Documents\Arduino\libraries\FastLED\utility;C:\Program Files (x86)\Arduino\libraries\IRremote;C:\Program Files (x86)\Arduino\libraries\IRremote\utility;C:\Program Files (x86)\Arduino\libraries\SPI;C:\Program Files (x86)\Arduino\libraries\SPI\utility;C:\Program Files (x86)\Arduino\libraries\SD;C:\Program Files (x86)\Arduino\libraries\SD\utility;C:\Program Files (x86)\Arduino\libraries\Wire;C:\Program Files (x86)\Arduino\libraries\Wire\utility;C:\Program Files (x86)\Arduino\libraries\Time;C:\Program Files (x86)\Arduino\libraries\Time\utility;C:\Program Files (x86)\Arduino\libraries\DS1307RTC;C:\Program Files (x86)\Arduino\libraries\DS1307RTC\utility;C:\Users\Jason\Documents\Arduino\libraries\aJson;C:\Users\Jason\Documents\Arduino\libraries\aJson\utility;C:\Users\Jason\Documents\Arduino\libraries\SmartMatrix;C:\Users\Jason\Documents\Arduino\libraries\SmartMatrix\utility;C:\Program Files (x86)\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\teensy\libraries;C:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers;C:\Users\Jason\Documents\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\tools\arm-none-eabi\arm-none-eabi\include;C:\Program Files (x86)\Arduino\hardware\tools\arm-none-eabi\arm-none-eabi\include;C:\Program Files (x86)\Arduino\hardware\tools\arm-none-eabi\lib\gcc\arm-none-eabi\4.7.2\include;C:\Program Files (x86)\Arduino\hardware\tools\arm-none-eabi\lib\gcc\arm-none-eabi\4.7.2\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>C:\Users\Jason\Documents\Arduino\aurora-github\Aurora\Visual Micro\.Aurora.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
-      <PreprocessorDefinitions>ARDUINO=106;ARDUINO_MAIN;__AVR__;__avr__;F_CPU=48000000;USB_SERIAL;LAYOUT_US_ENGLISH;__cplusplus;GCC_VERSION=40301;ARDUINO_ARCH_AVR;ARDUINO_AVR_TEENSY31;__MK20DX256__;TEENSYDUINO=120;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ARDUINO=106;ARDUINO_MAIN;__AVR__;__avr__;F_CPU=96000000;USB_SERIAL;LAYOUT_US_ENGLISH;__cplusplus;GCC_VERSION=40702;ARDUINO_ARCH_AVR;ARDUINO_AVR_TEENSY31;__MK20DX256__;TEENSYDUINO=120;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -169,6 +169,7 @@
     </ClInclude>
     <ClInclude Include="StreamingMode.h" />
     <ClInclude Include="Vector.h" />
+    <ClInclude Include="Visual Micro\.Aurora.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="LICENSE.txt" />
