@@ -20,35 +20,35 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-    #ifndef PatternInfinity_H
-    
-    class PatternInfinity : public Drawable {
-    public:
-        unsigned int drawFrame() {
-            // dim all pixels on the display slightly 
-            // to 250/255 (98%) of their current brightness
-            effects.DimAll(250);
+#ifndef PatternInfinity_H
 
-            // the Effects class has some sample oscillators
-            // that move from 0 to 255 at different speeds
-            effects.MoveOscillators();
-            
-            // the horizontal position of the head of the infinity sign
-            // oscillates from 0 to the maximum horizontal and back
-            int x = (MATRIX_WIDTH - 1) - effects.p[1];
+class PatternInfinity : public Drawable {
+public:
+    unsigned int drawFrame() {
+        // dim all pixels on the display slightly 
+        // to 250/255 (98%) of their current brightness
+        effects.DimAll(250);
 
-            // the vertical position of the head oscillates
-            // from 8 to 23 and back (hard-coded for a 32x32 matrix)
-            int y = map8(sin8(effects.osci[3]), 8, 23);
-            
-            // the hue oscillates from 0 to 255, overflowing back to 0
-            byte hue = sin8(effects.osci[5]);
-    
-            // draw a pixel at x,y using a color from the current palette
-            effects.Pixel(x, y, hue);
-    
-            return 15;
-        }
-    };
-    
-    #endif
+        // the Effects class has some sample oscillators
+        // that move from 0 to 255 at different speeds
+        effects.MoveOscillators();
+
+        // the horizontal position of the head of the infinity sign
+        // oscillates from 0 to the maximum horizontal and back
+        int x = (MATRIX_WIDTH - 1) - effects.p[1];
+
+        // the vertical position of the head oscillates
+        // from 8 to 23 and back (hard-coded for a 32x32 matrix)
+        int y = map8(sin8(effects.osci[3]), 8, 23);
+
+        // the hue oscillates from 0 to 255, overflowing back to 0
+        byte hue = sin8(effects.osci[5]);
+
+        // draw a pixel at x,y using a color from the current palette
+        effects.Pixel(x, y, hue);
+
+        return 15;
+    }
+};
+
+#endif

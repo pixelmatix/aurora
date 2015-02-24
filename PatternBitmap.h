@@ -43,8 +43,8 @@ public:
 
             if (sdAvailable) {
                 if (SD.exists("/aurora/pmlogo32.bmp")) {
-            bitmapPlayer.drawBitmap("/aurora/pmlogo32.bmp");
-        }
+                    bitmapPlayer.drawBitmap("/aurora/pmlogo32.bmp");
+                }
                 else {
                     matrix.drawString(0, 0, { 255, 255, 255 }, "No file");
                 }

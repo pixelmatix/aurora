@@ -24,6 +24,8 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#include "Vector.h"
+
 class Attractor {
 public:
     float mass;    // Mass, tied to size
@@ -31,7 +33,7 @@ public:
     PVector location;   // Location
 
     Attractor() {
-        location = PVector((MATRIX_WIDTH / 2) - 1, (MATRIX_HEIGHT / 2) - 1);
+        location = PVector(MATRIX_CENTRE_X, MATRIX_CENTRE_Y);
         mass = 10;
         G = .5;
     }

@@ -78,7 +78,7 @@ public:
             for (int j = 0; j < MATRIX_HEIGHT; j++) {
                 int joffset = scale * j;
                 noise[i][j] = inoise8(x + ioffset, y + joffset, z);
-                effects.leds[effects.XY(i, j)] = effects.ColorFromCurrentPalette(noise[j][i], noise[i][j]);
+                effects.leds[XY(i, j)] = effects.ColorFromCurrentPalette(noise[j][i], noise[i][j]);
             }
         }
         x += speed;

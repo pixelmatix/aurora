@@ -22,6 +22,9 @@
 
 #ifndef PatternSpin_H
 
+extern Effects effects;
+#include "Aurora.h"
+
 class PatternSpin : public Drawable {
 public:
 

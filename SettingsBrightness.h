@@ -25,6 +25,8 @@
 
 class SettingsBrightness : public Runnable {
 private:
+    boolean hasChanges = false;
+
 public:
     void run() {
         while (true) {
@@ -59,29 +61,41 @@ public:
                 matrix.drawPixel(x, y, crgb);
             }
 
+            matrix.swapBuffers();
+
             int level = ((float) getBrightnessLevel() / (float) (brightnessCount - 1)) * 100;
             if (level < 1 && brightness > 0)
                 level = 10;
 
             char text[4];
             sprintf(text, "%3d%%", level);
-            matrix.setFont(gohufont11b);
-            matrix.drawString(4, 11, { 255, 255, 255 }, text);
-            matrix.swapBuffers();
+
+            matrix.setScrollOffsetFromTop(MATRIX_HEIGHT);
+            matrix.setForegroundFont(gohufont11b);
+            matrix.setScrollColor({ 255, 255, 255 });
+            matrix.clearForeground();
+            matrix.drawForegroundString(4, 11, text, true);
+            matrix.displayForegroundDrawing(false);
 
             InputCommand command = readCommand(defaultHoldDelay);
-            
+
             switch (command) {
                 case InputCommand::Up:
                     adjustBrightness(1);
+                    hasChanges = true;
                     break;
 
                 case InputCommand::Down:
                     adjustBrightness(-1);
+                    hasChanges = true;
                     break;
 
                 case InputCommand::Select:
                 case InputCommand::Back:
+                    if (hasChanges) {
+                        saveBrightnessSetting();
+                        hasChanges = false;
+                    }
                     return;
             }
         }

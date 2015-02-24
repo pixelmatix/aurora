@@ -27,8 +27,13 @@
 #include "Boid.h"
 #include "Attractor.h"
 
-#include "PatternFlowField.h"
+#include "PatternNoiseSmearing.h"
+#include "PatternAnalogClock.h"
+#include "PatternSwirl.h"
 #include "PatternPendulumWave.h"
+#include "PatternFlowField.h"
+#include "PatternMunch.h"
+#include "PatternElectricMandala.h"
 #include "PatternSpin.h"
 #include "PatternSimplexNoise.h"
 #include "PatternWave.h"
@@ -50,8 +55,18 @@
 
 class Patterns : public Playlist {
 private:
-    PatternFlowField flowField;
+    PatternMultipleStream multipleStream;
+    PatternMultipleStream2 multipleStream2;
+    PatternMultipleStream3 multipleStream3;
+    PatternMultipleStream4 multipleStream4;
+    PatternMultipleStream5 multipleStream5;
+    PatternMultipleStream8 multipleStream8;
+    PatternAnalogClock analogClock;
+    PatternSwirl swirl;
     PatternPendulumWave pendulumWave;
+    PatternFlowField flowField;
+    PatternMunch munch;
+    PatternElectricMandala electricMandala;
     PatternSpin spin;
     PatternSimplexNoise simplexNoise;
     PatternWave wave;
@@ -78,15 +93,26 @@ private:
     int currentIndex = 0;
     Drawable* currentItem;
 
-    static const int PATTERN_COUNT = 24;
+    static const int PATTERN_COUNT = 34;
 
     Drawable* items[PATTERN_COUNT] = {
+        &multipleStream,
+        &multipleStream2,
+        &multipleStream3,
+        &multipleStream4,
+        &multipleStream5,
+        &multipleStream8,
+        &life,
         &flowField,
         &pendulumWave,
+        &munch,
+        &electricMandala,
         &spin,
         &simplexNoise,
         &wave,
         &attract,
+        &analogClock,
+        &swirl,
         &bounce,
         &flock,
         &infinity,
@@ -94,7 +120,6 @@ private:
         &invaders,
         &snake,
         &fire,
-        &life,
         &maze,
         &pulse,
         &rainbowSmoke,
@@ -104,7 +129,7 @@ private:
         &dots1,
         &dots2,
         &slowMandala,
-        &mandala8,
+        &mandala8
     };
 
 public:

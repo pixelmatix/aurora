@@ -25,11 +25,14 @@
 
 #include "SettingsBrightness.h"
 #include "SettingsBackgroundBrightness.h"
-//#include "SettingsChooseClock.h"
 #include "SettingsMoveClock.h"
 #include "SettingsSetTime.h"
 #include "SettingsClockColor.h"
 #include "SettingsClock24Hour.h"
+#include "SettingsMenuColor.h"
+#include "SettingsAutoplayDuration.h"
+
+extern GifPlayer gifPlayer;
 
 class Settings : public Runnable {
 private:
@@ -37,18 +40,20 @@ private:
 
     SettingsBrightness brightness;
     SettingsBackgroundBrightness backgroundBrightness;
-    //SettingsChooseClock chooseClock;
+    SettingsMenuColor menuColor;
     SettingsMoveClock moveClock;
     SettingsClockColor clockColor;
     SettingsSetTime setTime;
     SettingsClock24Hour set24Hour;
+    SettingsAutoplayDuration setAutoplayDuration;
     Drawable exit;
 
-    static const int itemCount = 7;
+    static const int itemCount = 9;
 
     MenuItem menuItemBrightness = MenuItem("Brightness", &brightness);
     MenuItem menuItemBgBrightness = MenuItem("BG Brightness", &backgroundBrightness);
-    //MenuItem menuItemClockFace = MenuItem("Clock Face", &chooseClock);
+    MenuItem menuItemMenuColor = MenuItem("Menu Color", &menuColor);
+    MenuItem menuItemAutoplayDuration = MenuItem("Autoplay Duration", &setAutoplayDuration);
     MenuItem menuItemMoveClock = MenuItem("Move Clock", &moveClock);
     MenuItem menuItemClockColor = MenuItem("Clock Color", &clockColor);
     MenuItem menuItemClock24Hour = MenuItem("12/24 Hour Clock", &set24Hour);
@@ -58,7 +63,8 @@ private:
     MenuItem* menuItems[itemCount] = {
         &menuItemBrightness,
         &menuItemBgBrightness,
-        // &menuItemClockFace,
+        &menuItemMenuColor,
+        &menuItemAutoplayDuration,
         &menuItemMoveClock,
         &menuItemClockColor,
         &menuItemClock24Hour,

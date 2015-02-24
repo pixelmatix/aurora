@@ -2,6 +2,8 @@
  * Aurora: https://github.com/pixelmatix/aurora
  * Copyright (c) 2014 Jason Coon
  *
+ * Designed in collaboration with Pixelmatix using the SmartMatrix Library: http://pixelmatix.com
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
  * the Software without restriction, including without limitation the rights to
@@ -20,44 +22,30 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef SettingsChooseClock_H
-#define SettingsChooseClock_H
+#ifndef AURORA_H_
+#define AURORA_H_
 
-class SettingsChooseClock : public Runnable {
-private:
+#include <SmartMatrix_32x32.h>
 
-public:
-    void run() {
-        while (true) {
-            drawFrame();
-            clockDisplay.drawFrame();
+const int MATRIX_CENTER_X = MATRIX_WIDTH / 2;
+const int MATRIX_CENTER_Y = MATRIX_HEIGHT / 2;
 
-            matrix.swapBuffers();
+const byte MATRIX_CENTRE_X = MATRIX_CENTER_X - 1;
+const byte MATRIX_CENTRE_Y = MATRIX_CENTER_Y - 1;
 
-            InputCommand command = readCommand(defaultHoldDelay);
+void powerOff();
+void loadSettings();
+int getBrightnessLevel();
+int getBackgroundBrightnessLevel();
+void adjustBrightness(int delta);
+uint8_t cycleBrightness();
+void adjustBackgroundBrightness(int d);
+void boundBrightness();
+void boundBackgroundBrightness();
+void saveBrightnessSetting();
+void saveBackgroundBrightnessSetting();
+int loadIntSetting(char* dir, const char* settingPath, int maxLength, int defaultValue);
+void saveIntSetting(char* dir, const char* settingPath, int value);
 
-            switch (command) {
-                case InputCommand::Up:
-                    clockDisplay.move(-1);
-                    clockDisplay.saveSettings();
-                    break;
-
-                case InputCommand::Down:
-                    clockDisplay.move(1);
-                    clockDisplay.saveSettings();
-                    break;
-
-                case InputCommand::Select:
-                case InputCommand::Back:
-                    return;
-            }
-        }
-    }
-
-    unsigned int drawFrame() {
-        matrix.fillScreen(CRGB(CRGB::Black));
-        return 0;
-    }
-};
 
 #endif

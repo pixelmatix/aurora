@@ -25,12 +25,14 @@
 
 class SettingsMoveClock : public Runnable {
 private:
+    boolean hasChanges = false;
+
 public:
     void run() {
         while (true) {
             drawFrame();
-            clockDisplay.drawFrame();
-            clockDisplay.drawMoveClockIndicator();
+            clockDigitalShort.drawFrame();
+            clockDigitalShort.drawMoveClockIndicator();
 
             matrix.swapBuffers();
             matrix.displayForegroundDrawing(false);
@@ -40,16 +42,20 @@ public:
             switch (command) {
                 case InputCommand::Up:
                     clockDisplay.adjustY(-1);
-                    clockDisplay.saveClockYSetting();
+                    hasChanges = true;
                     break;
 
                 case InputCommand::Down:
                     clockDisplay.adjustY(1);
-                    clockDisplay.saveClockYSetting();
+                    hasChanges = true;
                     break;
 
                 case InputCommand::Select:
                 case InputCommand::Back:
+                    if (hasChanges) {
+                        clockDisplay.saveClockYSetting();
+                        hasChanges = false;
+                    }
                     return;
             }
         }

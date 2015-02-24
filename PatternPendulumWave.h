@@ -48,14 +48,14 @@ public:
     unsigned int drawFrame() {
         int16_t y;
 
+        effects.DimAll(170);
+
         for (int x = 0; x < MATRIX_WIDTH; x++)
         {
-            y = 16 * (1 + sin((float) fmod((timeStep * (x / 500.02 + 0.02F)), (float)TWO_PI)));
+            y = beatsin8(x + MATRIX_WIDTH, 0, MATRIX_HEIGHT);
 
             matrix.drawPixel(x, y, effects.ColorFromCurrentPalette(x * 7));
         }
-
-        effects.DimAll(170);
 
         timeStep++;
 

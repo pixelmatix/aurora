@@ -33,8 +33,8 @@ public:
     void run() {
         while (true) {
             drawFrame();
-            clockDisplay.drawFrame();
-            clockDisplay.drawSetTimeIndicator(state);
+            clockDigitalShort.drawFrame();
+            clockDigitalShort.drawSetTimeIndicator(state);
 
             matrix.swapBuffers();
             matrix.displayForegroundDrawing(false);

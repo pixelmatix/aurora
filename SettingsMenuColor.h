@@ -20,10 +20,10 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef SettingsClockColor_H
-#define SettingsClockColor_H
+#ifndef SettingsMenuColor_H
+#define SettingsMenuColor_H
 
-class SettingsClockColor : public Runnable {
+class SettingsMenuColor : public Runnable {
 private:
     int cursorX = 0;
     int cursorY = 0;
@@ -47,9 +47,9 @@ public:
                 }
 
                 hsv2rgb_rainbow(chsv, crgb);
-                if (crgb.r == clockDisplay.color.red &&
-                    crgb.g == clockDisplay.color.green &&
-                    crgb.b == clockDisplay.color.blue) {
+                if (crgb.r == menuColor.red &&
+                    crgb.g == menuColor.green &&
+                    crgb.b == menuColor.blue) {
                     cursorX = x;
                     cursorY = y;
                     return;
@@ -112,14 +112,15 @@ public:
             matrix.drawLine(cursorX, cursorY + 4, cursorX, cursorY + 2, crgb);
 
             // draw the clock numbers at the bottom, so we can see the selected color better, without leaving the settings item
-            clockDisplay.setColor(selectedColor);
-            clockDisplay.readTime();
+            menuColor = selectedColor;
+
+            matrix.setScrollColor(selectedColor);
 
             if (cursorY >= 18) {
-                clockDigitalShort.drawFrame(0);
+                matrix.drawForegroundString(0, 0, "Menu");
             }
             else {
-                clockDigitalShort.drawFrame(23);
+                matrix.drawForegroundString(0, 23, "Menu");
             }
 
             matrix.swapBuffers();
@@ -175,8 +176,8 @@ public:
     }
 
     void save(CRGB crgb) {
-        clockDisplay.setColor(crgb);
-        clockDisplay.saveColor();
+        menuColor = crgb;
+        saveMenuColor();
     }
 };
 

@@ -68,7 +68,7 @@ public:
         if ((x >= matrix.getScreenWidth()) || (y >= matrix.getScreenHeight())) return 0;
 
         Serial.println();
-        Serial.print("Loading image '");
+        Serial.print(F("Loading image '"));
         Serial.print(filename);
         Serial.println('\'');
 
@@ -80,25 +80,25 @@ public:
 
         // Parse BMP header
         if (read16(bmpFile) == 0x4D42) { // BMP signature
-            Serial.print("File size: ");
+            Serial.print(F("File size: "));
             Serial.println(read32(bmpFile));
             read32(bmpFile); // Read & ignore creator bytes
             bmpImageoffset = read32(bmpFile); // Start of image data
-            Serial.print("Image Offset: ");
+            Serial.print(F("Image Offset: "));
             Serial.println(bmpImageoffset, DEC);
             // Read DIB header
-            Serial.print("Header size: ");
+            Serial.print(F("Header size: "));
             Serial.println(read32(bmpFile));
             bmpWidth = read32(bmpFile);
             bmpHeight = read32(bmpFile);
             if (read16(bmpFile) == 1) { // # planes -- must be '1'
                 bmpDepth = read16(bmpFile); // bits per pixel
-                Serial.print("bmpDepth: ");
+                Serial.print(F("bmpDepth: "));
                 Serial.println(bmpDepth);
                 if ((bmpDepth == 24) && (read32(bmpFile) == 0)) { // 0 = uncompressed
 
                     goodBmp = true; // Supported BMP format -- proceed!
-                    Serial.print("Image size: ");
+                    Serial.print(F("Image size: "));
                     Serial.print(bmpWidth);
                     Serial.print('x');
                     Serial.println(bmpHeight);
@@ -155,9 +155,9 @@ public:
                         } // end pixel
                     } // end scanline
                     // matrix.swapBuffers(true);
-                    Serial.print("Loaded in ");
+                    Serial.print(F("Loaded in "));
                     Serial.print(millis() - startTime);
-                    Serial.println(" ms");
+                    Serial.println(F(" ms"));
                 } // end goodBmp
             }
         }
@@ -165,7 +165,7 @@ public:
         bmpFile.close();
 
         if (!goodBmp) {
-            Serial.println("BMP format not recognized.");
+            Serial.println(F("BMP format not recognized."));
             return 0;
         }
         else {

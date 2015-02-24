@@ -19,6 +19,8 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+#ifndef BITMAPS_H_
+#define BITMAPS_H_
 
 const int pauseBitmapWidth = 7;
 const int pauseBitmapHeight = 7;
@@ -43,3 +45,5 @@ uint8_t playBitmap [] = {
     __XX____,
     __X_____,
 };
+
+#endif

@@ -2,6 +2,8 @@
  * Aurora: https://github.com/pixelmatix/aurora
  * Copyright (c) 2014 Jason Coon
  *
+ * Munch pattern created by J.B. Langston: https://github.com/jblang/aurora/blob/master/PatternMunch.h
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
  * the Software without restriction, including without limitation the rights to
@@ -20,50 +22,42 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef PatternAttract_H
+#ifndef PatternMunch_H
+#define PatternMunch_H
 
-class PatternAttract : public Drawable {
+
+class PatternMunch : public Drawable {
 private:
-    static const int count = 8;
-    Boid boids[count];
-    Attractor attractor;
+    byte count = 0;
+    byte dir = 1;
+    byte flip = 0;
+    byte generation = 0;
 
 public:
-    void start() {
-        int direction = random(0, 2);
-        if (direction == 0)
-            direction = -1;
-
-        for (int i = 0; i < count; i++) {
-            Boid boid = Boid(15, 31 - i);
-            boid.mass = 1; // random(0.1, 2);
-            boid.velocity.x = ((float) random(40, 50)) / 100.0;
-            boid.velocity.x *= direction;
-            boid.velocity.y = 0;
-            boid.colorIndex = i * 32;
-            boids[i] = boid;
-            //dim = random(170, 250);
-        }
-    }
-
     unsigned int drawFrame() {
-        // dim all pixels on the display
-        uint8_t dim = beatsin8(2, 170, 250);
-        effects.DimAll(dim);
-
-        for (int i = 0; i < count; i++) {
-            Boid boid = boids[i];
-
-            PVector force = attractor.attract(boid);
-            boid.applyForce(force);
-
-            boid.update();
-            matrix.drawPixel(boid.location.x, boid.location.y, effects.ColorFromCurrentPalette(boid.colorIndex));
-
-            boids[i] = boid;
+        for (byte x = 0; x < MATRIX_WIDTH; x++) {
+            for (byte y = 0; y < MATRIX_HEIGHT; y++) {
+                effects.leds[XY(x, y)] = (x ^ y ^ flip) < count ? effects.ColorFromCurrentPalette(((x ^ y) << 3) + generation) : CRGB::Black;
+            }
+        }
+        
+        count += dir;
+        
+        if (count <= 0 || count >= MATRIX_WIDTH) {
+          dir = -dir;
+        }
+        
+        if (count <= 0) {
+          if (flip == 0)
+            flip = 31;
+          else
+            flip = 0;
         }
 
-        return 15;
+        generation++;
+          
+        
+        return 60;
     }
 };
 

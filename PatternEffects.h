@@ -37,8 +37,8 @@ public:
         //if (random(255) < 120)
         effects.Pixel((effects.p[2] + effects.p[0] + effects.p[1]) / 3, (effects.p[1] + effects.p[3] + effects.p[2]) / 3, effects.osci[3]);
 
-        effects.SpiralStream(MATRIX_WIDTH / 2 - 5, MATRIX_HEIGHT / 2 - 5, 5, 140);
-        effects.SpiralStream(MATRIX_WIDTH / 2 + 5, MATRIX_HEIGHT / 2 + 5, 5, 140);
+        effects.SpiralStream(MATRIX_CENTER_X - 5, MATRIX_CENTER_Y - 5, 5, 140);
+        effects.SpiralStream(MATRIX_CENTER_X + 5, MATRIX_CENTER_Y + 5, 5, 140);
 
         return 15;
     }
@@ -55,8 +55,8 @@ public:
         effects.StreamRight(125);
         effects.MoveOscillators();
         //2 lissajous dots red
-        effects.leds[effects.XY(effects.p[0], effects.p[1])] = color1;
-        effects.leds[effects.XY(effects.p[2], effects.p[3])] = color2;
+        effects.leds[XY(effects.p[0], effects.p[1])] = color1;
+        effects.leds[XY(effects.p[2], effects.p[3])] = color2;
         //average of the coordinates in yellow
         effects.Pixel((effects.p[2] + effects.p[0]) / 2, (effects.p[1] + effects.p[3]) / 2, 50);
 
@@ -86,15 +86,15 @@ private:
     int j = 0;
 public:
     unsigned int drawFrame() {
-        effects.leds[effects.XY(i, j)] = effects.ColorFromCurrentPalette(255); // COLOR_RED;
+        effects.leds[XY(i, j)] = effects.ColorFromCurrentPalette(255); // COLOR_RED;
         effects.SpiralStream(8, 8, 8, 127);
         effects.Caleidoscope1();
 
         i++;
-        if (i >= MATRIX_WIDTH / 2) {
+        if (i >= MATRIX_CENTER_X) {
             i = 0;
             j++;
-            if (j >= MATRIX_HEIGHT / 2) {
+            if (j >= MATRIX_CENTER_Y) {
                 j = 0;
             }
         }
