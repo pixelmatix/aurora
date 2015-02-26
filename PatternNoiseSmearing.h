@@ -40,7 +40,7 @@ public:
     // the smear has an offset so the pixels usually have a trail leading toward the upper left
     unsigned int drawFrame() {
         static unsigned long counter = 0;
-#if 1
+#if 0
         // this counter lets put delays between each frame and still get the same animation
         counter++;
 #else
