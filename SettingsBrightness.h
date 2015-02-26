@@ -97,6 +97,9 @@ public:
                         hasChanges = false;
                     }
                     return;
+
+                default:
+                    break;
             }
         }
     }

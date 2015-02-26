@@ -61,6 +61,9 @@ public:
                 case InputCommand::Select:
                 case InputCommand::Back:
                     return;
+
+                default:
+                    break;
             }
 
             if (currentStateIndex > SetTimeStatesCount)

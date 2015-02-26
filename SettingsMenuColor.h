@@ -156,6 +156,9 @@ public:
                         hasChanges = false;
                     }
                     return;
+
+                default:
+                    break;
             }
 
             if (cursorX < 0)
