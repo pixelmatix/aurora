@@ -55,6 +55,8 @@
 
 class Patterns : public Playlist {
 private:
+    PatternBitmap bitmap;
+    PatternPaletteSmear paletteSmear;
     PatternMultipleStream multipleStream;
     PatternMultipleStream2 multipleStream2;
     PatternMultipleStream3 multipleStream3;
@@ -93,9 +95,11 @@ private:
     int currentIndex = 0;
     Drawable* currentItem;
 
-    static const int PATTERN_COUNT = 34;
+    static const int PATTERN_COUNT = 36;
 
     Drawable* items[PATTERN_COUNT] = {
+        &bitmap,
+        &paletteSmear,
         &multipleStream,
         &multipleStream2,
         &multipleStream3,

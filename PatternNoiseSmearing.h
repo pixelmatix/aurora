@@ -240,4 +240,34 @@ public:
     }
 };
 
+class PatternPaletteSmear : public Drawable {
+public:
+    void start() {
+        effects.NoiseVariablesSetup();
+    }
+
+    unsigned int drawFrame() {
+        effects.DimAll(170);
+
+        // draw a rainbow color palette
+        for (uint8_t y = 0; y < MATRIX_HEIGHT; y++) {
+            for (uint8_t x = 0; x < MATRIX_WIDTH; x++) {
+                effects.leds[XY(x, y)] += effects.ColorFromCurrentPalette(x * 8, y * 8 + 7);
+            }
+        }
+        
+        // Noise
+        effects.noise_x[0] += 1000;
+        effects.noise_y[0] += 1000;
+        effects.noise_scale_x[0] = 4000;
+        effects.noise_scale_y[0] = 4000;
+        effects.FillNoise(0);
+
+        // this pattern smears with an offset added so the pixels usually have a trail going to the upper left
+        effects.NoiseSmearWithRadius(8, 1);
+
+        return 0;
+    }
+};
+
 #endif
