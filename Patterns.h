@@ -27,6 +27,7 @@
 #include "Boid.h"
 #include "Attractor.h"
 
+#include "PatternBitmap.h"
 #include "PatternNoiseSmearing.h"
 #include "PatternAnalogClock.h"
 #include "PatternSwirl.h"
