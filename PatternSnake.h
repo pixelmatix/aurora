@@ -105,18 +105,15 @@ private:
     Snake snakes[snakeCount];
 
 public:
-    String Drawable::name = "Snake";
-    virtual unsigned int drawFrame();
-
     PatternSnake() {
+        name = (char *)"Snake";
         for (int i = 0; i < snakeCount; i++) {
             Snake* snake = &snakes[i];
             snake->reset();
         }
     }
-};
 
-unsigned int PatternSnake::drawFrame() {
+    unsigned int drawFrame() {
     matrix.fillScreen(CRGB(CRGB::Black));
 
     fill_palette(colors, SNAKE_LENGTH, initialHue++, 5, effects.currentPalette, 255, BLEND);
@@ -136,5 +133,6 @@ unsigned int PatternSnake::drawFrame() {
 
     return 30;
 }
+};
 
 #endif

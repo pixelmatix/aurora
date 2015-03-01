@@ -27,6 +27,9 @@ class PatternInvaders : public Drawable {
 private:
 
 public:
+    PatternInvaders() {
+        name = (char *)"Invaders";
+    }
 
     unsigned int drawFrame() {
         matrix.fillScreen(CRGB(CRGB::Black));

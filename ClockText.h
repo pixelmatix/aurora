@@ -34,34 +34,34 @@ class ClockText : public Drawable {
 private:
     char* onesStrings[20] =
     {
-        "twelve",
-        "one",
-        "two",
-        "three",
-        "four",
-        "five",
-        "six",
-        "seven",
-        "eight",
-        "nine",
-        "ten",
-        "eleven",
-        "twelve",
-        "thirteen",
-        "fourteen",
-        "fifteen",
-        "sixteen",
-        "seventeen",
-        "eighteen",
-        "nineteen"
+        (char *)"twelve",
+        (char *)"one",
+        (char *)"two",
+        (char *)"three",
+        (char *)"four",
+        (char *)"five",
+        (char *)"six",
+        (char *)"seven",
+        (char *)"eight",
+        (char *)"nine",
+        (char *)"ten",
+        (char *)"eleven",
+        (char *)"twelve",
+        (char *)"thirteen",
+        (char *)"fourteen",
+        (char *)"fifteen",
+        (char *)"sixteen",
+        (char *)"seventeen",
+        (char *)"eighteen",
+        (char *)"nineteen"
     };
 
     char* tensStrings[4] =
     {
-        "twenty",
-        "thirty",
-        "forty",
-        "fifty"
+        (char *)"twenty",
+        (char *)"thirty",
+        (char *)"forty",
+        (char *)"fifty"
     };
 
 public:
@@ -75,7 +75,7 @@ public:
         else if (y > 11)
             y = 11;
 
-        drawFrame(y);
+        return drawFrame(y);
     }
 
     unsigned int drawFrame(const int cy) {

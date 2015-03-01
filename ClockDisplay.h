@@ -44,9 +44,10 @@ public:
 
     rgb24 color;
 
-    rgb24 setColor(rgb24 color) {
+    void setColor(rgb24 color) {
         ClockDisplay::color = color;
         clockDigitalShort.color = color;
+        clockText.color = color;
     }
 
     virtual void move(int step) {
@@ -112,14 +113,14 @@ public:
 
     void loadSettings() {
         clockDigitalShort.loadSettings();
-        currentIndex = loadIntSetting("/aurora/", "/aurora/clckface.txt", 1, 0);
+        currentIndex = loadIntSetting("clckface.txt", 1, 0);
         if (currentIndex >= itemCount)
             currentIndex = itemCount - 1;
         move(0);
 
-        color.red = loadIntSetting("/aurora/", "/aurora/clockR.txt", 3, 255);
-        color.green = loadIntSetting("/aurora/", "/aurora/clockG.txt", 3, 255);
-        color.blue = loadIntSetting("/aurora/", "/aurora/clockB.txt", 3, 255);
+        color.red = loadIntSetting("clockR.txt", 3, 255);
+        color.green = loadIntSetting("clockG.txt", 3, 255);
+        color.blue = loadIntSetting("clockB.txt", 3, 255);
         setColor(color);
     }
 
@@ -141,7 +142,7 @@ public:
     }
 
     void saveClockFaceSetting() {
-        saveIntSetting("/aurora/", "/aurora/clckface.txt", currentIndex);
+        saveIntSetting("clckface.txt", currentIndex);
     }
 
     void saveColor() {
@@ -151,15 +152,15 @@ public:
     }
 
     void saveR() {
-        saveIntSetting("/aurora/", "/aurora/clockR.txt", color.red);
+        saveIntSetting("clockR.txt", color.red);
     }
 
     void saveG() {
-        saveIntSetting("/aurora/", "/aurora/clockG.txt", color.green);
+        saveIntSetting("clockG.txt", color.green);
     }
 
     void saveB() {
-        saveIntSetting("/aurora/", "/aurora/clockB.txt", color.blue);
+        saveIntSetting("clockB.txt", color.blue);
     }
 };
 

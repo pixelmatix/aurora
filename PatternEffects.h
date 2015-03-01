@@ -29,6 +29,10 @@
 
 class PatternGhost : public Drawable {
 public:
+    PatternGhost() {
+        name = (char *)"Ghost";
+    }
+
     unsigned int drawFrame() {
         effects.StreamRight(125);
 
@@ -51,6 +55,10 @@ private:
     CRGB color2 = effects.HsvToRgb(1, 255, 150);
 
 public:
+    PatternDots1() {
+        name = (char *)"Dots1";
+    }
+
     unsigned int drawFrame() {
         effects.StreamRight(125);
         effects.MoveOscillators();
@@ -67,6 +75,10 @@ public:
 // x and y based on 3 sine waves
 class PatternDots2 : public Drawable {
 public:
+    PatternDots2() {
+        name = (char *)"Dots2";
+    }
+
     unsigned int drawFrame() {
 
         effects.StreamRight(125);
@@ -85,6 +97,10 @@ private:
     int i = 0;
     int j = 0;
 public:
+    PatternSlowMandala() {
+        name = (char *)"SlowMandala";
+    }
+
     unsigned int drawFrame() {
         effects.leds[XY(i, j)] = effects.ColorFromCurrentPalette(255); // COLOR_RED;
         effects.SpiralStream(8, 8, 8, 127);
@@ -105,6 +121,10 @@ public:
 
 class PatternMandala8 : public Drawable {
 public:
+    PatternMandala8() {
+        name = (char *)"Mandala8";
+    }
+
     // 2 lissajou dots *2 *4
     unsigned int drawFrame() {
         effects.MoveOscillators();

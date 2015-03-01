@@ -29,6 +29,10 @@ private:
     PVector gravity = PVector(0, 0.0125);
 
 public:
+    PatternBounce() {
+        name = (char *)"Bounce";
+    }
+
     void start() {
         unsigned int colorWidth = 256 / count;
         for (int i = 0; i < count; i++) {

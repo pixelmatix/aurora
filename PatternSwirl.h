@@ -31,6 +31,10 @@ private:
     const uint8_t borderWidth = 2;
 
 public:
+    PatternSwirl() {
+        name = (char *)"Swirl";
+    }
+
     void start() {
     }
 

@@ -29,6 +29,10 @@
 
 class PatternMultipleStream : public Drawable {
 public:
+    PatternMultipleStream() {
+        name = (char *)"MultipleStream";
+    }
+
     void start() {
         effects.NoiseVariablesSetup();
     }
@@ -49,11 +53,12 @@ public:
 #endif
 
         byte x1 = 4 + sin8(counter * 2) / 10;
-        byte y1 = 4 + cos8(counter * 2) / 10;
         byte x2 = 8 + sin8(counter * 2) / 16;
         byte y2 = 8 + cos8((counter * 2) / 3) / 16;
 
 #ifdef CONNECT_THE_DOTS
+        byte y1 = 4 + cos8(counter * 2) / 10;
+        
         point1_x = x1;
         point1_y = y1;
 
@@ -91,6 +96,10 @@ public:
 
 class PatternMultipleStream2 : public Drawable {
 public:
+    PatternMultipleStream2() {
+        name = (char *)"MultipleStream2";
+    }
+
     void start() {
         effects.NoiseVariablesSetup();
     }
@@ -123,6 +132,10 @@ public:
 
 class PatternMultipleStream3 : public Drawable {
 public:
+    PatternMultipleStream3() {
+        name = (char *)"MultipleStream3";
+    }
+
     void start() {
         effects.NoiseVariablesSetup();
     }
@@ -151,6 +164,10 @@ public:
 
 class PatternMultipleStream4 : public Drawable {
 public:
+    PatternMultipleStream4() {
+        name = (char *)"MultipleStream4";
+    }
+
     void start() {
         effects.NoiseVariablesSetup();
     }
@@ -178,6 +195,10 @@ public:
 
 class PatternMultipleStream5 : public Drawable {
 public:
+    PatternMultipleStream5() {
+        name = (char *)"MultipleStream5";
+    }
+
     void start() {
         effects.NoiseVariablesSetup();
     }
@@ -210,6 +231,10 @@ public:
 
 class PatternMultipleStream8 : public Drawable {
 public:
+    PatternMultipleStream8() {
+        name = (char *)"MultipleStream8";
+    }
+
     void start() {
         effects.NoiseVariablesSetup();
     }

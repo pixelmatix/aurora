@@ -37,6 +37,10 @@ private:
     int diff;
 
 public:
+    PatternPulse() {
+        name = (char *)"Pulse";
+    }
+
     unsigned int drawFrame() {
         matrix.fillScreen(CRGB(CRGB::Black));
 

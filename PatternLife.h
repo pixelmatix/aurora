@@ -39,7 +39,7 @@ public:
 class PatternLife : public Drawable {
 private:
     Cell world[MATRIX_WIDTH][MATRIX_HEIGHT];
-    long density = 50;
+    unsigned int density = 50;
     int generation = 0;
 
     void randomFillWorld() {
@@ -71,6 +71,10 @@ private:
     }
 
 public:
+    PatternLife() {
+        name = (char *)"Life";
+    }
+
     unsigned int drawFrame() {
         if (generation == 0) {
             matrix.fillScreen(CRGB(CRGB::Black));

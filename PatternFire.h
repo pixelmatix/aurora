@@ -37,6 +37,10 @@ private:
     byte heat[MATRIX_WIDTH * MATRIX_HEIGHT];
 
 public:
+    PatternFire() {
+        name = (char *)"Fire";
+    }
+
     // There are two main parameters you can play with to control the look and
     // feel of your fire: COOLING (used in step 1 above), and SPARKING (used
     // in step 3 above).
@@ -49,7 +53,7 @@ public:
     // sparking: What chance (out of 255) is there that a new spark will be lit?
     // Higher chance = more roaring fire.  Lower chance = more flickery fire.
     // Default 120, suggested range 50-200.
-    int sparking = 50;
+    unsigned int sparking = 50;
 
     unsigned int drawFrame() {
         for (int x = 0; x < MATRIX_WIDTH; x++) {

@@ -44,8 +44,8 @@ void boundBrightness();
 void boundBackgroundBrightness();
 void saveBrightnessSetting();
 void saveBackgroundBrightnessSetting();
-int loadIntSetting(char* dir, const char* settingPath, int maxLength, int defaultValue);
-void saveIntSetting(char* dir, const char* settingPath, int value);
+int loadIntSetting(const char* name, int maxLength, int defaultValue);
+void saveIntSetting(const char* name, int value);
 
 
 #endif

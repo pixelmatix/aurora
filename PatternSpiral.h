@@ -60,6 +60,10 @@ private:
     }
 
 public:
+    PatternSpiral() {
+        name = (char *)"Spiral";
+    }
+
     void start() {
         // set all counting directions positive for the beginning
         for (int i = 0; i < timers; i++) multiTimer[i].delta = 1;

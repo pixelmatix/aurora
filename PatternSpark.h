@@ -53,6 +53,10 @@ private:
     }
 
 public:
+    PatternSpark() {
+        name = (char *)"Spark";
+    }
+
     // There are two main parameters you can play with to control the look and
     // feel of your fire: COOLING (used in step 1 above), and SPARKING (used
     // in step 3 above).

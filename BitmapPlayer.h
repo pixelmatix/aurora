@@ -62,15 +62,9 @@ public:
         boolean  goodBmp = false;       // Set to true on valid header parse
         boolean  flip = true;        // BMP is stored bottom-to-top
         int      w, h, row, col;
-        //  uint8_t  r, g, b;
         uint32_t pos = 0, startTime = millis();
 
         if ((x >= matrix.getScreenWidth()) || (y >= matrix.getScreenHeight())) return 0;
-
-        Serial.println();
-        Serial.print(F("Loading image '"));
-        Serial.print(filename);
-        Serial.println('\'');
 
         // Open requested file on SD card
         bmpFile = SD.open(filename, FILE_READ);
@@ -80,28 +74,16 @@ public:
 
         // Parse BMP header
         if (read16(bmpFile) == 0x4D42) { // BMP signature
-            Serial.print(F("File size: "));
-            Serial.println(read32(bmpFile));
+            read32(bmpFile); // Read & ignore file size
             read32(bmpFile); // Read & ignore creator bytes
             bmpImageoffset = read32(bmpFile); // Start of image data
-            Serial.print(F("Image Offset: "));
-            Serial.println(bmpImageoffset, DEC);
-            // Read DIB header
-            Serial.print(F("Header size: "));
-            Serial.println(read32(bmpFile));
+            read32(bmpFile); // Read & ignore header size
             bmpWidth = read32(bmpFile);
             bmpHeight = read32(bmpFile);
             if (read16(bmpFile) == 1) { // # planes -- must be '1'
                 bmpDepth = read16(bmpFile); // bits per pixel
-                Serial.print(F("bmpDepth: "));
-                Serial.println(bmpDepth);
                 if ((bmpDepth == 24) && (read32(bmpFile) == 0)) { // 0 = uncompressed
-
                     goodBmp = true; // Supported BMP format -- proceed!
-                    Serial.print(F("Image size: "));
-                    Serial.print(bmpWidth);
-                    Serial.print('x');
-                    Serial.println(bmpHeight);
 
                     // BMP rows are padded (if needed) to 4-byte boundary
                     rowSize = (bmpWidth * 3 + 3) & ~3;
@@ -154,10 +136,6 @@ public:
 
                         } // end pixel
                     } // end scanline
-                    // matrix.swapBuffers(true);
-                    Serial.print(F("Loaded in "));
-                    Serial.print(millis() - startTime);
-                    Serial.println(F(" ms"));
                 } // end goodBmp
             }
         }
@@ -165,7 +143,6 @@ public:
         bmpFile.close();
 
         if (!goodBmp) {
-            Serial.println(F("BMP format not recognized."));
             return 0;
         }
         else {
@@ -175,3 +152,4 @@ public:
 };
 
 #endif
+

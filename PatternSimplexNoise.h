@@ -38,6 +38,7 @@ private:
 
 public:
     PatternSimplexNoise() {
+        name = (char *)"Noise";
         // Initialize our coordinates to some random values
         x = random16();
         y = random16();

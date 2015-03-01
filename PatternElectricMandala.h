@@ -96,6 +96,10 @@ private:
     }
 
 public:
+    PatternElectricMandala() {
+        name = (char *)"ElectricMandala";
+    }
+
     void start() {
         // set to reasonable values to avoid a black out
         colorshift = 0;

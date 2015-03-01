@@ -50,15 +50,15 @@ private:
 
     static const int itemCount = 9;
 
-    MenuItem menuItemBrightness = MenuItem("Brightness", &brightness);
-    MenuItem menuItemBgBrightness = MenuItem("BG Brightness", &backgroundBrightness);
-    MenuItem menuItemMenuColor = MenuItem("Menu Color", &menuColor);
-    MenuItem menuItemAutoplayDuration = MenuItem("Autoplay Duration", &setAutoplayDuration);
-    MenuItem menuItemMoveClock = MenuItem("Move Clock", &moveClock);
-    MenuItem menuItemClockColor = MenuItem("Clock Color", &clockColor);
-    MenuItem menuItemClock24Hour = MenuItem("12/24 Hour Clock", &set24Hour);
-    MenuItem menuItemSetTime = MenuItem("Set Time", &setTime);
-    MenuItem menuItemExit = MenuItem("Exit Settings", &exit, true);
+    MenuItem menuItemBrightness = MenuItem((char *)"Brightness", &brightness);
+    MenuItem menuItemBgBrightness = MenuItem((char *)"BG Brightness", &backgroundBrightness);
+    MenuItem menuItemMenuColor = MenuItem((char *)"Menu Color", &menuColor);
+    MenuItem menuItemAutoplayDuration = MenuItem((char *)"Autoplay Duration", &setAutoplayDuration);
+    MenuItem menuItemMoveClock = MenuItem((char *)"Move Clock", &moveClock);
+    MenuItem menuItemClockColor = MenuItem((char *)"Clock Color", &clockColor);
+    MenuItem menuItemClock24Hour = MenuItem((char *)"12/24 Hour Clock", &set24Hour);
+    MenuItem menuItemSetTime = MenuItem((char *)"Set Time", &setTime);
+    MenuItem menuItemExit = MenuItem((char *)"Exit Settings", &exit, true);
 
     MenuItem* menuItems[itemCount] = {
         &menuItemBrightness,
@@ -110,7 +110,7 @@ public:
     Settings() {
     }
 
-    char* Drawable::name = "Settings";
+    char* Drawable::name = (char *)"Settings";
 
     void run() {
         menuItemMoveClock.visible = isTimeAvailable;

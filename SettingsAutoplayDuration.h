@@ -54,7 +54,7 @@ public:
                 case InputCommand::Select:
                 case InputCommand::Back:
                     if (hasChanges) {
-                        saveBackgroundBrightnessSetting();
+                        saveAutoPlayDurationSeconds();
                         hasChanges = false;
                     }
                     return;

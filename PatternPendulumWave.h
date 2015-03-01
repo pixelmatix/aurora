@@ -41,6 +41,10 @@ private:
     int scale = 256 / MATRIX_WIDTH;
 
 public:
+    PatternPendulumWave() {
+        name = (char *)"Pendulum Wave";
+    }
+
     void start() {
         timeStep = 0;
     }

@@ -81,49 +81,108 @@ public:
         switch (paletteIndex) {
         case 0:
             targetPalette = RainbowColors_p;
-            currentPaletteName = "Rainbow";
+            currentPaletteName = (char *)"Rainbow";
             break;
         case 1:
             targetPalette = RainbowStripeColors_p;
-            currentPaletteName = "RainbowStripe";
+            currentPaletteName = (char *)"RainbowStripe";
             break;
         case 2:
             targetPalette = OceanColors_p;
-            currentPaletteName = "Ocean";
+            currentPaletteName = (char *)"Ocean";
             break;
         case 3:
             targetPalette = CloudColors_p;
-            currentPaletteName = "Cloud";
+            currentPaletteName = (char *)"Cloud";
             break;
         case 4:
             targetPalette = ForestColors_p;
-            currentPaletteName = "Forest";
+            currentPaletteName = (char *)"Forest";
             break;
         case 5:
             targetPalette = PartyColors_p;
-            currentPaletteName = "Party";
+            currentPaletteName = (char *)"Party";
             break;
         case 6:
             setupGrayscalePalette();
-            currentPaletteName = "Grey";
+            currentPaletteName = (char *)"Grey";
             break;
         case HeatColorsPaletteIndex:
             targetPalette = HeatColors_p;
-            currentPaletteName = "Heat";
+            currentPaletteName = (char *)"Heat";
             break;
         case 8:
             targetPalette = LavaColors_p;
-            currentPaletteName = "Lava";
+            currentPaletteName = (char *)"Lava";
             break;
         case 9:
             setupIcePalette();
-            currentPaletteName = "Ice";
+            currentPaletteName = (char *)"Ice";
             break;
         case 10:
             setupRandomPalette3();
-            currentPaletteName = "Random";
+            currentPaletteName = (char *)"Random";
             break;
         }
+    }
+
+    void setPalette(String paletteName) {
+        if (paletteName == "Rainbow")
+            loadPalette(0);
+        else if (paletteName == "RainbowStripe")
+            loadPalette(1);
+        else if (paletteName == "Ocean")
+            loadPalette(2);
+        else if (paletteName == "Cloud")
+            loadPalette(3);
+        else if (paletteName == "Forest")
+            loadPalette(4);
+        else if (paletteName == "Party")
+            loadPalette(5);
+        else if (paletteName == "Grayscale")
+            loadPalette(6);
+        else if (paletteName == "Heat")
+            loadPalette(7);
+        else if (paletteName == "Lava")
+            loadPalette(8);
+        else if (paletteName == "Ice")
+            loadPalette(9);
+        else if (paletteName == "Random")
+            loadPalette(10);
+    }
+
+    void listPalettes() {
+        Serial.println(F("{"));
+        Serial.print(F("  \"count\": "));
+        Serial.print(paletteCount);
+        Serial.println(",");
+        Serial.println(F("  \"results\": ["));
+
+        String paletteNames[] = {
+            "Rainbow",
+            "RainbowStripe",
+            "Ocean",
+            "Cloud",
+            "Forest",
+            "Party",
+            "Grayscale",
+            "Heat",
+            "Lava",
+            "Ice",
+            "Random"
+        };
+
+        for (int i = 0; i < paletteCount; i++) {
+            Serial.print(F("    \""));
+            Serial.print(paletteNames[i]);
+            if (i == paletteCount - 1)
+                Serial.println(F("\""));
+            else
+                Serial.println(F("\","));
+        }
+
+        Serial.println("  ]");
+        Serial.println("}");
     }
 
     void setupGrayscalePalette() {
@@ -731,11 +790,12 @@ public:
 #endif
 
         byte x1 = 4 + sin8(counter * 2) / 10;
-        byte y1 = 4 + cos8(counter * 2) / 10;
         byte x2 = 8 + sin8(counter * 2) / 16;
         byte y2 = 8 + cos8((counter * 2) / 3) / 16;
 
 #ifdef CONNECT_THE_DOTS
+        byte y1 = 4 + cos8(counter * 2) / 10;
+        
         point1_x = x1;
         point1_y = y1;
 

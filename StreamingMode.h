@@ -30,6 +30,10 @@
  *
  * I have translated the protocol description to English here:
  * https://gist.github.com/jblang/89e24e2655be6c463c56
+ *
+ * PixelController configuration for SmartMatrix with TPM2 protocol support:
+ * https://gist.github.com/jblang/cccb8b4f7caedc689c49
+ *
  */
  
 #define tpm2Header 0xc9
@@ -40,10 +44,9 @@
 #define tpm2Footer 0x36
 #define tpm2Acknowledge 0xac
 
-
 class StreamingMode : public Drawable {
 private:
-    unsigned long lastData = 0;
+    uint32_t lastData = 1000;
 
     void drawFrameTPM2() {
       int bufferSize = matrix.getScreenHeight() * matrix.getScreenWidth() * 3;
@@ -75,7 +78,7 @@ private:
         return;
       
       // If packet has been validated, swap buffers and acknowledge
-      matrix.swapBuffers();
+        //matrix.swapBuffers();
       Serial.write(tpm2Acknowledge);
     }
 
@@ -124,30 +127,78 @@ private:
       }
 
       // Once all the packets have been validated, swap buffers and acknowledge
-      matrix.swapBuffers();
+        //matrix.swapBuffers();
       Serial.write(tpm2Acknowledge);
     }
     
   public:
 
+    boolean haveReceivedData = false;
+
+    boolean handleStreaming() {
+        boolean receivedData = false;
+
+        // Make sure serial data is waiting
+        if (Serial.available() > 0) {
+            // Check which protocol we're using
+            switch (Serial.peek()) {
+                case tpm2Header:
+                    drawFrameTPM2();
+                    lastData = millis();
+                    receivedData = true;
+                    break;
+
+                case tpm2netHeader:
+                    drawFrameTPM2net();
+                    lastData = millis();
+                    receivedData = true;
+                    break;
+
+                default:
+                    // If we don't recognize the protocol, throw the byte away
+                    Serial.read();
+                    break;
+            }
+        }
+
+        if(receivedData) {
+            haveReceivedData = true;
+            return true;
+        }
+
+        if (haveReceivedData && millis() - lastData < 1000) {
+            return true;
+        }
+
+        haveReceivedData = false;
+
+        return false;
+    }
+
     unsigned int drawFrame() {
       // Make sure serial data is waiting
       if (Serial.available() > 0) {
-        // Record when the last data came in
-        lastData = millis();
         // Check which protocol we're using
         switch (Serial.peek()) {
           case tpm2Header:
             drawFrameTPM2();
+                    // Record when the last data came in
+                    lastData = millis();
             break;
+
           case tpm2netHeader:
             drawFrameTPM2net();
+                    // Record when the last data came in
+                    lastData = millis();
             break;
+
           default:
             // If we don't recognize the protocol, throw the byte away
             Serial.read();
+                    break;
+            }
         }
-      } else if (millis() - lastData > 1000) {
+        else if (millis() - lastData > 1000) {
           // If it's been longer than a second since we last received data
           // blank the screen and notify that we're waiting for data.
           matrix.fillScreen({ 0, 0, 0 });

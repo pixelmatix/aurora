@@ -59,8 +59,6 @@ public:
     }
 
     void run() {
-        int lastStateIndex = -1;
-
         while (true) {
             drawFrame();
 
@@ -122,8 +120,8 @@ public:
                 clockDigitalShort.drawFrame(23);
             }
 
-            matrix.swapBuffers();
             matrix.displayForegroundDrawing(false);
+            matrix.swapBuffers();
 
             InputCommand command = readCommand(defaultHoldDelay);
 

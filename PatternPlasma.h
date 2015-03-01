@@ -32,11 +32,11 @@ private:
     int cycles = 0;
 
 public:
-    String Drawable::name = "Plasma";
-    virtual unsigned int drawFrame();
-};
+    PatternPlasma() {
+        name = (char *)"Plasma";
+    }
 
-unsigned int PatternPlasma::drawFrame() {
+    unsigned int drawFrame() {
     for (int x = 0; x < MATRIX_WIDTH; x++) {
         for (int y = 0; y < MATRIX_HEIGHT; y++) {
             int16_t v = 0;
@@ -59,5 +59,6 @@ unsigned int PatternPlasma::drawFrame() {
 
     return 30;
 }
+};
 
 #endif

@@ -59,6 +59,7 @@ private:
                     return New(x - 1, y);
 
                 case Right:
+                default:
                     return New(x + 1, y);
             }
         }
@@ -75,6 +76,7 @@ private:
                     return Right;
 
                 case Right:
+                default:
                     return Left;
             }
         }
@@ -189,6 +191,10 @@ private:
     }
 
 public:
+    PatternMaze() {
+        name = (char *)"Maze";
+    }
+
     unsigned int drawFrame() {
         if (cellCount < 1) {
             matrix.fillScreen(CRGB(CRGB::Black));

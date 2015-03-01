@@ -59,8 +59,6 @@ public:
     }
 
     void run() {
-        int lastStateIndex = -1;
-
         while (true) {
             drawFrame();
 
@@ -115,6 +113,8 @@ public:
             menuColor = selectedColor;
 
             matrix.setScrollColor(selectedColor);
+            matrix.clearForeground();
+            matrix.setForegroundFont(gohufont11b);
 
             if (cursorY >= 18) {
                 matrix.drawForegroundString(0, 0, "Menu");
@@ -123,8 +123,8 @@ public:
                 matrix.drawForegroundString(0, 23, "Menu");
             }
 
-            matrix.swapBuffers();
             matrix.displayForegroundDrawing(false);
+            matrix.swapBuffers();
 
             InputCommand command = readCommand(defaultHoldDelay);
 

@@ -29,6 +29,10 @@ private:
 #define SEC_IND_RADIUS   15
 
 public:
+    PatternAnalogClock() {
+        name = (char *)"AnalogClock";
+    }
+
     void start() {
     }
 
@@ -71,6 +75,7 @@ public:
             effects.leds[XY(x, y)] += {0, 0, 255};
         }
         else {
+            matrix.setFont(font3x5);
             matrix.drawString(0, 0, { 255, 255, 255 }, "No Clock");
         }
 

@@ -24,6 +24,10 @@
 
 class PatternInfinity : public Drawable {
 public:
+    PatternInfinity() {
+        name = (char *)"Infinity";
+    }
+
     unsigned int drawFrame() {
         // dim all pixels on the display slightly 
         // to 250/255 (98%) of their current brightness

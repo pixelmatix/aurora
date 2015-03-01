@@ -49,19 +49,19 @@ IRrecv irReceiver(IR_RECV_PIN);
 
 #include "aJSON.h"
 
-#include "IrCodes.h"
+#include "MessagePlayer.h"
+MessagePlayer messagePlayer;
 
 #include "Effects.h"
 Effects effects;
+
+#include "IrCodes.h"
 
 #include "GifPlayer.h"
 GifPlayer gifPlayer;
 
 #include "BitmapPlayer.h"
 BitmapPlayer bitmapPlayer;
-
-#include "MessagePlayer.h"
-MessagePlayer messagePlayer;
 
 #include "Logo.h"
 
@@ -92,6 +92,9 @@ Animations animations;
 rgb24 menuColor = CRGB(CRGB::Blue);
 int autoPlayDurationSeconds = 10;
 
+#include "StreamingMode.h"
+StreamingMode streamingMode;
+
 #include "MenuItem.h"
 #include "Menu.h"
 Menu menu;
@@ -102,19 +105,14 @@ Settings settings;
 #include "SettingsSetTime.h"
 #include "SettingsMoveClock.h"
 
-#include "StreamingMode.h"
-StreamingMode streamingMode;
-
-MenuItem menuItemPatterns = MenuItem("Patterns", &patterns);
-MenuItem menuItemAnimations = MenuItem("Animations", &animations);
-MenuItem menuItemStreamingMode = MenuItem("Streaming Mode", &streamingMode);
-MenuItem menuItemSettings = MenuItem("Settings", &settings);
+MenuItem menuItemPatterns = MenuItem((char*)"Patterns", &patterns);
+MenuItem menuItemAnimations = MenuItem((char*)"Animations", &animations);
+MenuItem menuItemSettings = MenuItem((char*)"Settings", &settings);
 
 // Main Menu
 MenuItem* mainMenuItems [] = {
     &menuItemPatterns,
     &menuItemAnimations,
-    &menuItemStreamingMode,
     &menuItemSettings,
 };
 
@@ -125,7 +123,7 @@ bool enableStartupSplash = false;
 void setup()
 {
     // Setup serial interface
-    Serial.begin(9600);
+    Serial.begin(115200);
 
     // delay(3000);
     // Serial.println(F("starting..."));
@@ -156,8 +154,8 @@ void setup()
     pinMode(SD_CARD_CS, OUTPUT);
     sdAvailable = SD.begin(SD_CARD_CS);
     if (sdAvailable) {
-        animations.setup("/gifs/");
-        messagePlayer.setup("/messages/");
+        animations.setup((char *)"/gifs/");
+        messagePlayer.setup((char *)"/messages/");
     }
 
     // setup the effects generator
@@ -192,6 +190,51 @@ void loop()
     menu.run(mainMenuItems, mainMenuItemCount);
 }
 
+void listPatterns() {
+    patterns.listPatterns();
+}
+
+bool setPattern(String name) {
+    if (patterns.setPattern(name)) {
+        menu.currentIndex = 1;
+        menu.visible = false;
+        return true;
+    }
+    return false;
+}
+
+bool setPattern(int index) {
+    if(patterns.setPattern(index)) {
+        menu.currentIndex = 1;
+        menu.visible = false;
+        return true;
+    }
+    return false;
+}
+
+void listAnimations() {
+    animations.listFiles();
+}
+
+bool setAnimation(String name) {
+    if(animations.setAnimation(name)) {
+        menu.currentIndex = 2;
+        menu.visible = false;
+        return true;
+    }
+    return false;
+}
+
+bool setAnimation(int index) {
+    if (animations.setAnimation(index)) {
+        menu.currentIndex = 2;
+        menu.visible = false;
+        return true;
+    }
+
+    return false;
+}
+
 void powerOff()
 {
     // clear the display
@@ -205,7 +248,7 @@ void powerOff()
     while (true) {
         InputCommand command = readCommand();
         if (command == InputCommand::Power ||
-            command == InputCommand::Brightness)
+            command == InputCommand::CycleBrightness)
             return;
 
         // go idle for a while, converve power
@@ -214,19 +257,19 @@ void powerOff()
 }
 
 void loadSettings() {
-    brightness = loadIntSetting("/aurora/", "/aurora/brghtnss.txt", 3, 255);
+    brightness = loadIntSetting("brghtnss.txt", 3, 255);
     boundBrightness();
     matrix.setBrightness(brightness);
 
-    backgroundBrightness = loadIntSetting("/aurora/", "/aurora/bckbrght.txt", 3, 63);
+    backgroundBrightness = loadIntSetting("bckbrght.txt", 3, 63);
     boundBackgroundBrightness();
     matrix.setBackgroundBrightness(backgroundBrightness);
 
-    menuColor.red = loadIntSetting("/aurora/", "/aurora/menuR.txt", 3, 0);
-    menuColor.green = loadIntSetting("/aurora/", "/aurora/menuG.txt", 3, 0);
-    menuColor.blue = loadIntSetting("/aurora/", "/aurora/menuB.txt", 3, 255);
+    menuColor.red = loadIntSetting("menuR.txt", 3, 0);
+    menuColor.green = loadIntSetting("menuG.txt", 3, 0);
+    menuColor.blue = loadIntSetting("menuB.txt", 3, 255);
 
-    autoPlayDurationSeconds = loadIntSetting("/aurora/", "/aurora/autoplyd.txt", 3, 10);
+    autoPlayDurationSeconds = loadIntSetting("autoplyd.txt", 3, 10);
 
     clockDisplay.loadSettings();
 }
@@ -311,12 +354,13 @@ void boundBackgroundBrightness() {
         backgroundBrightness = backgroundBrightnessMap[brightnessCount - 1];
 }
 
+
 void saveBrightnessSetting() {
-    saveIntSetting("/aurora/", "/aurora/brghtnss.txt", brightness);
+    saveIntSetting("brghtnss.txt", brightness);
 }
 
 void saveBackgroundBrightnessSetting() {
-    saveIntSetting("/aurora/", "/aurora/bckbrght.txt", backgroundBrightness);
+    saveIntSetting("bckbrght.txt", backgroundBrightness);
 }
 
 void saveMenuColor() {
@@ -326,73 +370,76 @@ void saveMenuColor() {
 }
 
 void saveMenuR() {
-    saveIntSetting("/aurora/", "/aurora/menuR.txt", menuColor.red);
+    saveIntSetting("menuR.txt", menuColor.red);
 }
 
 void saveMenuG() {
-    saveIntSetting("/aurora/", "/aurora/menuG.txt", menuColor.green);
+    saveIntSetting("menuG.txt", menuColor.green);
 }
 
 void saveMenuB() {
-    saveIntSetting("/aurora/", "/aurora/menuB.txt", menuColor.blue);
+    saveIntSetting("menuB.txt", menuColor.blue);
 }
 
 void saveAutoPlayDurationSeconds() {
-    saveIntSetting("/aurora/", "/aurora/autoplyd.txt", autoPlayDurationSeconds);
+    saveIntSetting("autoplyd.txt", autoPlayDurationSeconds);
 }
 
-int loadIntSetting(char* dir, const char* settingPath, int maxLength, int defaultValue) {
+int loadIntSetting(const char* name, int maxLength, int defaultValue) {
     if (!sdAvailable)
         return defaultValue;
 
     int intValue = defaultValue;
 
-    if (!SD.exists(dir)) {
-        //Serial.println(F("aurora dir doesn't exist"));
-        SD.mkdir(dir);
+    char* path = (char *) "/aurora/";
+    
+    if (!SD.exists(path)) {
+        SD.mkdir(path);
     }
-    //Serial.print(dir);
-    //Serial.print(" exists: ");
-    //Serial.println(sd.exists(dir));
 
-    File file = SD.open(settingPath, FILE_READ);
-    //Serial.println(settingPath);
+    char filepath[255];
+    strcpy(filepath, path);
+    strcat(filepath, name);
+
+//    Serial.print("loading ");
+//    Serial.println(filepath);
+
+    File file = SD.open(filepath, FILE_READ);
     if (file) {
-        //Serial.println(F(" exists, reading..."));
         String value;
         char c = file.read();
         int length = 1;
         while (c >= 0 && length <= maxLength) {
-            //Serial.println(c);
             value.append(c);
             c = file.read();
             length++;
         }
         file.close();
-        //Serial.println(value);
         intValue = value.toInt();
-        //Serial.println(intValue);
     }
 
     return intValue;
 }
 
-void saveIntSetting(char* dir, const char* settingPath, int value) {
+void saveIntSetting(const char* name, int value) {
     if (!sdAvailable)
         return;
 
-    if (!SD.exists(dir)) {
-        //Serial.print(dir);
-        //Serial.println(F(" dir doesn't exist"));
-        SD.mkdir(dir);
+    char* path = (char *) "/aurora/";
+    
+    if (!SD.exists(path)) {
+        SD.mkdir(path);
     }
-    //Serial.print("exists: ");
-    //Serial.println(sd.exists(dir));
 
-    File file = SD.open(settingPath, O_CREAT | O_TRUNC | O_WRITE);
-    Serial.println(settingPath);
+    char filepath[255];
+    strcpy(filepath, path);
+    strcat(filepath, name);
+
+//    Serial.print("saving ");
+//    Serial.println(filepath);
+
+    File file = SD.open(filepath, O_CREAT | O_TRUNC | O_WRITE);
     if (file) {
-        //Serial.println(value);
         file.print(value, 10);
         file.close();
     }

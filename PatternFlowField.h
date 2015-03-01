@@ -26,6 +26,10 @@ extern Effects effects;
 
 class PatternFlowField : public Drawable {
 public:
+    PatternFlowField() {
+        name = (char *)"FlowField";
+    }
+
     uint16_t x;
     uint16_t y;
     uint16_t z;

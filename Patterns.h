@@ -143,7 +143,7 @@ public:
         this->currentItem->start();
     }
 
-    char* Drawable::name = "Patterns";
+    char* Drawable::name = (char *)"Patterns";
 
     void stop() {
         if (currentItem)
@@ -161,13 +161,7 @@ public:
         if (currentIndex >= PATTERN_COUNT) currentIndex = 0;
         else if (currentIndex < 0) currentIndex = PATTERN_COUNT - 1;
 
-        if (currentItem)
-            currentItem->stop();
-
-        currentItem = items[currentIndex];
-
-        if (currentItem)
-            currentItem->start();
+        moveTo(currentIndex);
     }
 
     void moveRandom() {
@@ -176,12 +170,18 @@ public:
         if (currentIndex >= PATTERN_COUNT) currentIndex = 0;
         else if (currentIndex < 0) currentIndex = PATTERN_COUNT - 1;
 
+        effects.RandomPalette();
+
+        moveTo(currentIndex);
+    }
+
+    void moveTo(int index) {
         if (currentItem)
             currentItem->stop();
 
-        currentItem = items[currentIndex];
+        currentIndex = index;
 
-        effects.RandomPalette();
+        currentItem = items[currentIndex];
 
         if (currentItem)
             currentItem->start();
@@ -191,6 +191,45 @@ public:
         return currentItem->drawFrame();
     }
 
+    void listPatterns() {
+        Serial.println(F("{"));
+        Serial.print(F("  \"count\": "));
+        Serial.print(PATTERN_COUNT);
+        Serial.println(",");
+        Serial.println(F("  \"results\": ["));
+
+        for (int i = 0; i < PATTERN_COUNT; i++) {
+            Serial.print(F("    \""));
+            Serial.print(items[i]->name);
+            if(i == PATTERN_COUNT - 1)
+                Serial.println(F("\""));
+            else
+                Serial.println(F("\","));
+        }
+
+        Serial.println("  ]");
+        Serial.println("}");
+    }
+
+    bool setPattern(String name) {
+        for (int i = 0; i < PATTERN_COUNT; i++) {
+            if (name.compareTo(items[i]->name) == 0) {
+                moveTo(i);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    bool setPattern(int index) {
+        if (index >= PATTERN_COUNT || index < 0)
+            return false;
+
+        moveTo(index);
+
+        return true;
+    }
 };
 
 #endif
