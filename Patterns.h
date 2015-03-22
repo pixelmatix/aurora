@@ -162,6 +162,9 @@ public:
         else if (currentIndex < 0) currentIndex = PATTERN_COUNT - 1;
 
         moveTo(currentIndex);
+        
+        if (!isTimeAvailable && currentItem == &analogClock)
+          move(step);
     }
 
     void moveRandom() {
@@ -173,6 +176,9 @@ public:
         effects.RandomPalette();
 
         moveTo(currentIndex);
+        
+        if (!isTimeAvailable && currentItem == &analogClock)
+          moveRandom();
     }
 
     void moveTo(int index) {

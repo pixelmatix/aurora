@@ -254,7 +254,7 @@ public:
                     }
                     else if (!clockVisible && !messageVisible) {
                         // if neither are visible, just show the current clock or message
-                        clockVisible = clockOrMessageIndex < clockDisplay.itemCount;
+                        clockVisible = isTimeAvailable && clockOrMessageIndex < clockDisplay.itemCount;
                         messageVisible = !clockVisible;
                     }
                     else {
@@ -262,12 +262,12 @@ public:
                         clockOrMessageIndex++;
 
                         // if we still have clock faces left, move to the next one
-                        if (clockOrMessageIndex < clockDisplay.itemCount) {
+                        if (isTimeAvailable && clockOrMessageIndex < clockDisplay.itemCount) {
                             clockDisplay.moveTo(clockOrMessageIndex);
                             clockVisible = true;
                             messageVisible = false;
                         }
-                        else if (messagePlayer.count > 0 && clockOrMessageIndex - clockDisplay.itemCount < messagePlayer.count - 1) {
+                        else if (messagePlayer.count > 0 && (!isTimeAvailable || clockOrMessageIndex - clockDisplay.itemCount < messagePlayer.count - 1)) {
                             // otherwise try to move to the next message
                             if (messagePlayer.loadNextMessage()) {
                                 messageVisible = true;

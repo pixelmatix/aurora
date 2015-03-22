@@ -27,6 +27,8 @@
 #ifndef PatternNoiseSmearing_H
 #define PatternNoiseSmearing_H
 
+byte patternNoiseSmearingHue = 0;
+
 class PatternMultipleStream : public Drawable {
 public:
     PatternMultipleStream() {
@@ -77,8 +79,8 @@ public:
         effects.DimAll(249);
 #endif
 
-        effects.leds[XY(x1, x2)] = 0xFFFF00;
-        effects.leds[XY(x2, y2)] = 0xFF0000;
+        effects.leds[XY(x1, x2)] = effects.ColorFromCurrentPalette(patternNoiseSmearingHue);
+        effects.leds[XY(x2, y2)] = effects.ColorFromCurrentPalette(patternNoiseSmearingHue + 128);
 
         // Noise
         effects.noise_x[0] += 1000;
@@ -90,6 +92,8 @@ public:
         // this pattern smears with an offset added so the pixels usually have a trail going to the upper left
         effects.NoiseSmearWithRadius(8, 1);
 
+        patternNoiseSmearingHue++;
+        
         return 0;
     }
 };
@@ -109,13 +113,13 @@ public:
 
         byte xx = 4 + sin8(millis() / 9) / 10;
         byte yy = 4 + cos8(millis() / 10) / 10;
-        effects.leds[XY(xx, yy)] += 0x0000FF;
+        effects.leds[XY(xx, yy)] += effects.ColorFromCurrentPalette(patternNoiseSmearingHue);
 
         xx = 8 + sin8(millis() / 10) / 16;
         yy = 8 + cos8(millis() / 7) / 16;
-        effects.leds[XY(xx, yy)] += 0xFF0000;
+        effects.leds[XY(xx, yy)] += effects.ColorFromCurrentPalette(patternNoiseSmearingHue + 80);
 
-        effects.leds[XY(15, 15)] += 0xFFFF00;
+        effects.leds[XY(15, 15)] += effects.ColorFromCurrentPalette(patternNoiseSmearingHue + 160);
 
         effects.noise_x[0] += 1000;
         effects.noise_y[0] += 1000;
@@ -125,6 +129,8 @@ public:
         effects.FillNoise(0);
 
         effects.NoiseSmearWithRadius(2);
+
+        patternNoiseSmearingHue++;
 
         return 0;
     }
@@ -145,7 +151,7 @@ public:
         effects.DimAll(235);
 
         for (uint8_t i = 3; i < 32; i = i + 4) {
-            effects.leds[XY(i, 15)] += CHSV(i * 2, 255, 255);
+            effects.leds[XY(i, 15)] += effects.ColorFromCurrentPalette(i * 8);
         }
 
         // Noise
@@ -177,7 +183,7 @@ public:
         //CLS();
         effects.DimAll(235);
 
-        effects.leds[XY(15, 15)] += CHSV(millis(), 255, 255);
+        effects.leds[XY(15, 15)] += effects.ColorFromCurrentPalette(patternNoiseSmearingHue);
 
 
         // Noise
@@ -188,6 +194,8 @@ public:
         effects.FillNoise(0);
 
         effects.NoiseSmearWithRadius(2);
+
+        patternNoiseSmearingHue++;
 
         return 0;
     }
@@ -210,7 +218,7 @@ public:
 
 
         for (uint8_t i = 3; i < 32; i = i + 4) {
-            effects.leds[XY(i, 31)] += CHSV(i * 2, 255, 255);
+            effects.leds[XY(i, 31)] += effects.ColorFromCurrentPalette(i * 8);
         }
 
         // Noise
@@ -246,7 +254,7 @@ public:
         for (uint8_t y = 1; y < 32; y = y + 6) {
             for (uint8_t x = 1; x < 32; x = x + 6) {
 
-                effects.leds[XY(x, y)] += CHSV((x*y) / 4, 255, 255);
+                effects.leds[XY(x, y)] += effects.ColorFromCurrentPalette((x*y) / 4);
             }
         }
 
