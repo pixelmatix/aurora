@@ -98,6 +98,8 @@ private:
     int algorithm = 0;
     int algorithmCount = 2;
 
+    byte hue = 0;
+
     Directions directions[4] = { Up, Down, Left, Right };
 
     void removeCell(int index) {// shift cells after index down one
@@ -123,6 +125,17 @@ private:
         point.x = x;
         point.y = y;
         return point;
+    }
+
+    CRGB chooseColor(int index) {
+        switch (algorithm) {
+            case 0:
+            default:
+                return effects.ColorFromCurrentPalette(index);
+
+            case 1:
+                return effects.ColorFromCurrentPalette(hue++);
+        }
     }
 
     int chooseIndex(int max) {
@@ -158,9 +171,11 @@ private:
 
         Point imagePoint = createPoint(point.x * 2, point.y * 2);
 
-        matrix.drawPixel(imagePoint.x, imagePoint.y, CRGB(CRGB::Blue));
+        //matrix.drawPixel(imagePoint.x, imagePoint.y, CRGB(CRGB::Gray));
 
         shuffleDirections();
+
+        CRGB color = chooseColor(index);
 
         for (int i = 0; i < 4; i++) {
             Directions direction = directions[i];
@@ -171,7 +186,8 @@ private:
                 grid[newPoint.y][newPoint.x] = (Directions) ((int) grid[newPoint.y][newPoint.x] | (int) point.Opposite(direction));
 
                 Point newImagePoint = imagePoint.Move(direction);
-                matrix.drawPixel(newImagePoint.x, newImagePoint.y, CRGB(CRGB::White));
+
+                matrix.drawPixel(newImagePoint.x, newImagePoint.y, color);
 
                 cellCount++;
                 cells[cellCount - 1] = newPoint;
@@ -184,7 +200,7 @@ private:
         if (index > -1) {
             Point finishedPoint = cells[index];
             imagePoint = createPoint(finishedPoint.x * 2, finishedPoint.y * 2);
-            matrix.drawPixel(imagePoint.x, imagePoint.y, CRGB(CRGB::White));
+            matrix.drawPixel(imagePoint.x, imagePoint.y, color);
 
             removeCell(index);
         }
@@ -212,6 +228,8 @@ public:
             cells[0] = createPoint(x, y);
 
             cellCount = 1;
+
+            hue = 0;
         }
 
         drawNextCell();
@@ -230,6 +248,7 @@ public:
     void start() {
         matrix.fillScreen({ 0, 0, 0 });
         cellCount = 0;
+        hue = 0;
     }
 };
 
