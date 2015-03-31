@@ -27,6 +27,7 @@
 #include "Boid.h"
 #include "Attractor.h"
 
+#include "PatternIncrementalDrift.h"
 #include "PatternBitmap.h"
 #include "PatternNoiseSmearing.h"
 #include "PatternAnalogClock.h"
@@ -56,6 +57,7 @@
 
 class Patterns : public Playlist {
 private:
+    PatternIncrementalDrift incrementalDrift;
     PatternBitmap bitmap;
     PatternPaletteSmear paletteSmear;
     PatternMultipleStream multipleStream;
@@ -96,9 +98,10 @@ private:
     int currentIndex = 0;
     Drawable* currentItem;
 
-    static const int PATTERN_COUNT = 36;
+    static const int PATTERN_COUNT = 37;
 
     Drawable* items[PATTERN_COUNT] = {
+        &incrementalDrift,
         &bitmap,
         &paletteSmear,
         &multipleStream,
