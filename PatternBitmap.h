@@ -31,13 +31,7 @@ public:
         name = (char *)"Bitmap";
     }
 
-    void start() {
-        effects.NoiseVariablesSetup();
-    }
-
     unsigned int drawFrame() {
-        // matrix.fillScreen({ 0, 0, 0 });
-
         char* filename = (char *) "/aurora/pmlogo32.bmp";
 
             if (sdAvailable) {

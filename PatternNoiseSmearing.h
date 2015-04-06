@@ -35,10 +35,6 @@ public:
         name = (char *)"MultipleStream";
     }
 
-    void start() {
-        effects.NoiseVariablesSetup();
-    }
-
     // this pattern draws two points to the screen based on sin/cos if a counter
     // (comment out NoiseSmearWithRadius to see pattern of pixels)
     // these pixels are smeared by a large radius, giving a lot of movement
@@ -104,10 +100,6 @@ public:
         name = (char *)"MultipleStream2";
     }
 
-    void start() {
-        effects.NoiseVariablesSetup();
-    }
-
     unsigned int drawFrame() {
         effects.DimAll(230);
 
@@ -142,10 +134,6 @@ public:
         name = (char *)"MultipleStream3";
     }
 
-    void start() {
-        effects.NoiseVariablesSetup();
-    }
-
     unsigned int drawFrame() {
         //CLS();
         effects.DimAll(235);
@@ -172,10 +160,6 @@ class PatternMultipleStream4 : public Drawable {
 public:
     PatternMultipleStream4() {
         name = (char *)"MultipleStream4";
-    }
-
-    void start() {
-        effects.NoiseVariablesSetup();
     }
 
     unsigned int drawFrame() {
@@ -205,10 +189,6 @@ class PatternMultipleStream5 : public Drawable {
 public:
     PatternMultipleStream5() {
         name = (char *)"MultipleStream5";
-    }
-
-    void start() {
-        effects.NoiseVariablesSetup();
     }
 
     unsigned int drawFrame() {
@@ -243,10 +223,6 @@ public:
         name = (char *)"MultipleStream8";
     }
 
-    void start() {
-        effects.NoiseVariablesSetup();
-    }
-
     unsigned int drawFrame() {
         effects.DimAll(230);
 
@@ -275,10 +251,6 @@ public:
 
 class PatternPaletteSmear : public Drawable {
 public:
-    void start() {
-        effects.NoiseVariablesSetup();
-    }
-
     unsigned int drawFrame() {
         effects.DimAll(170);
 

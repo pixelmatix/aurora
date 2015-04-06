@@ -160,6 +160,7 @@ void setup()
 
     // setup the effects generator
     effects.CyclePalette();
+    effects.NoiseVariablesSetup();
 
     mainMenuItemCount = sizeof(mainMenuItems) / sizeof(MenuItem*);
 

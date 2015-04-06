@@ -167,6 +167,7 @@ enum class InputCommand {
 // Low level IR code reading function
 // Function will return 0 if no IR code available
 unsigned long decodeIRCode() {
+
     decode_results results;
 
     results.value = 0;

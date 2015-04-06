@@ -27,13 +27,14 @@
 #include "Boid.h"
 #include "Attractor.h"
 
-#include "PatternIncrementalDrift.h"
 #include "PatternBitmap.h"
 #include "PatternNoiseSmearing.h"
 #include "PatternAnalogClock.h"
 #include "PatternSwirl.h"
 #include "PatternPendulumWave.h"
 #include "PatternFlowField.h"
+#include "PatternIncrementalDrift.h"
+#include "PatternIncrementalDrift2.h"
 #include "PatternMunch.h"
 #include "PatternElectricMandala.h"
 #include "PatternSpin.h"
@@ -57,7 +58,6 @@
 
 class Patterns : public Playlist {
 private:
-    PatternIncrementalDrift incrementalDrift;
     PatternBitmap bitmap;
     PatternPaletteSmear paletteSmear;
     PatternMultipleStream multipleStream;
@@ -70,6 +70,8 @@ private:
     PatternSwirl swirl;
     PatternPendulumWave pendulumWave;
     PatternFlowField flowField;
+    PatternIncrementalDrift incrementalDrift;
+    PatternIncrementalDrift2 incrementalDrift2;
     PatternMunch munch;
     PatternElectricMandala electricMandala;
     PatternSpin spin;
@@ -98,10 +100,9 @@ private:
     int currentIndex = 0;
     Drawable* currentItem;
 
-    static const int PATTERN_COUNT = 37;
+    static const int PATTERN_COUNT = 38;
 
     Drawable* items[PATTERN_COUNT] = {
-        &incrementalDrift,
         &bitmap,
         &paletteSmear,
         &multipleStream,
@@ -113,6 +114,8 @@ private:
         &life,
         &flowField,
         &pendulumWave,
+        &incrementalDrift,
+        &incrementalDrift2,
         &munch,
         &electricMandala,
         &spin,
