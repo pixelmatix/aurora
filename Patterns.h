@@ -27,7 +27,6 @@
 #include "Boid.h"
 #include "Attractor.h"
 
-#include "PatternBitmap.h"
 #include "PatternNoiseSmearing.h"
 #include "PatternAnalogClock.h"
 #include "PatternSwirl.h"
@@ -55,10 +54,10 @@
 #include "PatternSpark.h"
 #include "PatternSpiral.h"
 #include "PatternEffects.h"
+//#include "PatternBitmap.h"
 
 class Patterns : public Playlist {
 private:
-    PatternBitmap bitmap;
     PatternPaletteSmear paletteSmear;
     PatternMultipleStream multipleStream;
     PatternMultipleStream2 multipleStream2;
@@ -96,6 +95,7 @@ private:
     PatternDots2 dots2;
     PatternSlowMandala slowMandala;
     PatternMandala8 mandala8;
+//    PatternBitmap bitmap;
 
     int currentIndex = 0;
     Drawable* currentItem;
@@ -103,14 +103,13 @@ private:
     static const int PATTERN_COUNT = 38;
 
     Drawable* items[PATTERN_COUNT] = {
-        &bitmap,
         &paletteSmear,
-        &multipleStream,
-        &multipleStream2,
+        &multipleStream8,
+        &multipleStream5,
         &multipleStream3,
         &multipleStream4,
-        &multipleStream5,
-        &multipleStream8,
+        &multipleStream2,
+//        &multipleStream,
         &life,
         &flowField,
         &pendulumWave,
@@ -141,6 +140,7 @@ private:
         &dots2,
         &slowMandala,
         &mandala8
+//        &bitmap
     };
 
 public:

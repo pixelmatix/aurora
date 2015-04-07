@@ -60,8 +60,8 @@ Effects effects;
 #include "GifPlayer.h"
 GifPlayer gifPlayer;
 
-#include "BitmapPlayer.h"
-BitmapPlayer bitmapPlayer;
+//#include "BitmapPlayer.h"
+//BitmapPlayer bitmapPlayer;
 
 #include "Logo.h"
 
@@ -118,7 +118,7 @@ MenuItem* mainMenuItems [] = {
 
 int mainMenuItemCount;
 
-bool enableStartupSplash = false;
+//bool enableStartupSplash = false;
 
 void setup()
 {
@@ -140,14 +140,15 @@ void setup()
     matrix.setScrollOffsetFromTop(25);
     matrix.setScrollSpeed(80);
     matrix.setScrollMode(wrapForward);
+    matrix.fillScreen(rgb24{ 0, 0, 0 });
 
-    if (enableStartupSplash) {
-        drawLogo();
-        matrix.scrollText("Aurora by Pixelmatix", 1);
-    }
-    else {
-        matrix.fillScreen(rgb24{ 0, 0, 0 });
-    }
+//    if (enableStartupSplash) {
+//        drawLogo();
+//        matrix.scrollText("Aurora by Pixelmatix", 1);
+//    }
+//    else {
+//        matrix.fillScreen(rgb24{ 0, 0, 0 });
+//    }
 
     matrix.swapBuffers();
 
@@ -176,9 +177,9 @@ void setup()
     if (sdAvailable)
         loadSettings();
 
-    if (enableStartupSplash) {
-        while (matrix.getScrollStatus() != 0) {}
-    }
+//    if (enableStartupSplash) {
+//        while (matrix.getScrollStatus() != 0) {}
+//    }
 
     if (!HAS_IR) {
         menu.playbackState = Menu::PlaybackState::Autoplay;
