@@ -100,7 +100,7 @@ private:
     int currentIndex = 0;
     Drawable* currentItem;
 
-    static const int PATTERN_COUNT = 38;
+    static const int PATTERN_COUNT = 36;
 
     Drawable* items[PATTERN_COUNT] = {
         &paletteSmear,
