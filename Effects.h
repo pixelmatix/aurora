@@ -62,6 +62,12 @@ public:
 
     static const int HeatColorsPaletteIndex = 7;
 
+    void Setup() {
+      currentPalette = RainbowColors_p;
+      loadPalette(0);
+      NoiseVariablesSetup();
+    }
+
     void CyclePalette(int offset = 1) {
         loadPalette(paletteIndex + offset);
     }
