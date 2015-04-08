@@ -27,10 +27,12 @@
 #ifndef PatternNoiseSmearing_H
 #define PatternNoiseSmearing_H
 
+byte patternNoiseSmearingHue = 0;
+
 class PatternMultipleStream : public Drawable {
 public:
-    void start() {
-        effects.NoiseVariablesSetup();
+    PatternMultipleStream() {
+        name = (char *)"MultipleStream";
     }
 
     // this pattern draws two points to the screen based on sin/cos if a counter
@@ -49,11 +51,12 @@ public:
 #endif
 
         byte x1 = 4 + sin8(counter * 2) / 10;
-        byte y1 = 4 + cos8(counter * 2) / 10;
         byte x2 = 8 + sin8(counter * 2) / 16;
         byte y2 = 8 + cos8((counter * 2) / 3) / 16;
 
 #ifdef CONNECT_THE_DOTS
+        byte y1 = 4 + cos8(counter * 2) / 10;
+        
         point1_x = x1;
         point1_y = y1;
 
@@ -72,8 +75,8 @@ public:
         effects.DimAll(249);
 #endif
 
-        effects.leds[XY(x1, x2)] = 0xFFFF00;
-        effects.leds[XY(x2, y2)] = 0xFF0000;
+        effects.leds[XY(x1, x2)] = effects.ColorFromCurrentPalette(patternNoiseSmearingHue);
+        effects.leds[XY(x2, y2)] = effects.ColorFromCurrentPalette(patternNoiseSmearingHue + 128);
 
         // Noise
         effects.noise_x[0] += 1000;
@@ -85,14 +88,16 @@ public:
         // this pattern smears with an offset added so the pixels usually have a trail going to the upper left
         effects.NoiseSmearWithRadius(8, 1);
 
+        patternNoiseSmearingHue++;
+        
         return 0;
     }
 };
 
 class PatternMultipleStream2 : public Drawable {
 public:
-    void start() {
-        effects.NoiseVariablesSetup();
+    PatternMultipleStream2() {
+        name = (char *)"MultipleStream2";
     }
 
     unsigned int drawFrame() {
@@ -100,13 +105,13 @@ public:
 
         byte xx = 4 + sin8(millis() / 9) / 10;
         byte yy = 4 + cos8(millis() / 10) / 10;
-        effects.leds[XY(xx, yy)] += 0x0000FF;
+        effects.leds[XY(xx, yy)] += effects.ColorFromCurrentPalette(patternNoiseSmearingHue);
 
         xx = 8 + sin8(millis() / 10) / 16;
         yy = 8 + cos8(millis() / 7) / 16;
-        effects.leds[XY(xx, yy)] += 0xFF0000;
+        effects.leds[XY(xx, yy)] += effects.ColorFromCurrentPalette(patternNoiseSmearingHue + 80);
 
-        effects.leds[XY(15, 15)] += 0xFFFF00;
+        effects.leds[XY(15, 15)] += effects.ColorFromCurrentPalette(patternNoiseSmearingHue + 160);
 
         effects.noise_x[0] += 1000;
         effects.noise_y[0] += 1000;
@@ -117,14 +122,16 @@ public:
 
         effects.NoiseSmearWithRadius(2);
 
+        patternNoiseSmearingHue++;
+
         return 0;
     }
 };
 
 class PatternMultipleStream3 : public Drawable {
 public:
-    void start() {
-        effects.NoiseVariablesSetup();
+    PatternMultipleStream3() {
+        name = (char *)"MultipleStream3";
     }
 
     unsigned int drawFrame() {
@@ -132,7 +139,7 @@ public:
         effects.DimAll(235);
 
         for (uint8_t i = 3; i < 32; i = i + 4) {
-            effects.leds[XY(i, 15)] += CHSV(i * 2, 255, 255);
+            effects.leds[XY(i, 15)] += effects.ColorFromCurrentPalette(i * 8);
         }
 
         // Noise
@@ -151,8 +158,8 @@ public:
 
 class PatternMultipleStream4 : public Drawable {
 public:
-    void start() {
-        effects.NoiseVariablesSetup();
+    PatternMultipleStream4() {
+        name = (char *)"MultipleStream4";
     }
 
     unsigned int drawFrame() {
@@ -160,7 +167,7 @@ public:
         //CLS();
         effects.DimAll(235);
 
-        effects.leds[XY(15, 15)] += CHSV(millis(), 255, 255);
+        effects.leds[XY(15, 15)] += effects.ColorFromCurrentPalette(patternNoiseSmearingHue);
 
 
         // Noise
@@ -172,14 +179,16 @@ public:
 
         effects.NoiseSmearWithRadius(2);
 
+        patternNoiseSmearingHue++;
+
         return 0;
     }
 };
 
 class PatternMultipleStream5 : public Drawable {
 public:
-    void start() {
-        effects.NoiseVariablesSetup();
+    PatternMultipleStream5() {
+        name = (char *)"MultipleStream5";
     }
 
     unsigned int drawFrame() {
@@ -189,7 +198,7 @@ public:
 
 
         for (uint8_t i = 3; i < 32; i = i + 4) {
-            effects.leds[XY(i, 31)] += CHSV(i * 2, 255, 255);
+            effects.leds[XY(i, 31)] += effects.ColorFromCurrentPalette(i * 8);
         }
 
         // Noise
@@ -210,8 +219,8 @@ public:
 
 class PatternMultipleStream8 : public Drawable {
 public:
-    void start() {
-        effects.NoiseVariablesSetup();
+    PatternMultipleStream8() {
+        name = (char *)"MultipleStream8";
     }
 
     unsigned int drawFrame() {
@@ -221,7 +230,7 @@ public:
         for (uint8_t y = 1; y < 32; y = y + 6) {
             for (uint8_t x = 1; x < 32; x = x + 6) {
 
-                effects.leds[XY(x, y)] += CHSV((x*y) / 4, 255, 255);
+                effects.leds[XY(x, y)] += effects.ColorFromCurrentPalette((x*y) / 4);
             }
         }
 
@@ -235,6 +244,32 @@ public:
 
         // move image (including newly drawn dot) within +/-2 pixels of original position
         effects.NoiseSmearWithRadius(2);
+
+        return 0;
+    }
+};
+
+class PatternPaletteSmear : public Drawable {
+public:
+    unsigned int drawFrame() {
+        effects.DimAll(170);
+
+        // draw a rainbow color palette
+        for (uint8_t y = 0; y < MATRIX_HEIGHT; y++) {
+            for (uint8_t x = 0; x < MATRIX_WIDTH; x++) {
+                effects.leds[XY(x, y)] += effects.ColorFromCurrentPalette(x * 8, y * 8 + 7);
+            }
+        }
+        
+        // Noise
+        effects.noise_x[0] += 1000;
+        effects.noise_y[0] += 1000;
+        effects.noise_scale_x[0] = 4000;
+        effects.noise_scale_y[0] = 4000;
+        effects.FillNoise(0);
+
+        // this pattern smears with an offset added so the pixels usually have a trail going to the upper left
+        effects.NoiseSmearWithRadius(8, 1);
 
         return 0;
     }

@@ -65,8 +65,8 @@ public:
         path = directoryName;
 
         count = countFiles(directoryName);
-        Serial.print(F("message file count: "));
-        Serial.println(count);
+        //Serial.print(F("message file count: "));
+        //Serial.println(count);
         currentIndex = -1;
     }
 
@@ -177,8 +177,8 @@ public:
         strcpy(filepath, path);
         strcat(filepath, name);
 
-        Serial.print(F("message file path: "));
-        Serial.println(filepath);
+        //Serial.print(F("message file path: "));
+        //Serial.println(filepath);
 
         File file = SD.open(filepath, FILE_READ);
         if (!file) {
@@ -206,6 +206,8 @@ public:
             color = { 255, 255, 255 };
 
         file.close();
+        
+        return true;
     }
 
     void readTextFile(File &file) {
@@ -213,8 +215,8 @@ public:
             String text = readLine(file);
             if (text.startsWith("text=")) {
                 text = text.substring(5);
-                Serial.print(F("message: "));
-                Serial.println(text);
+                //Serial.print(F("message: "));
+                //Serial.println(text);
                 text.toCharArray(message, textLayerMaxStringLength);
             }
             else if (text.startsWith("red=")) {
@@ -222,8 +224,8 @@ public:
                 if (text.length() > 0) {
                     color.red = text.toInt();
                     colorSpecified = true;
-                    Serial.print(F("red: "));
-                    Serial.println(color.red);
+                    //Serial.print(F("red: "));
+                    //Serial.println(color.red);
                 }
             }
             else if (text.startsWith("green=")) {
@@ -231,8 +233,8 @@ public:
                 if (text.length() > 0) {
                     color.green = text.toInt();
                     colorSpecified = true;
-                    Serial.print(F("green: "));
-                    Serial.println(color.green);
+                    //Serial.print(F("green: "));
+                    //Serial.println(color.green);
                 }
             }
             else if (text.startsWith("blue=")) {
@@ -240,127 +242,146 @@ public:
                 if (text.length() > 0) {
                     color.blue = text.toInt();
                     colorSpecified = true;
-                    Serial.print(F("blue: "));
-                    Serial.println(color.blue);
+                    //Serial.print(F("blue: "));
+                    //Serial.println(color.blue);
                 }
             }
             else if (text.startsWith("top=")) {
                 text = text.substring(4);
                 if (text.length() > 0) {
                     offsetFromTop = text.toInt();
-                    Serial.print(F("offsetFromTop: "));
-                    Serial.println(offsetFromTop);
+                    //Serial.print(F("offsetFromTop: "));
+                    //Serial.println(offsetFromTop);
                 }
             }
             else if (text.startsWith("left=")) {
                 text = text.substring(5);
                 if (text.length() > 0) {
                     offsetFromLeft = text.toInt();
-                    Serial.print(F("offsetFromLeft: "));
-                    Serial.println(offsetFromLeft);
+                    //Serial.print(F("offsetFromLeft: "));
+                    //Serial.println(offsetFromLeft);
                 }
             }
             else if (text.startsWith("font=")) {
                 text = text.substring(5);
                 if (text.length() > 0) {
                     fontName = text;
-                    Serial.print(F("font: "));
-                    Serial.println(fontName);
+                    //Serial.print(F("font: "));
+                    //Serial.println(fontName);
                 }
             }
             else if (text.startsWith("speed=")) {
                 text = text.substring(6);
                 if (text.length() > 0) {
                     scrollSpeed = text.toInt();
-                    Serial.print(F("scrollSpeed: "));
-                    Serial.println(scrollSpeed);
+                    //Serial.print(F("scrollSpeed: "));
+                    //Serial.println(scrollSpeed);
                 }
             }
             else if (text.startsWith("mode=")) {
                 text = text.substring(5);
                 if (text.length() > 0) {
                     scrollMode = getScrollMode(text);
-                    Serial.print(F("scrollMode: "));
-                    Serial.println(text);
+                    //Serial.print(F("scrollMode: "));
+                    //Serial.println(text);
                 }
             }
         }
     }
 
-    void readJsonFile(File &file) {
+    bool readJsonSerial() {
+        aJsonStream stream(&Serial);
+        return readJsonStream(stream);
+    }
+
+    bool readJsonFile(File &file) {
         aJsonStream sd_stream(&file);
+        return readJsonStream(sd_stream);
+    }
 
-        Serial.print(F("Parsing json..."));
-        aJsonObject* root = aJson.parse(&sd_stream);
-        Serial.println(F(" done"));
+    bool readJsonStream(aJsonStream &stream) {
+        //Serial.print(F("Parsing json..."));
+        aJsonObject* root = aJson.parse(&stream);
+        if (!root) {
+            //Serial.println(F(" failed"));
+            return false;
+        }
 
+        //Serial.println(F(" done"));
+
+        return readJsonObject(root);
+    }
+
+    bool readJsonObject(aJsonObject * root){
         aJsonObject* property = aJson.getObjectItem(root, "text");
         if (property->type == aJson_String) {
             strcpy(message, property->valuestring);
-            Serial.print(F("message: "));
-            Serial.println(message);
+            //Serial.print(F("message: "));
+            //Serial.println(message);
         }
 
         property = aJson.getObjectItem(root, "red");
         if (property->type == aJson_Int) {
             color.red = property->valueint;
             colorSpecified = true;
-            Serial.print(F("red: "));
-            Serial.println(color.red);
+            //Serial.print(F("red: "));
+            //Serial.println(color.red);
         }
 
         property = aJson.getObjectItem(root, "green");
         if (property->type == aJson_Int) {
             color.green = property->valueint;
             colorSpecified = true;
-            Serial.print(F("green: "));
-            Serial.println(color.green);
+            //Serial.print(F("green: "));
+            //Serial.println(color.green);
         }
 
         property = aJson.getObjectItem(root, "blue");
         if (property->type == aJson_Int) {
             color.blue = property->valueint;
             colorSpecified = true;
-            Serial.print(F("blue: "));
-            Serial.println(color.blue);
+            //Serial.print(F("blue: "));
+            //Serial.println(color.blue);
         }
 
         property = aJson.getObjectItem(root, "top");
         if (property->type == aJson_Int) {
             offsetFromTop = property->valueint;
-            Serial.print(F("offsetFromTop: "));
-            Serial.println(offsetFromTop);
+            //Serial.print(F("offsetFromTop: "));
+            //Serial.println(offsetFromTop);
         }
 
         property = aJson.getObjectItem(root, "left");
         if (property->type == aJson_Int) {
             offsetFromLeft = property->valueint;
-            Serial.print(F("offsetFromLeft: "));
-            Serial.println(offsetFromLeft);
+            //Serial.print(F("offsetFromLeft: "));
+            //Serial.println(offsetFromLeft);
         }
 
         property = aJson.getObjectItem(root, "font");
         if (property->type == aJson_String) {
             fontName = property->valuestring;
-            Serial.print(F("font: "));
-            Serial.println(fontName);
+            //Serial.print(F("font: "));
+            //Serial.println(fontName);
         }
 
         property = aJson.getObjectItem(root, "speed");
         if (property->type == aJson_Int) {
             scrollSpeed = property->valueint;
-            Serial.print(F("scrollSpeed: "));
-            Serial.println(scrollSpeed);
+            //Serial.print(F("scrollSpeed: "));
+            //Serial.println(scrollSpeed);
         }
 
         property = aJson.getObjectItem(root, "mode");
         if (property->type == aJson_String) {
             scrollMode = getScrollMode(property->valuestring);
-            Serial.print(F("scrollMode: "));
-            Serial.println(scrollMode);
+            //Serial.print(F("scrollMode: "));
+            //Serial.println(scrollMode);
         }
 
         aJson.deleteItem(root);
+
+        return true;
     }
 
     fontChoices getFont() {

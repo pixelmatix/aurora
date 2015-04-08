@@ -27,6 +27,9 @@ extern Effects effects;
 
 class PatternSpin : public Drawable {
 public:
+    PatternSpin() {
+        name = (char *)"Spin";
+    }
 
     float degrees = 0;
     float radius = 16;

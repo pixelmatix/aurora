@@ -32,20 +32,24 @@ extern IRrecv irReceiver;
 
 enum class InputCommand {
     None,
+    Update,
     Up,
     Down,
     Left,
     Right,
     Select,
-    Brightness,
+    CycleBrightness,
     PlayMode,
     Palette,
-    Clock,
+    CycleClockAndMessageFiles,
+    ShowClock,
+    HideClockOrMessage,
     Power,
     Back,
     BrightnessUp,
     BrightnessDown,
     Menu,
+    ShowCurrentMessage,
 };
 
 // IR Raw Key Codes for SparkFun remote
@@ -193,7 +197,7 @@ unsigned long readIRCode() {
     while (decodeIRCode() == code) {
         ;
     }
-    Serial.println(code);
+    //Serial.println(code);
     return code;
 }
 
@@ -331,7 +335,7 @@ InputCommand getCommand(unsigned long input) {
 
         case IRCODE_SPARKFUN_POWER:
 //        case IRCODE_WRT8621_05A_M:
-            return InputCommand::Brightness;
+            return InputCommand::CycleBrightness;
 
         case IRCODE_SPARKFUN_A:
         case IRCODE_ADAFRUIT_STOP_MODE:
@@ -355,7 +359,7 @@ InputCommand getCommand(unsigned long input) {
 //        case IRCODE_WRT8521_01_3:
 //        case IRCODE_WRT8621_DOWN4:
 //        case IRCODE_RONIX_SET_RED:
-            return InputCommand::Clock;
+            return InputCommand::CycleClockAndMessageFiles;
 
         case IRCODE_ADAFRUIT_PLAY_PAUSE:
 //        case IRCODE_WRT8521_01_PLAY_PAUSE:
@@ -391,12 +395,176 @@ InputCommand getCommand(unsigned long input) {
     return InputCommand::None;
 }
 
+InputCommand getCommand(String input) {
+    if (input == "Up")
+        return InputCommand::Up;
+    else if (input == "Down")
+        return InputCommand::Down;
+    else if (input == "Left")
+        return InputCommand::Left;
+    else if (input == "Right")
+        return InputCommand::Right;
+    else if (input == "Select")
+        return InputCommand::Select;
+    else if (input == "CycleBrightness")
+        return InputCommand::CycleBrightness;
+    else if (input == "PlayMode")
+        return InputCommand::PlayMode;
+    else if (input == "Palette")
+        return InputCommand::Palette;
+    else if (input == "CycleClockAndMessageFiles")
+        return InputCommand::CycleClockAndMessageFiles;
+    else if (input == "Power")
+        return InputCommand::Power;
+    else if (input == "Back")
+        return InputCommand::Back;
+    else if (input == "BrightnessUp")
+        return InputCommand::BrightnessUp;
+    else if (input == "BrightnessDown")
+        return InputCommand::BrightnessDown;
+    else if (input == "Menu")
+        return InputCommand::Menu;
+    else if (input == "ShowCurrentMessage")
+        return InputCommand::ShowCurrentMessage;
+    else if (input == "ShowClock")
+        return InputCommand::ShowClock;
+    else if (input == "HideClockOrMessage")
+        return InputCommand::HideClockOrMessage;
+
+    return InputCommand::None;
+}
+
+InputCommand readSerialCommand() {
+    if (Serial.available() < 1)
+        return InputCommand::None;
+
+    if(Serial.peek() != '{')
+        return InputCommand::None;
+
+    aJsonStream stream(&Serial);
+
+    //Serial.print(F("Parsing json..."));
+    aJsonObject* root = aJson.parse(&stream);
+    if (!root) {
+        //Serial.println(F(" failed"));
+        return InputCommand::None;
+    }
+    //Serial.println(F(" done"));
+
+    // message
+    aJsonObject* item = aJson.getObjectItem(root, "message");
+    if (item && messagePlayer.readJsonObject(item)) {
+        return InputCommand::ShowCurrentMessage;
+    }
+
+    // brightness
+    item = aJson.getObjectItem(root, "brightness");
+    if (item && item->type == aJson_Int) {
+        brightness = item->valueint;
+        boundBrightness();
+        matrix.setBrightness(brightness);
+        saveBrightnessSetting();
+        return InputCommand::None;
+    }
+
+    // background brightness
+    item = aJson.getObjectItem(root, "backgroundBrightness");
+    if (item && item->type == aJson_Int) {
+        backgroundBrightness = item->valueint;
+        boundBackgroundBrightness();
+        matrix.setBackgroundBrightness(backgroundBrightness);
+        saveBackgroundBrightnessSetting();
+        return InputCommand::None;
+    }
+
+    // palette
+    item = aJson.getObjectItem(root, "palette");
+    if (item && item->type == aJson_String) {
+        effects.setPalette(item->valuestring);
+        return InputCommand::None;
+    }
+
+    // pattern
+    item = aJson.getObjectItem(root, "pattern");
+    if (item && item->type == aJson_String) {
+        //Serial.print(F("Loading pattern "));
+        //Serial.println(item->valuestring);
+        if (setPattern(item->valuestring))
+            return InputCommand::Update;
+        else
+    return InputCommand::None;
+}
+    else if (item && item->type == aJson_Int) {
+        //Serial.print(F("Loading pattern "));
+        //Serial.println(item->valueint);
+        if (setPattern(item->valueint))
+            return InputCommand::Update;
+        else
+            return InputCommand::None;
+    }
+
+    // animation
+    item = aJson.getObjectItem(root, "animation");
+    if (item && item->type == aJson_String) {
+        //Serial.print(F("Loading animation "));
+        //Serial.println(item->valuestring);
+        if (setAnimation(item->valuestring))
+            return InputCommand::Update;
+        else
+            return InputCommand::None;
+    }
+    else if (item && item->type == aJson_Int) {
+        //Serial.print(F("Loading animation "));
+        //Serial.println(item->valueint);
+        if (setAnimation(item->valueint))
+            return InputCommand::Update;
+        else
+            return InputCommand::None;
+    }
+
+    // add support for more specialized items here...
+
+    // fall back on basic command support
+    item = aJson.getObjectItem(root, "command");
+    if (item && item->type == aJson_String) {
+        // custom commands
+        if ((String) item->valuestring == "ListAnimations") {
+            listAnimations();
+            return InputCommand::None;
+        }
+        else if ((String) item->valuestring == "ListPatterns") {
+            listPatterns();
+            return InputCommand::None;
+        }
+        else if ((String) item->valuestring == "ListPalettes") {
+            effects.listPalettes();
+            return InputCommand::None;
+        }
+
+        InputCommand command = getCommand(item->valuestring);
+        if (command != InputCommand::None)
+            return command;
+    }
+
+    return InputCommand::None;
+}
+
 InputCommand readCommand() {
-    return getCommand(readIRCode());
+    InputCommand command = getCommand(readIRCode());
+
+    if (command == InputCommand::None)
+        command = readSerialCommand();
+
+    return command;
 }
 
 InputCommand readCommand(unsigned int holdDelay) {
-    return getCommand(readIRCode(holdDelay));
+    InputCommand command = getCommand(readIRCode(holdDelay));
+
+    if (command == InputCommand::None)
+        command = readSerialCommand();
+
+    return command;
 }
 
 #endif

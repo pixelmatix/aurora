@@ -29,6 +29,10 @@ private:
     Attractor attractor;
 
 public:
+    PatternAttract() {
+        name = (char *)"Attract";
+    }
+
     void start() {
         int direction = random(0, 2);
         if (direction == 0)

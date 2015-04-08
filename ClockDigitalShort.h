@@ -50,7 +50,7 @@ public:
     bool twentyFourHour = false;
 
     unsigned int drawFrame() {
-        drawFrame(y);
+        return drawFrame(y);
     }
 
     unsigned int drawFrame(const int cy) {
@@ -125,8 +125,8 @@ public:
     }
 
     void loadSettings() {
-        y = loadIntSetting("/aurora/", "/aurora/clockY.txt", 2, 11);
-        twentyFourHour = loadIntSetting("/aurora/", "/aurora/clock24h.txt", 2, 11);
+        y = loadIntSetting("clockY.txt", 2, 11);
+        twentyFourHour = loadIntSetting("clock24h.txt", 2, 11);
         boundY();
     }
 
@@ -135,11 +135,11 @@ public:
     }
 
     void saveClockYSetting() {
-        saveIntSetting("/aurora/", "/aurora/clockY.txt", y);
+        saveIntSetting("clockY.txt", y);
     }
 
     void saveTwentyFourHourSetting() {
-        saveIntSetting("/aurora/", "/aurora/clock24h.txt", twentyFourHour);
+        saveIntSetting("clock24h.txt", twentyFourHour);
     }
 
     void boundY() {

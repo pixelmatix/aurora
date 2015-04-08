@@ -31,7 +31,7 @@ extern GifPlayer gifPlayer;
 class Animations : public Playlist {
 public:
 
-    char* Drawable::name = "Animations";
+    char* Drawable::name = (char *)"Animations";
 
     void move(int step) {
         currentIndex += step;
@@ -50,6 +50,61 @@ public:
         else if (currentIndex < 0) currentIndex = imageCount - 1;
 
         openImageFile(false);
+    }
+
+    bool setAnimation(int index) {
+        if (index >= imageCount || index < 0)
+            return false;
+
+        currentIndex = index;
+        openImageFile(false);
+
+        return true;
+    }
+
+    bool setAnimation(String name) {
+        if (!SD.exists(path))
+            return false;
+
+        File directory = SD.open(path, FILE_READ);
+        if (!directory)
+            return -1;
+
+        int index = -1;
+        bool foundMatch = false;
+
+        File file = directory.openNextFile();
+        while (file) {
+            if (!file.isDirectory()) {
+                if (isAnimationFile(file.name())) {
+                    index++;
+                }
+
+                if (name.compareTo(file.name()) == 0) {
+                    foundMatch = true;
+                    currentIndex = index;
+                    break;
+                }
+            }
+
+            file.close();
+            file = directory.openNextFile();
+        }
+        file.close();
+        directory.close();
+
+        if (foundMatch) {
+            currentIndex = index;
+
+            if (currentIndex >= imageCount) currentIndex = 0;
+            else if (currentIndex < 0) currentIndex = imageCount - 1;
+
+            openImageFile(false);
+
+            return true;
+        }
+
+        return false;
     }
 
     unsigned int drawFrame() {
@@ -116,9 +171,48 @@ public:
         return true;
     }
 
+    void listFiles() {
+        Serial.println(F("{"));
+        Serial.print(F("  \"count\": "));
+        Serial.print(imageCount);
+        Serial.println(",");
+        Serial.println(F("  \"results\": ["));
+
+        int i = 0;
+
+        if (SD.exists(path)) {
+            File directory = SD.open(path, FILE_READ);
+            if (directory) {
+
+                File file = directory.openNextFile();
+                while (file) {
+                    if (!file.isDirectory()) {
+                        if (isAnimationFile(file.name())) {
+                            Serial.print(F("    \""));
+                            Serial.print(file.name());
+                            if (i == imageCount - 1)
+                                Serial.println(F("\""));
+                            else
+                                Serial.println(F("\","));
+                            i++;
+                        }
+                    }
+
+                    file.close();
+                    file = directory.openNextFile();
+                }
+                file.close();
+                directory.close();
+            }
+        }
+
+        Serial.println("  ]");
+        Serial.println("}");
+    }
+
 private:
 
-    const char* path;
+    char* path;
 
     File imageFile;
 

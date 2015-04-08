@@ -34,6 +34,10 @@ private:
     byte generation = 0;
 
 public:
+    PatternMunch() {
+        name = (char *)"Munch";
+    }
+
     unsigned int drawFrame() {
         for (byte x = 0; x < MATRIX_WIDTH; x++) {
             for (byte y = 0; y < MATRIX_HEIGHT; y++) {

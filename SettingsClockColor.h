@@ -34,7 +34,6 @@ public:
     void start() {
         CHSV chsv;
         CRGB crgb;
-        CRGB selectedColor;
         for (int x = 0; x < MATRIX_WIDTH - 1; x += 1) {
             uint8_t hue = x * 8;
 
@@ -59,8 +58,6 @@ public:
     }
 
     void run() {
-        int lastStateIndex = -1;
-
         while (true) {
             drawFrame();
 
@@ -69,7 +66,7 @@ public:
             // then Value from 255 (fully-saturated color) to 45 (mostly black) middle to bottom, skipping anything lower than 45 which is indistinguishable from black.
             CHSV chsv;
             CRGB crgb;
-            CRGB selectedColor;
+            CRGB selectedColor = CRGB::White;
             for (int x = 0; x < MATRIX_WIDTH - 1; x += 1) {
                 uint8_t hue = x * 8;
 
@@ -122,8 +119,8 @@ public:
                 clockDigitalShort.drawFrame(23);
             }
 
-            matrix.swapBuffers();
             matrix.displayForegroundDrawing(false);
+            matrix.swapBuffers();
 
             InputCommand command = readCommand(defaultHoldDelay);
 

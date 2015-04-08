@@ -79,6 +79,7 @@ private:
             case 0:
                 return getAvailablePointWithClosestNeighborColor(color);
             case 1:
+            default:
                 return getAvailablePointWithClosestAverageNeighborColor(color);
         }
     }
@@ -301,6 +302,10 @@ private:
     }
 
 public:
+    PatternRainbowSmoke() {
+        name = (char *)"RainbowSmoke";
+    }
+
     unsigned int drawFrame() {
         if (currentColorIndex == 0) {
             //randomSeed(analogRead(5));

@@ -99,7 +99,7 @@ public:
             PVector repelVec = location - obstacle;
             repelVec.normalize();
             if (d != 0) { //Don't divide by zero.
-                float scale = 1.0 / d; //The closer to the obstacle, the stronger the force.
+                // float scale = 1.0 / d; //The closer to the obstacle, the stronger the force.
                 repelVec.normalize();
                 repelVec *= (maxforce * 7);
                 if (repelVec.mag() < 0) { //Don't let the boids turn around to avoid the obstacle.
@@ -240,7 +240,7 @@ public:
         PVector steer = desired - velocity;
         steer.limit(maxforce);  // Limit to maximum steering force
         applyForce(steer);
-        Serial.println(d);
+        //Serial.println(d);
     }
 
     // Wraparound

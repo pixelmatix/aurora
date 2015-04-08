@@ -43,6 +43,10 @@ private:
     int waveCount = 1;
 
 public:
+    PatternWave() {
+        name = (char *)"Wave";
+    }
+
     void start() {
         rotation = random(0, 4);
         waveCount = random(1, 3);

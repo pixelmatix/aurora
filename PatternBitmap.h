@@ -25,34 +25,41 @@
 
 class PatternBitmap : public Drawable {
 private:
-    bool loaded = false;
 
 public:
-    void start() {
-    }
-
-    void stop() {
-        loaded = false;
+    PatternBitmap() {
+        name = (char *)"Bitmap";
     }
 
     unsigned int drawFrame() {
-        if (!loaded) {
-            loaded = true;
-
-            matrix.fillScreen({ 0, 0, 0 });
+        char* filename = (char *) "/aurora/pmlogo32.bmp";
 
             if (sdAvailable) {
-                if (SD.exists("/aurora/pmlogo32.bmp")) {
-                    bitmapPlayer.drawBitmap("/aurora/pmlogo32.bmp");
+            if (SD.exists(filename)) {
+                effects.DimAll(230);
+
+                bitmapPlayer.drawBitmap(filename, 0, 0, true);
+
+                // Noise
+                effects.noise_x[0] += 1000;
+                effects.noise_y[0] += 1000;
+                effects.noise_z[0] += 1000;
+                effects.noise_scale_x[0] = 4000;
+                effects.noise_scale_y[0] = 4000;
+                effects.FillNoise(0);
+
+                // move image (including newly drawn dot) within +/-2 pixels of original position
+                effects.NoiseSmearWithRadius(2);
+
+                return 0;
                 }
                 else {
-                    matrix.drawString(0, 0, { 255, 255, 255 }, "No file");
+                matrix.drawString(0, 0, { 255, 255, 255 }, (char *)"No file");
                 }
             }
             else {
-                matrix.drawString(0, 0, { 255, 255, 255 }, "No SD");
+            matrix.drawString(0, 0, { 255, 255, 255 }, (char *)"No SD");
             }
-        }
 
         return 30;
     }

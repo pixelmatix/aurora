@@ -78,8 +78,12 @@ public:
 
     uint8_t clockOrMessageIndex = 0;
 
+    boolean wasStreaming = false;
+    boolean visibleBeforeStreaming = true;
+
     void run(MenuItem* menuItems [], int menuItemsCount) {
         while (true) {
+
             if (currentIndex != previousIndex) {
                 if (currentMenuItem && currentMenuItem->drawable) {
                     currentMenuItem->drawable->stop();
@@ -174,7 +178,7 @@ public:
                         break;
                     }
                 }
-                else if (command == InputCommand::Brightness) {
+                else if (command == InputCommand::CycleBrightness) {
                     bool wasHolding = isHolding;
                     if (isHolding || cycleBrightness() == 0) {
                         heldButtonHasBeenHandled();
@@ -227,7 +231,22 @@ public:
                     showingPaletteIndicator = true;
                     paletteIndicatorTimout = millis() + paletteIndicatorDuration;
                 }
-                else if (command == InputCommand::Clock && !visible) { // cycle through clock faces and messages
+                else if (command == InputCommand::ShowClock) {
+                    messageVisible = false;
+                    clockVisible = true;
+                    updateScrollText = true;
+                }
+                else if (command == InputCommand::HideClockOrMessage) {
+                    messageVisible = false;
+                    clockVisible = false;
+                    updateScrollText = true;
+                }
+                else if (command == InputCommand::ShowCurrentMessage) {
+                    messageVisible = true;
+                    clockVisible = false;
+                    updateScrollText = true;
+                }
+                else if (command == InputCommand::CycleClockAndMessageFiles && !visible) { // cycle through clock faces and messages
                     if (isHolding) {
                         // turn off the clock or message if the button is held
                         messageVisible = false;
@@ -235,7 +254,7 @@ public:
                     }
                     else if (!clockVisible && !messageVisible) {
                         // if neither are visible, just show the current clock or message
-                        clockVisible = clockOrMessageIndex < clockDisplay.itemCount;
+                        clockVisible = isTimeAvailable && clockOrMessageIndex < clockDisplay.itemCount;
                         messageVisible = !clockVisible;
                     }
                     else {
@@ -243,12 +262,12 @@ public:
                         clockOrMessageIndex++;
 
                         // if we still have clock faces left, move to the next one
-                        if (clockOrMessageIndex < clockDisplay.itemCount) {
+                        if (isTimeAvailable && clockOrMessageIndex < clockDisplay.itemCount) {
                             clockDisplay.moveTo(clockOrMessageIndex);
                             clockVisible = true;
                             messageVisible = false;
                         }
-                        else if (messagePlayer.count > 0 && clockOrMessageIndex - clockDisplay.itemCount < messagePlayer.count - 1) {
+                        else if (messagePlayer.count > 0 && (!isTimeAvailable || clockOrMessageIndex - clockDisplay.itemCount < messagePlayer.count - 1)) {
                             // otherwise try to move to the next message
                             if (messagePlayer.loadNextMessage()) {
                                 messageVisible = true;
@@ -268,6 +287,10 @@ public:
                     }
 
                     updateScrollText = true;
+                }
+                else if (command == InputCommand::Update) {
+                    updateScrollText = true;
+                    break;
                 }
                 else {
                     if (playbackState != Paused && millis() >= autoPlayTimout) {
@@ -425,8 +448,31 @@ private:
         // account for any time spent drawing the clock, swapping buffers, etc.
         unsigned int startTime = millis();
 
+        boolean streaming = streamingMode.handleStreaming();
+
+        if (streaming && !wasStreaming) {
+            wasStreaming = true;
+            visibleBeforeStreaming = visible;
+        }
+
+        if (streaming) {
+            visible = false;
+            updateScrollText = true;
+        }
+        else {
+            if (wasStreaming && visibleBeforeStreaming) {
+                visible = true;
+                updateScrollText = true;
+            }
+
+            wasStreaming = false;
+        }
+
         // draw the current item
-        unsigned int requestedDelay = currentMenuItem->drawable->drawFrame();
+        unsigned int requestedDelay = 0;
+
+        if (!streaming)
+            requestedDelay = currentMenuItem->drawable->drawFrame();
 
         effects.ShowFrame();
 

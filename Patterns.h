@@ -32,6 +32,8 @@
 #include "PatternSwirl.h"
 #include "PatternPendulumWave.h"
 #include "PatternFlowField.h"
+#include "PatternIncrementalDrift.h"
+#include "PatternIncrementalDrift2.h"
 #include "PatternMunch.h"
 #include "PatternElectricMandala.h"
 #include "PatternSpin.h"
@@ -52,9 +54,11 @@
 #include "PatternSpark.h"
 #include "PatternSpiral.h"
 #include "PatternEffects.h"
+//#include "PatternBitmap.h"
 
 class Patterns : public Playlist {
 private:
+    PatternPaletteSmear paletteSmear;
     PatternMultipleStream multipleStream;
     PatternMultipleStream2 multipleStream2;
     PatternMultipleStream3 multipleStream3;
@@ -65,6 +69,8 @@ private:
     PatternSwirl swirl;
     PatternPendulumWave pendulumWave;
     PatternFlowField flowField;
+    PatternIncrementalDrift incrementalDrift;
+    PatternIncrementalDrift2 incrementalDrift2;
     PatternMunch munch;
     PatternElectricMandala electricMandala;
     PatternSpin spin;
@@ -89,22 +95,26 @@ private:
     PatternDots2 dots2;
     PatternSlowMandala slowMandala;
     PatternMandala8 mandala8;
+//    PatternBitmap bitmap;
 
     int currentIndex = 0;
     Drawable* currentItem;
 
-    static const int PATTERN_COUNT = 34;
+    static const int PATTERN_COUNT = 36;
 
     Drawable* items[PATTERN_COUNT] = {
-        &multipleStream,
-        &multipleStream2,
+        &paletteSmear,
+        &multipleStream8,
+        &multipleStream5,
         &multipleStream3,
         &multipleStream4,
-        &multipleStream5,
-        &multipleStream8,
+        &multipleStream2,
+//        &multipleStream,
         &life,
         &flowField,
         &pendulumWave,
+        &incrementalDrift,
+        &incrementalDrift2,
         &munch,
         &electricMandala,
         &spin,
@@ -130,6 +140,7 @@ private:
         &dots2,
         &slowMandala,
         &mandala8
+//        &bitmap
     };
 
 public:
@@ -138,7 +149,7 @@ public:
         this->currentItem->start();
     }
 
-    char* Drawable::name = "Patterns";
+    char* Drawable::name = (char *)"Patterns";
 
     void stop() {
         if (currentItem)
@@ -156,13 +167,10 @@ public:
         if (currentIndex >= PATTERN_COUNT) currentIndex = 0;
         else if (currentIndex < 0) currentIndex = PATTERN_COUNT - 1;
 
-        if (currentItem)
-            currentItem->stop();
-
-        currentItem = items[currentIndex];
-
-        if (currentItem)
-            currentItem->start();
+        moveTo(currentIndex);
+        
+        if (!isTimeAvailable && currentItem == &analogClock)
+          move(step);
     }
 
     void moveRandom() {
@@ -171,12 +179,21 @@ public:
         if (currentIndex >= PATTERN_COUNT) currentIndex = 0;
         else if (currentIndex < 0) currentIndex = PATTERN_COUNT - 1;
 
+        effects.RandomPalette();
+
+        moveTo(currentIndex);
+        
+        if (!isTimeAvailable && currentItem == &analogClock)
+          moveRandom();
+    }
+
+    void moveTo(int index) {
         if (currentItem)
             currentItem->stop();
 
-        currentItem = items[currentIndex];
+        currentIndex = index;
 
-        effects.RandomPalette();
+        currentItem = items[currentIndex];
 
         if (currentItem)
             currentItem->start();
@@ -186,6 +203,45 @@ public:
         return currentItem->drawFrame();
     }
 
+    void listPatterns() {
+        Serial.println(F("{"));
+        Serial.print(F("  \"count\": "));
+        Serial.print(PATTERN_COUNT);
+        Serial.println(",");
+        Serial.println(F("  \"results\": ["));
+
+        for (int i = 0; i < PATTERN_COUNT; i++) {
+            Serial.print(F("    \""));
+            Serial.print(items[i]->name);
+            if(i == PATTERN_COUNT - 1)
+                Serial.println(F("\""));
+            else
+                Serial.println(F("\","));
+        }
+
+        Serial.println("  ]");
+        Serial.println("}");
+    }
+
+    bool setPattern(String name) {
+        for (int i = 0; i < PATTERN_COUNT; i++) {
+            if (name.compareTo(items[i]->name) == 0) {
+                moveTo(i);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    bool setPattern(int index) {
+        if (index >= PATTERN_COUNT || index < 0)
+            return false;
+
+        moveTo(index);
+
+        return true;
+    }
 };
 
 #endif

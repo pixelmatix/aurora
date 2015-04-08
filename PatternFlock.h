@@ -36,6 +36,10 @@
 
 class PatternFlock : public Drawable {
 public:
+    PatternFlock() {
+        name = (char *)"Flock";
+    }
+
     Boid boids[boidCount];
     Boid predator;
 

@@ -26,6 +26,7 @@
 class SettingsBackgroundBrightness : public Runnable {
 private:
     boolean hasChanges = false;
+    char text[4];
 
 public:
     void run() {
@@ -67,7 +68,6 @@ public:
             if (level < 1 && brightness > 0)
                 level = 10;
 
-            char text[4];
             sprintf(text, "%3d%%", level);
 
             matrix.setScrollOffsetFromTop(MATRIX_HEIGHT);
