@@ -31,6 +31,7 @@
 #include "SettingsClock24Hour.h"
 #include "SettingsMenuColor.h"
 #include "SettingsAutoplayDuration.h"
+#include "SettingsUpdateFiles.h"
 
 extern GifPlayer gifPlayer;
 
@@ -46,9 +47,10 @@ private:
     SettingsSetTime setTime;
     SettingsClock24Hour set24Hour;
     SettingsAutoplayDuration setAutoplayDuration;
+    SettingsUpdateFiles updateFiles;
     Drawable exit;
 
-    static const int itemCount = 9;
+    static const int itemCount = 10;
 
     MenuItem menuItemBrightness = MenuItem((char *)"Brightness", &brightness);
     MenuItem menuItemBgBrightness = MenuItem((char *)"BG Brightness", &backgroundBrightness);
@@ -58,6 +60,7 @@ private:
     MenuItem menuItemClockColor = MenuItem((char *)"Clock Color", &clockColor);
     MenuItem menuItemClock24Hour = MenuItem((char *)"12/24 Hour Clock", &set24Hour);
     MenuItem menuItemSetTime = MenuItem((char *)"Set Time", &setTime);
+    MenuItem menuItemUpdateFiles = MenuItem((char *)"Update Files", &updateFiles);
     MenuItem menuItemExit = MenuItem((char *)"Exit Settings", &exit, true);
 
     MenuItem* menuItems[itemCount] = {
@@ -69,6 +72,7 @@ private:
         &menuItemClockColor,
         &menuItemClock24Hour,
         &menuItemSetTime,
+        &menuItemUpdateFiles,
         &menuItemExit,
     };
 
