@@ -24,8 +24,7 @@
 
 class PatternAttract : public Drawable {
 private:
-    static const int count = 8;
-    Boid boids[count];
+    const int count = 8;
     Attractor attractor;
 
 public:

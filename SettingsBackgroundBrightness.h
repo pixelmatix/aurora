@@ -25,8 +25,8 @@
 
 class SettingsBackgroundBrightness : public Runnable {
 private:
-    boolean hasChanges = false;
-    char text[4];
+  boolean hasChanges = false;
+  char text[4];
 
 public:
     void run() {

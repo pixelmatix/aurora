@@ -34,7 +34,7 @@ public:
     unsigned int drawFrame() {
         char* filename = (char *) "/aurora/pmlogo32.bmp";
 
-            if (sdAvailable) {
+        if (sdAvailable) {
             if (SD.exists(filename)) {
                 effects.DimAll(230);
 
@@ -52,14 +52,14 @@ public:
                 effects.NoiseSmearWithRadius(2);
 
                 return 0;
-                }
-                else {
-                matrix.drawString(0, 0, { 255, 255, 255 }, (char *)"No file");
-                }
             }
             else {
-            matrix.drawString(0, 0, { 255, 255, 255 }, (char *)"No SD");
+                matrix.drawString(0, 0, { 255, 255, 255 }, (char *)"No file");
             }
+        }
+        else {
+            matrix.drawString(0, 0, { 255, 255, 255 }, (char *)"No SD");
+        }
 
         return 30;
     }

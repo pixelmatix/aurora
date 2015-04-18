@@ -40,7 +40,7 @@ public:
         name = (char *)"Flock";
     }
 
-    Boid boids[boidCount];
+    static const int boidCount = 10;
     Boid predator;
 
     PVector wind;
@@ -83,7 +83,7 @@ public:
                 boid->repelForce(predator.location, 10);
             }
 
-            boid->run(boids);
+            boid->run(boids, boidCount);
             PVector location = boid->location;
             PVector velocity = boid->velocity;
             matrix.drawLine(location.x, location.y, location.x - velocity.x, location.y - velocity.y, color);
@@ -95,7 +95,7 @@ public:
         }
 
         if (predatorPresent) {
-            predator.run(boids);
+            predator.run(boids, boidCount);
             color = effects.ColorFromCurrentPalette((byte) (hue + 128));
             PVector location = predator.location;
             PVector velocity = predator.velocity;

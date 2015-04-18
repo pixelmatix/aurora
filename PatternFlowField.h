@@ -37,9 +37,8 @@ public:
     uint16_t speed = 1;
     uint16_t scale = 26;
 
-    static const int boidCount = 40;
+    static const int count = 40;
 
-    Boid boids[boidCount];
     byte hue = 0;
 
     void start() {
@@ -47,7 +46,7 @@ public:
         y = random16();
         z = random16();
 
-        for (int i = 0; i < boidCount; i++) {
+        for (int i = 0; i < count; i++) {
             boids[i] = Boid(random(MATRIX_WIDTH), 0);
         }
     }
@@ -57,7 +56,7 @@ public:
 
         CRGB color = effects.ColorFromCurrentPalette(hue);
 
-        for (int i = 0; i < boidCount; i++) {
+        for (int i = 0; i < count; i++) {
             Boid * boid = &boids[i];
 
             int ioffset = scale * boid->location.x;

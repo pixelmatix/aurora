@@ -256,6 +256,8 @@ public:
                         // if neither are visible, just show the current clock or message
                         clockVisible = isTimeAvailable && clockOrMessageIndex < clockDisplay.itemCount;
                         messageVisible = !clockVisible;
+                        if(messageVisible && messagePlayer.currentIndex < 0)
+                          messageVisible = messagePlayer.loadNextMessage();
                     }
                     else {
                         // clock or message is visible, move to next
@@ -326,6 +328,13 @@ private:
         // skip hidden menu items
         while (!menuItems[currentIndex]->visible) {
             currentIndex += delta;
+            
+            if (currentIndex >= menuItemsCount) {
+                currentIndex = 0;
+            }
+            else if (currentIndex < 0) {
+                currentIndex = menuItemsCount - 1;
+            }
         }
     }
 

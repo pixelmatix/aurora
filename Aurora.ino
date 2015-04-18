@@ -31,7 +31,7 @@ uint8_t backgroundBrightness = 63;
 
 const uint8_t brightnessCount = 5;
 uint8_t brightnessMap[brightnessCount] = { 16, 32, 64, 128, 255 };
-uint8_t backgroundBrightnessMap[brightnessCount] = { 8, 16, 32, 64, 128 };
+uint8_t backgroundBrightnessMap[brightnessCount] = { 16, 32, 64, 128, 255 };
 
 #include <SmartMatrix_32x32.h>
 #include <FastLED.h>
@@ -208,8 +208,8 @@ void setup()
     // Setup serial interface
     Serial.begin(115200);
 
-    // delay(3000);
-    // Serial.println(F("starting..."));
+    delay(250);
+//    Serial.println(F("starting..."));
 
     // Initialize the IR receiver
     irReceiver.enableIRIn();
@@ -267,6 +267,8 @@ void setup()
         menu.playbackState = Menu::PlaybackState::Autoplay;
         menu.visible = false;
     }
+    
+//    menuItemSettings.visible = false;
 }
 
 void loop()
@@ -476,7 +478,7 @@ int loadIntSetting(const char* name, int maxLength, int defaultValue) {
     int intValue = defaultValue;
 
     char* path = (char *) "/aurora/";
-    
+
     if (!SD.exists(path)) {
         SD.mkdir(path);
     }
@@ -510,7 +512,7 @@ void saveIntSetting(const char* name, int value) {
         return;
 
     char* path = (char *) "/aurora/";
-    
+
     if (!SD.exists(path)) {
         SD.mkdir(path);
     }

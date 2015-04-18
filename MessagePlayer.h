@@ -74,11 +74,11 @@ public:
     int countFiles(char* directoryName) {
         int count = 0;
 
-        if(!SD.exists(directoryName))
+        if (!SD.exists(directoryName))
             return 0;
 
         File directory = SD.open(directoryName, FILE_READ);
-        if(!directory)
+        if (!directory)
             return 0;
 
         File file = directory.openNextFile();

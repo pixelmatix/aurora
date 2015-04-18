@@ -27,10 +27,10 @@ class SettingsBrightness : public Runnable {
 private:
     boolean hasChanges = false;
     char text[4];
-
+    
 public:
     void run() {
-        while (true) {
+        while (true) {  
             // draw an RGB grid, Hue from 0 to 248 left to right (256 is the same as 0)
             // Saturation from 15 (mostly white) to 255 (fully-saturated color) top to middle (0 to 16), skipping 0 which is white and will be handled in the right-most column)
             // then Value from 255 (fully-saturated color) to 45 (mostly black) middle to bottom, skipping anything lower than 45 which is indistinguishable from black.

@@ -31,8 +31,6 @@
 // Boid class
 // Methods for Separation, Cohesion, Alignment added
 
-static const int boidCount = 10;
-
 class Boid {
 public:
 
@@ -65,8 +63,8 @@ public:
         return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
 
-    void run(Boid boids []) {
-        flock(boids);
+    void run(Boid boids [], uint8_t boidCount) {
+        flock(boids, boidCount);
         update();
         wrapAroundBorders();
         render();
@@ -111,10 +109,10 @@ public:
     }
 
     // We accumulate a new acceleration each time based on three rules
-    void flock(Boid boids []) {
-        PVector sep = separate(boids);   // Separation
-        PVector ali = align(boids);      // Alignment
-        PVector coh = cohesion(boids);   // Cohesion
+    void flock(Boid boids [], uint8_t boidCount) {
+        PVector sep = separate(boids, boidCount);   // Separation
+        PVector ali = align(boids, boidCount);      // Alignment
+        PVector coh = cohesion(boids, boidCount);   // Cohesion
         // Arbitrarily weight these forces
         sep *= 1.5;
         ali *= 1.0;
@@ -127,7 +125,7 @@ public:
 
     // Separation
     // Method checks for nearby boids and steers away
-    PVector separate(Boid boids []) {
+    PVector separate(Boid boids [], uint8_t boidCount) {
         PVector steer = PVector(0, 0);
         int count = 0;
         // For every boid in the system, check if it's too close
@@ -162,7 +160,7 @@ public:
 
     // Alignment
     // For every nearby boid in the system, calculate the average velocity
-    PVector align(Boid boids []) {
+    PVector align(Boid boids [], uint8_t boidCount) {
         PVector sum = PVector(0, 0);
         int count = 0;
         for (int i = 0; i < boidCount; i++) {
@@ -188,7 +186,7 @@ public:
 
     // Cohesion
     // For the average location (i.e. center) of all nearby boids, calculate steering vector towards that location
-    PVector cohesion(Boid boids []) {
+    PVector cohesion(Boid boids [], uint8_t boidCount) {
         PVector sum = PVector(0, 0);   // Start with empty vector to accumulate all locations
         int count = 0;
         for (int i = 0; i < boidCount; i++) {
@@ -251,28 +249,28 @@ public:
         if (location.y >= MATRIX_HEIGHT) location.y = 0;
     }
 
-    bool bounceOffBorders() {
+    bool bounceOffBorders(float bounce) {
         bool bounced = false;
 
         if (location.x >= MATRIX_WIDTH) {
             location.x = MATRIX_WIDTH - 1;
-            velocity.x *= -1;
+            velocity.x *= -bounce;
             bounced = true;
         }
         else if (location.x < 0) {
             location.x = 0;
-            velocity.x *= -1;
+            velocity.x *= -bounce;
             bounced = true;
         }
 
         if (location.y >= MATRIX_HEIGHT) {
             location.y = MATRIX_HEIGHT - 1;
-            velocity.y *= -1;
+            velocity.y *= -bounce;
             bounced = true;
         }
         else if (location.y < 0) {
             location.y = 0;
-            velocity.y *= -1;
+            velocity.y *= -bounce;
             bounced = true;
         }
 
@@ -296,3 +294,6 @@ public:
         //matrix.drawPixel(location.x, location.y, CRGB::Blue);
     }
 };
+
+static const uint8_t AVAILABLE_BOID_COUNT = 40;
+Boid boids[AVAILABLE_BOID_COUNT];

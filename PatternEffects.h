@@ -62,11 +62,13 @@ public:
     unsigned int drawFrame() {
         effects.StreamRight(125);
         effects.MoveOscillators();
-        //2 lissajous dots red
-        effects.leds[XY(effects.p[0], effects.p[1])] = color1;
-        effects.leds[XY(effects.p[2], effects.p[3])] = color2;
-        //average of the coordinates in yellow
-        effects.Pixel((effects.p[2] + effects.p[0]) / 2, (effects.p[1] + effects.p[3]) / 2, 50);
+        
+        //2 lissajous dots
+        effects.Pixel(effects.p[0], effects.p[1], beatsin8(3, 0, 255));
+        effects.Pixel(effects.p[2], effects.p[3], beatsin8(3, 0, 255));
+        
+        //average of the coordinates
+        effects.Pixel((effects.p[2] + effects.p[0]) / 2, (effects.p[1] + effects.p[3]) / 2, beatsin8(6, 0, 255));
 
         return 20;
     }

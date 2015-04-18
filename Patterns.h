@@ -106,7 +106,7 @@ private:
         &paletteSmear,
         &multipleStream8,
         &multipleStream5,
-        &multipleStream3,
+        &multipleStream3,        
         &multipleStream4,
         &multipleStream2,
 //        &multipleStream,

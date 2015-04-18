@@ -25,24 +25,9 @@
 #define PatternIncrementalDrift_H
 
 class PatternIncrementalDrift : public Drawable {
-  private:
-
   public:
     PatternIncrementalDrift() {
       name = (char *)"Incremental Drift";
-    }
-
-    void start() {
-    }
-
-    uint8_t beatcos8( accum88 beats_per_minute, uint8_t lowest = 0, uint8_t highest = 255)
-    {
-      uint8_t beat = beat8( beats_per_minute);
-      uint8_t beatsin = cos8( beat);
-      uint8_t rangewidth = highest - lowest;
-      uint8_t scaledbeat = scale8( beatsin, rangewidth);
-      uint8_t result = lowest + scaledbeat;
-      return result;
     }
 
     unsigned int drawFrame() {

@@ -54,27 +54,6 @@ public:
         byte x2 = 8 + sin8(counter * 2) / 16;
         byte y2 = 8 + cos8((counter * 2) / 3) / 16;
 
-#ifdef CONNECT_THE_DOTS
-        byte y1 = 4 + cos8(counter * 2) / 10;
-        
-        point1_x = x1;
-        point1_y = y1;
-
-        // draw line from previous position of point to current posistion
-        // TODO: draw line that wraps around edges
-        pSmartMatrix->drawLine(point1_x, point1_y, point1_x + delta1_x, point1_y + delta1_y, { (0xff * 230) / 256, 0xff * 230 / 256, 0x00 });
-
-        point2_x = x2;
-        point2_y = y2;
-
-        pSmartMatrix->drawLine(point2_x, point2_y, point2_x + delta2_x, point2_y + delta2_y, { (0xff * 230) / 256, 0x00, 0x00 });
-
-        // dim the image more as lines add more light than just pixels
-        effects.DimAll(230);
-#else
-        effects.DimAll(249);
-#endif
-
         effects.leds[XY(x1, x2)] = effects.ColorFromCurrentPalette(patternNoiseSmearingHue);
         effects.leds[XY(x2, y2)] = effects.ColorFromCurrentPalette(patternNoiseSmearingHue + 128);
 
@@ -84,10 +63,13 @@ public:
         effects.noise_scale_x[0] = 4000;
         effects.noise_scale_y[0] = 4000;
         effects.FillNoise(0);
-
-        // this pattern smears with an offset added so the pixels usually have a trail going to the upper left
-        effects.NoiseSmearWithRadius(8, 1);
-
+        
+        effects.MoveX(8);
+        effects.MoveFractionalNoiseX();
+      
+        effects.MoveY(8);
+        effects.MoveFractionalNoiseY();
+        
         patternNoiseSmearingHue++;
         
         return 0;
@@ -119,9 +101,13 @@ public:
         effects.noise_scale_x[0] = 4000;
         effects.noise_scale_y[0] = 4000;
         effects.FillNoise(0);
-
-        effects.NoiseSmearWithRadius(2);
-
+              
+        effects.MoveX(3);
+        effects.MoveFractionalNoiseY(4);
+      
+        effects.MoveY(3);
+        effects.MoveFractionalNoiseX(4);
+        
         patternNoiseSmearingHue++;
 
         return 0;
@@ -149,9 +135,13 @@ public:
         effects.noise_scale_x[0] = 4000;
         effects.noise_scale_y[0] = 4000;
         effects.FillNoise(0);
-
-        effects.NoiseSmearWithRadius(2);
-
+        
+        effects.MoveX(3);
+        effects.MoveFractionalNoiseY(4);
+      
+        effects.MoveY(3);
+        effects.MoveFractionalNoiseX(4);
+  
         return 1;
     }
 };
@@ -177,8 +167,12 @@ public:
         effects.noise_scale_y[0] = 4000;
         effects.FillNoise(0);
 
-        effects.NoiseSmearWithRadius(2);
-
+        effects.MoveX(8);
+        effects.MoveFractionalNoiseX();
+      
+        effects.MoveY(8);
+        effects.MoveFractionalNoiseY();
+  
         patternNoiseSmearingHue++;
 
         return 0;
@@ -208,11 +202,13 @@ public:
         effects.noise_scale_x[0] = 4000;
         effects.noise_scale_y[0] = 4000;
         effects.FillNoise(0);
-
-        // apply an offset to 1 to keep streams moving toward the top of the scren
-        effects.MoveFractionalNoiseX(2);
-        effects.MoveFractionalNoiseY(2, 1);
-
+        
+        effects.MoveX(3);
+        effects.MoveFractionalNoiseY(4);
+      
+        effects.MoveY(4);
+        effects.MoveFractionalNoiseX(4);
+  
         return 0;
     }
 };
@@ -241,9 +237,12 @@ public:
         effects.noise_scale_x[0] = 4000;
         effects.noise_scale_y[0] = 4000;
         effects.FillNoise(0);
-
-        // move image (including newly drawn dot) within +/-2 pixels of original position
-        effects.NoiseSmearWithRadius(2);
+      
+        effects.MoveX(3);
+        effects.MoveFractionalNoiseX(4);
+      
+        effects.MoveY(3);
+        effects.MoveFractionalNoiseY(4);
 
         return 0;
     }
@@ -268,9 +267,12 @@ public:
         effects.noise_scale_y[0] = 4000;
         effects.FillNoise(0);
 
-        // this pattern smears with an offset added so the pixels usually have a trail going to the upper left
-        effects.NoiseSmearWithRadius(8, 1);
-
+        effects.MoveX(3);
+        effects.MoveFractionalNoiseY(4);
+      
+        effects.MoveY(3);
+        effects.MoveFractionalNoiseX(4);
+        
         return 0;
     }
 };

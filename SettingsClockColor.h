@@ -121,7 +121,7 @@ public:
 
             matrix.displayForegroundDrawing(false);
             matrix.swapBuffers();
-
+            
             InputCommand command = readCommand(defaultHoldDelay);
 
             switch (command) {

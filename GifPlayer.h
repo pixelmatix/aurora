@@ -36,7 +36,7 @@ class GifPlayer{
 public:
 
     // Error codes
-#define ERROR_NONE		            0
+#define ERROR_NONE		0
 #define ERROR_FILEOPEN		1
 #define ERROR_FILENOTGIF	2
 #define ERROR_BADGIFFORMAT      3

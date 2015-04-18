@@ -1,7 +1,7 @@
 /*
  * Aurora: https://github.com/pixelmatix/aurora
  * Copyright (c) 2014 Jason Coon
- * 
+ *
  * Portions of this code are adapted from "Rainbow Smoke" by Jozsef Fejes: http://codegolf.stackexchange.com/a/22326
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
