@@ -24,49 +24,52 @@
 #define SettingsMoveClock_H
 
 class SettingsMoveClock : public Runnable {
-private:
+  private:
     boolean hasChanges = false;
 
-public:
+  public:
     void run() {
-        while (true) {
-            drawFrame();
-            clockDigitalShort.drawFrame();
-            clockDigitalShort.drawMoveClockIndicator();
+      while (true) {
+        matrix.fillScreen(CRGB(CRGB::Black));
 
-            matrix.swapBuffers();
-            matrix.displayForegroundDrawing(false);
+        clockDigitalShort.drawFrame();
+        clockDigitalShort.drawMoveClockIndicator();
 
-            InputCommand command = readCommand(defaultHoldDelay);
+        matrix.swapBuffers();
+        matrix.displayForegroundDrawing(false);
 
-            switch (command) {
-                case InputCommand::Up:
-                    clockDisplay.adjustY(-1);
-                    hasChanges = true;
-                    break;
+        InputCommand command = readCommand(defaultHoldDelay);
 
-                case InputCommand::Down:
-                    clockDisplay.adjustY(1);
-                    hasChanges = true;
-                    break;
+        switch (command) {
+          case InputCommand::Up:
+            clockDisplay.adjustY(-1);
+            hasChanges = true;
+            break;
 
-                case InputCommand::Select:
-                case InputCommand::Back:
-                    if (hasChanges) {
-                        clockDisplay.saveClockYSetting();
-                        hasChanges = false;
-                    }
-                    return;
+          case InputCommand::Down:
+            clockDisplay.adjustY(1);
+            hasChanges = true;
+            break;
 
-                default:
-                    break;
+          case InputCommand::Select:
+          case InputCommand::Back:
+            if (hasChanges) {
+              clockDisplay.saveClockYSetting();
+              hasChanges = false;
             }
+            return;
+
+          default:
+            break;
         }
+      }
     }
 
     unsigned int drawFrame() {
-        matrix.fillScreen(CRGB(CRGB::Black));
-        return 0;
+      matrix.fillScreen(CRGB(CRGB::Black));
+      matrix.setFont(font3x5);
+      matrix.drawString(0, 27, { 255, 255, 255 }, versionText);
+      return 0;
     }
 };
 

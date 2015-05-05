@@ -24,159 +24,161 @@
 #define SettingsClockColor_H
 
 class SettingsClockColor : public Runnable {
-private:
+  private:
     int cursorX = 0;
     int cursorY = 0;
     boolean hasChanges = false;
 
-public:
+  public:
 
     void start() {
-        CHSV chsv;
-        CRGB crgb;
-        for (int x = 0; x < MATRIX_WIDTH - 1; x += 1) {
-            uint8_t hue = x * 8;
+      CHSV chsv;
+      CRGB crgb;
+      for (int x = 0; x < MATRIX_WIDTH - 1; x += 1) {
+        uint8_t hue = x * 8;
 
-            for (int y = 0; y < MATRIX_HEIGHT; y += 1) {
-                if (y <= 16) {
-                    chsv = CHSV(hue, y * 15 + 15, 255);
-                }
-                else {
-                    chsv = CHSV(hue, 255, 255 - (y - 17) * 15);
-                }
+        for (int y = 0; y < MATRIX_HEIGHT; y += 1) {
+          if (y <= 16) {
+            chsv = CHSV(hue, y * 15 + 15, 255);
+          }
+          else {
+            chsv = CHSV(hue, 255, 255 - (y - 17) * 15);
+          }
 
-                hsv2rgb_rainbow(chsv, crgb);
-                if (crgb.r == clockDisplay.color.red &&
-                    crgb.g == clockDisplay.color.green &&
-                    crgb.b == clockDisplay.color.blue) {
-                    cursorX = x;
-                    cursorY = y;
-                    return;
-                }
-            }
+          hsv2rgb_rainbow(chsv, crgb);
+          if (crgb.r == clockDisplay.color.red &&
+              crgb.g == clockDisplay.color.green &&
+              crgb.b == clockDisplay.color.blue) {
+            cursorX = x;
+            cursorY = y;
+            return;
+          }
         }
+      }
     }
 
     void run() {
-        while (true) {
-            drawFrame();
+      while (true) {
+        drawFrame();
 
-            // draw an RGB grid, Hue from 0 to 248 left to right (256 is the same as 0)
-            // Saturation from 15 (mostly white) to 255 (fully-saturated color) top to middle (0 to 16), skipping 0 which is white and will be handled in the right-most column)
-            // then Value from 255 (fully-saturated color) to 45 (mostly black) middle to bottom, skipping anything lower than 45 which is indistinguishable from black.
-            CHSV chsv;
-            CRGB crgb;
-            CRGB selectedColor = CRGB::White;
-            for (int x = 0; x < MATRIX_WIDTH - 1; x += 1) {
-                uint8_t hue = x * 8;
+        // draw an RGB grid, Hue from 0 to 248 left to right (256 is the same as 0)
+        // Saturation from 15 (mostly white) to 255 (fully-saturated color) top to middle (0 to 16), skipping 0 which is white and will be handled in the right-most column)
+        // then Value from 255 (fully-saturated color) to 45 (mostly black) middle to bottom, skipping anything lower than 45 which is indistinguishable from black.
+        CHSV chsv;
+        CRGB crgb;
+        CRGB selectedColor = CRGB::White;
+        for (int x = 0; x < MATRIX_WIDTH - 1; x += 1) {
+          uint8_t hue = x * 8;
 
-                for (int y = 0; y < MATRIX_HEIGHT; y += 1) {
-                    if (y <= 16) {
-                        chsv = CHSV(hue, y * 15 + 15, 255);
-                    }
-                    else {
-                        chsv = CHSV(hue, 255, 255 - (y - 17) * 15);
-                    }
-
-                    hsv2rgb_rainbow(chsv, crgb);
-                    matrix.drawPixel(x, y, crgb);
-
-                    if (x == cursorX && y == cursorY)
-                        selectedColor = crgb;
-                }
-            }
-
-            // draw a grayscale strip down the right edge
-            // from 0 (white) to 69 (mostly black), skipping anything lower than 69 which is almost indistinguishable from black.
-            int x = MATRIX_WIDTH - 1;
-            for (int y = 0; y < MATRIX_HEIGHT; y += 1) {
-                chsv = CHSV(0, 0, 255 - y * 6);
-                hsv2rgb_rainbow(chsv, crgb);
-                matrix.drawPixel(x, y, crgb);
-
-                if (x == cursorX && y == cursorY)
-                    selectedColor = crgb;
-            }
-
-            // draw the cursor crosshairs
-            uint8_t v = cursorY * 8;
-            crgb = CRGB(v, v, v);
-            // horizontal cursor lines
-            matrix.drawLine(cursorX - 4, cursorY, cursorX - 2, cursorY, crgb);
-            matrix.drawLine(cursorX + 4, cursorY, cursorX + 2, cursorY, crgb);
-            // vertical cursor lines
-            matrix.drawLine(cursorX, cursorY - 4, cursorX, cursorY - 2, crgb);
-            matrix.drawLine(cursorX, cursorY + 4, cursorX, cursorY + 2, crgb);
-
-            // draw the clock numbers at the bottom, so we can see the selected color better, without leaving the settings item
-            clockDisplay.setColor(selectedColor);
-            clockDisplay.readTime();
-
-            if (cursorY >= 18) {
-                clockDigitalShort.drawFrame(0);
+          for (int y = 0; y < MATRIX_HEIGHT; y += 1) {
+            if (y <= 16) {
+              chsv = CHSV(hue, y * 15 + 15, 255);
             }
             else {
-                clockDigitalShort.drawFrame(23);
+              chsv = CHSV(hue, 255, 255 - (y - 17) * 15);
             }
 
-            matrix.displayForegroundDrawing(false);
-            matrix.swapBuffers();
-            
-            InputCommand command = readCommand(defaultHoldDelay);
+            hsv2rgb_rainbow(chsv, crgb);
+            matrix.drawPixel(x, y, crgb);
 
-            switch (command) {
-                case InputCommand::Left:
-                    cursorX -= 1;
-                    hasChanges = true;
-                    break;
-
-                case InputCommand::Right:
-                    cursorX += 1;
-                    hasChanges = true;
-                    break;
-
-                case InputCommand::Up:
-                    cursorY -= 1;
-                    hasChanges = true;
-                    break;
-
-                case InputCommand::Down:
-                    cursorY += 1;
-                    hasChanges = true;
-                    break;
-
-                case InputCommand::Select:
-                case InputCommand::Back:
-                    if (hasChanges) {
-                        save(selectedColor);
-                        hasChanges = false;
-                    }
-                    return;
-
-                default:
-                    break;
-            }
-
-            if (cursorX < 0)
-                cursorX = MATRIX_WIDTH - 1;
-            else if (cursorX >= MATRIX_WIDTH)
-                cursorX = 0;
-
-            if (cursorY < 0)
-                cursorY = MATRIX_HEIGHT - 1;
-            else if (cursorY >= MATRIX_HEIGHT)
-                cursorY = 0;
+            if (x == cursorX && y == cursorY)
+              selectedColor = crgb;
+          }
         }
+
+        // draw a grayscale strip down the right edge
+        // from 0 (white) to 69 (mostly black), skipping anything lower than 69 which is almost indistinguishable from black.
+        int x = MATRIX_WIDTH - 1;
+        for (int y = 0; y < MATRIX_HEIGHT; y += 1) {
+          chsv = CHSV(0, 0, 255 - y * 6);
+          hsv2rgb_rainbow(chsv, crgb);
+          matrix.drawPixel(x, y, crgb);
+
+          if (x == cursorX && y == cursorY)
+            selectedColor = crgb;
+        }
+
+        // draw the cursor crosshairs
+        uint8_t v = cursorY * 8;
+        crgb = CRGB(v, v, v);
+        // horizontal cursor lines
+        matrix.drawLine(cursorX - 4, cursorY, cursorX - 2, cursorY, crgb);
+        matrix.drawLine(cursorX + 4, cursorY, cursorX + 2, cursorY, crgb);
+        // vertical cursor lines
+        matrix.drawLine(cursorX, cursorY - 4, cursorX, cursorY - 2, crgb);
+        matrix.drawLine(cursorX, cursorY + 4, cursorX, cursorY + 2, crgb);
+
+        // draw the clock numbers at the bottom, so we can see the selected color better, without leaving the settings item
+        clockDisplay.setColor(selectedColor);
+        clockDisplay.readTime();
+
+        if (cursorY >= 18) {
+          clockDigitalShort.drawFrame(0);
+        }
+        else {
+          clockDigitalShort.drawFrame(23);
+        }
+
+        matrix.displayForegroundDrawing(false);
+        matrix.swapBuffers();
+
+        InputCommand command = readCommand(defaultHoldDelay);
+
+        switch (command) {
+          case InputCommand::Left:
+            cursorX -= 1;
+            hasChanges = true;
+            break;
+
+          case InputCommand::Right:
+            cursorX += 1;
+            hasChanges = true;
+            break;
+
+          case InputCommand::Up:
+            cursorY -= 1;
+            hasChanges = true;
+            break;
+
+          case InputCommand::Down:
+            cursorY += 1;
+            hasChanges = true;
+            break;
+
+          case InputCommand::Select:
+          case InputCommand::Back:
+            if (hasChanges) {
+              save(selectedColor);
+              hasChanges = false;
+            }
+            return;
+
+          default:
+            break;
+        }
+
+        if (cursorX < 0)
+          cursorX = MATRIX_WIDTH - 1;
+        else if (cursorX >= MATRIX_WIDTH)
+          cursorX = 0;
+
+        if (cursorY < 0)
+          cursorY = MATRIX_HEIGHT - 1;
+        else if (cursorY >= MATRIX_HEIGHT)
+          cursorY = 0;
+      }
     }
 
     unsigned int drawFrame() {
-        matrix.fillScreen(CRGB(CRGB::Black));
-        return 0;
+      matrix.fillScreen(CRGB(CRGB::Black));
+      matrix.setFont(font3x5);
+      matrix.drawString(0, 27, { 255, 255, 255 }, versionText);
+      return 0;
     }
 
     void save(CRGB crgb) {
-        clockDisplay.setColor(crgb);
-        clockDisplay.saveColor();
+      clockDisplay.setColor(crgb);
+      clockDisplay.saveColor();
     }
 };
 

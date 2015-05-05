@@ -24,21 +24,16 @@
 #define SettingsUpdateFiles_H
 
 class SettingsUpdateFiles : public Runnable {
-
-public:
-
-    void start() {
-    }
-
+  public:
     void run() {
-        restartAndJumpToApp();
+      restartAndJumpToApp();
     }
 
     unsigned int drawFrame() {
-        return 0;
-    }
-
-    void save(CRGB crgb) {
+      matrix.fillScreen(CRGB(CRGB::Black));
+      matrix.setFont(font3x5);
+      matrix.drawString(0, 27, { 255, 255, 255 }, versionText);
+      return 0;
     }
 };
 

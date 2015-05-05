@@ -42,38 +42,94 @@ uint8_t beatcos8( accum88 beats_per_minute, uint8_t lowest = 0, uint8_t highest 
   return result;
 }
 
+uint8_t beattriwave8( accum88 beats_per_minute, uint8_t lowest = 0, uint8_t highest = 255, uint32_t timebase = 0, uint8_t phase_offset = 0)
+{
+  uint8_t beat = beat8( beats_per_minute, timebase);
+  uint8_t beatcos = triwave8( beat + phase_offset);
+  uint8_t rangewidth = highest - lowest;
+  uint8_t scaledbeat = scale8( beatcos, rangewidth);
+  uint8_t result = lowest + scaledbeat;
+  return result;
+}
+
+uint8_t mapsin8(uint8_t theta, uint8_t lowest = 0, uint8_t highest = 255) {
+  uint8_t beatsin = sin8( theta );
+  uint8_t rangewidth = highest - lowest;
+  uint8_t scaledbeat = scale8( beatsin, rangewidth);
+  uint8_t result = lowest + scaledbeat;
+  return result;
+}
+
+uint8_t mapcos8(uint8_t theta, uint8_t lowest = 0, uint8_t highest = 255) {
+  uint8_t beatcos = cos8( theta );
+  uint8_t rangewidth = highest - lowest;
+  uint8_t scaledbeat = scale8( beatcos, rangewidth);
+  uint8_t result = lowest + scaledbeat;
+  return result;
+}
+
 // Array of temperature readings at each simulation cell
-byte heat[MATRIX_WIDTH * MATRIX_HEIGHT];
-    
+byte heat[NUM_LEDS];
+
+// The coordinates for 3 16-bit noise spaces.
+#define NOISE_NUM_LAYERS 1
+
+uint32_t noise_x[NOISE_NUM_LAYERS];
+uint32_t noise_y[NOISE_NUM_LAYERS];
+uint32_t noise_z[NOISE_NUM_LAYERS];
+uint32_t noise_scale_x[NOISE_NUM_LAYERS];
+uint32_t noise_scale_y[NOISE_NUM_LAYERS];
+
+uint8_t noise[NOISE_NUM_LAYERS][MATRIX_WIDTH][MATRIX_HEIGHT];
+
+uint8_t noisesmoothing;
+
 class Effects {
   public:
     CRGB *leds;
-    CRGB leds2[MATRIX_WIDTH * MATRIX_HEIGHT];
+    CRGB leds2[NUM_LEDS];
 
-    // The coordinates for 3 16-bit noise spaces.
-#define NOISE_NUM_LAYERS 1
+    void CircleStream(uint8_t value) {
+      DimAll(value);
 
-    uint32_t noise_x[NOISE_NUM_LAYERS];
-    uint32_t noise_y[NOISE_NUM_LAYERS];
-    uint32_t noise_z[NOISE_NUM_LAYERS];
-    uint32_t noise_scale_x[NOISE_NUM_LAYERS];
-    uint32_t noise_scale_y[NOISE_NUM_LAYERS];
+      for (uint8_t offset = 0; offset < MATRIX_CENTER_X; offset++) {
+        boolean hasprev = false;
+        uint16_t prevxy = 0;
 
-    uint8_t noise[NOISE_NUM_LAYERS][MATRIX_WIDTH][MATRIX_HEIGHT];
+        for (uint8_t theta = 0; theta < 255; theta++) {
+          uint8_t x = mapcos8(theta, offset, (MATRIX_WIDTH - 1) - offset);
+          uint8_t y = mapsin8(theta, offset, (MATRIX_HEIGHT - 1) - offset);
 
-    uint8_t noisesmoothing;
+          uint16_t xy = XY(x, y);
 
-    int ledCount = MATRIX_WIDTH * MATRIX_HEIGHT;
+          if (hasprev) {
+            leds2[prevxy] += leds[xy];
+          }
+
+          prevxy = xy;
+          hasprev = true;
+        }
+      }
+
+      for (uint8_t x = 0; x < MATRIX_WIDTH; x++) {
+        for (uint8_t y = 0; y < MATRIX_HEIGHT; y++) {
+          uint16_t xy = XY(x, y);
+          leds[xy] = leds2[xy];
+          leds[xy].nscale8(value);
+          leds2[xy].nscale8(value);
+        }
+      }
+    }
 
     // palettes
-    static const int paletteCount = 11;
+    static const int paletteCount = 9;
     int paletteIndex = -1;
     TBlendType currentBlendType = BLEND;
     CRGBPalette16 currentPalette;
     CRGBPalette16 targetPalette;
     char* currentPaletteName;
 
-    static const int HeatColorsPaletteIndex = 7;
+    static const int HeatColorsPaletteIndex = 6;
 
     void Setup() {
       currentPalette = RainbowColors_p;
@@ -102,27 +158,27 @@ class Effects {
           targetPalette = RainbowColors_p;
           currentPaletteName = (char *)"Rainbow";
           break;
+        //case 1:
+        //  targetPalette = RainbowStripeColors_p;
+        //  currentPaletteName = (char *)"RainbowStripe";
+        //  break;
         case 1:
-          targetPalette = RainbowStripeColors_p;
-          currentPaletteName = (char *)"RainbowStripe";
-          break;
-        case 2:
           targetPalette = OceanColors_p;
           currentPaletteName = (char *)"Ocean";
           break;
-        case 3:
+        case 2:
           targetPalette = CloudColors_p;
           currentPaletteName = (char *)"Cloud";
           break;
-        case 4:
+        case 3:
           targetPalette = ForestColors_p;
           currentPaletteName = (char *)"Forest";
           break;
-        case 5:
+        case 4:
           targetPalette = PartyColors_p;
           currentPaletteName = (char *)"Party";
           break;
-        case 6:
+        case 5:
           setupGrayscalePalette();
           currentPaletteName = (char *)"Grey";
           break;
@@ -130,17 +186,13 @@ class Effects {
           targetPalette = HeatColors_p;
           currentPaletteName = (char *)"Heat";
           break;
-        case 8:
+        case 7:
           targetPalette = LavaColors_p;
           currentPaletteName = (char *)"Lava";
           break;
-        case 9:
+        case 8:
           setupIcePalette();
           currentPaletteName = (char *)"Ice";
-          break;
-        case 10:
-          setupRandomPalette3();
-          currentPaletteName = (char *)"Random";
           break;
       }
     }
@@ -148,26 +200,24 @@ class Effects {
     void setPalette(String paletteName) {
       if (paletteName == "Rainbow")
         loadPalette(0);
-      else if (paletteName == "RainbowStripe")
-        loadPalette(1);
+      //else if (paletteName == "RainbowStripe")
+      //  loadPalette(1);
       else if (paletteName == "Ocean")
-        loadPalette(2);
+        loadPalette(1);
       else if (paletteName == "Cloud")
-        loadPalette(3);
+        loadPalette(2);
       else if (paletteName == "Forest")
-        loadPalette(4);
+        loadPalette(3);
       else if (paletteName == "Party")
-        loadPalette(5);
+        loadPalette(4);
       else if (paletteName == "Grayscale")
-        loadPalette(6);
+        loadPalette(5);
       else if (paletteName == "Heat")
-        loadPalette(7);
+        loadPalette(6);
       else if (paletteName == "Lava")
-        loadPalette(8);
+        loadPalette(7);
       else if (paletteName == "Ice")
-        loadPalette(9);
-      else if (paletteName == "Random")
-        loadPalette(10);
+        loadPalette(8);
     }
 
     void listPalettes() {
@@ -179,7 +229,7 @@ class Effects {
 
       String paletteNames[] = {
         "Rainbow",
-        "RainbowStripe",
+        // "RainbowStripe",
         "Ocean",
         "Cloud",
         "Forest",
@@ -187,8 +237,7 @@ class Effects {
         "Grayscale",
         "Heat",
         "Lava",
-        "Ice",
-        "Random"
+        "Ice"
       };
 
       for (int i = 0; i < paletteCount; i++) {
@@ -210,29 +259,6 @@ class Effects {
 
     void setupIcePalette() {
       targetPalette = CRGBPalette16(CRGB::Black, CRGB::Blue, CRGB::Aqua, CRGB::White);
-    }
-
-    void setupRandomPalette3() {
-      targetPalette = CRGBPalette16(
-                        CHSV(random8(), 255, 0),
-                        CHSV(random8(), 255, 0),
-                        CHSV(random8(), 255, 255),
-                        CHSV(random8(), 255, 255),
-
-                        CHSV(random8(), 255, 0),
-                        CHSV(random8(), 255, 255),
-                        CHSV(random8(), 255, 255),
-                        CHSV(random8(), 255, 0),
-
-                        CHSV(random8(), 255, 0),
-                        CHSV(random8(), 255, 255),
-                        CHSV(random8(), 255, 255),
-                        CHSV(random8(), 255, 0),
-
-                        CHSV(random8(), 255, 255),
-                        CHSV(random8(), 255, 255),
-                        CHSV(random8(), 255, 0),
-                        CHSV(random8(), 255, 0));
     }
 
     // Oscillators and Emitters
@@ -276,7 +302,7 @@ class Effects {
     // scale the brightness of the screenbuffer down
     void DimAll(byte value)
     {
-      for (int i = 0; i < ledCount; i++)
+      for (int i = 0; i < NUM_LEDS; i++)
       {
         leds[i].nscale8(value);
       }
@@ -781,6 +807,20 @@ class Effects {
 
         leds[XY(x, 0)] = PixelA + PixelB;
       }
+    }
+
+    void standardNoiseSmearing() {
+      noise_x[0] += 1000;
+      noise_y[0] += 1000;
+      noise_scale_x[0] = 4000;
+      noise_scale_y[0] = 4000;
+      FillNoise(0);
+
+      MoveX(3);
+      MoveFractionalNoiseY(4);
+
+      MoveY(3);
+      MoveFractionalNoiseX(4);
     }
 };
 

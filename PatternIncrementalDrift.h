@@ -34,12 +34,12 @@ class PatternIncrementalDrift : public Drawable {
       uint8_t dim = beatsin8(2, 230, 250);
       effects.DimAll(dim);
 
-      for (int i = 0; i < MATRIX_WIDTH / 2; i++)
+      for (int i = 2; i <= MATRIX_WIDTH / 2; i++)
       {
-        CRGB color = effects.ColorFromCurrentPalette(i * 15);
+        CRGB color = effects.ColorFromCurrentPalette((i - 2) * 14);
 
-        uint8_t x = beatcos8((16 - i) * 2, MATRIX_CENTER_X - i, MATRIX_CENTER_X + i);
-        uint8_t y = beatsin8((16 - i) * 2, MATRIX_CENTER_Y - i, MATRIX_CENTER_Y + i);
+        uint8_t x = beatcos8((17 - i) * 2, MATRIX_CENTER_X - i, MATRIX_CENTER_X + i);
+        uint8_t y = beatsin8((17 - i) * 2, MATRIX_CENTER_Y - i, MATRIX_CENTER_Y + i);
 
         matrix.drawPixel(x, y, color);
       }

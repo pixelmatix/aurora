@@ -27,7 +27,7 @@
 #define ClockDisplay_H
 
 class ClockDisplay : public Playlist {
-public:
+  public:
     unsigned int lastRead = 0;
     const unsigned int readInterval = 250; // ms
 
@@ -36,131 +36,154 @@ public:
     static const int itemCount = 2;
 
     Drawable* items[itemCount] = {
-        &clockDigitalShort,
-        &clockText,
+      &clockDigitalShort,
+      &clockText,
     };
 
     Drawable* currentItem = items[currentIndex];
 
-    rgb24 color;
+    int getCurrentIndex() {
+      return currentIndex;
+    }
+
+    rgb24 color = CRGB(CRGB::White);
 
     void setColor(rgb24 color) {
-        ClockDisplay::color = color;
-        clockDigitalShort.color = color;
-        clockText.color = color;
+      ClockDisplay::color = color;
+      clockDigitalShort.color = color;
+      clockText.color = color;
     }
 
     virtual void move(int step) {
-        moveTo(currentIndex + step);
+      moveTo(currentIndex + step);
     }
 
     virtual void moveRandom() {
-        moveTo(random(0, itemCount));
+      moveTo(random(0, itemCount));
     }
 
     void moveTo(int index) {
-        currentIndex = index;
+      currentIndex = index;
 
-        if (currentIndex >= itemCount)
-            currentIndex = 0;
-        else if (currentIndex < 0)
-            currentIndex = itemCount - 1;
+      if (currentIndex >= itemCount)
+        currentIndex = 0;
+      else if (currentIndex < 0)
+        currentIndex = itemCount - 1;
 
-        if (currentItem)
-            currentItem->stop();
+      if (currentItem)
+        currentItem->stop();
 
-        currentItem = items[currentIndex];
+      currentItem = items[currentIndex];
 
-        if (currentItem)
-            currentItem->start();
+      if (currentItem)
+        currentItem->start();
+    }
+
+    bool readTimeHardware() {
+      hasDS1307RTC = false;
+
+      // try to read the DS1307RTC
+      if (RTC.read(time)) {
+        hasDS1307RTC = true;
+        return true;
+      }
+      else if (timeStatus() != timeSet) {
+        return false;
+      }
+      else {
+        breakTime(now(), time);
+      }
+
+      return true;
     }
 
     void readTime() {
-        // reading from the RTC only takes 1-2ms, but there's no point in reading it every frame
-        // so we'll only check it every so often, and then cache the time text
-        if (millis() - lastRead > readInterval) {
-            if (RTC.read(time)) {
-                isTimeAvailable = true;
-                lastRead = millis();
-            }
-            else {
-                isTimeAvailable = false;
-            }
+      // reading from the RTC only takes 1-2ms, but there's no point in reading it every frame
+      // so we'll only check it every so often, and then cache the time text
+      if (millis() - lastRead > readInterval) {
+        if (readTimeHardware()) {
+          isTimeAvailable = true;
+          lastRead = millis();
         }
+        else {
+          isTimeAvailable = false;
+        }
+      }
     }
 
     unsigned int drawFrame() {
-        readTime();
+      readTime();
 
-        if (currentItem)
-            currentItem->drawFrame();
+      if (currentItem)
+        currentItem->drawFrame();
 
-        return 0;
+      return 0;
     }
 
     void adjustY(int d) {
-        clockDigitalShort.y += d;
-        clockDigitalShort.boundY();
+      clockDigitalShort.y += d;
+      clockDigitalShort.boundY();
     }
 
     void drawSetTimeIndicator(SetTimeState state) {
-        clockDigitalShort.drawSetTimeIndicator(state);
+      clockDigitalShort.drawSetTimeIndicator(state);
     }
 
     void drawMoveClockIndicator() {
-        clockDigitalShort.drawMoveClockIndicator();
+      clockDigitalShort.drawMoveClockIndicator();
     }
 
     void loadSettings() {
-        clockDigitalShort.loadSettings();
-        currentIndex = loadIntSetting("clckface.txt", 1, 0);
-        if (currentIndex >= itemCount)
-            currentIndex = itemCount - 1;
-        move(0);
+      clockDigitalShort.loadSettings();
+      currentIndex = loadIntSetting("clckface.txt", 1, 0);
+      if (currentIndex >= itemCount)
+        currentIndex = itemCount - 1;
+      move(0);
 
-        color.red = loadIntSetting("clockR.txt", 3, 255);
-        color.green = loadIntSetting("clockG.txt", 3, 255);
-        color.blue = loadIntSetting("clockB.txt", 3, 255);
-        setColor(color);
+      color.red = loadIntSetting("clockR.txt", 3, 255);
+      color.green = loadIntSetting("clockG.txt", 3, 255);
+      color.blue = loadIntSetting("clockB.txt", 3, 255);
+      setColor(color);
     }
 
     void saveSettings() {
-        clockDigitalShort.saveSettings();
-        saveClockFaceSetting();
+      clockDigitalShort.saveSettings();
+      saveClockFaceSetting();
 
-        saveR();
-        saveG();
-        saveB();
+      saveR();
+      saveG();
+      saveB();
+      setColor(color);
     }
 
     void saveClockYSetting() {
-        clockDigitalShort.saveClockYSetting();
+      clockDigitalShort.saveClockYSetting();
     }
 
     void saveTwentyFourHourSetting() {
-        clockDigitalShort.saveTwentyFourHourSetting();
+      clockDigitalShort.saveTwentyFourHourSetting();
     }
 
     void saveClockFaceSetting() {
-        saveIntSetting("clckface.txt", currentIndex);
+      saveIntSetting("clckface.txt", currentIndex);
     }
 
     void saveColor() {
-        saveR();
-        saveG();
-        saveB();
+      saveR();
+      saveG();
+      saveB();
     }
 
     void saveR() {
-        saveIntSetting("clockR.txt", color.red);
+      saveIntSetting("clockR.txt", color.red);
     }
 
     void saveG() {
-        saveIntSetting("clockG.txt", color.green);
+      saveIntSetting("clockG.txt", color.green);
     }
 
     void saveB() {
-        saveIntSetting("clockB.txt", color.blue);
+      saveIntSetting("clockB.txt", color.blue);
     }
 };
 

@@ -42,15 +42,15 @@ class PatternIncrementalDrift2 : public Drawable {
         uint8_t y = 0;
 
         if (i < 16) {
-          x = beatcos8((i + 1) * 2, i, (MATRIX_WIDTH - 1) - i);
-          y = beatsin8((i + 1) * 2, i, (MATRIX_HEIGHT - 1) - i);
-          color = effects.ColorFromCurrentPalette(i * 16);
+          x = beatcos8((i + 1) * 2, i, MATRIX_WIDTH - i);
+          y = beatsin8((i + 1) * 2, i, MATRIX_HEIGHT - i);
+          color = effects.ColorFromCurrentPalette(i * 14);
         }
         else
         {
-          x = beatsin8((32 - i) * 2, (MATRIX_WIDTH - 1) - i, i);
-          y = beatcos8((32 - i) * 2, (MATRIX_HEIGHT - 1) - i, i);
-          color = effects.ColorFromCurrentPalette((31 - i) * 16);
+          x = beatsin8((32 - i) * 2, MATRIX_WIDTH - i, i + 1);
+          y = beatcos8((32 - i) * 2, MATRIX_HEIGHT - i, i + 1);
+          color = effects.ColorFromCurrentPalette((31 - i) * 14);
         }
 
         matrix.drawPixel(x, y, color);

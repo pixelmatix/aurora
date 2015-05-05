@@ -20,66 +20,87 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef SettingsSetTime_H
-#define SettingsSetTime_H
+#ifndef SettingsDemoMode_H
+#define SettingsDemoMode_H
 
-class SettingsSetTime : public Runnable {
+class SettingsDemoMode : public Runnable {
   private:
-    SetTimeState state = SetHour;
-    unsigned int currentStateIndex = 0;
-
-    void setTime() {
-      if (hasDS1307RTC)
-        RTC.write(time);
-      else
-        Teensy3Clock.set(makeTime(time));
-    }
+    boolean hasChanges = false;
 
   public:
-
     void run() {
       while (true) {
         matrix.fillScreen(CRGB(CRGB::Black));
 
-        clockDigitalShort.drawFrame();
-        clockDigitalShort.drawSetTimeIndicator(state);
+        matrix.setScrollOffsetFromTop(MATRIX_HEIGHT);
+        matrix.setForegroundFont(font3x5);
+        matrix.setScrollColor({ 255, 255, 255 });
+        matrix.clearForeground();
 
-        matrix.swapBuffers();
+        switch (demoMode) {
+          case 0:
+            matrix.drawForegroundString(0, 13, "None", true);
+            break;
+
+          case 1:
+            matrix.drawForegroundString(0, 7, "Autoplay", true);
+            matrix.drawForegroundString(0, 13, "Audio", true);
+            matrix.drawForegroundString(0, 19, "Patterns", true);
+            break;
+
+          case 2:
+            matrix.drawForegroundString(0, 7, "Random", true);
+            matrix.drawForegroundString(0, 13, "Audio", true);
+            matrix.drawForegroundString(0, 19, "Patterns", true);
+            break;
+
+          case 3:
+            matrix.drawForegroundString(0, 10, "Autoplay", true);
+            matrix.drawForegroundString(0, 16, "Patterns", true);
+            break;
+
+          case 4:
+            matrix.drawForegroundString(0, 10, "Random", true);
+            matrix.drawForegroundString(0, 16, "Patterns", true);
+            break;
+
+          case 5:
+            matrix.drawForegroundString(0, 10, "Autoplay", true);
+            matrix.drawForegroundString(0, 16, "Animations", true);
+            break;
+
+          case 6:
+            matrix.drawForegroundString(0, 10, "Random", true);
+            matrix.drawForegroundString(0, 16, "Animations", true);
+            break;
+        }
+
         matrix.displayForegroundDrawing(false);
 
         InputCommand command = readCommand(defaultHoldDelay);
 
         switch (command) {
           case InputCommand::Up:
-            adjust(1);
+            adjustDemoMode(-1);
+            hasChanges = true;
             break;
 
           case InputCommand::Down:
-            adjust(-1);
-            break;
-
-          case InputCommand::Left:
-            currentStateIndex--;
-            break;
-
-          case InputCommand::Right:
-            currentStateIndex++;
+            adjustDemoMode(1);
+            hasChanges = true;
             break;
 
           case InputCommand::Select:
           case InputCommand::Back:
+            if (hasChanges) {
+              saveDemoMode();
+              hasChanges = false;
+            }
             return;
 
           default:
             break;
         }
-
-        if (currentStateIndex > SetTimeStatesCount)
-          currentStateIndex = 0;
-        else if (currentStateIndex < 0)
-          currentStateIndex = SetTimeStatesCount - 1;
-
-        state = SetTimeStates[currentStateIndex];
       }
     }
 
@@ -88,28 +109,6 @@ class SettingsSetTime : public Runnable {
       matrix.setFont(font3x5);
       matrix.drawString(0, 27, { 255, 255, 255 }, versionText);
       return 0;
-    }
-
-    void adjust(int d) {
-      switch (state) {
-        case SetHour:
-          time.Hour += d;
-          if (time.Hour > 24)
-            time.Hour = 0;
-          else if (time.Hour < 0)
-            time.Hour = 23;
-          setTime();
-          break;
-
-        case SetMinute:
-          time.Minute += d;
-          if (time.Minute > 59)
-            time.Minute = 1;
-          else if (time.Minute < 1)
-            time.Minute = 59;
-          setTime();
-          break;
-      }
     }
 };
 

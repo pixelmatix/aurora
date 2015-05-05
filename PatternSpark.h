@@ -94,11 +94,11 @@ class PatternSpark : public Drawable {
       }
 
       // Noise
-      effects.noise_x[0] += 1000;
-      effects.noise_y[0] += 1000;
-      effects.noise_z[0] += 1000;
-      effects.noise_scale_x[0] = 4000;
-      effects.noise_scale_y[0] = 4000;
+      noise_x[0] += 1000;
+      noise_y[0] += 1000;
+      noise_z[0] += 1000;
+      noise_scale_x[0] = 4000;
+      noise_scale_y[0] = 4000;
       effects.FillNoise(0);
 
       effects.MoveX(3);

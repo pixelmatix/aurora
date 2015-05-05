@@ -27,20 +27,10 @@
 #ifndef PatternElectricMandala_H
 
 class PatternElectricMandala : public Drawable {
-private:
-
-    // can be used for palette rotation
-    // "colorshift"
-    byte colorshift;
+  private:
 
     // The coordinates for 16-bit noise spaces.
 #define NUM_LAYERS 1
-
-    uint32_t x[NUM_LAYERS];
-    uint32_t y[NUM_LAYERS];
-    uint32_t z[NUM_LAYERS];
-    uint32_t scale_x[NUM_LAYERS];
-    uint32_t scale_y[NUM_LAYERS];
 
     // used for the random based animations
     int16_t dx;
@@ -49,106 +39,76 @@ private:
     int16_t dsx;
     int16_t dsy;
 
-    // a 3dimensional array used to store the calculated 
-    // values of the different noise planes
-    uint8_t noise[NUM_LAYERS][MATRIX_WIDTH][MATRIX_HEIGHT];
-
-    uint8_t noisesmoothing;
-
-    // Fill the x/y array with 16-bit noise values 
-    void FillNoise(byte layer) {
-
-        for (uint8_t i = 0; i < MATRIX_WIDTH; i++) {
-
-            uint32_t ioffset = scale_x[layer] * (i - MATRIX_CENTRE_X);
-
-            for (uint8_t j = 0; j < MATRIX_HEIGHT; j++) {
-
-                uint32_t joffset = scale_y[layer] * (j - MATRIX_CENTRE_Y);
-
-                byte data = inoise16(x[layer] + ioffset, y[layer] + joffset, z[layer]) >> 8;
-
-                uint8_t olddata = noise[layer][i][j];
-                uint8_t newdata = scale8(olddata, noisesmoothing) + scale8(data, 256 - noisesmoothing);
-                data = newdata;
-
-
-                noise[layer][i][j] = data;
-            }
-        }
-    }
-
-    // show just one layer
-    void ShowLayer(byte layer, byte colorrepeat) {
-        for (uint8_t i = 0; i < MATRIX_WIDTH; i++) {
-            for (uint8_t j = 0; j < MATRIX_HEIGHT; j++) {
-
-                uint8_t color = noise[layer][i][j];
-
-                uint8_t   bri = color;
-
-                // assign a color depending on the actual palette
-                CRGB pixel = ColorFromPalette(effects.currentPalette, colorrepeat * (color + colorshift), bri);
-
-                effects.leds[XY(i, j)] = pixel;
-            }
-        }
-    }
-
-public:
+  public:
     PatternElectricMandala() {
-        name = (char *)"ElectricMandala";
+      name = (char *)"ElectricMandala";
     }
 
     void start() {
-        // set to reasonable values to avoid a black out
-        colorshift = 0;
-        noisesmoothing = 200;
+      // set to reasonable values to avoid a black out
+      noisesmoothing = 200;
 
-        // just any free input pin
-        //random16_add_entropy(analogRead(18));
+      // just any free input pin
+      //random16_add_entropy(analogRead(18));
 
-        // fill coordinates with random values
-        // set zoom levels
-        for (int i = 0; i < NUM_LAYERS; i++) {
-            x[i] = random16();
-            y[i] = random16();
-            z[i] = random16();
-            scale_x[i] = 6000;
-            scale_y[i] = 6000;
-        }
-        // for the random movement
-        dx = random8();
-        dy = random8();
-        dz = random8();
-        dsx = random8();
-        dsy = random8();
+      // fill coordinates with random values
+      // set zoom levels
+      for (int i = 0; i < NUM_LAYERS; i++) {
+        noise_x[i] = random16();
+        noise_y[i] = random16();
+        noise_z[i] = random16();
+        noise_scale_x[i] = 6000;
+        noise_scale_y[i] = 6000;
+      }
+      // for the random movement
+      dx = random8();
+      dy = random8();
+      dz = random8();
+      dsx = random8();
+      dsy = random8();
     }
 
     unsigned int drawFrame() {
 #if FASTLED_VERSION >= 3001000
-        // a new parameter set every 15 seconds
-        EVERY_N_SECONDS(15) {
-            //SetupRandomPalette3();
-            dy = random16(500) - 250; // random16(2000) - 1000 is pretty fast but works fine, too
-            dx = random16(500) - 250;
-            dz = random16(500) - 250;
-            scale_x[0] = random16(10000) + 2000;
-            scale_y[0] = random16(10000) + 2000;
-        }
+      // a new parameter set every 15 seconds
+      EVERY_N_SECONDS(15) {
+        //SetupRandomPalette3();
+        dy = random16(500) - 250; // random16(2000) - 1000 is pretty fast but works fine, too
+        dx = random16(500) - 250;
+        dz = random16(500) - 250;
+        noise_scale_x[0] = random16(10000) + 2000;
+        noise_scale_y[0] = random16(10000) + 2000;
+      }
 #endif
 
-        y[0] += dy;
-        x[0] += dx;
-        z[0] += dz;
+      noise_y[0] += dy;
+      noise_x[0] += dx;
+      noise_z[0] += dz;
 
-        FillNoise(0);
-        ShowLayer(0, 1);
+      effects.FillNoise(0);
+      ShowNoiseLayer(0, 1, 0);
 
-        effects.Caleidoscope3();
-        effects.Caleidoscope1();
+      effects.Caleidoscope3();
+      effects.Caleidoscope1();
 
-        return 0;
+      return 0;
+    }
+
+    // show just one layer
+    void ShowNoiseLayer(byte layer, byte colorrepeat, byte colorshift) {
+      for (uint8_t i = 0; i < MATRIX_WIDTH; i++) {
+        for (uint8_t j = 0; j < MATRIX_HEIGHT; j++) {
+
+          uint8_t color = noise[layer][i][j];
+
+          uint8_t bri = color;
+
+          // assign a color depending on the actual palette
+          CRGB pixel = ColorFromPalette(effects.currentPalette, colorrepeat * (color + colorshift), bri);
+
+          effects.leds[XY(i, j)] = pixel;
+        }
+      }
     }
 };
 

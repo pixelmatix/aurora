@@ -20,48 +20,36 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef PatternBitmap_H
-#define PatternBitmap_H
+#ifndef PatternRadar_H
 
-class PatternBitmap : public Drawable {
-private:
+class PatternRadar : public Drawable {
+  private:
+    byte theta = 0;
+    byte hueoffset = 0;
 
-public:
-    PatternBitmap() {
-        name = (char *)"Bitmap";
+  public:
+    PatternRadar() {
+      name = (char *)"Radar";
     }
 
     unsigned int drawFrame() {
-        char* filename = (char *) "/aurora/pmlogo32.bmp";
+      effects.DimAll(254);
 
-        if (sdAvailable) {
-            if (SD.exists(filename)) {
-                effects.DimAll(230);
+      for (int offset = 0; offset < MATRIX_CENTER_X; offset++) {
+        byte hue = 255 - (offset * 16 + hueoffset);
+        CRGB color = effects.ColorFromCurrentPalette(hue);
+        uint8_t x = mapcos8(theta, offset, (MATRIX_WIDTH - 1) - offset);
+        uint8_t y = mapsin8(theta, offset, (MATRIX_HEIGHT - 1) - offset);
+        uint16_t xy = XY(x, y);
+        effects.leds[xy] = color;
 
-                bitmapPlayer.drawBitmap(filename, 0, 0, true);
-
-                // Noise
-                noise_x[0] += 1000;
-                noise_y[0] += 1000;
-                noise_z[0] += 1000;
-                noise_scale_x[0] = 4000;
-                noise_scale_y[0] = 4000;
-                effects.FillNoise(0);
-
-                // move image (including newly drawn dot) within +/-2 pixels of original position
-                effects.NoiseSmearWithRadius(2);
-
-                return 0;
-            }
-            else {
-                matrix.drawString(0, 0, { 255, 255, 255 }, (char *)"No file");
-            }
+        EVERY_N_MILLIS(25) {
+          theta += 2;
+          hueoffset += 1;
         }
-        else {
-            matrix.drawString(0, 0, { 255, 255, 255 }, (char *)"No SD");
-        }
+      }
 
-        return 30;
+      return 0;
     }
 };
 

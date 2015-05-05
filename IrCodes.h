@@ -31,174 +31,122 @@
 extern IRrecv irReceiver;
 
 enum class InputCommand {
-    None,
-    Update,
-    Up,
-    Down,
-    Left,
-    Right,
-    Select,
-    CycleBrightness,
-    PlayMode,
-    Palette,
-    CycleClockAndMessageFiles,
-    ShowClock,
-    HideClockOrMessage,
-    Power,
-    Back,
-    BrightnessUp,
-    BrightnessDown,
-    Menu,
-    ShowCurrentMessage,
+  None,
+  Update,
+  Up,
+  Down,
+  Left,
+  Right,
+  Select,
+  CycleBrightness,
+  PlayMode,
+  Palette,
+  CycleClockAndMessageFiles,
+  ShowClock,
+  HideClockOrMessage,
+  Power,
+  Back,
+  BrightnessUp,
+  BrightnessDown,
+  Menu,
+  ShowCurrentMessage,
+  AudioScaleUp,
+  AudioScaleDown,
+  ToggleSettingsMenuVisibility,
+  ShowPatternName,
+  FreezeDisplay,
 };
 
+bool sparkfunRemoteEnabled = true;
+bool adafruitRemoteEnabled = true;
+bool smartMatrixRemoteEnabled = true;
+
+// IR Raw Key Codes for SmartMatrix remote
+#define IRCODE_SMARTMATRIX_HELD            0xFFFFFFFF // 4294967295
+#define IRCODE_SMARTMATRIX_POWER           0x1689D02F // 378130479
+#define IRCODE_SMARTMATRIX_BRIGHTNESS_DOWN 0x1689E01F // 378134559
+#define IRCODE_SMARTMATRIX_BRIGHTNESS_UP   0x1689D827 // 378132519
+#define IRCODE_SMARTMATRIX_PLAY            0x168900FF // 378077439
+#define IRCODE_SMARTMATRIX_PALETTE         0x1689C03F // 378126399
+#define IRCODE_SMARTMATRIX_OVERLAY         0x1689807F // 378110079
+#define IRCODE_SMARTMATRIX_UP              0x1689609F // 378101919
+#define IRCODE_SMARTMATRIX_LEFT            0x168910EF // 378081519
+#define IRCODE_SMARTMATRIX_SELECT          0x168938C7 // 378091719
+#define IRCODE_SMARTMATRIX_RIGHT           0x16899867 // 378116199
+#define IRCODE_SMARTMATRIX_BACK            0x168918E7 // 378083559
+#define IRCODE_SMARTMATRIX_DOWN            0x1689B847 // 378124359
+
 // IR Raw Key Codes for SparkFun remote
-#define IRCODE_SPARKFUN_POWER  0x10EFD827    
-#define IRCODE_SPARKFUN_A      0x10EFF807
-#define IRCODE_SPARKFUN_B      0x10EF7887
-#define IRCODE_SPARKFUN_C      0x10EF58A7
-#define IRCODE_SPARKFUN_UP     0x10EFA05F
-#define IRCODE_SPARKFUN_LEFT   0x10EF10EF
-#define IRCODE_SPARKFUN_SELECT 0x10EF20DF
-#define IRCODE_SPARKFUN_RIGHT  0x10EF807F
-#define IRCODE_SPARKFUN_DOWN   0x10EF00FF
-#define IRCODE_SPARKFUN_HELD   0xFFFFFFFF
+#define IRCODE_SPARKFUN_HELD               0xFFFFFFFF // 4294967295
+#define IRCODE_SPARKFUN_POWER              0x10EFD827 // 284153895
+#define IRCODE_SPARKFUN_A                  0x10EFF807 // 284162055
+#define IRCODE_SPARKFUN_B                  0x10EF7887 // 284129415
+#define IRCODE_SPARKFUN_C                  0x10EF58A7 // 284121255
+#define IRCODE_SPARKFUN_UP                 0x10EFA05F // 284139615
+#define IRCODE_SPARKFUN_LEFT               0x10EF10EF // 284102895
+#define IRCODE_SPARKFUN_SELECT             0x10EF20DF // 284106975
+#define IRCODE_SPARKFUN_RIGHT              0x10EF807F // 284131455
+#define IRCODE_SPARKFUN_DOWN               0x10EF00FF // 284098815
 
 // IR Raw Key Codes for Adafruit remote
-#define IRCODE_ADAFRUIT_HELD        0x7FFFFFFF // 4294967295
-#define IRCODE_ADAFRUIT_VOLUME_UP   0x00FD40BF // 16597183
-#define IRCODE_ADAFRUIT_PLAY_PAUSE  0x00FD807F // 16613503
-#define IRCODE_ADAFRUIT_VOLUME_DOWN 0x00FD00FF // 16580863
-#define IRCODE_ADAFRUIT_SETUP       0x00FD20DF // 16589023
-#define IRCODE_ADAFRUIT_UP          0x00FDA05F // 16621663
-#define IRCODE_ADAFRUIT_STOP_MODE   0x00FD609F // 16605343
-#define IRCODE_ADAFRUIT_LEFT        0x00FD10EF // 16584943
-#define IRCODE_ADAFRUIT_ENTER_SAVE  0x00FD906F // 16617583
-#define IRCODE_ADAFRUIT_RIGHT       0x00FD50AF // 16601263
-#define IRCODE_ADAFRUIT_0_10_PLUS   0x00FD30CF // 16593103
-#define IRCODE_ADAFRUIT_DOWN        0x00FDB04F // 16625743
-#define IRCODE_ADAFRUIT_BACK        0x00FD708F // 16609423
-#define IRCODE_ADAFRUIT_1           0x00FD08F7 // 16582903
-#define IRCODE_ADAFRUIT_2           0x00FD8877 // 16615543
-#define IRCODE_ADAFRUIT_3           0x00FD48B7 // 16599223
-#define IRCODE_ADAFRUIT_4           0x00FD28D7 // 16591063
-#define IRCODE_ADAFRUIT_5           0x00FDA857 // 16623703
-#define IRCODE_ADAFRUIT_6           0x00FD6897 // 16607383
-#define IRCODE_ADAFRUIT_7           0x00FD18E7 // 16586983
-#define IRCODE_ADAFRUIT_8           0x00FD9867 // 16619623
-#define IRCODE_ADAFRUIT_9           0x00FD58A7 // 16603303
-
-// IR Raw Key Codes for WRT8621 remote
-//#define IRCODE_WRT8621_HELD         0x7FFFFFFF // 4294967295
-//#define IRCODE_WRT8621_OFF          0x00FFB04F // 16756815
-//#define IRCODE_WRT8621_MODE         0x00FF708F // 16740495
-//#define IRCODE_WRT8621_ON           0x00FFF00F // 16773135
-//#define IRCODE_WRT8621_UP1          0x00FF906F // 16748655
-//#define IRCODE_WRT8621_IN           0x00FF50AF // 16732335
-//#define IRCODE_WRT8621_DOWN1        0x00FFD02F // 16764975
-//#define IRCODE_WRT8621_UP2          0x00FF8877 // 16746615
-//#define IRCODE_WRT8621_OUT          0x00FF48B7 // 16730295
-//#define IRCODE_WRT8621_DOWN2        0x00FFC837 // 16762935
-//#define IRCODE_WRT8621_UP3          0x00FFA857 // 16754775
-//#define IRCODE_WRT8621_ATT          0x00FF6897 // 16738455
-//#define IRCODE_WRT8621_DOWN3        0x00FFE817 // 16771095
-//#define IRCODE_WRT8621_UP4          0x00FF9867 // 16750695
-//#define IRCODE_WRT8621_QA           0x00FF58A7 // 16734375
-//#define IRCODE_WRT8621_DOWN4        0x00FFD827 // 16767015
-//#define IRCODE_WRT8621_V            0x00FFB847 // 16758855
-//#define IRCODE_WRT8621_T            0x00FFF807 // 16775175
-
-// IR Raw Key Codes for WRT8621-05A remote
-//#define IRCODE_WRT8621_05A_HELD     0x7FFFFFFF // 4294967295
-//#define IRCODE_WRT8621_05A_M        0x00FF40BF // 16728255
-//#define IRCODE_WRT8621_05A_UP       0x00FFA05F // 16752735
-//#define IRCODE_WRT8621_05A_LEFT     0x00FF10EF // 16716015
-//#define IRCODE_WRT8621_05A_OK       0x00FF906F // 16748655
-//#define IRCODE_WRT8621_05A_RIGHT    0x00FF50AF // 16732335
-//#define IRCODE_WRT8621_05A_DOWN     0x00FFB04F // 16756815
-
-// IR Raw Key Codes for WRT8521-01 remote
-//#define IRCODE_WRT8521_01_HELD        0x7FFFFFFF // 4294967295
-//#define IRCODE_WRT8521_01_VOLUME_UP   0x00FFE21D // 16769565
-//#define IRCODE_WRT8521_01_PLAY_PAUSE  0x00FF629D // 16736925
-//#define IRCODE_WRT8521_01_VOLUME_DOWN 0x00FFA25D // 16753245
-//#define IRCODE_WRT8521_01_SETUP       0x00FF22DD // 16720605
-//#define IRCODE_WRT8521_01_UP          0x00FF02FD // 16712445
-//#define IRCODE_WRT8521_01_STOP_MODE   0x00FFC23D // 16761405
-//#define IRCODE_WRT8521_01_LEFT        0x00FFE01F // 16769055
-//#define IRCODE_WRT8521_01_ENTER_SAVE  0x00FFA857 // 16754775
-//#define IRCODE_WRT8521_01_RIGHT       0x00FF906F // 16748655
-//#define IRCODE_WRT8521_01_0_10_PLUS   0x00FF6897 // 16738455
-//#define IRCODE_WRT8521_01_DOWN        0x00FF9867 // 16750695
-//#define IRCODE_WRT8521_01_BACK        0x00FFB04F // 16756815     
-//#define IRCODE_WRT8521_01_1           0x00FF30CF // 16724175
-//#define IRCODE_WRT8521_01_2           0x00FF18E7 // 16718055
-//#define IRCODE_WRT8521_01_3           0x00FF7A85 // 16743045
-//#define IRCODE_WRT8521_01_4           0x00FF10EF // 16716015
-//#define IRCODE_WRT8521_01_5           0x00FF38C7 // 16726215
-//#define IRCODE_WRT8521_01_6           0x00FF5AA5 // 16734885
-//#define IRCODE_WRT8521_01_7           0x00FF42BD // 16728765
-//#define IRCODE_WRT8521_01_8           0x00FF4AB5 // 16730805
-//#define IRCODE_WRT8521_01_9           0x00FF52AD // 16732845
-
-//#define IRCODE_RONIX_HELD             4294967295
-//#define IRCODE_RONIX_POWER_RED_1      378130479
-//#define IRCODE_RONIX_POWER_RED_2      378134559
-//#define IRCODE_RONIX_POWER_RED_3      378132519
-//#define IRCODE_RONIX_POWER_BLUE_1     378077439
-//#define IRCODE_RONIX_POWER_BLUE_2     378126399
-//#define IRCODE_RONIX_POWER_BLUE_3     378110079
-//#define IRCODE_RONIX_POWER_YELLOW_1   378114159
-//#define IRCODE_RONIX_POWER_YELLOW_2   378118239
-//#define IRCODE_RONIX_POWER_YELLOW_3   378093759
-//#define IRCODE_RONIX_ALL_RED          378097839
-//#define IRCODE_RONIX_ALL_BLUE         378101919
-//#define IRCODE_RONIX_ALL_YELLOW       378099879
-//#define IRCODE_RONIX_SLEEP_RED        378081519
-//#define IRCODE_RONIX_SELECT_RED       378091719
-//#define IRCODE_RONIX_SET_RED          378116199
-//#define IRCODE_RONIX_SLEEP_BLUE       378083559
-//#define IRCODE_RONIX_SELECT_BLUE      378124359
-//#define IRCODE_RONIX_SET_BLUE         378085599
-//#define IRCODE_RONIX_SLEEP_YELLOW     378089679
-//#define IRCODE_RONIX_SELECT_YELLOW    378122319
-//#define IRCODE_RONIX_SET_YELLOW       378105999
+#define IRCODE_ADAFRUIT_HELD               0x7FFFFFFF // 2147483647
+#define IRCODE_ADAFRUIT_VOLUME_UP          0x00FD40BF // 16597183
+#define IRCODE_ADAFRUIT_PLAY_PAUSE         0x00FD807F // 16613503
+#define IRCODE_ADAFRUIT_VOLUME_DOWN        0x00FD00FF // 16580863
+#define IRCODE_ADAFRUIT_SETUP              0x00FD20DF // 16589023
+#define IRCODE_ADAFRUIT_UP                 0x00FDA05F // 16621663
+#define IRCODE_ADAFRUIT_STOP_MODE          0x00FD609F // 16605343
+#define IRCODE_ADAFRUIT_LEFT               0x00FD10EF // 16584943
+#define IRCODE_ADAFRUIT_ENTER_SAVE         0x00FD906F // 16617583
+#define IRCODE_ADAFRUIT_RIGHT              0x00FD50AF // 16601263
+#define IRCODE_ADAFRUIT_0_10_PLUS          0x00FD30CF // 16593103
+#define IRCODE_ADAFRUIT_DOWN               0x00FDB04F // 16625743
+#define IRCODE_ADAFRUIT_BACK               0x00FD708F // 16609423
+#define IRCODE_ADAFRUIT_1                  0x00FD08F7 // 16582903
+#define IRCODE_ADAFRUIT_2                  0x00FD8877 // 16615543
+#define IRCODE_ADAFRUIT_3                  0x00FD48B7 // 16599223
+#define IRCODE_ADAFRUIT_4                  0x00FD28D7 // 16591063
+#define IRCODE_ADAFRUIT_5                  0x00FDA857 // 16623703
+#define IRCODE_ADAFRUIT_6                  0x00FD6897 // 16607383
+#define IRCODE_ADAFRUIT_7                  0x00FD18E7 // 16586983
+#define IRCODE_ADAFRUIT_8                  0x00FD9867 // 16619623
+#define IRCODE_ADAFRUIT_9                  0x00FD58A7 // 16603303
 
 // Low level IR code reading function
 // Function will return 0 if no IR code available
 unsigned long decodeIRCode() {
 
-    decode_results results;
+  decode_results results;
 
-    results.value = 0;
+  results.value = 0;
 
-    // Attempt to read an IR code ?
-    if (irReceiver.decode(&results)) {
-        delay(20);
+  // Attempt to read an IR code ?
+  if (irReceiver.decode(&results)) {
+    delay(20);
 
-        // Prepare to receive the next IR code
-        irReceiver.resume();
-    }
+    // Prepare to receive the next IR code
+    irReceiver.resume();
+  }
 
-    return results.value;
+  return results.value;
 }
 
 // Read an IR code
 // Function will return 0 if no IR code available
 unsigned long readIRCode() {
 
-    // Is there an IR code to read ?
-    unsigned long code = decodeIRCode();
-    if (code == 0) {
-        // No code so return 0
-        return 0;
-    }
-    // Keep reading until code changes
-    while (decodeIRCode() == code) {
-        ;
-    }
-    //Serial.println(code);
-    return code;
+  // Is there an IR code to read ?
+  unsigned long code = decodeIRCode();
+  if (code == 0) {
+    // No code so return 0
+    return 0;
+  }
+  // Keep reading until code changes
+  while (decodeIRCode() == code) {
+    ;
+  }
+  //Serial.println(code);
+  return code;
 }
 
 unsigned long lastIrCode = 0;
@@ -211,360 +159,390 @@ unsigned int zeroStartTime = 0;
 unsigned int zeroDelay = 120;
 
 unsigned long readIRCode(unsigned int holdDelay) {
-    // read the raw code from the sensor
-    unsigned long irCode = readIRCode();
+  // read the raw code from the sensor
+  unsigned long irCode = readIRCode();
 
-    //Serial.print(millis());
-    //Serial.print("\t");
-    //Serial.println(irCode);
+  //Serial.print(millis());
+  //Serial.print("\t");
+  //Serial.println(irCode);
 
-    // don't return a short click until we know it's not a long hold
-    // we'll have to wait for holdDelay ms to pass before returning a non-zero IR code
-    // then, after that delay, as long as the button is held, we can keep returning the code
-    // every time until it's released
+  // don't return a short click until we know it's not a long hold
+  // we'll have to wait for holdDelay ms to pass before returning a non-zero IR code
+  // then, after that delay, as long as the button is held, we can keep returning the code
+  // every time until it's released
 
-    // the ir remote only sends codes every 107 ms or so (avg 106.875, max 111, min 102),
-    // so the ir sensor will return 0 even if a button is held
-    // so we have to wait longer than that before returning a non-zero code
-    // in order to detect that a button has been released and is no longer held
+  // the ir remote only sends codes every 107 ms or so (avg 106.875, max 111, min 102),
+  // so the ir sensor will return 0 even if a button is held
+  // so we have to wait longer than that before returning a non-zero code
+  // in order to detect that a button has been released and is no longer held
 
-    // only reset after we've gotten 0 back for more than the ir remote send interval
-    unsigned int zeroTime = 0;
+  // only reset after we've gotten 0 back for more than the ir remote send interval
+  unsigned int zeroTime = 0;
 
-    if (irCode == 0) {
-        zeroTime = millis() - zeroStartTime;
-        if (zeroTime >= zeroDelay && lastIrCode != 0) {
-            //Serial.println(F("zero delay has elapsed, returning last ir code"));
-            // the button has been released for longer than the zero delay
-            // start over delays over and return the last code
-            irCode = lastIrCode;
-            lastIrCode = 0;
-            return irCode;
-        }
-
-        return 0;
-    }
-
-    // reset the zero timer every time a non-zero code is read
-    zeroStartTime = millis();
-
-    unsigned int heldTime = 0;
-
-    if (irCode == IRCODE_SPARKFUN_HELD || irCode == IRCODE_ADAFRUIT_HELD) {
-        // has the hold delay passed?
-        heldTime = millis() - holdStartTime;
-        if (heldTime >= holdDelay) {
-            isHolding = true;
-            //Serial.println(F("hold delay has elapsed, returning last ir code"));
-            return lastIrCode;
-        }
-        else if (holdStartTime == 0) {
-            isHolding = false;
-            holdStartTime = millis();
-        }
-    }
-    else {
-        // not zero, not IRCODE_SPARKFUN_HELD
-        // store it for use later, until the hold and zero delays have elapsed
-        holdStartTime = millis();
-        isHolding = false;
-        lastIrCode = irCode;
-        return 0;
+  if (irCode == 0) {
+    zeroTime = millis() - zeroStartTime;
+    if (zeroTime >= zeroDelay && lastIrCode != 0) {
+      //Serial.println(F("zero delay has elapsed, returning last ir code"));
+      // the button has been released for longer than the zero delay
+      // start over delays over and return the last code
+      irCode = lastIrCode;
+      lastIrCode = 0;
+      return irCode;
     }
 
     return 0;
+  }
+
+  // reset the zero timer every time a non-zero code is read
+  zeroStartTime = millis();
+
+  unsigned int heldTime = 0;
+
+  if (irCode == IRCODE_SPARKFUN_HELD || irCode == IRCODE_ADAFRUIT_HELD) {
+    // has the hold delay passed?
+    heldTime = millis() - holdStartTime;
+    if (heldTime >= holdDelay) {
+      isHolding = true;
+      //Serial.println(F("hold delay has elapsed, returning last ir code"));
+      return lastIrCode;
+    }
+    else if (holdStartTime == 0) {
+      isHolding = false;
+      holdStartTime = millis();
+    }
+  }
+  else {
+    // not zero, not IRCODE_SPARKFUN_HELD
+    // store it for use later, until the hold and zero delays have elapsed
+    holdStartTime = millis();
+    isHolding = false;
+    lastIrCode = irCode;
+    return 0;
+  }
+
+  return 0;
 }
 
 void heldButtonHasBeenHandled() {
-    lastIrCode = 0;
-    isHolding = false;
-    holdStartTime = 0;
+  lastIrCode = 0;
+  isHolding = false;
+  holdStartTime = 0;
 }
 
 unsigned long waitForIRCode() {
 
-    unsigned long irCode = readIRCode();
-    while ((irCode == 0) || (irCode == 0xFFFFFFFF)) {
-        delay(200);
-        irCode = readIRCode();
-    }
-    return irCode;
+  unsigned long irCode = readIRCode();
+  while ((irCode == 0) || (irCode == 0xFFFFFFFF)) {
+    delay(200);
+    irCode = readIRCode();
+  }
+  return irCode;
 }
 
 InputCommand getCommand(unsigned long input) {
+  if (adafruitRemoteEnabled) {
     switch (input) {
-        case IRCODE_ADAFRUIT_UP:
-        case IRCODE_SPARKFUN_UP:
-//        case IRCODE_WRT8521_01_UP:
-//        case IRCODE_WRT8621_IN:
-//        case IRCODE_WRT8621_05A_UP:
-//        case IRCODE_RONIX_POWER_BLUE_2:
-            return InputCommand::Up;
+      case IRCODE_ADAFRUIT_UP:
+        return InputCommand::Up;
 
-        case IRCODE_ADAFRUIT_DOWN:
-        case IRCODE_SPARKFUN_DOWN:
-//        case IRCODE_WRT8521_01_DOWN:
-//        case IRCODE_WRT8621_ATT:
-//        case IRCODE_WRT8621_05A_DOWN:
-//        case IRCODE_RONIX_ALL_BLUE:
-            return InputCommand::Down;
+      case IRCODE_ADAFRUIT_DOWN:
+        return InputCommand::Down;
 
-        case IRCODE_SPARKFUN_LEFT:
-        case IRCODE_ADAFRUIT_LEFT:
-//        case IRCODE_WRT8521_01_LEFT:
-//        case IRCODE_WRT8621_UP2:
-//        case IRCODE_WRT8621_05A_LEFT:
-//        case IRCODE_RONIX_POWER_YELLOW_1:
-            return InputCommand::Left;
+      case IRCODE_ADAFRUIT_LEFT:
+        return InputCommand::Left;
 
-        case IRCODE_SPARKFUN_RIGHT:
-        case IRCODE_ADAFRUIT_RIGHT:
-//        case IRCODE_WRT8521_01_RIGHT:
-//        case IRCODE_WRT8621_DOWN2:
-//        case IRCODE_WRT8621_05A_RIGHT:
-//        case IRCODE_RONIX_POWER_YELLOW_3:
-            return InputCommand::Right;
+      case IRCODE_ADAFRUIT_RIGHT:
+        return InputCommand::Right;
 
-        case IRCODE_SPARKFUN_SELECT:
-        case IRCODE_ADAFRUIT_ENTER_SAVE:
-//        case IRCODE_WRT8521_01_ENTER_SAVE:
-//        case IRCODE_WRT8621_OUT:
-//        case IRCODE_WRT8621_05A_OK:
-//        case IRCODE_RONIX_POWER_YELLOW_2:
-            return InputCommand::Select;
+      case IRCODE_ADAFRUIT_ENTER_SAVE:
+        return InputCommand::Select;
 
-        case IRCODE_SPARKFUN_POWER:
-//        case IRCODE_WRT8621_05A_M:
-            return InputCommand::CycleBrightness;
+      case IRCODE_ADAFRUIT_STOP_MODE:
+      case IRCODE_ADAFRUIT_1:
+        return InputCommand::PlayMode;
 
-        case IRCODE_SPARKFUN_A:
-        case IRCODE_ADAFRUIT_STOP_MODE:
-        case IRCODE_ADAFRUIT_1:
-//        case IRCODE_WRT8521_01_STOP_MODE:
-//        case IRCODE_WRT8521_01_1:
-//        case IRCODE_WRT8621_DOWN1:
-//        case IRCODE_RONIX_POWER_BLUE_3:
-//        case IRCODE_RONIX_SLEEP_RED:
-            return InputCommand::PlayMode;
+      case IRCODE_ADAFRUIT_2:
+        return InputCommand::Palette;
 
-        case IRCODE_SPARKFUN_B:
-        case IRCODE_ADAFRUIT_2:
-//        case IRCODE_WRT8521_01_2:
-//        case IRCODE_WRT8621_QA:
-//        case IRCODE_RONIX_SELECT_RED:
-            return InputCommand::Palette;
+      case IRCODE_ADAFRUIT_3:
+        return InputCommand::CycleClockAndMessageFiles;
 
-        case IRCODE_SPARKFUN_C:
-        case IRCODE_ADAFRUIT_3:
-//        case IRCODE_WRT8521_01_3:
-//        case IRCODE_WRT8621_DOWN4:
-//        case IRCODE_RONIX_SET_RED:
-            return InputCommand::CycleClockAndMessageFiles;
+      case IRCODE_ADAFRUIT_PLAY_PAUSE:
+        return InputCommand::Power;
 
-        case IRCODE_ADAFRUIT_PLAY_PAUSE:
-//        case IRCODE_WRT8521_01_PLAY_PAUSE:
-//        case IRCODE_WRT8621_MODE:
-//        case IRCODE_RONIX_POWER_RED_2:
-            return InputCommand::Power;
+      case IRCODE_ADAFRUIT_BACK:
+        return InputCommand::Back;
 
-        case IRCODE_ADAFRUIT_BACK:
-//        case IRCODE_WRT8521_01_BACK:
-//        case IRCODE_WRT8621_DOWN3:
-//        case IRCODE_RONIX_ALL_YELLOW:
-            return InputCommand::Back;
+      case IRCODE_ADAFRUIT_VOLUME_UP:
+        return InputCommand::BrightnessUp;
 
-        case IRCODE_ADAFRUIT_VOLUME_UP:
-//        case IRCODE_WRT8521_01_VOLUME_UP:
-//        case IRCODE_WRT8621_ON:
-//        case IRCODE_RONIX_POWER_RED_3:
-            return InputCommand::BrightnessUp;
+      case IRCODE_ADAFRUIT_VOLUME_DOWN:
+        return InputCommand::BrightnessDown;
 
-        case IRCODE_ADAFRUIT_VOLUME_DOWN:
-//        case IRCODE_WRT8521_01_VOLUME_DOWN:
-//        case IRCODE_WRT8621_OFF:
-//        case IRCODE_RONIX_POWER_RED_1:
-            return InputCommand::BrightnessDown;
+      case IRCODE_ADAFRUIT_SETUP:
+        return InputCommand::Menu;
 
-        case IRCODE_ADAFRUIT_SETUP:
-//        case IRCODE_WRT8521_01_SETUP:
-//        case IRCODE_WRT8621_UP1:
-//        case IRCODE_RONIX_POWER_BLUE_1:
-            return InputCommand::Menu;
+      case IRCODE_ADAFRUIT_5:
+        return InputCommand::ToggleSettingsMenuVisibility;
+
+      case IRCODE_ADAFRUIT_6:
+        return InputCommand::AudioScaleUp;
+
+      case IRCODE_ADAFRUIT_7:
+        return InputCommand::FreezeDisplay;
+
+      case IRCODE_ADAFRUIT_9:
+        return InputCommand::AudioScaleDown;
+
+      case IRCODE_ADAFRUIT_0_10_PLUS:
+        return InputCommand::ShowPatternName;
     }
+  }
 
-    return InputCommand::None;
+  if (sparkfunRemoteEnabled) {
+    switch (input) {
+      case IRCODE_SPARKFUN_UP:
+        return InputCommand::Up;
+
+      case IRCODE_SPARKFUN_DOWN:
+        return InputCommand::Down;
+
+      case IRCODE_SPARKFUN_LEFT:
+        return InputCommand::Left;
+
+      case IRCODE_SPARKFUN_RIGHT:
+        return InputCommand::Right;
+
+      case IRCODE_SPARKFUN_SELECT:
+        return InputCommand::Select;
+
+      case IRCODE_SPARKFUN_POWER:
+        return InputCommand::CycleBrightness;
+
+      case IRCODE_SPARKFUN_A:
+        return InputCommand::PlayMode;
+
+      case IRCODE_SPARKFUN_B:
+        return InputCommand::Palette;
+
+      case IRCODE_SPARKFUN_C:
+        return InputCommand::CycleClockAndMessageFiles;
+    }
+  }
+
+  if (smartMatrixRemoteEnabled) {
+    switch (input) {
+      case IRCODE_SMARTMATRIX_UP:
+        return InputCommand::Up;
+
+      case IRCODE_SMARTMATRIX_DOWN:
+        return InputCommand::Down;
+
+      case IRCODE_SMARTMATRIX_LEFT:
+        return InputCommand::Left;
+
+      case IRCODE_SMARTMATRIX_RIGHT:
+        return InputCommand::Right;
+
+      case IRCODE_SMARTMATRIX_SELECT:
+        return InputCommand::Select;
+
+      case IRCODE_SMARTMATRIX_PLAY:
+        return InputCommand::PlayMode;
+
+      case IRCODE_SMARTMATRIX_PALETTE:
+        return InputCommand::Palette;
+
+      case IRCODE_SMARTMATRIX_OVERLAY:
+        return InputCommand::CycleClockAndMessageFiles;
+
+      case IRCODE_SMARTMATRIX_POWER:
+        return InputCommand::Power;
+
+      case IRCODE_SMARTMATRIX_BACK:
+        return InputCommand::Back;
+
+      case IRCODE_SMARTMATRIX_BRIGHTNESS_UP:
+        return InputCommand::BrightnessUp;
+
+      case IRCODE_SMARTMATRIX_BRIGHTNESS_DOWN:
+        return InputCommand::BrightnessDown;
+    }
+  }
+
+  return InputCommand::None;
 }
 
 InputCommand getCommand(String input) {
-    if (input == "Up")
-        return InputCommand::Up;
-    else if (input == "Down")
-        return InputCommand::Down;
-    else if (input == "Left")
-        return InputCommand::Left;
-    else if (input == "Right")
-        return InputCommand::Right;
-    else if (input == "Select")
-        return InputCommand::Select;
-    else if (input == "CycleBrightness")
-        return InputCommand::CycleBrightness;
-    else if (input == "PlayMode")
-        return InputCommand::PlayMode;
-    else if (input == "Palette")
-        return InputCommand::Palette;
-    else if (input == "CycleClockAndMessageFiles")
-        return InputCommand::CycleClockAndMessageFiles;
-    else if (input == "Power")
-        return InputCommand::Power;
-    else if (input == "Back")
-        return InputCommand::Back;
-    else if (input == "BrightnessUp")
-        return InputCommand::BrightnessUp;
-    else if (input == "BrightnessDown")
-        return InputCommand::BrightnessDown;
-    else if (input == "Menu")
-        return InputCommand::Menu;
-    else if (input == "ShowCurrentMessage")
-        return InputCommand::ShowCurrentMessage;
-    else if (input == "ShowClock")
-        return InputCommand::ShowClock;
-    else if (input == "HideClockOrMessage")
-        return InputCommand::HideClockOrMessage;
+  if (input == "Up")
+    return InputCommand::Up;
+  else if (input == "Down")
+    return InputCommand::Down;
+  else if (input == "Left")
+    return InputCommand::Left;
+  else if (input == "Right")
+    return InputCommand::Right;
+  else if (input == "Select")
+    return InputCommand::Select;
+  else if (input == "CycleBrightness")
+    return InputCommand::CycleBrightness;
+  else if (input == "PlayMode")
+    return InputCommand::PlayMode;
+  else if (input == "Palette")
+    return InputCommand::Palette;
+  else if (input == "CycleClockAndMessageFiles")
+    return InputCommand::CycleClockAndMessageFiles;
+  else if (input == "Power")
+    return InputCommand::Power;
+  else if (input == "Back")
+    return InputCommand::Back;
+  else if (input == "BrightnessUp")
+    return InputCommand::BrightnessUp;
+  else if (input == "BrightnessDown")
+    return InputCommand::BrightnessDown;
+  else if (input == "Menu")
+    return InputCommand::Menu;
+  else if (input == "ShowCurrentMessage")
+    return InputCommand::ShowCurrentMessage;
+  else if (input == "ShowClock")
+    return InputCommand::ShowClock;
+  else if (input == "HideClockOrMessage")
+    return InputCommand::HideClockOrMessage;
 
-    return InputCommand::None;
+  return InputCommand::None;
 }
 
 InputCommand readSerialCommand() {
-    if (Serial.available() < 1)
-        return InputCommand::None;
-
-    if(Serial.peek() != '{')
-        return InputCommand::None;
-
-    aJsonStream stream(&Serial);
-
-    //Serial.print(F("Parsing json..."));
-    aJsonObject* root = aJson.parse(&stream);
-    if (!root) {
-        //Serial.println(F(" failed"));
-        return InputCommand::None;
-    }
-    //Serial.println(F(" done"));
-
-    // message
-    aJsonObject* item = aJson.getObjectItem(root, "message");
-    if (item && messagePlayer.readJsonObject(item)) {
-        return InputCommand::ShowCurrentMessage;
-    }
-
-    // brightness
-    item = aJson.getObjectItem(root, "brightness");
-    if (item && item->type == aJson_Int) {
-        brightness = item->valueint;
-        boundBrightness();
-        matrix.setBrightness(brightness);
-        saveBrightnessSetting();
-        return InputCommand::None;
-    }
-
-    // background brightness
-    item = aJson.getObjectItem(root, "backgroundBrightness");
-    if (item && item->type == aJson_Int) {
-        backgroundBrightness = item->valueint;
-        boundBackgroundBrightness();
-        matrix.setBackgroundBrightness(backgroundBrightness);
-        saveBackgroundBrightnessSetting();
-        return InputCommand::None;
-    }
-
-    // palette
-    item = aJson.getObjectItem(root, "palette");
-    if (item && item->type == aJson_String) {
-        effects.setPalette(item->valuestring);
-        return InputCommand::None;
-    }
-
-    // pattern
-    item = aJson.getObjectItem(root, "pattern");
-    if (item && item->type == aJson_String) {
-        //Serial.print(F("Loading pattern "));
-        //Serial.println(item->valuestring);
-        if (setPattern(item->valuestring))
-            return InputCommand::Update;
-        else
+  if (Serial.available() < 1)
     return InputCommand::None;
-}
-    else if (item && item->type == aJson_Int) {
-        //Serial.print(F("Loading pattern "));
-        //Serial.println(item->valueint);
-        if (setPattern(item->valueint))
-            return InputCommand::Update;
-        else
-            return InputCommand::None;
-    }
 
-    // animation
-    item = aJson.getObjectItem(root, "animation");
-    if (item && item->type == aJson_String) {
-        //Serial.print(F("Loading animation "));
-        //Serial.println(item->valuestring);
-        if (setAnimation(item->valuestring))
-            return InputCommand::Update;
-        else
-            return InputCommand::None;
-    }
-    else if (item && item->type == aJson_Int) {
-        //Serial.print(F("Loading animation "));
-        //Serial.println(item->valueint);
-        if (setAnimation(item->valueint))
-            return InputCommand::Update;
-        else
-            return InputCommand::None;
-    }
-
-    // add support for more specialized items here...
-
-    // fall back on basic command support
-    item = aJson.getObjectItem(root, "command");
-    if (item && item->type == aJson_String) {
-        // custom commands
-        if ((String) item->valuestring == "ListAnimations") {
-            listAnimations();
-            return InputCommand::None;
-        }
-        else if ((String) item->valuestring == "ListPatterns") {
-            listPatterns();
-            return InputCommand::None;
-        }
-        else if ((String) item->valuestring == "ListPalettes") {
-            effects.listPalettes();
-            return InputCommand::None;
-        }
-
-        InputCommand command = getCommand(item->valuestring);
-        if (command != InputCommand::None)
-            return command;
-    }
-
+  if (Serial.peek() != '{')
     return InputCommand::None;
+
+  aJsonStream stream(&Serial);
+
+  //Serial.print(F("Parsing json..."));
+  aJsonObject* root = aJson.parse(&stream);
+  if (!root) {
+    //Serial.println(F(" failed"));
+    return InputCommand::None;
+  }
+  //Serial.println(F(" done"));
+
+  // message
+  aJsonObject* item = aJson.getObjectItem(root, "message");
+  if (item && messagePlayer.readJsonObject(item)) {
+    return InputCommand::ShowCurrentMessage;
+  }
+
+  // brightness
+  item = aJson.getObjectItem(root, "brightness");
+  if (item && item->type == aJson_Int) {
+    brightness = item->valueint;
+    boundBrightness();
+    matrix.setBrightness(brightness);
+    saveBrightnessSetting();
+    return InputCommand::None;
+  }
+
+  // background brightness
+  item = aJson.getObjectItem(root, "backgroundBrightness");
+  if (item && item->type == aJson_Int) {
+    backgroundBrightness = item->valueint;
+    boundBackgroundBrightness();
+    matrix.setBackgroundBrightness(backgroundBrightness);
+    saveBackgroundBrightnessSetting();
+    return InputCommand::None;
+  }
+
+  // palette
+  item = aJson.getObjectItem(root, "palette");
+  if (item && item->type == aJson_String) {
+    effects.setPalette(item->valuestring);
+    return InputCommand::None;
+  }
+
+  // pattern
+  item = aJson.getObjectItem(root, "pattern");
+  if (item && item->type == aJson_String) {
+    //Serial.print(F("Loading pattern "));
+    //Serial.println(item->valuestring);
+    if (setPattern(item->valuestring))
+      return InputCommand::Update;
+    else
+      return InputCommand::None;
+  }
+  else if (item && item->type == aJson_Int) {
+    //Serial.print(F("Loading pattern "));
+    //Serial.println(item->valueint);
+    if (setPattern(item->valueint))
+      return InputCommand::Update;
+    else
+      return InputCommand::None;
+  }
+
+  // animation
+  item = aJson.getObjectItem(root, "animation");
+  if (item && item->type == aJson_String) {
+    //Serial.print(F("Loading animation "));
+    //Serial.println(item->valuestring);
+    if (setAnimation(item->valuestring))
+      return InputCommand::Update;
+    else
+      return InputCommand::None;
+  }
+  else if (item && item->type == aJson_Int) {
+    //Serial.print(F("Loading animation "));
+    //Serial.println(item->valueint);
+    if (setAnimation(item->valueint))
+      return InputCommand::Update;
+    else
+      return InputCommand::None;
+  }
+
+  // add support for more specialized items here...
+
+  // fall back on basic command support
+  item = aJson.getObjectItem(root, "command");
+  if (item && item->type == aJson_String) {
+    // custom commands
+    if ((String) item->valuestring == "ListAnimations") {
+      listAnimations();
+      return InputCommand::None;
+    }
+    else if ((String) item->valuestring == "ListPatterns") {
+      listPatterns();
+      return InputCommand::None;
+    }
+    else if ((String) item->valuestring == "ListPalettes") {
+      effects.listPalettes();
+      return InputCommand::None;
+    }
+
+    InputCommand command = getCommand(item->valuestring);
+    if (command != InputCommand::None)
+      return command;
+  }
+
+  return InputCommand::None;
 }
 
 InputCommand readCommand() {
-    InputCommand command = getCommand(readIRCode());
+  InputCommand command = getCommand(readIRCode());
 
-    if (command == InputCommand::None)
-        command = readSerialCommand();
+  if (command == InputCommand::None)
+    command = readSerialCommand();
 
-    return command;
+  return command;
 }
 
 InputCommand readCommand(unsigned int holdDelay) {
-    InputCommand command = getCommand(readIRCode(holdDelay));
+  InputCommand command = getCommand(readIRCode(holdDelay));
 
-    if (command == InputCommand::None)
-        command = readSerialCommand();
+  if (command == InputCommand::None)
+    command = readSerialCommand();
 
-    return command;
+  return command;
 }
 
 #endif
