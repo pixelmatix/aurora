@@ -32,6 +32,9 @@ class Animations : public Playlist {
   public:
 
     char* Drawable::name = (char *)"Animations";
+  
+    int currentIndex = 0;
+    int imageCount = 1;
 
     int getCurrentIndex() {
       return currentIndex;
@@ -46,7 +49,7 @@ class Animations : public Playlist {
       openImageFile(false);
     }
 
-    void moveRandom() {
+    void moveRandom(int step) {
       random16_add_entropy(analogRead(0));
       currentIndex = random(0, imageCount);
 
@@ -134,6 +137,7 @@ class Animations : public Playlist {
       unsigned long result = gifPlayer.drawFrame();
       if (result == ERROR_FINISHED) {
         openImageFile(true);
+        isCurrentItemFinished = true;
       }
       else if (result < 0) {
         return 0;
@@ -154,6 +158,10 @@ class Animations : public Playlist {
     void setup(char* directoryName) {
       path = directoryName;
 
+      if (!SD.exists(directoryName)) {
+        SD.mkdir(directoryName);
+      }
+      
       imageCount = countFiles(directoryName);
       currentIndex = 0;
     }
@@ -220,9 +228,6 @@ class Animations : public Playlist {
 
     File imageFile;
 
-    int currentIndex = 0;
-    int imageCount = 1;
-
     int animationDurationSeconds = 3;
 
     bool paused = true;
@@ -279,6 +284,7 @@ class Animations : public Playlist {
           return;
 
         gifPlayer.setFile(imageFile);
+        isCurrentItemFinished = false;
       }
 
       if (!gifPlayer.parseGifHeader()) {

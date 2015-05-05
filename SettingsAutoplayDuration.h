@@ -35,8 +35,12 @@ class SettingsAutoplayDuration : public Runnable {
 
         char text[4];
         sprintf(text, "%d", autoPlayDurationSeconds);
+        matrix.setFont(font3x5);
+        matrix.drawString(1, 2, { 255, 255, 255 }, "Autoplay");
         matrix.setFont(gohufont11b);
         matrix.drawString(4, 11, { 255, 255, 255 }, text);
+        matrix.setFont(font3x5);
+        matrix.drawString(3, 25, { 255, 255, 255 }, "seconds");
         matrix.swapBuffers();
         matrix.displayForegroundDrawing(false);
 
@@ -78,9 +82,9 @@ class SettingsAutoplayDuration : public Runnable {
       autoPlayDurationSeconds += d;
 
       if (autoPlayDurationSeconds < 1)
-        autoPlayDurationSeconds = 1;
-      else if (autoPlayDurationSeconds > 999)
         autoPlayDurationSeconds = 999;
+      else if (autoPlayDurationSeconds > 999)
+        autoPlayDurationSeconds = 1;
     }
 };
 

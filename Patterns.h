@@ -112,6 +112,8 @@ class Patterns : public Playlist {
 
     static const int PATTERN_COUNT = 39;
 
+    Drawable* shuffledItems[PATTERN_COUNT];
+
     Drawable* items[PATTERN_COUNT] = {
       &spiro,
       &paletteSmear,
@@ -158,6 +160,13 @@ class Patterns : public Playlist {
 
   public:
     Patterns() {
+      // add the items to the shuffledItems array
+      for (int a = 0; a < PATTERN_COUNT; a++) {
+        shuffledItems[a] = items[a];
+      }
+
+      shuffleItems();
+
       this->currentItem = items[0];
       this->currentItem->start();
     }
@@ -180,24 +189,44 @@ class Patterns : public Playlist {
       if (currentIndex >= PATTERN_COUNT) currentIndex = 0;
       else if (currentIndex < 0) currentIndex = PATTERN_COUNT - 1;
 
+      if (effects.paletteIndex == effects.RandomPaletteIndex)
+        effects.RandomPalette();
+
       moveTo(currentIndex);
 
       if (!isTimeAvailable && currentItem == &analogClock)
         move(step);
     }
 
-    void moveRandom() {
-      currentIndex = random(0, PATTERN_COUNT);
+    void moveRandom(int step) {
+      currentIndex += step;
 
       if (currentIndex >= PATTERN_COUNT) currentIndex = 0;
       else if (currentIndex < 0) currentIndex = PATTERN_COUNT - 1;
 
-      effects.RandomPalette();
+      if (effects.paletteIndex == effects.RandomPaletteIndex)
+        effects.RandomPalette();
 
-      moveTo(currentIndex);
+      if (currentItem)
+        currentItem->stop();
+
+      currentItem = shuffledItems[currentIndex];
+
+      if (currentItem)
+        currentItem->start();
 
       if (!isTimeAvailable && currentItem == &analogClock)
-        moveRandom();
+        moveRandom(step);
+    }
+
+    void shuffleItems() {
+      for (int a = 0; a < PATTERN_COUNT; a++)
+      {
+        int r = random(a, PATTERN_COUNT);
+        Drawable* temp = shuffledItems[a];
+        shuffledItems[a] = shuffledItems[r];
+        shuffledItems[r] = temp;
+      }
     }
 
     void moveTo(int index) {

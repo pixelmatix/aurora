@@ -23,25 +23,28 @@
 #ifndef MenuItem_H
 #define MenuItem_H
 
-struct MenuItem{
-    char *name;
-    Drawable *drawable;
-    bool exit = false;
-    bool visible = true;
+struct MenuItem {
+  char *name;
+  Drawable *drawable;
+  bool exit = false;
+  bool visible = true;
+  bool audioScaleEnabled = false;
+  bool playModeEnabled = false;
+  bool paletteEnabled = false;
 
-    MenuItem() {
-    }
+  MenuItem() {
+  }
 
-    MenuItem(char *name, Drawable *drawable) {
-        MenuItem::name = name;
-        MenuItem::drawable = drawable;
-    }
+  MenuItem(char *name, Drawable *drawable) {
+    MenuItem::name = name;
+    MenuItem::drawable = drawable;
+  }
 
-    MenuItem(char *name, Drawable *drawable, bool exit) {
-        MenuItem::name = name;
-        MenuItem::drawable = drawable;
-        MenuItem::exit = exit;
-    }
+  MenuItem(char *name, Drawable *drawable, bool exit) {
+    MenuItem::name = name;
+    MenuItem::drawable = drawable;
+    MenuItem::exit = exit;
+  }
 };
 
 #endif

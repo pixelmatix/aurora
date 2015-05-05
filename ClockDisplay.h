@@ -58,7 +58,7 @@ class ClockDisplay : public Playlist {
       moveTo(currentIndex + step);
     }
 
-    virtual void moveRandom() {
+    virtual void moveRandom(int step) {
       moveTo(random(0, itemCount));
     }
 

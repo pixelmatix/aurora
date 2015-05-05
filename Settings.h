@@ -136,7 +136,7 @@ class Settings : public Runnable {
       menuItemClock24Hour.visible = isTimeAvailable;
       menuItemSetTime.visible = isTimeAvailable;
 
-      menuItemUpdateFiles.visible = *(unsigned long *)0x38080 != 0xffffffff;
+      menuItemUpdateFiles.visible = *(unsigned long *)0x38080 != 0xffffffff && sdAvailable;
 
       settingsMenu.canMoveBack = true;
       settingsMenu.run(menuItems, itemCount);

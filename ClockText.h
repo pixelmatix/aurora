@@ -31,97 +31,100 @@ extern tmElements_t time;
 extern bool isTimeAvailable;
 
 class ClockText : public Drawable {
-private:
+  private:
     char* onesStrings[20] =
     {
-        (char *)"twelve",
-        (char *)"one",
-        (char *)"two",
-        (char *)"three",
-        (char *)"four",
-        (char *)"five",
-        (char *)"six",
-        (char *)"seven",
-        (char *)"eight",
-        (char *)"nine",
-        (char *)"ten",
-        (char *)"eleven",
-        (char *)"twelve",
-        (char *)"thirteen",
-        (char *)"fourteen",
-        (char *)"fifteen",
-        (char *)"sixteen",
-        (char *)"seventeen",
-        (char *)"eighteen",
-        (char *)"nineteen"
+      (char *)"twelve",
+      (char *)"one",
+      (char *)"two",
+      (char *)"three",
+      (char *)"four",
+      (char *)"five",
+      (char *)"six",
+      (char *)"seven",
+      (char *)"eight",
+      (char *)"nine",
+      (char *)"ten",
+      (char *)"eleven",
+      (char *)"twelve",
+      (char *)"thirteen",
+      (char *)"fourteen",
+      (char *)"fifteen",
+      (char *)"sixteen",
+      (char *)"seventeen",
+      (char *)"eighteen",
+      (char *)"nineteen"
     };
 
     char* tensStrings[4] =
     {
-        (char *)"twenty",
-        (char *)"thirty",
-        (char *)"forty",
-        (char *)"fifty"
+      (char *)"twenty",
+      (char *)"thirty",
+      (char *)"forty",
+      (char *)"fifty"
     };
 
-public:
+  public:
     rgb24 color = CRGB(CRGB::White);
 
     unsigned int drawFrame() {
-        uint8_t y = clockDigitalShort.y;
+      uint8_t y = clockDigitalShort.y;
 
-        if (y < 0)
-            y = 0;
-        else if (y > 11)
-            y = 11;
+      if (y < 0)
+        y = 0;
+      else if (y > 11)
+        y = 11;
 
-        return drawFrame(y);
+      return drawFrame(y);
     }
 
     unsigned int drawFrame(const int cy) {
-        matrix.setScrollOffsetFromTop(MATRIX_HEIGHT);
-        matrix.setScrollColor(color);
-        matrix.setForegroundFont(font3x5);
-        matrix.clearForeground();
+      matrix.setScrollOffsetFromTop(MATRIX_HEIGHT);
+      matrix.setScrollColor(color);
+      matrix.setForegroundFont(font3x5);
+      matrix.clearForeground();
 
-        int x = 1;
+      int x = 1;
 
-        if (isTimeAvailable) {
-            uint8_t hour = time.Hour;
-            uint8_t minute = time.Minute;
+      if (isTimeAvailable) {
+        uint8_t hour = time.Hour;
+        uint8_t minute = time.Minute;
 
-            if (hour > 12)
-                hour -= 12;
+        if (hour > 12)
+          hour -= 12;
 
-            matrix.drawForegroundString(x, cy, onesStrings[hour]);
-
-            if (minute == 0) {
-                matrix.drawForegroundString(x, cy + 7, "o'clock");
-            }
-            else if (minute < 10) {
-                matrix.drawForegroundString(x, cy + 7, "oh");
-                matrix.drawForegroundString(x, cy + 14, onesStrings[minute]);
-            }
-            else if (minute == 17) {
-                matrix.drawForegroundString(x, cy + 7, onesStrings[7]);
-                matrix.drawForegroundString(x, cy + 14, "teen");
-            }
-            else if (minute < 20) {
-                matrix.drawForegroundString(x, cy + 7, onesStrings[minute]);
-            }
-            else {
-                matrix.drawForegroundString(x, cy + 7, tensStrings[minute / 10 - 2]);
-
-                if (minute % 10 > 0) {
-                    matrix.drawForegroundString(x, cy + 14, onesStrings[minute % 10]);
-                }
-            }
+        if (minute == 0) {
+          matrix.drawForegroundString(x, cy, onesStrings[hour]);
+          matrix.drawForegroundString(x, cy + 7, "o'clock");
+        }
+        else if (minute < 10) {
+          matrix.drawForegroundString(x, cy, onesStrings[minute]);
+          matrix.drawForegroundString(x, cy + 7, "past");
+          matrix.drawForegroundString(x, cy + 14, onesStrings[hour]);
+        }
+        else if (minute == 17) {
+          matrix.drawForegroundString(x, cy, onesStrings[hour]);
+          matrix.drawForegroundString(x, cy + 7, onesStrings[7]);
+          matrix.drawForegroundString(x, cy + 14, "teen");
+        }
+        else if (minute < 20) {
+          matrix.drawForegroundString(x, cy, onesStrings[hour]);
+          matrix.drawForegroundString(x, cy + 7, onesStrings[minute]);
         }
         else {
-            matrix.drawForegroundString(x, cy, "No Clock", true);
-        }
+          matrix.drawForegroundString(x, cy, onesStrings[hour]);
+          matrix.drawForegroundString(x, cy + 7, tensStrings[minute / 10 - 2]);
 
-        return 0;
+          if (minute % 10 > 0) {
+            matrix.drawForegroundString(x, cy + 14, onesStrings[minute % 10]);
+          }
+        }
+      }
+      else {
+        matrix.drawForegroundString(x, cy, "No Clock", true);
+      }
+
+      return 0;
     }
 };
 extern ClockText clockText;

@@ -28,9 +28,11 @@ public:
     virtual bool isPlaylist() {
         return true;
     }
+    
+    boolean isCurrentItemFinished = true;
 
     virtual void move(int step) = 0;
-    virtual void moveRandom() = 0;
+    virtual void moveRandom(int step) = 0;
     virtual int getCurrentIndex();
 };
 

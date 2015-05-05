@@ -102,11 +102,12 @@ class SettingsSetTime : public Runnable {
           break;
 
         case SetMinute:
-          time.Minute += d;
-          if (time.Minute > 59)
-            time.Minute = 1;
-          else if (time.Minute < 1)
+          if (d > 0 && time.Minute == 59)
+            time.Minute = 0;
+          else if (d < 1 && time.Minute == 0)
             time.Minute = 59;
+          else
+            time.Minute += d;
           setTime();
           break;
       }

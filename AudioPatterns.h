@@ -46,6 +46,9 @@ class AudioPatterns : public Playlist {
     AudioPatternFunctionPointer currentItem;
 
     static const int PATTERN_COUNT = 48;
+
+    AudioPatternFunctionPointer shuffledItems[PATTERN_COUNT];
+
     AudioPatternFunctionPointer items[PATTERN_COUNT] = {
       &AudioPatterns::analyzerColumns,
       &AudioPatterns::analyzerPixels,
@@ -1199,6 +1202,35 @@ class AudioPatterns : public Playlist {
 
     AudioPatterns() {
       this->currentItem = items[currentIndex];
+
+      // add the items to the shuffledItems array
+      for (int a = 0; a < PATTERN_COUNT; a++) {
+        shuffledItems[a] = items[a];
+      }
+
+      shuffleItems();
+    }
+
+    void moveRandom(int step) {
+      currentIndex += step;
+
+      if (currentIndex >= PATTERN_COUNT) currentIndex = 0;
+      else if (currentIndex < 0) currentIndex = PATTERN_COUNT - 1;
+
+      if (effects.paletteIndex == effects.RandomPaletteIndex)
+        effects.RandomPalette();
+
+      currentItem = shuffledItems[currentIndex];
+    }
+
+    void shuffleItems() {
+      for (int a = 0; a < PATTERN_COUNT; a++)
+      {
+        int r = random(a, PATTERN_COUNT);
+        AudioPatternFunctionPointer temp = shuffledItems[a];
+        shuffledItems[a] = shuffledItems[r];
+        shuffledItems[r] = temp;
+      }
     }
 
     char* Drawable::name = (char *)"Audio Patterns";
@@ -1209,16 +1241,8 @@ class AudioPatterns : public Playlist {
       if (currentIndex >= PATTERN_COUNT) currentIndex = 0;
       else if (currentIndex < 0) currentIndex = PATTERN_COUNT - 1;
 
-      currentItem = items[currentIndex];
-    }
-
-    void moveRandom() {
-      currentIndex = random(0, PATTERN_COUNT);
-
-      if (currentIndex >= PATTERN_COUNT) currentIndex = 0;
-      else if (currentIndex < 0) currentIndex = PATTERN_COUNT - 1;
-
-      effects.RandomPalette();
+      if (effects.paletteIndex == effects.RandomPaletteIndex)
+        effects.RandomPalette();
 
       currentItem = items[currentIndex];
     }

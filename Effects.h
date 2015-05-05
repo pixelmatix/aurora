@@ -122,7 +122,7 @@ class Effects {
     }
 
     // palettes
-    static const int paletteCount = 9;
+    static const int paletteCount = 10;
     int paletteIndex = -1;
     TBlendType currentBlendType = BLEND;
     CRGBPalette16 currentPalette;
@@ -130,6 +130,7 @@ class Effects {
     char* currentPaletteName;
 
     static const int HeatColorsPaletteIndex = 6;
+    static const int RandomPaletteIndex = 9;
 
     void Setup() {
       currentPalette = RainbowColors_p;
@@ -142,7 +143,7 @@ class Effects {
     }
 
     void RandomPalette() {
-      loadPalette(random(0, paletteCount));
+      loadPalette(RandomPaletteIndex);
     }
 
     void loadPalette(int index) {
@@ -194,6 +195,11 @@ class Effects {
           setupIcePalette();
           currentPaletteName = (char *)"Ice";
           break;
+        case RandomPaletteIndex:
+          loadPalette(random(0, paletteCount - 1));
+          paletteIndex = RandomPaletteIndex;
+          currentPaletteName = (char *)"Random";
+          break;
       }
     }
 
@@ -218,6 +224,8 @@ class Effects {
         loadPalette(7);
       else if (paletteName == "Ice")
         loadPalette(8);
+      else if (paletteName == "Random")
+        RandomPalette();
     }
 
     void listPalettes() {
@@ -237,7 +245,8 @@ class Effects {
         "Grayscale",
         "Heat",
         "Lava",
-        "Ice"
+        "Ice",
+        "Random"
       };
 
       for (int i = 0; i < paletteCount; i++) {

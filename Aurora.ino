@@ -202,9 +202,19 @@ void setup()
   }
 
   if (!HAS_IR) {
-    menu.playbackState = Menu::PlaybackState::Autoplay;
+    menu.playMode = Menu::PlaybackState::Autoplay;
     menu.visible = false;
   }
+
+  menuItemAudioPatterns.audioScaleEnabled = true;
+  menuItemAudioPatterns.playModeEnabled = true;
+  menuItemAudioPatterns.paletteEnabled = true;
+
+  menuItemPatterns.playModeEnabled = true;
+  menuItemPatterns.paletteEnabled = true;
+
+  menuItemAnimations.visible = sdAvailable && animations.imageCount > 0;
+  menuItemAnimations.playModeEnabled = true;
 
   clockDisplay.readTime();
   // Serial.print(F("isTimeAvailable: "));
@@ -274,7 +284,9 @@ void powerOff()
   while (true) {
     InputCommand command = readCommand();
     if (command == InputCommand::Power ||
-        command == InputCommand::CycleBrightness)
+        command == InputCommand::CycleBrightness ||
+        command == InputCommand::BrightnessUp ||
+        command == InputCommand::BrightnessDown)
       return;
 
     // go idle for a while, converve power
@@ -337,15 +349,15 @@ void loadRotationSetting() {
     default:
       rotation = rotation0;
       break;
-      
+
     case 1:
       rotation = rotation90;
       break;
-      
+
     case 2:
       rotation = rotation180;
       break;
-      
+
     case 3:
       rotation = rotation270;
       break;
@@ -493,32 +505,32 @@ void applyDemoMode() {
     switch (demoMode) {
       case 1: // autoplay audio patterns
         menu.currentIndex = 0;
-        menu.playbackState = Menu::PlaybackState::Autoplay;
+        menu.playMode = Menu::PlaybackState::Autoplay;
         break;
 
       case 2:
         menu.currentIndex = 0;
-        menu.playbackState = Menu::PlaybackState::Random;
+        menu.playMode = Menu::PlaybackState::Random;
         break;
 
       case 3:
         menu.currentIndex = 1;
-        menu.playbackState = Menu::PlaybackState::Autoplay;
+        menu.playMode = Menu::PlaybackState::Autoplay;
         break;
 
       case 4:
         menu.currentIndex = 1;
-        menu.playbackState = Menu::PlaybackState::Random;
+        menu.playMode = Menu::PlaybackState::Random;
         break;
 
       case 5:
         menu.currentIndex = 2;
-        menu.playbackState = Menu::PlaybackState::Autoplay;
+        menu.playMode = Menu::PlaybackState::Autoplay;
         break;
 
       case 6:
         menu.currentIndex = 2;
-        menu.playbackState = Menu::PlaybackState::Random;
+        menu.playMode = Menu::PlaybackState::Random;
         break;
     }
   }
