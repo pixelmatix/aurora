@@ -143,8 +143,8 @@ void setup()
   // Setup serial interface
   Serial.begin(115200);
 
-  delay(2500);
-  Serial.println(F("starting..."));
+  delay(250);
+  // Serial.println(F("starting..."));
 
   // Initialize the IR receiver
   irReceiver.enableIRIn();
@@ -207,8 +207,8 @@ void setup()
   }
 
   clockDisplay.readTime();
-  Serial.print(F("isTimeAvailable: "));
-  Serial.println(isTimeAvailable);
+  // Serial.print(F("isTimeAvailable: "));
+  // Serial.println(isTimeAvailable);
 }
 
 void loop()

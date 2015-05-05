@@ -834,7 +834,7 @@ class AudioPatterns : public Playlist {
         }
 
         // Step 2.  ignite new 'sparks' of heat based on audio level
-        if (random(255) < level / 5) {
+        if (random(255) < (uint8_t)(level / 5)) {
           // int x = (p[0] + p[1] + p[2]) / 3;
 
           int xy = XY(x, MATRIX_HEIGHT - 1);

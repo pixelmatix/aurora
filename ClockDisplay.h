@@ -87,6 +87,7 @@ class ClockDisplay : public Playlist {
       // try to read the DS1307RTC
       if (RTC.read(time)) {
         hasDS1307RTC = true;
+        return true;
       }
       else {
         if (!hasSetSyncProvider) {
