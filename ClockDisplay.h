@@ -29,7 +29,7 @@
 class ClockDisplay : public Playlist {
   public:
     unsigned int lastRead = 0;
-    const unsigned int readInterval = 250; // ms
+    const unsigned int readInterval = 1000; // ms
 
     int currentIndex = 0;
 
@@ -79,22 +79,25 @@ class ClockDisplay : public Playlist {
         currentItem->start();
     }
 
+    bool hasSetSyncProvider = false;
+
     bool readTimeHardware() {
       hasDS1307RTC = false;
 
       // try to read the DS1307RTC
       if (RTC.read(time)) {
         hasDS1307RTC = true;
-        return true;
-      }
-      else if (timeStatus() != timeSet) {
-        return false;
       }
       else {
-        breakTime(now(), time);
-      }
+        if (!hasSetSyncProvider) {
+          // set the Time library to use Teensy 3.0's RTC to keep time
+          setSyncProvider(getTeensy3Time);
+        }
 
-      return true;
+        uint8_t second = time.Second;
+        breakTime(now(), time);
+        return second != time.Second;
+      }
     }
 
     void readTime() {

@@ -81,12 +81,12 @@ class SettingsBrightness : public Runnable {
 
         switch (command) {
           case InputCommand::Up:
-            adjustBrightness(1);
+            adjustBrightness(1, true);
             hasChanges = true;
             break;
 
           case InputCommand::Down:
-            adjustBrightness(-1);
+            adjustBrightness(-1, true);
             hasChanges = true;
             break;
 

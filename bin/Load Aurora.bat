@@ -1,1 +1,1 @@
-"C:\Program Files (x86)\Arduino\hardware\tools\teensy_post_compile.exe" -file="Aurora" -path="C:\Users\Jason\Documents\Arduino\aurora-bitbucket\Aurora\bin" -tools="C:\Program Files (x86)\Arduino\hardware\tools"
+"C:\Program Files (x86)\Arduino\hardware\tools\teensy_post_compile.exe" -file="Aurora" -path="C:\Users\Jason\Documents\Arduino\Aurora\bin" -tools="C:\Program Files (x86)\Arduino\hardware\tools"

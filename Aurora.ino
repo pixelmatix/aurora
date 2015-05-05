@@ -143,8 +143,8 @@ void setup()
   // Setup serial interface
   Serial.begin(115200);
 
-  delay(250);
-  // Serial.println(F("starting..."));
+  delay(2500);
+  Serial.println(F("starting..."));
 
   // Initialize the IR receiver
   irReceiver.enableIRIn();
@@ -207,7 +207,8 @@ void setup()
   }
 
   clockDisplay.readTime();
-  // Serial.println(isTimeAvailable);
+  Serial.print(F("isTimeAvailable: "));
+  Serial.println(isTimeAvailable);
 }
 
 void loop()
@@ -407,14 +408,14 @@ int getBackgroundBrightnessLevel() {
   return level;
 }
 
-void adjustBrightness(int delta) {
+void adjustBrightness(int delta, boolean wrap) {
   int level = getBrightnessLevel();
 
   level += delta;
   if (level < 0)
-    level = brightnessCount - 1;
+    level = wrap ? brightnessCount - 1 : 0;
   if (level >= brightnessCount)
-    level = 0;
+    level = wrap ? 0 : brightnessCount - 1;
 
   brightness = brightnessMap[level];
   boundBrightness();
@@ -422,7 +423,7 @@ void adjustBrightness(int delta) {
 }
 
 uint8_t cycleBrightness() {
-  adjustBrightness(1);
+  adjustBrightness(1, true);
   saveBrightnessSetting();
 
   if (brightness == brightnessMap[0])

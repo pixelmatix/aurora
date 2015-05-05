@@ -211,14 +211,14 @@ class Menu {
               currentMenuItem->drawable->stop();
           }
           else if (command == InputCommand::BrightnessUp) {
-            adjustBrightness(1);
+            adjustBrightness(1, false);
             saveBrightnessSetting();
             brightnessChanged = true;
             showingBrightnessIndicator = true;
             brightnessIndicatorTimout = millis() + brightnessIndicatorDuration;
           }
           else if (command == InputCommand::BrightnessDown) {
-            adjustBrightness(-1);
+            adjustBrightness(-1, false);
             saveBrightnessSetting();
             brightnessChanged = true;
             showingBrightnessIndicator = true;
