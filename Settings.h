@@ -129,6 +129,8 @@ class Settings : public Runnable {
     }
 
     void run() {
+      clockDisplay.readTime();
+      
       menuItemMoveClock.visible = isTimeAvailable;
       menuItemClockColor.visible = isTimeAvailable;
       menuItemClock24Hour.visible = isTimeAvailable;

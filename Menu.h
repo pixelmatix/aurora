@@ -264,6 +264,7 @@ class Menu {
             }
             else if (!clockVisible && !messageVisible) {
               // if neither are visible, just show the current clock or message
+              clockDisplay.readTime();
               clockVisible = isTimeAvailable && clockOrMessageIndex < clockDisplay.itemCount;
               messageVisible = !clockVisible;
               if (messageVisible && messagePlayer.currentIndex < 0)

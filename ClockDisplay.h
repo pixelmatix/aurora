@@ -93,6 +93,7 @@ class ClockDisplay : public Playlist {
         if (!hasSetSyncProvider) {
           // set the Time library to use Teensy 3.0's RTC to keep time
           setSyncProvider(getTeensy3Time);
+          hasSetSyncProvider = true;
         }
 
         uint8_t second = time.Second;
