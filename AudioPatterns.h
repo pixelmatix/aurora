@@ -45,7 +45,7 @@ class AudioPatterns : public Playlist {
 
     AudioPatternFunctionPointer currentItem;
 
-    static const int PATTERN_COUNT = 48;
+    static const int PATTERN_COUNT = 38;
 
     AudioPatternFunctionPointer shuffledItems[PATTERN_COUNT];
 
@@ -53,10 +53,6 @@ class AudioPatterns : public Playlist {
       &AudioPatterns::analyzerColumns,
       &AudioPatterns::analyzerPixels,
       &AudioPatterns::lineChart,
-      &AudioPatterns::viz2,
-      &AudioPatterns::viz10,
-      &AudioPatterns::radialPixels,
-      &AudioPatterns::radialCircles,
       &AudioPatterns::radar,
       &AudioPatterns::gauge,
       &AudioPatterns::gauge2,
@@ -66,7 +62,6 @@ class AudioPatterns : public Playlist {
       &AudioPatterns::incrementalDrift2,
       &AudioPatterns::pendulumWave,
       &AudioPatterns::fire,
-      &AudioPatterns::staticMiddlePixelsWithNoiseSmearing,
       &AudioPatterns::analyzerPixelsWithNoiseSmearing,
       &AudioPatterns::analyzerColumnsWithNoiseSmearing,
       &AudioPatterns::randomEmittersWithNoiseSmearing,
@@ -91,13 +86,18 @@ class AudioPatterns : public Playlist {
       &AudioPatterns::lineChartWithHorizontalStream,
       &AudioPatterns::lineChartWithSpiral,
       &AudioPatterns::lineChartWithSpirals,
-      &AudioPatterns::FunkyNoise1,
-      &AudioPatterns::FunkyNoise2,
-      &AudioPatterns::FunkyNoise3,
-      &AudioPatterns::FunkyNoise4,
-      &AudioPatterns::FunkyNoise5,
       &AudioPatterns::circles,
       &AudioPatterns::boxes,
+      //      &AudioPatterns::viz2,
+      //      &AudioPatterns::viz10,
+      //      &AudioPatterns::radialPixels,
+      //      &AudioPatterns::radialCircles,
+      //      &AudioPatterns::staticMiddlePixelsWithNoiseSmearing,
+      //      &AudioPatterns::FunkyNoise1,
+      //      &AudioPatterns::FunkyNoise2,
+      //      &AudioPatterns::FunkyNoise3,
+      //      &AudioPatterns::FunkyNoise4,
+      //      &AudioPatterns::FunkyNoise5,
     };
 
     void circles() {
@@ -213,19 +213,19 @@ class AudioPatterns : public Playlist {
       }
     }
 
-    void staticMiddlePixelsWithNoiseSmearing() {
-      effects.DimAll(235);
-
-      for (int i = 0; i < bandCount; i++) {
-        int level = levels[i];
-        if (drawPeaks)
-          level = peaks[i];
-
-        effects.Pixel(i * 4 + 3, MATRIX_CENTRE_Y, level / 4);
-      }
-
-      effects.standardNoiseSmearing();
-    }
+    //    void staticMiddlePixelsWithNoiseSmearing() {
+    //      effects.DimAll(235);
+    //
+    //      for (int i = 0; i < bandCount; i++) {
+    //        int level = levels[i];
+    //        if (drawPeaks)
+    //          level = peaks[i];
+    //
+    //        effects.Pixel(i * 4 + 3, MATRIX_CENTRE_Y, level / 4);
+    //      }
+    //
+    //      effects.standardNoiseSmearing();
+    //    }
 
     void areaChart() {
       effects.StreamDown(145);
@@ -398,44 +398,44 @@ class AudioPatterns : public Playlist {
       }
     }
 
-    // 2 frequencies linked to dot emitters in a spiral mandala (MSGEQtest2)
-    void viz2() {
-      if (levels[0] > 500) {
-        effects.Pixel(0, 0, 255 + hueoffset);
-        effects.Pixel(1, 1, 255 + hueoffset);
-      }
-      if (levels[2] > 200) {
-        effects.Pixel(3, 3, 85 + hueoffset);
-      }
-      if (levels[6] > 200) {
-        effects.Pixel(5, 5, 170 + hueoffset);
-      }
-      effects.SpiralStream(8, 8, 8, 128);
-      effects.Caleidoscope1();
-
-      EVERY_N_MILLIS(100) {
-        hueoffset++;
-      }
-    }
-
-    // basedrum/snare linked to emitters (AudioSpiral)
-    void viz10() {
-      if (levels[1] > 500) {
-        effects.Pixel(0, 0, hueoffset);
-        effects.Pixel(1, 1, hueoffset);
-      }
-      if (levels[4] > 500) {
-        effects.Pixel(random8(16), random8(16), 128 + hueoffset);
-      }
-
-      effects.DimAll(254);
-      effects.SpiralStream(8, 8, 8, 128);
-      effects.Caleidoscope1();
-
-      EVERY_N_MILLIS(100) {
-        hueoffset++;
-      }
-    }
+    //    // 2 frequencies linked to dot emitters in a spiral mandala (MSGEQtest2)
+    //    void viz2() {
+    //      if (levels[0] > 500) {
+    //        effects.Pixel(0, 0, 255 + hueoffset);
+    //        effects.Pixel(1, 1, 255 + hueoffset);
+    //      }
+    //      if (levels[2] > 200) {
+    //        effects.Pixel(3, 3, 85 + hueoffset);
+    //      }
+    //      if (levels[6] > 200) {
+    //        effects.Pixel(5, 5, 170 + hueoffset);
+    //      }
+    //      effects.SpiralStream(8, 8, 8, 128);
+    //      effects.Caleidoscope1();
+    //
+    //      EVERY_N_MILLIS(100) {
+    //        hueoffset++;
+    //      }
+    //    }
+    //
+    //    // basedrum/snare linked to emitters (AudioSpiral)
+    //    void viz10() {
+    //      if (levels[1] > 500) {
+    //        effects.Pixel(0, 0, hueoffset);
+    //        effects.Pixel(1, 1, hueoffset);
+    //      }
+    //      if (levels[4] > 500) {
+    //        effects.Pixel(random8(16), random8(16), 128 + hueoffset);
+    //      }
+    //
+    //      effects.DimAll(254);
+    //      effects.SpiralStream(8, 8, 8, 128);
+    //      effects.Caleidoscope1();
+    //
+    //      EVERY_N_MILLIS(100) {
+    //        hueoffset++;
+    //      }
+    //    }
 
     // random emitters with spirals
     void randomEmitters() {
@@ -631,183 +631,183 @@ class AudioPatterns : public Playlist {
 
     int band5 = (int) ((float) bandCount * 0.75);
 
-    void FunkyNoise1() {
-      int level0 = levels[0] / 4;
-      if (drawPeaks)
-        level0 = peaks[0] / 4;
-
-      int level1 = levels[1] / 4;
-      if (drawPeaks)
-        level1 = peaks[1] / 4;
-
-      int level5 = levels[band5] / 4;
-      if (drawPeaks)
-        level5 = peaks[5] / 4;
-
-      scale = level5 / 4;
-      FillNoiseCentral();
-      for (int i = 0; i < MATRIX_WIDTH; i++) {
-        for (int j = 0; j < MATRIX_HEIGHT; j++) {
-          effects.leds[XY(i, j)] =
-            effects.ColorFromCurrentPalette(
-              // color controlled by lowest basedrum + noisevalue
-              level0 + noise[0][i][j],
-              // brightness controlled by kickdrum
-              level1);
-        }
-      }
-
-      if (drawMiniAnalyzer)
-        miniAnalyzer();
-    }
-
-    void FunkyNoise2() {
-      int level0 = levels[0] / 4;
-      if (drawPeaks)
-        level0 = peaks[0] / 4;
-
-      int level1 = levels[1] / 4;
-      if (drawPeaks)
-        level1 = peaks[1] / 4;
-
-      // zoom factor set by inversed band 0 (63-0)
-      // 3 added to avoid maximal zoom = plain color
-      scale = 3 + 63 - level0 / 4;
-      // move one step in the noise space when basedrum is present
-      // = slowly change the pattern while the beat goes
-      if (level0 > 128) z++;
-      // calculate the noise array
-      FillNoiseCentral();
-      // map the noise
-      for (int i = 0; i < MATRIX_WIDTH; i++) {
-        for (int j = 0; j < MATRIX_HEIGHT; j++) {
-          effects.leds[XY(i, j)] =
-            effects.ColorFromCurrentPalette(
-              // hue controlled by noise and shifted by band 0
-              // 40 added to end redish
-              40 + noise[0][i][j] + level0 / 4,
-              // brightness controlled by the average of band 0 and 1
-              // 20 to ensure a minimum brigness
-              // = limiting contrast
-              20 + (level0 + level1) / 2);
-        }
-      }
-
-      if (drawMiniAnalyzer)
-        miniAnalyzer();
-    }
-
-    void FunkyNoise3() {
-      int level0 = levels[0] / 4;
-      if (drawPeaks)
-        level0 = peaks[0] / 4;
-
-      int level3 = levels[3] / 4;
-      if (drawPeaks)
-        level3 = peaks[3] / 4;
-
-      // fix zoom factor
-      scale = 50;
-      // move one step in the noise space when basedrum is present
-      // = slowly change the pattern while the beat goes
-      if (level0 > 128) z = z + 10;
-      // x any y is defining the position in the noise space
-      x = level3 / 3;
-      y = level0 / 3;
-      // calculate the noise array
-      FillNoiseCentral();
-      // map the noise
-      for (int i = 0; i < MATRIX_WIDTH; i++) {
-        for (int j = 0; j < MATRIX_HEIGHT; j++) {
-          effects.leds[XY(i, j)] =
-            effects.ColorFromCurrentPalette(
-              // hue controlled by noise and shifted by band 0
-              // 40 added to end redish
-              40 + noise[0][i][j] + level0 / 4,
-              // brightness controlled by noise
-              noise[0][i][j]);
-        }
-      }
-
-      if (drawMiniAnalyzer)
-        miniAnalyzer();
-    }
-
-    void FunkyNoise4() {
-      int level0 = levels[0] / 4;
-      if (drawPeaks)
-        level0 = peaks[0] / 4;
-
-      int level5 = levels[band5] / 4;
-      if (drawPeaks)
-        level5 = peaks[band5] / 4;
-
-      // fix zoom factor
-      scale = 50;
-      // position in the noise space depending on band 5
-      // = change of the pattern
-      z = level5 / 2;
-      // x scrolling through
-      // = horizontal movement
-      x = x + 50;
-      // y controlled by lowest band
-      // = jumping of the pattern
-      y = level0;
-      // calculate the noise array
-      FillNoiseCentral();
-      // map the noise
-      for (int i = 0; i < MATRIX_WIDTH; i++) {
-        for (int j = 0; j < MATRIX_HEIGHT; j++) {
-          effects.leds[XY(i, j)] =
-            effects.ColorFromCurrentPalette(
-              // hue controlled by noise and shifted by band 0
-              // 40 added to end redish
-              40 + noise[0][i][j] + level0 / 4,
-              // brightness controlled by noise
-              noise[0][i][j]);
-        }
-      }
-
-      if (drawMiniAnalyzer)
-        miniAnalyzer();
-    }
-
-    void FunkyNoise5() {
-      int level0 = levels[0] / 4;
-      if (drawPeaks)
-        level0 = peaks[0] / 4;
-
-      int level1 = levels[1] / 4;
-      if (drawPeaks)
-        level1 = peaks[1] / 4;
-
-      // dynamic zoom: average of band 0 and 1
-      scale = 128 - (level0 + level1) / 4;
-      // position in the noise space depending on x, y and z
-      // z slowly scrolling
-      z++;
-      // x static
-      // y scrolling
-      y = y + 20;
-      // calculate the noise array
-      // x any y are this time defining THE CENTER
-      FillNoiseCentral();
-      // map the noise
-      for (int i = 0; i < MATRIX_WIDTH; i++) {
-        for (int j = 0; j < MATRIX_HEIGHT; j++) {
-          effects.leds[XY(i, j)] =
-            effects.ColorFromCurrentPalette(
-              // hue controlled by noise and shifted by band 0
-              // 40 added to end redish
-              120 + noise[0][i][j] * 2,
-              // brightness controlled by noise
-              noise[0][i][j]);
-        }
-      }
-
-      if (drawMiniAnalyzer)
-        miniAnalyzer();
-    }
+    //    void FunkyNoise1() {
+    //      int level0 = levels[0] / 4;
+    //      if (drawPeaks)
+    //        level0 = peaks[0] / 4;
+    //
+    //      int level1 = levels[1] / 4;
+    //      if (drawPeaks)
+    //        level1 = peaks[1] / 4;
+    //
+    //      int level5 = levels[band5] / 4;
+    //      if (drawPeaks)
+    //        level5 = peaks[5] / 4;
+    //
+    //      scale = level5 / 4;
+    //      FillNoiseCentral();
+    //      for (int i = 0; i < MATRIX_WIDTH; i++) {
+    //        for (int j = 0; j < MATRIX_HEIGHT; j++) {
+    //          effects.leds[XY(i, j)] =
+    //            effects.ColorFromCurrentPalette(
+    //              // color controlled by lowest basedrum + noisevalue
+    //              level0 + noise[0][i][j],
+    //              // brightness controlled by kickdrum
+    //              level1);
+    //        }
+    //      }
+    //
+    //      if (drawMiniAnalyzer)
+    //        miniAnalyzer();
+    //    }
+    //
+    //    void FunkyNoise2() {
+    //      int level0 = levels[0] / 4;
+    //      if (drawPeaks)
+    //        level0 = peaks[0] / 4;
+    //
+    //      int level1 = levels[1] / 4;
+    //      if (drawPeaks)
+    //        level1 = peaks[1] / 4;
+    //
+    //      // zoom factor set by inversed band 0 (63-0)
+    //      // 3 added to avoid maximal zoom = plain color
+    //      scale = 3 + 63 - level0 / 4;
+    //      // move one step in the noise space when basedrum is present
+    //      // = slowly change the pattern while the beat goes
+    //      if (level0 > 128) z++;
+    //      // calculate the noise array
+    //      FillNoiseCentral();
+    //      // map the noise
+    //      for (int i = 0; i < MATRIX_WIDTH; i++) {
+    //        for (int j = 0; j < MATRIX_HEIGHT; j++) {
+    //          effects.leds[XY(i, j)] =
+    //            effects.ColorFromCurrentPalette(
+    //              // hue controlled by noise and shifted by band 0
+    //              // 40 added to end redish
+    //              40 + noise[0][i][j] + level0 / 4,
+    //              // brightness controlled by the average of band 0 and 1
+    //              // 20 to ensure a minimum brigness
+    //              // = limiting contrast
+    //              20 + (level0 + level1) / 2);
+    //        }
+    //      }
+    //
+    //      if (drawMiniAnalyzer)
+    //        miniAnalyzer();
+    //    }
+    //
+    //    void FunkyNoise3() {
+    //      int level0 = levels[0] / 4;
+    //      if (drawPeaks)
+    //        level0 = peaks[0] / 4;
+    //
+    //      int level3 = levels[3] / 4;
+    //      if (drawPeaks)
+    //        level3 = peaks[3] / 4;
+    //
+    //      // fix zoom factor
+    //      scale = 50;
+    //      // move one step in the noise space when basedrum is present
+    //      // = slowly change the pattern while the beat goes
+    //      if (level0 > 128) z = z + 10;
+    //      // x any y is defining the position in the noise space
+    //      x = level3 / 3;
+    //      y = level0 / 3;
+    //      // calculate the noise array
+    //      FillNoiseCentral();
+    //      // map the noise
+    //      for (int i = 0; i < MATRIX_WIDTH; i++) {
+    //        for (int j = 0; j < MATRIX_HEIGHT; j++) {
+    //          effects.leds[XY(i, j)] =
+    //            effects.ColorFromCurrentPalette(
+    //              // hue controlled by noise and shifted by band 0
+    //              // 40 added to end redish
+    //              40 + noise[0][i][j] + level0 / 4,
+    //              // brightness controlled by noise
+    //              noise[0][i][j]);
+    //        }
+    //      }
+    //
+    //      if (drawMiniAnalyzer)
+    //        miniAnalyzer();
+    //    }
+    //
+    //    void FunkyNoise4() {
+    //      int level0 = levels[0] / 4;
+    //      if (drawPeaks)
+    //        level0 = peaks[0] / 4;
+    //
+    //      int level5 = levels[band5] / 4;
+    //      if (drawPeaks)
+    //        level5 = peaks[band5] / 4;
+    //
+    //      // fix zoom factor
+    //      scale = 50;
+    //      // position in the noise space depending on band 5
+    //      // = change of the pattern
+    //      z = level5 / 2;
+    //      // x scrolling through
+    //      // = horizontal movement
+    //      x = x + 50;
+    //      // y controlled by lowest band
+    //      // = jumping of the pattern
+    //      y = level0;
+    //      // calculate the noise array
+    //      FillNoiseCentral();
+    //      // map the noise
+    //      for (int i = 0; i < MATRIX_WIDTH; i++) {
+    //        for (int j = 0; j < MATRIX_HEIGHT; j++) {
+    //          effects.leds[XY(i, j)] =
+    //            effects.ColorFromCurrentPalette(
+    //              // hue controlled by noise and shifted by band 0
+    //              // 40 added to end redish
+    //              40 + noise[0][i][j] + level0 / 4,
+    //              // brightness controlled by noise
+    //              noise[0][i][j]);
+    //        }
+    //      }
+    //
+    //      if (drawMiniAnalyzer)
+    //        miniAnalyzer();
+    //    }
+    //
+    //    void FunkyNoise5() {
+    //      int level0 = levels[0] / 4;
+    //      if (drawPeaks)
+    //        level0 = peaks[0] / 4;
+    //
+    //      int level1 = levels[1] / 4;
+    //      if (drawPeaks)
+    //        level1 = peaks[1] / 4;
+    //
+    //      // dynamic zoom: average of band 0 and 1
+    //      scale = 128 - (level0 + level1) / 4;
+    //      // position in the noise space depending on x, y and z
+    //      // z slowly scrolling
+    //      z++;
+    //      // x static
+    //      // y scrolling
+    //      y = y + 20;
+    //      // calculate the noise array
+    //      // x any y are this time defining THE CENTER
+    //      FillNoiseCentral();
+    //      // map the noise
+    //      for (int i = 0; i < MATRIX_WIDTH; i++) {
+    //        for (int j = 0; j < MATRIX_HEIGHT; j++) {
+    //          effects.leds[XY(i, j)] =
+    //            effects.ColorFromCurrentPalette(
+    //              // hue controlled by noise and shifted by band 0
+    //              // 40 added to end redish
+    //              120 + noise[0][i][j] * 2,
+    //              // brightness controlled by noise
+    //              noise[0][i][j]);
+    //        }
+    //      }
+    //
+    //      if (drawMiniAnalyzer)
+    //        miniAnalyzer();
+    //    }
 
     void fire() {
       // cooling: How much does the air cool as it rises?
@@ -1101,98 +1101,96 @@ class AudioPatterns : public Playlist {
         effects.leds[xy] = color;
       }
 
-      EVERY_N_MILLIS(50) {
-        theta += 2;
-      }
+      theta++;
     }
 
-    void radialCircles() {
-      effects.DimAll(230);
-
-      uint8_t x = 0;
-      uint8_t y = 0;
-      //      uint8_t brightness = 0;
-      int level = 0;
-      CRGB color;
-      byte localtheta = 0;
-
-      for (int i = 0; i < bandCount; i++) {
-        level = levels[i];
-        if (drawPeaks)
-          level = peaks[i];
-
-        //        brightness = level / 4;
-        //        if (brightness < 32) brightness = 32;
-
-        // offset = i * 2 + 1;
-        // color = effects.ColorFromCurrentPalette(offset * 18, brightness);
-        color = effects.ColorFromCurrentPalette(level / 5);
-        localtheta = theta + (i * 2) * (256 / 14);
-        x = mapcos8(localtheta, 2, MATRIX_WIDTH - 2);
-        y = mapsin8(localtheta, 2, MATRIX_HEIGHT - 2);
-        matrix.fillCircle(x, y, 3, color);
-
-        // offset = i * 2 + 3;
-        // color = effects.ColorFromCurrentPalette(offset * 18, brightness);
-        color = effects.ColorFromCurrentPalette(level / 5);
-        localtheta = theta + (i * 2 + 1) * (256 / 14);
-        x = mapcos8(localtheta, 2, MATRIX_WIDTH - 2);
-        y = mapsin8(localtheta, 2, MATRIX_HEIGHT - 2);
-        matrix.fillCircle(x, y, 3, color);
-      }
-
-      EVERY_N_MILLIS(1) {
-        theta += 1;
-      }
-
-      effects.standardNoiseSmearing();
-    }
-
-    boolean peakhandled = false;
-
-    void radialPixels() {
-      effects.DimAll(230);
-
-      uint8_t x = 0;
-      uint8_t y = 0;
-      uint8_t brightness = 0;
-      int level = 0;
-      CRGB color;
-      byte localtheta = 0;
-
-      for (int i = 0; i < bandCount; i++) {
-        level = levels[i];
-        if (drawPeaks)
-          level = peaks[i];
-
-        if (i == 0 && level > 768) {
-          theta -= 1;
-        }
-
-        brightness = level / 16;
-        if (brightness < 16) brightness = 16;
-
-        color = effects.ColorFromCurrentPalette(level / 5);
-        localtheta = theta - (i * 2) * (256 / 14);
-        x = mapcos8(localtheta, 4, MATRIX_WIDTH - 4);
-        y = mapsin8(localtheta, 4, MATRIX_HEIGHT - 4);
-        effects.leds[XY(x, y)] += color;
-        x = mapcos8(localtheta, 12, MATRIX_WIDTH - 12);
-        y = mapsin8(localtheta, 12, MATRIX_HEIGHT - 12);
-        effects.leds[XY(x, y)] += color;
-
-        color = effects.ColorFromCurrentPalette(level / 5);
-        localtheta = theta - (i * 2 + 1) * (256 / 14);
-        x = mapcos8(localtheta, 4, MATRIX_WIDTH - 4);
-        y = mapsin8(localtheta, 4, MATRIX_HEIGHT - 4);
-        effects.leds[XY(x, y)] += color;
-        x = mapcos8(localtheta, 12, MATRIX_WIDTH - 12);
-        y = mapsin8(localtheta, 12, MATRIX_HEIGHT - 12);
-        effects.leds[XY(x, y)] += color;
-      }
-
-      effects.standardNoiseSmearing();
-    }
+    //    void radialCircles() {
+    //      effects.DimAll(230);
+    //
+    //      uint8_t x = 0;
+    //      uint8_t y = 0;
+    //      //      uint8_t brightness = 0;
+    //      int level = 0;
+    //      CRGB color;
+    //      byte localtheta = 0;
+    //
+    //      for (int i = 0; i < bandCount; i++) {
+    //        level = levels[i];
+    //        if (drawPeaks)
+    //          level = peaks[i];
+    //
+    //        //        brightness = level / 4;
+    //        //        if (brightness < 32) brightness = 32;
+    //
+    //        // offset = i * 2 + 1;
+    //        // color = effects.ColorFromCurrentPalette(offset * 18, brightness);
+    //        color = effects.ColorFromCurrentPalette(level / 5);
+    //        localtheta = theta + (i * 2) * (256 / 14);
+    //        x = mapcos8(localtheta, 2, MATRIX_WIDTH - 2);
+    //        y = mapsin8(localtheta, 2, MATRIX_HEIGHT - 2);
+    //        matrix.fillCircle(x, y, 3, color);
+    //
+    //        // offset = i * 2 + 3;
+    //        // color = effects.ColorFromCurrentPalette(offset * 18, brightness);
+    //        color = effects.ColorFromCurrentPalette(level / 5);
+    //        localtheta = theta + (i * 2 + 1) * (256 / 14);
+    //        x = mapcos8(localtheta, 2, MATRIX_WIDTH - 2);
+    //        y = mapsin8(localtheta, 2, MATRIX_HEIGHT - 2);
+    //        matrix.fillCircle(x, y, 3, color);
+    //      }
+    //
+    //      EVERY_N_MILLIS(1) {
+    //        theta += 1;
+    //      }
+    //
+    //      effects.standardNoiseSmearing();
+    //    }
+    //
+    //    boolean peakhandled = false;
+    //
+    //    void radialPixels() {
+    //      effects.DimAll(230);
+    //
+    //      uint8_t x = 0;
+    //      uint8_t y = 0;
+    //      uint8_t brightness = 0;
+    //      int level = 0;
+    //      CRGB color;
+    //      byte localtheta = 0;
+    //
+    //      for (int i = 0; i < bandCount; i++) {
+    //        level = levels[i];
+    //        if (drawPeaks)
+    //          level = peaks[i];
+    //
+    //        if (i == 0 && level > 768) {
+    //          theta -= 1;
+    //        }
+    //
+    //        brightness = level / 16;
+    //        if (brightness < 16) brightness = 16;
+    //
+    //        color = effects.ColorFromCurrentPalette(level / 5);
+    //        localtheta = theta - (i * 2) * (256 / 14);
+    //        x = mapcos8(localtheta, 4, MATRIX_WIDTH - 4);
+    //        y = mapsin8(localtheta, 4, MATRIX_HEIGHT - 4);
+    //        effects.leds[XY(x, y)] += color;
+    //        x = mapcos8(localtheta, 12, MATRIX_WIDTH - 12);
+    //        y = mapsin8(localtheta, 12, MATRIX_HEIGHT - 12);
+    //        effects.leds[XY(x, y)] += color;
+    //
+    //        color = effects.ColorFromCurrentPalette(level / 5);
+    //        localtheta = theta - (i * 2 + 1) * (256 / 14);
+    //        x = mapcos8(localtheta, 4, MATRIX_WIDTH - 4);
+    //        y = mapsin8(localtheta, 4, MATRIX_HEIGHT - 4);
+    //        effects.leds[XY(x, y)] += color;
+    //        x = mapcos8(localtheta, 12, MATRIX_WIDTH - 12);
+    //        y = mapsin8(localtheta, 12, MATRIX_HEIGHT - 12);
+    //        effects.leds[XY(x, y)] += color;
+    //      }
+    //
+    //      effects.standardNoiseSmearing();
+    //    }
 
     int currentIndex = 0;
 

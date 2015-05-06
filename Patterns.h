@@ -99,8 +99,8 @@ class Patterns : public Playlist {
     PatternGhost ghost;
     PatternDots1 dots1;
     PatternDots2 dots2;
-    PatternSlowMandala slowMandala;
-    PatternMandala8 mandala8;
+    //    PatternSlowMandala slowMandala;
+    //    PatternMandala8 mandala8;
     //    PatternBitmap bitmap;
 
     int currentIndex = 0;
@@ -110,7 +110,7 @@ class Patterns : public Playlist {
       return currentIndex;
     }
 
-    static const int PATTERN_COUNT = 39;
+    static const int PATTERN_COUNT = 37;
 
     Drawable* shuffledItems[PATTERN_COUNT];
 
@@ -153,9 +153,9 @@ class Patterns : public Playlist {
       &ghost,
       &dots1,
       &dots2,
-      &slowMandala,
-      &mandala8
-      //        &bitmap
+      //      &slowMandala,
+      //      &mandala8
+      //      &bitmap
     };
 
   public:
