@@ -45,7 +45,7 @@ class AudioPatterns : public Playlist {
 
     AudioPatternFunctionPointer currentItem;
 
-    static const int PATTERN_COUNT = 40;
+    static const int PATTERN_COUNT = 39;
 
     AudioPatternFunctionPointer shuffledItems[PATTERN_COUNT];
 
@@ -80,7 +80,6 @@ class AudioPatterns : public Playlist {
       &AudioPatterns::fallingSpectrogram,
       &AudioPatterns::randomEmitters,
       &AudioPatterns::linesFromCenterToOutside,
-      &AudioPatterns::linesFromOutsideToCenter,
       &AudioPatterns::analyzerPixelsX4,
       &AudioPatterns::areaChart,
       &AudioPatterns::lineChartWithHorizontalStream,
@@ -100,6 +99,7 @@ class AudioPatterns : public Playlist {
       //      &AudioPatterns::FunkyNoise3,
       //      &AudioPatterns::FunkyNoise4,
       //      &AudioPatterns::FunkyNoise5,
+      //      &AudioPatterns::linesFromOutsideToCenter,
     };
 
     void circles() {
@@ -476,31 +476,17 @@ class AudioPatterns : public Playlist {
     // radiating outwards at equal angles with length and color based on level
     void linesFromCenterToOutside() {
       effects.DimAll(235);
+//      effects.SpiralStream(15, 15, 16, 120);
 
-      drawLinesFromCenterToOutside(2);
-
-      effects.standardNoiseSmearing();
-    }
-
-    // single channel (levels), one line per band starting from the outside
-    // radiating inwards at equal angles with length and color based on level
-    void linesFromOutsideToCenter() {
-      effects.DimAll(235);
-
-      drawLinesFromOutsideToCenter(2);
-
-      effects.standardNoiseSmearing();
-    }
-
-    // single channel (levels), X lines per channel starting from the center
-    // radiating outwards at equal angles with length and color based on channel level
-    void drawLinesFromCenterToOutside(int linesPerBand) {
       int x0 = 15;
       int y0 = 15;
+      int linesPerBand = 2;
+      
       if (linesPerBand * bandCount > 32)
         linesPerBand = bandCount / 32;
-      float degreesPerLine = 360.0 / (bandCount * linesPerBand);
-      float angle = 0.0;
+        
+      float degreesPerLine = 360 / (bandCount * linesPerBand);
+      float angle = 360.0;
       for (int band = 0; band < bandCount; band++) {
         int level = levels[band];
         if (drawPeaks)
@@ -513,42 +499,86 @@ class AudioPatterns : public Playlist {
             float radians = radians(angle);
             int x1 = x0 + length * sin(radians);
             int y1 = y0 + length * cos(radians);
-            matrix.drawLine(x0, y0, x1, y1, color);
+            radians = radians(angle - degreesPerLine);
+            int x2 = x0 + length * sin(radians);
+            int y2 = y0 + length * cos(radians);
+            matrix.fillTriangle(x0, y0, x1, y1, x2, y2, color);
           }
-          angle += degreesPerLine;
+          angle -= degreesPerLine;
         }
       }
+
+//      effects.standardNoiseSmearing();
     }
 
-    // single channel (levels), X lines per channel starting from the outside
-    // radiating inwards at equal angles with length and color based on channel level
-    void drawLinesFromOutsideToCenter(int linesPerBand) {
-      int x0 = 15;
-      int y0 = 15;
-      if (linesPerBand * bandCount > 32)
-        linesPerBand = bandCount / 32;
-      float degreesPerLine = 360.0 / (bandCount * linesPerBand);
-      float angle = 0.0;
-      for (int band = 0; band < bandCount; band++) {
-        int level = levels[band];
-        if (drawPeaks)
-          level = peaks[band];
+//    // single channel (levels), one line per band starting from the outside
+//    // radiating inwards at equal angles with length and color based on level
+//    void linesFromOutsideToCenter() {
+////      effects.DimAll(235);
+//      effects.SpiralStream(15, 15, 16, 120);
+//
+//      drawLinesFromOutsideToCenter(1);
+//      
+////      effects.standardNoiseSmearing();
+//    }
 
-        for (int i = 0; i < linesPerBand; i++) {
-          CRGB color = effects.ColorFromCurrentPalette(level / 4);
-          float length = level / 64.0 - 1.0;
-          if (length > 0.0) {
-            float radians = radians(angle);
-            int x1 = x0 + 16 * sin(radians);
-            int y1 = y0 + 16 * cos(radians);
-            int x2 = x1 - length * sin(radians);
-            int y2 = y1 - length * cos(radians);
-            matrix.drawLine(x1, y1, x2, y2, color);
-          }
-          angle += degreesPerLine;
-        }
-      }
-    }
+//    // single channel (levels), X lines per channel starting from the center
+//    // radiating outwards at equal angles with length and color based on channel level
+//    void drawLinesFromCenterToOutside(int linesPerBand) {
+//      int x0 = 15;
+//      int y0 = 15;
+//      if (linesPerBand * bandCount > 32)
+//        linesPerBand = bandCount / 32;
+//      float degreesPerLine = 360.0 / (bandCount * linesPerBand);
+//      float angle = 360.0;
+//      for (int band = 0; band < bandCount; band++) {
+//        int level = levels[band];
+//        if (drawPeaks)
+//          level = peaks[band];
+//
+//        for (int i = 0; i < linesPerBand; i++) {
+//          CRGB color = effects.ColorFromCurrentPalette(level / 4);
+//          float length = level / 64.0 - 1.0;
+//          if (length > 0.0) {
+//            float radians = radians(angle);
+//            int x1 = x0 + length * sin(radians);
+//            int y1 = y0 + length * cos(radians);
+//            matrix.drawLine(x0, y0, x1, y1, color);
+//          }
+//          angle -= degreesPerLine;
+//        }
+//      }
+//    }
+
+//    // single channel (levels), X lines per channel starting from the outside
+//    // radiating inwards at equal angles with length and color based on channel level
+//    void drawLinesFromOutsideToCenter(int linesPerBand) {
+//      int x0 = 15;
+//      int y0 = 15;
+//      if (linesPerBand * bandCount > 32)
+//        linesPerBand = bandCount / 32;
+//      float degreesPerLine = 360.0 / (bandCount * linesPerBand);
+//      float angle = 360.0;
+//      for (int band = 0; band < bandCount; band++) {
+//        int level = levels[band];
+//        if (drawPeaks)
+//          level = peaks[band];
+//
+//        for (int i = 0; i < linesPerBand; i++) {
+//          CRGB color = effects.ColorFromCurrentPalette(level / 4);
+//          float length = level / 64.0 - 1.0;
+//          if (length > 0.0) {
+//            float radians = radians(angle);
+//            int x1 = x0 + 16 * sin(radians);
+//            int y1 = y0 + 16 * cos(radians);
+//            int x2 = x1 - length * sin(radians);
+//            int y2 = y1 - length * cos(radians);
+//            matrix.drawLine(x1, y1, x2, y2, color);
+//          }
+//          angle -= degreesPerLine;
+//        }
+//      }
+//    }
 
     // analyzer x 4 (as showed on youtube) (MSGEQtest4)
     void analyzerPixelsX4() {
