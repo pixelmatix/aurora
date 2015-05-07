@@ -45,7 +45,7 @@ class AudioPatterns : public Playlist {
 
     AudioPatternFunctionPointer currentItem;
 
-    static const int PATTERN_COUNT = 38;
+    static const int PATTERN_COUNT = 40;
 
     AudioPatternFunctionPointer shuffledItems[PATTERN_COUNT];
 
@@ -88,6 +88,8 @@ class AudioPatterns : public Playlist {
       &AudioPatterns::lineChartWithSpirals,
       &AudioPatterns::circles,
       &AudioPatterns::boxes,
+      &AudioPatterns::spiralSpectrum,
+      &AudioPatterns::spiralSpectrum2,
       //      &AudioPatterns::viz2,
       //      &AudioPatterns::viz10,
       //      &AudioPatterns::radialPixels,
@@ -1102,6 +1104,34 @@ class AudioPatterns : public Playlist {
       }
 
       theta++;
+    }
+
+    void spiralSpectrum() {
+      effects.SpiralStream(15, 15, 16, 125);
+
+      for (int i = 0; i < interpolatedBandCount; i++) {
+        int level = interpolatedLevels[i];
+
+        CRGB color = effects.ColorFromCurrentPalette(i * 15, level / 4);
+        matrix.drawPixel(i, i, color);
+        matrix.drawPixel(i, (MATRIX_HEIGHT - 1) - i, color);
+        matrix.drawPixel((MATRIX_WIDTH - 1) - i, i, color);
+        matrix.drawPixel((MATRIX_WIDTH - 1) - i, (MATRIX_HEIGHT - 1) - i, color);
+      }
+    }
+
+    void spiralSpectrum2() {
+      effects.SpiralStream(15, 15, 16, 125);
+
+      for (int i = 0; i < interpolatedBandCount; i++) {
+        int level = interpolatedLevels[i];
+
+        CRGB color = effects.ColorFromCurrentPalette(i * 15, level / 4);
+        matrix.drawPixel(i, MATRIX_CENTRE_Y, color);
+        matrix.drawPixel(MATRIX_CENTRE_X, i, color);
+        matrix.drawPixel((MATRIX_WIDTH - 1) - i, MATRIX_CENTRE_Y, color);
+        matrix.drawPixel(MATRIX_CENTRE_X, (MATRIX_HEIGHT - 1) - i, color);
+      }
     }
 
     //    void radialCircles() {

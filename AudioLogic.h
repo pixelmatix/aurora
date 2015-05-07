@@ -256,7 +256,8 @@ void ReadAudio() {
     if (level > 1023) {
       level = 1023;
     }
-
+    else if(level < 0) level = 0;
+    
     levels[band] = level;
 
     if (level >= peaks[band]) {
@@ -264,6 +265,7 @@ void ReadAudio() {
     }
     else if (peaks[band] > 0) {
       peaks[band] = peaks[band] - peakDecay;
+      if(peaks[band] < 0) peaks[band] = 0;
     }
 
     if (level > minAudioLevel)
