@@ -42,7 +42,8 @@ const int bandCount = 7;
 // the 10Bit (0-1023) audio band values
 int levels[bandCount];
 int peaks[bandCount];
-int peakDecay = 8;
+static const int defaultPeakDecay = 8;
+int peakDecay = defaultPeakDecay;
 bool drawPeaks = true;
 
 int correction[bandCount] = {

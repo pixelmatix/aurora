@@ -203,6 +203,8 @@ class AudioPatterns : public Playlist {
       drawAnalyzerPixels();
 
       effects.standardNoiseSmearing();
+      
+      peakDecay = 32;
     }
 
     void drawAnalyzerPixels() {
@@ -230,7 +232,7 @@ class AudioPatterns : public Playlist {
     //    }
 
     void areaChart() {
-      effects.StreamDown(145);
+      effects.StreamDown(130);
       analyzerLinesByIntensity();
     }
 
@@ -245,6 +247,8 @@ class AudioPatterns : public Playlist {
       analyzerLinesByIntensity();
 
       effects.standardNoiseSmearing();
+      
+      peakDecay = 32;
     }
 
     void lineChartWithSpiral() {
@@ -277,6 +281,8 @@ class AudioPatterns : public Playlist {
       analyzerColumnsByIntensity();
 
       effects.standardNoiseSmearing();
+      
+      peakDecay = 32;
     }
 
     void analyzerColumnsWithOneLargeSpiralStream() {
@@ -343,6 +349,8 @@ class AudioPatterns : public Playlist {
         y = (MATRIX_HEIGHT / 2) + level / (MATRIX_HEIGHT * 2);
         effects.Pixel(x, y, colorIndex);
       }
+      
+      peakDecay = 32;
     }
 
     void fallingSpectrogramPaletteSpectrum() {
@@ -455,6 +463,8 @@ class AudioPatterns : public Playlist {
       drawRandomEmitters();
 
       effects.standardNoiseSmearing();
+      
+      peakDecay = 32;
     }
 
     void drawRandomEmitters() {
@@ -1041,6 +1051,8 @@ class AudioPatterns : public Playlist {
       }
 
       effects.standardNoiseSmearing();
+      
+      peakDecay = 32;
     }
 
     void gauge() {
@@ -1308,7 +1320,10 @@ class AudioPatterns : public Playlist {
     unsigned int drawFrame() {
       ReadAudio();
 
+      peakDecay = defaultPeakDecay;
+      
       (this->*currentItem)();
+      
       return 0;
     }
 };
