@@ -68,8 +68,10 @@ class SettingsAudioCalibration : public Runnable {
           else if (mode == autoMode && !selectingMode) {
             color = CRGB::Red;
 
-            if (level > 0)
+            if (level > 0) {
               correction[i] = correction[i] - level;
+              hasChanges = true;
+            }
           }
 
           matrix.drawLine(i * 4 + 2, MATRIX_HEIGHT - level / MATRIX_HEIGHT, i * 4 + 2, 31, color);
@@ -168,6 +170,7 @@ class SettingsAudioCalibration : public Runnable {
       for (int i = 0; i < bandCount; i++) {
         correction[i] = 0;
       }
+      hasChanges = true;
     }
 
     unsigned int drawFrame() {
