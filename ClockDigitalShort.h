@@ -60,6 +60,8 @@ public:
             uint8_t hour = time.Hour;
             if (!twentyFourHour && hour > 12)
                 hour -= 12;
+            else if (!twentyFourHour && hour == 0)
+                hour = 12;
 
             matrix.setForegroundFont(gohufont11b);
             sprintf(timeBuffer, "%d:%02d", hour, time.Minute);

@@ -28,11 +28,14 @@ class SettingsSetTime : public Runnable {
     SetTimeState state = SetHour;
     unsigned int currentStateIndex = 0;
 
-    void setTime() {
+    void setTimeHardware() {
       if (hasDS1307RTC)
         RTC.write(time);
-      else
-        Teensy3Clock.set(makeTime(time));
+      else {
+        time_t t = makeTime(time);
+        Teensy3Clock.set(t);
+        setTime(t);
+      }
     }
 
   public:
@@ -93,12 +96,12 @@ class SettingsSetTime : public Runnable {
     void adjust(int d) {
       switch (state) {
         case SetHour:
-          time.Hour += d;
-          if (time.Hour > 24)
+          if (d > 0 && time.Hour == 23)
             time.Hour = 0;
-          else if (time.Hour < 0)
+          else if (d < 1 && time.Hour == 0)
             time.Hour = 23;
-          setTime();
+          else
+            time.Hour += d;
           break;
 
         case SetMinute:
@@ -108,9 +111,10 @@ class SettingsSetTime : public Runnable {
             time.Minute = 59;
           else
             time.Minute += d;
-          setTime();
           break;
       }
+
+      setTimeHardware();
     }
 };
 
