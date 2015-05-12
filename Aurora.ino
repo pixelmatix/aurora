@@ -133,6 +133,8 @@ MenuItem* mainMenuItems [] = {
 
 int mainMenuItemCount;
 
+bool enableAudioPatterns = true;
+
 time_t getTeensy3Time()
 {
   return Teensy3Clock.get();
@@ -187,6 +189,7 @@ void setup()
   if (sdAvailable) {
     loadRemotesSetting();
     loadRotationSetting();
+    enableAudioPatterns = loadByteSetting("enaudpat.txt", 1) > 0;
 
     loadDemoModeSetting();
 
@@ -206,6 +209,10 @@ void setup()
     menu.visible = false;
   }
 
+  if(!enableAudioPatterns)
+    menu.currentIndex = 1;
+    
+  menuItemAudioPatterns.visible = enableAudioPatterns;
   menuItemAudioPatterns.audioScaleEnabled = true;
   menuItemAudioPatterns.playModeEnabled = true;
   menuItemAudioPatterns.paletteEnabled = true;
@@ -316,25 +323,25 @@ void loadRemotesSetting() {
 
   byte remotes = loadByteSetting("remotes.txt", 7);
 
-  Serial.print(F("remotes setting is "));
-  Serial.println(remotes);
+  // Serial.print(F("remotes setting is "));
+  // Serial.println(remotes);
 
   sparkfunRemoteEnabled = (remotes & 1) == 1;
   adafruitRemoteEnabled = (remotes & 2) == 2;
   smartMatrixRemoteEnabled = (remotes & 4) == 4;
 
-  Serial.print(F("sparkfun remote is "));
-  Serial.println(sparkfunRemoteEnabled ? F("enabled") : F("disabled"));
+  // Serial.print(F("sparkfun remote is "));
+  // Serial.println(sparkfunRemoteEnabled ? F("enabled") : F("disabled"));
 
-  Serial.print(F("adafruit remote is "));
-  Serial.println(adafruitRemoteEnabled ? F("enabled") : F("disabled"));
+  // Serial.print(F("adafruit remote is "));
+  // Serial.println(adafruitRemoteEnabled ? F("enabled") : F("disabled"));
 
-  Serial.print(F("smartmatrix remote is "));
-  Serial.println(smartMatrixRemoteEnabled ? F("enabled") : F("disabled"));
+  // Serial.print(F("smartmatrix remote is "));
+  // Serial.println(smartMatrixRemoteEnabled ? F("enabled") : F("disabled"));
 
   // if no remotes are enabled, fall back and enable them all
   if (!sparkfunRemoteEnabled && !adafruitRemoteEnabled && !smartMatrixRemoteEnabled) {
-    Serial.println(F("enabling all remotes"));
+    // Serial.println(F("enabling all remotes"));
     sparkfunRemoteEnabled = true;
     adafruitRemoteEnabled = true;
     smartMatrixRemoteEnabled = true;
