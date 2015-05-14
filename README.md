@@ -1,18 +1,20 @@
 Aurora
 ======
 
-Aurora is a beautiful, dynamic art display. It's controllable, customizable, and extendable, allowing you to display your own animations and messages.
+Aurora runs on SmartMatrix, a dynamic LED art display and music visualizer.
 
-Aurora is driven by 1,024 bright RGB LEDS behind a diffusion screen. It's built using the [SmartMatrix SD Shield]
-and a 32x32 RGB LED matrix.
+SmartMatrix is a self-contained 32x32 pixel LED matrix display for music visualization, dynamic patterns, pixel art, and more!
+
+Customize what's on the screen with the included remote control: choose what's playing, show a clock or message on top, and change settings, all from the remote. You don't need a computer or phone to control what's on the screen.
 
 Features
 --------
 
-* Procedural pattern viewer
-* Animated GIF slideshow viewer
+* Music visualizer
+* Dynamic art display
+* Animated GIF pixel art display
 * Remote control, allowing for ease of use.
-* Optional Clock display in the foreground, over animation and pattern slideshows (**requires real-time clock chip**).
+* Optional Clock display in the foreground, over animation and pattern slideshows (**requires SmartMatrix or real-time clock chip attached to shield**).
 
 Demo Video
 -------------------------
