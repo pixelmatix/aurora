@@ -297,11 +297,11 @@ class Effects {
     }
 
     void ShowFrame() {
-#if (FASTLED_VERSION >= 3001000)
-      nblendPaletteTowardPalette(currentPalette, targetPalette, 24);
-#else
+      //#if (FASTLED_VERSION >= 3001000)
+      //      nblendPaletteTowardPalette(currentPalette, targetPalette, 24);
+      //#else
       currentPalette = targetPalette;
-#endif
+      //#endif
 
       matrix.swapBuffers();
       leds = (CRGB*) matrix.backBuffer();
