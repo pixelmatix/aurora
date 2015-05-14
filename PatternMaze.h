@@ -96,9 +96,10 @@ private:
     int cellCount = 0;
 
     int algorithm = 0;
-    int algorithmCount = 2;
+    int algorithmCount = 1;
 
     byte hue = 0;
+    byte hueOffset = 0;
 
     Directions directions[4] = { Up, Down, Left, Right };
 
@@ -128,10 +129,12 @@ private:
     }
 
     CRGB chooseColor(int index) {
+        byte h = index + hueOffset;
+                
         switch (algorithm) {
             case 0:
             default:
-                return effects.ColorFromCurrentPalette(index);
+                return effects.ColorFromCurrentPalette(h);
 
             case 1:
                 return effects.ColorFromCurrentPalette(hue++);
@@ -230,6 +233,7 @@ public:
             cellCount = 1;
 
             hue = 0;
+            hueOffset = random(0, 256);
         }
 
         drawNextCell();
