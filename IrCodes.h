@@ -411,10 +411,10 @@ InputCommand getCommand(unsigned long input) {
         return InputCommand::Right;
 
       case IRCODE_GAME_A_SELECT:
-        return InputCommand::Select;
+        return InputCommand::Back;
 
       case IRCODE_GAME_A_START:
-        return InputCommand::CycleBrightness;
+        return InputCommand::Select;
 
       case IRCODE_GAME_A_A:
         return InputCommand::PlayMode;

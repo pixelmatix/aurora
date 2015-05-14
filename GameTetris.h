@@ -131,10 +131,6 @@ class GameTetris : public Runnable {
           moveright();
           break;
 
-        case InputCommand::Select:
-          isPaused = !isPaused;
-          break;
-
         default:
           break;
       }
@@ -652,7 +648,7 @@ class GameTetris : public Runnable {
       int yi = 0;
       int i = 0;
       int j = 0;
-      
+
       //detect left
       for (i = FIELD_WIDTH - 1; i >= 0; i--)
       {
@@ -1066,9 +1062,13 @@ class GameTetris : public Runnable {
       while (true) {
         InputCommand command = handleInput();
 
-        if (command == InputCommand::Back) {
-          isPaused = true;
-          return;
+        switch (command) {
+          case InputCommand::Back:
+          case InputCommand::Select:
+          case InputCommand::Power:
+          case InputCommand::CycleBrightness:
+            isPaused = true;
+            return;
         }
 
         drawFrame();
@@ -1113,8 +1113,8 @@ class GameTetris : public Runnable {
 
       int left = (MATRIX_WIDTH - FIELD_WIDTH) / 2;
       int top = (MATRIX_HEIGHT - FIELD_HEIGHT) / 2;
-//      int right = MATRIX_WIDTH - left;
-//      int bottom = MATRIX_HEIGHT - top;
+      //      int right = MATRIX_WIDTH - left;
+      //      int bottom = MATRIX_HEIGHT - top;
 
       // Serial.println("drawing the blocks in the play field");
 

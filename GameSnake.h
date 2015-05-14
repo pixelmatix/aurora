@@ -107,10 +107,6 @@ class GameSnake : public Runnable {
           if (direction != LEFT) direction = RIGHT;
           break;
 
-        case InputCommand::Select:
-          isPaused = !isPaused;
-          break;
-
         default:
           break;
       }
@@ -224,9 +220,13 @@ class GameSnake : public Runnable {
       while (true) {
         InputCommand command = handleInput();
 
-        if (command == InputCommand::Back) {
-          isPaused = true;
-          return;
+        switch (command) {
+          case InputCommand::Back:
+          case InputCommand::Select:
+          case InputCommand::Power:
+          case InputCommand::CycleBrightness:
+            isPaused = true;
+            return;
         }
 
         drawFrame();
@@ -242,7 +242,7 @@ class GameSnake : public Runnable {
         update();
 
       matrix.fillScreen(black);
-      
+
       matrix.drawPixel(apple.x, apple.y, appleColor);
 
       // draw segments
