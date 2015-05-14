@@ -327,6 +327,7 @@ void loadRemotesSetting() {
   // 5 sparkfun & smartmatrix
   // 6 adafruit & smartmatrix
   // 7 sparkfun, adafruit & smartmatrix
+  // 8 ronix? six button remote
 
   byte remotes = loadByteSetting("remotes.txt", 7);
 
@@ -336,6 +337,7 @@ void loadRemotesSetting() {
   sparkfunRemoteEnabled = (remotes & 1) == 1;
   adafruitRemoteEnabled = (remotes & 2) == 2;
   smartMatrixRemoteEnabled = (remotes & 4) == 4;
+  ronixSixButtonRemoteEnabled = (remotes & 8) == 8;
 
   // Serial.print(F("sparkfun remote is "));
   // Serial.println(sparkfunRemoteEnabled ? F("enabled") : F("disabled"));
@@ -347,11 +349,12 @@ void loadRemotesSetting() {
   // Serial.println(smartMatrixRemoteEnabled ? F("enabled") : F("disabled"));
 
   // if no remotes are enabled, fall back and enable them all
-  if (!sparkfunRemoteEnabled && !adafruitRemoteEnabled && !smartMatrixRemoteEnabled) {
+  if (!sparkfunRemoteEnabled && !adafruitRemoteEnabled && !smartMatrixRemoteEnabled && !ronixSixButtonRemoteEnabled) {
     // Serial.println(F("enabling all remotes"));
     sparkfunRemoteEnabled = true;
     adafruitRemoteEnabled = true;
     smartMatrixRemoteEnabled = true;
+    ronixSixButtonRemoteEnabled = true;
   }
 }
 
@@ -669,8 +672,8 @@ void saveIntSetting(const char* name, int value) {
   strcpy(filepath, path);
   strcat(filepath, name);
 
-  Serial.print("saving ");
-  Serial.println(filepath);
+  // Serial.print("saving ");
+  // Serial.println(filepath);
 
   File file = SD.open(filepath, O_CREAT | O_TRUNC | O_WRITE);
   if (file) {
@@ -693,8 +696,8 @@ void saveByteSetting(const char* name, byte value) {
   strcpy(filepath, path);
   strcat(filepath, name);
 
-  Serial.print("saving ");
-  Serial.println(filepath);
+  // Serial.print("saving ");
+  // Serial.println(filepath);
 
   File file = SD.open(filepath, O_CREAT | O_TRUNC | O_WRITE);
   if (file) {

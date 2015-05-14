@@ -60,6 +60,7 @@ enum class InputCommand {
 bool sparkfunRemoteEnabled = true;
 bool adafruitRemoteEnabled = true;
 bool smartMatrixRemoteEnabled = true;
+bool ronixSixButtonRemoteEnabled = true;
 bool gameARemoteEnabled = true;
 bool gameBRemoteEnabled = true;
 
@@ -113,6 +114,14 @@ bool gameBRemoteEnabled = true;
 #define IRCODE_ADAFRUIT_7                  0x00FD18E7 // 16586983
 #define IRCODE_ADAFRUIT_8                  0x00FD9867 // 16619623
 #define IRCODE_ADAFRUIT_9                  0x00FD58A7 // 16603303
+
+#define IRCODE_RONIX_SIX_BUTTON_HELD   4294967295
+#define IRCODE_RONIX_SIX_BUTTON_M      16728255
+#define IRCODE_RONIX_SIX_BUTTON_UP     16752735
+#define IRCODE_RONIX_SIX_BUTTON_LEFT   16716015
+#define IRCODE_RONIX_SIX_BUTTON_SELECT 16748655
+#define IRCODE_RONIX_SIX_BUTTON_RIGHT  16732335
+#define IRCODE_RONIX_SIX_BUTTON_DOWN   16756815
 
 #define IRCODE_GAME_A_UP     2814785559
 #define IRCODE_GAME_A_DOWN   3881522439
@@ -393,6 +402,28 @@ InputCommand getCommand(unsigned long input) {
 
       case IRCODE_SMARTMATRIX_BRIGHTNESS_DOWN:
         return InputCommand::BrightnessDown;
+    }
+  }
+
+  if (ronixSixButtonRemoteEnabled) {
+    switch (input) {
+      case IRCODE_RONIX_SIX_BUTTON_UP:
+        return InputCommand::Up;
+
+      case IRCODE_RONIX_SIX_BUTTON_DOWN:
+        return InputCommand::Down;
+
+      case IRCODE_RONIX_SIX_BUTTON_LEFT:
+        return InputCommand::Left;
+
+      case IRCODE_RONIX_SIX_BUTTON_RIGHT:
+        return InputCommand::Right;
+
+      case IRCODE_RONIX_SIX_BUTTON_SELECT:
+        return InputCommand::Select;
+
+      case IRCODE_RONIX_SIX_BUTTON_M:
+        return InputCommand::CycleBrightness;
     }
   }
 
