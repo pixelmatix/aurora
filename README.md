@@ -3,34 +3,16 @@ Aurora
 
 Aurora runs on SmartMatrix, a dynamic LED art display and music visualizer.
 
+[![SmartMatrix](https://ksr-ugc.imgix.net/projects/979600/photo-original.JPG?v=1431226937&w=1024&h=768&fit=crop&auto=format&q=92&s=1aa8ae7a79a25f1c3e2e6ef2cce4a586)](http://pixl.mx/kick2015)
+
 SmartMatrix is a self-contained 32x32 pixel LED matrix display for music visualization, dynamic patterns, pixel art, and more!
 
 Customize what's on the screen with the included remote control: choose what's playing, show a clock or message on top, and change settings, all from the remote. You don't need a computer or phone to control what's on the screen.
 
-Features
---------
-
-* Music visualizer
-* Dynamic art display
-* Animated GIF pixel art display
-* Remote control, allowing for ease of use.
-* Optional Clock display in the foreground, over animation and pattern slideshows (**requires SmartMatrix or real-time clock chip attached to shield**).
-
-Demo Video
--------------------------
-
-[![Aurora Demo Video](http://img.youtube.com/vi/dRn1rFWGPWk/0.jpg)](http://www.youtube.com/watch?v=dRn1rFWGPWk)
-
-Installation
-------------
-See [Installation](https://github.com/pixelmatix/aurora/wiki/Installation) in the [Aurora Wiki] for instructions on how to load the pre-compiled Aurora program onto the Teensy 3.1
-
-See [Compiling](https://github.com/pixelmatix/aurora/wiki/Compiling) in the [Aurora Wiki] for instructions on how setup the Arduino IDE and all the libraries that are needed to compile Aurora.
-
-
 More Information
 ----------------
 
+* [SmartMatrix](http://pixl.mx/kick2015)
 * [Aurora Wiki] on GitHub for documentation
 * [Aurora Project] on GitHub for source code
 * [Aurora Issue Tracker] on GitHub for reporting issues
