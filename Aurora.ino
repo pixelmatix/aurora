@@ -112,6 +112,10 @@ StreamingMode streamingMode;
 #include "Menu.h"
 Menu menu;
 
+#include <QueueArray.h>
+#include "Games.h"
+Games games;
+
 #include "Settings.h"
 Settings settings;
 
@@ -121,6 +125,7 @@ Settings settings;
 MenuItem menuItemAudioPatterns = MenuItem((char*)"Audio Patterns", &audioPatterns);
 MenuItem menuItemPatterns = MenuItem((char*)"Patterns", &patterns);
 MenuItem menuItemAnimations = MenuItem((char*)"Animations", &animations);
+MenuItem menuItemGames = MenuItem((char*)"Games", &games);
 MenuItem menuItemSettings = MenuItem((char*)"Settings", &settings);
 
 // Main Menu
@@ -128,6 +133,7 @@ MenuItem* mainMenuItems [] = {
   &menuItemAudioPatterns,
   &menuItemPatterns,
   &menuItemAnimations,
+  &menuItemGames,
   &menuItemSettings,
 };
 
@@ -190,6 +196,7 @@ void setup()
     loadRemotesSetting();
     loadRotationSetting();
     enableAudioPatterns = loadByteSetting("enaudpat.txt", 1) > 0;
+    menuItemGames.visible = loadByteSetting("gamesvis.txt", 0) > 0;
 
     loadDemoModeSetting();
 
