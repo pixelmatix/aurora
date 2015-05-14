@@ -86,7 +86,9 @@ class Patterns : public Playlist {
     PatternFlock flock;
     PatternInfinity infinity;
     PatternPlasma plasma;
-    PatternInvaders invaders;
+    PatternInvadersSmall invadersSmall;
+    PatternInvadersMedium invadersMedium;
+    PatternInvadersLarge invadersLarge;
     PatternSnake snake;
     PatternCube cube;
     PatternFire fire;
@@ -110,7 +112,7 @@ class Patterns : public Playlist {
       return currentIndex;
     }
 
-    static const int PATTERN_COUNT = 37;
+    static const int PATTERN_COUNT = 39;
 
     Drawable* shuffledItems[PATTERN_COUNT];
 
@@ -141,7 +143,9 @@ class Patterns : public Playlist {
       &flock,
       &infinity,
       &plasma,
-      &invaders,
+      &invadersSmall,
+      &invadersMedium,
+      &invadersLarge,
       &snake,
       &cube,
       &fire,
