@@ -1069,6 +1069,9 @@ class GameTetris : public Runnable {
           case InputCommand::CycleBrightness:
             isPaused = true;
             return;
+
+          default:
+            break;
         }
 
         drawFrame();
