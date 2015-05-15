@@ -112,7 +112,7 @@ class GameTetris : public Runnable {
     }
 
     InputCommand handleInput() {
-      InputCommand command = readCommand(); // defaultHoldDelay
+      InputCommand command = readCommand(100);
 
       switch (command) {
         case InputCommand::Up:
@@ -137,6 +137,7 @@ class GameTetris : public Runnable {
 
       return command;
     }
+
     void check_gameover()
     {
       int i;
