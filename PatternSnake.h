@@ -116,7 +116,7 @@ public:
     unsigned int drawFrame() {
         matrix.fillScreen(CRGB(CRGB::Black));
 
-        fill_palette(colors, SNAKE_LENGTH, initialHue++, 5, effects.currentPalette, 255, BLEND);
+        fill_palette(colors, SNAKE_LENGTH, initialHue++, 5, effects.currentPalette, 255, LINEARBLEND);
 
         for (int i = 0; i < snakeCount; i++) {
             Snake* snake = &snakes[i];

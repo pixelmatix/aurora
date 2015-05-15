@@ -124,7 +124,7 @@ class Effects {
     // palettes
     static const int paletteCount = 10;
     int paletteIndex = -1;
-    TBlendType currentBlendType = BLEND;
+    TBlendType currentBlendType = LINEARBLEND;
     CRGBPalette16 currentPalette;
     CRGBPalette16 targetPalette;
     char* currentPaletteName;
@@ -655,7 +655,7 @@ class Effects {
       leds[XY(x, y)] = ColorFromCurrentPalette(colorIndex);
     }
 
-    CRGB ColorFromCurrentPalette(uint8_t index = 0, uint8_t brightness = 255, TBlendType blendType = BLEND) {
+    CRGB ColorFromCurrentPalette(uint8_t index = 0, uint8_t brightness = 255, TBlendType blendType = LINEARBLEND) {
       return ColorFromPalette(currentPalette, index, brightness, currentBlendType);
     }
 
