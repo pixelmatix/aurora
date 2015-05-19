@@ -1,10 +1,9 @@
 Aurora
 ======
 
-Aurora is a beautiful, dynamic art display. It's controllable, customizable, and extendable, allowing you to display your own animations and messages.
+Aurora runs on SmartMatrix, a beautiful music visualizer, dynamic art display, video game art display, and more.
 
-Aurora is driven by 1,024 bright RGB LEDS behind a diffusion screen. It's built using the [SmartMatrix SD Shield]
-and a 32x32 RGB LED matrix.
+More information on SmartMatrix: [SmartMatrix Kickstarter]
 
 Features
 --------
@@ -73,6 +72,7 @@ Thanks to these fine game companies for allowing us to use and distribute their 
 ![Tiny Barbarian](https://raw.githubusercontent.com/pixelmatix/aurora/master/sd/gifs/TinyFlex.gif) [Tiny Barbarian] by [StarQuail Games]  
 ![Chasm](https://raw.githubusercontent.com/pixelmatix/aurora/master/sd/gifs/ChasmDaltynCrouch.gif) [Chasm] by [Discord Games]
 
+[SmartMatrix Kickstarter]:https://www.kickstarter.com/projects/pixelmatix/smartmatrix-dynamic-led-art-display-and-music-visu
 [SmartMatrix User Community]:https://plus.google.com/u/0/communities/105354523738870531811
 [Aurora Project]:https://github.com/pixelmatix/aurora
 [Aurora Wiki]:https://github.com/pixelmatix/aurora/wiki
