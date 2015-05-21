@@ -27,6 +27,7 @@
 #include "SettingsBackgroundBrightness.h"
 #include "SettingsMoveClock.h"
 #include "SettingsSetTime.h"
+#include "SettingsSetDate.h"
 #include "SettingsClockColor.h"
 #include "SettingsClock24Hour.h"
 #include "SettingsMenuColor.h"
@@ -47,6 +48,7 @@ class Settings : public Runnable {
     SettingsMoveClock moveClock;
     SettingsClockColor clockColor;
     SettingsSetTime setTime;
+    SettingsSetDate setDate;
     SettingsClock24Hour set24Hour;
     SettingsAutoplayDuration setAutoplayDuration;
     SettingsAudioCalibration audioCalibration;
@@ -54,7 +56,7 @@ class Settings : public Runnable {
     SettingsDemoMode demoMode;
     Drawable exit;
 
-    static const int itemCount = 12;
+    static const int itemCount = 13;
 
     MenuItem menuItemBrightness = MenuItem((char *)"Brightness", &brightness);
     MenuItem menuItemBgBrightness = MenuItem((char *)"BG Brightness", &backgroundBrightness);
@@ -64,6 +66,7 @@ class Settings : public Runnable {
     MenuItem menuItemClockColor = MenuItem((char *)"Clock Color", &clockColor);
     MenuItem menuItemClock24Hour = MenuItem((char *)"12/24 Hour Clock", &set24Hour);
     MenuItem menuItemSetTime = MenuItem((char *)"Set Time", &setTime);
+    MenuItem menuItemSetDate = MenuItem((char *)"Set Date", &setDate);
     MenuItem menuItemNoiseReduction = MenuItem((char *)"Audio Calibration", &audioCalibration);
     MenuItem menuItemUpdateFiles = MenuItem((char *)"Update Files", &updateFiles);
     MenuItem menuItemDemoMode = MenuItem((char *)"Demo Mode", &demoMode);
@@ -78,6 +81,7 @@ class Settings : public Runnable {
       &menuItemClockColor,
       &menuItemClock24Hour,
       &menuItemSetTime,
+      &menuItemSetDate,
       &menuItemNoiseReduction,
       &menuItemUpdateFiles,
       &menuItemDemoMode,
@@ -130,7 +134,7 @@ class Settings : public Runnable {
 
     void run() {
       clockDisplay.readTime();
-      
+
       menuItemMoveClock.visible = isTimeAvailable;
       menuItemClockColor.visible = isTimeAvailable;
       menuItemClock24Hour.visible = isTimeAvailable;

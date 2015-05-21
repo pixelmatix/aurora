@@ -33,12 +33,14 @@ extern bool isTimeAvailable;
 enum SetTimeState {
   SetHour,
   SetMinute,
+  SetSecond,
 };
 
-static const unsigned int SetTimeStatesCount = 2;
+static const unsigned int SetTimeStatesCount = 3;
 SetTimeState SetTimeStates[SetTimeStatesCount] = {
   SetHour,
   SetMinute,
+  SetSecond,
 };
 
 class ClockDigitalShort : public Drawable {

@@ -88,6 +88,9 @@ ClockDigitalShort clockDigitalShort;
 #include "ClockText.h"
 ClockText clockText;
 
+#include "ClockCountdown.h"
+ClockCountdown clockCountdown;
+
 #include "ClockDisplay.h"
 ClockDisplay clockDisplay;
 
@@ -216,9 +219,9 @@ void setup()
     menu.visible = false;
   }
 
-  if(!enableAudioPatterns)
+  if (!enableAudioPatterns)
     menu.currentIndex = 1;
-    
+
   menuItemAudioPatterns.visible = enableAudioPatterns;
   menuItemAudioPatterns.audioScaleEnabled = true;
   menuItemAudioPatterns.playModeEnabled = true;
@@ -656,6 +659,50 @@ int loadByteSetting(const char* name, byte defaultValue) {
   }
 
   return byteValue;
+}
+
+tmElements_t loadDateTimeSetting(const char* name) {
+  tmElements_t value;
+
+  if (!sdAvailable)
+    return value;
+
+  char* path = (char *) "/aurora/";
+
+  if (!SD.exists(path)) {
+    SD.mkdir(path);
+  }
+
+  char filepath[255];
+  strcpy(filepath, path);
+  strcat(filepath, name);
+
+  File file = SD.open(filepath, FILE_READ);
+  if (file) {
+    char c;
+    value.Year = CalendarYrToTm(readInt(file, 4));
+    if (c >= 0) value.Month = readInt(file, 2);
+    if (c >= 0) value.Day = readInt(file, 2);
+    if (c >= 0) value.Hour = readInt(file, 2);
+    if (c >= 0) value.Minute = readInt(file, 2);
+    if (c >= 0) value.Second = readInt(file, 2);
+
+    file.close();
+  }
+
+  return value;
+}
+
+int readInt(File &file, uint8_t maxLength) {
+  String text;
+  char c = file.read();
+  int length = 1;
+  while (c >= 0 && length <= maxLength) {
+    text.append(c);
+    c = file.read();
+    length++;
+  }
+  return text.toInt();
 }
 
 void saveIntSetting(const char* name, int value) {

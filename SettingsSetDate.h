@@ -20,12 +20,25 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef SettingsSetTime_H
-#define SettingsSetTime_H
+#ifndef SettingsSetDate_H
+#define SettingsSetDate_H
 
-class SettingsSetTime : public Runnable {
+enum SetDateState {
+  SetYear,
+  SetMonth,
+  SetDay,
+};
+
+static const unsigned int SetDateStatesCount = 3;
+SetDateState SetDateStates[SetDateStatesCount] = {
+  SetYear,
+  SetMonth,
+  SetDay,
+};
+
+class SettingsSetDate : public Runnable {
   private:
-    SetTimeState state = SetHour;
+    SetDateState state = SetYear;
     unsigned int currentStateIndex = 0;
 
     char timeBuffer[9];
@@ -78,7 +91,7 @@ class SettingsSetTime : public Runnable {
         else if (currentStateIndex < 0)
           currentStateIndex = SetTimeStatesCount - 1;
 
-        state = SetTimeStates[currentStateIndex];
+        state = SetDateStates[currentStateIndex];
       }
     }
 
@@ -90,10 +103,14 @@ class SettingsSetTime : public Runnable {
 
       matrix.setForegroundFont(font3x5);
 
-      clockDisplay.readTime();
-
       if (isTimeAvailable) {
-        sprintf(timeBuffer, "%02d-%02d-%02d", time.Hour, time.Minute, time.Second);
+        uint16_t year = time.Year + 1970;
+        while (year > 999)
+          year -= 1000;
+        while (year > 99)
+          year -= 100;
+
+        sprintf(timeBuffer, "%02d-%02d-%02d", year, time.Month, time.Day);
       }
       else {
         sprintf(timeBuffer, "No Clock");
@@ -103,23 +120,23 @@ class SettingsSetTime : public Runnable {
       matrix.setScrollColor(clockDisplay.color);
       matrix.clearForeground();
 
-      // draw the time
+      // draw the date
       matrix.drawForegroundString(x, y, timeBuffer, true);
 
       // draw instruction text
       switch (state) {
-        case SetHour:
-          matrix.drawForegroundString(1, 0, "24 Hour", true);
+        case SetYear:
+          matrix.drawForegroundString(1, 0, "Year", true);
           x = 0;
           break;
 
-        case SetMinute:
-          matrix.drawForegroundString(1, 0, "Minute", true);
+        case SetMonth:
+          matrix.drawForegroundString(1, 0, "Month", true);
           x = 12;
           break;
 
-        case SetSecond:
-          matrix.drawForegroundString(1, 0, "Second", true);
+        case SetDay:
+          matrix.drawForegroundString(1, 0, "Day", true);
           x = 24;
           break;
 
@@ -148,32 +165,30 @@ class SettingsSetTime : public Runnable {
 
     void adjust(int d) {
       switch (state) {
-        case SetHour:
-          if (d > 0 && time.Hour == 23)
-            time.Hour = 0;
-          else if (d < 1 && time.Hour == 0)
-            time.Hour = 23;
-          else
-            time.Hour += d;
+        case SetYear:
+          if (d > 0 || time.Year > 0)
+            time.Year += d;
           break;
 
-        case SetMinute:
-          if (d > 0 && time.Minute == 59)
-            time.Minute = 0;
-          else if (d < 1 && time.Minute == 0)
-            time.Minute = 59;
+        case SetMonth:
+          if (d > 0 && time.Month == 12)
+            time.Month = 1;
+          else if (d < 1 && time.Month == 1)
+            time.Month = 12;
           else
-            time.Minute += d;
+            time.Month += d;
           break;
-          
-          
-        case SetSecond:
-          if (d > 0 && time.Second == 59)
-            time.Second = 0;
-          else if (d < 1 && time.Second == 0)
-            time.Second = 59;
+
+        case SetDay:
+          if (d > 0 && time.Day == 31)
+            time.Day = 1;
+          else if (d < 1 && time.Day == 1)
+            time.Day = 31;
           else
-            time.Second += d;
+            time.Day += d;
+          break;
+
+        default:
           break;
       }
 

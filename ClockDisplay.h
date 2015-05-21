@@ -33,11 +33,12 @@ class ClockDisplay : public Playlist {
 
     int currentIndex = 0;
 
-    static const int itemCount = 2;
+    static const int itemCount = 3;
 
     Drawable* items[itemCount] = {
       &clockDigitalShort,
       &clockText,
+      &clockCountdown,
     };
 
     Drawable* currentItem = items[currentIndex];
@@ -139,6 +140,7 @@ class ClockDisplay : public Playlist {
     }
 
     void loadSettings() {
+      clockCountdown.loadSettings();
       clockDigitalShort.loadSettings();
       currentIndex = loadIntSetting("clckface.txt", 1, 0);
       if (currentIndex >= itemCount)
