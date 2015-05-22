@@ -43,7 +43,7 @@ enum class InputCommand {
   Palette,
   CycleClockAndMessageFiles,
   ShowClock,
-  HideClockOrMessage,
+  HideOverlay,
   Power,
   Back,
   BrightnessUp,
@@ -437,8 +437,8 @@ InputCommand getCommand(String input) {
     return InputCommand::ShowCurrentMessage;
   else if (input == "ShowClock")
     return InputCommand::ShowClock;
-  else if (input == "HideClockOrMessage")
-    return InputCommand::HideClockOrMessage;
+  else if (input == "HideOverlay")
+    return InputCommand::HideOverlay;
 
   return InputCommand::None;
 }

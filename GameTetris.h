@@ -36,8 +36,8 @@ class GameTetris : public Runnable {
 
     bool isSetup = false;
 
-    static const int FIELD_WIDTH = 10;
-    static const int FIELD_HEIGHT = 20;
+    static const uint8_t FIELD_WIDTH = 10;
+    static const uint8_t FIELD_HEIGHT = 20;
 
     const rgb24 COLOR_BLACK = { 0, 0, 0 };
     const rgb24 COLOR_RED = { 255, 0, 0 };
@@ -62,18 +62,18 @@ class GameTetris : public Runnable {
       COLOR_RED,    // 7 Z
     };
 
-    int block[FIELD_WIDTH][FIELD_HEIGHT + 2]; //2 extra for rotation
-    int pile[FIELD_WIDTH][FIELD_HEIGHT];
+    uint8_t block[FIELD_WIDTH][FIELD_HEIGHT + 2]; //2 extra for rotation
+    uint8_t pile[FIELD_WIDTH][FIELD_HEIGHT];
 
     unsigned long startTime;
     unsigned long elapsedTime;
-    int cnt = 0;
+    uint8_t cnt = 0;
 
-    int newBlockIndex;
-    int nextBlockIndex;
-    int blockBag[7] = { 0, 1, 2, 3, 4, 5, 6 };
-    int nextBlockType;
-    int nextBlock[6][4];
+    uint8_t newBlockIndex;
+    uint8_t nextBlockIndex;
+    uint8_t blockBag[7] = { 0, 1, 2, 3, 4, 5, 6 };
+    uint8_t nextBlockType;
+    uint8_t nextBlock[6][4];
 
     int score;
     char scoreText[8];
@@ -83,12 +83,15 @@ class GameTetris : public Runnable {
 
     bool isPaused = false;
 
+    int i;
+    int j;
+
     void reset() {
       // Serial.println("reset");
       newBlockIndex = 0;
 
       // generate new random bag of blocks
-      for (int i = 0; i < 7; i++) {
+      for (i = 0; i < 7; i++) {
         int r = random(i, 6);
         int temp = blockBag[i];
         blockBag[i] = blockBag[r];
@@ -140,10 +143,8 @@ class GameTetris : public Runnable {
 
     void check_gameover()
     {
-      int i;
-      int j;
-      int cnt = 0;
-      int lineCount = 0;
+      uint8_t cnt = 0;
+      uint8_t lineCount = 0;
 
       for (i = FIELD_HEIGHT - 1; i >= 0; i--)
       {
@@ -210,8 +211,6 @@ class GameTetris : public Runnable {
 
     bool space_below()
     {
-      int i;
-      int j;
       for (i = FIELD_HEIGHT - 1; i >= 0; i--)
       {
         for (j = 0; j < FIELD_WIDTH; j++)
@@ -232,8 +231,6 @@ class GameTetris : public Runnable {
 
     bool space_left()
     {
-      int i;
-      int j;
       for (i = FIELD_HEIGHT - 1; i >= 0; i--)
       {
         for (j = 0; j < FIELD_WIDTH; j++)
@@ -254,8 +251,6 @@ class GameTetris : public Runnable {
 
     bool space_left2()
     {
-      int i;
-      int j;
       for (i = FIELD_HEIGHT - 1; i >= 0; i--)
       {
         for (j = 0; j < FIELD_WIDTH; j++)
@@ -276,8 +271,6 @@ class GameTetris : public Runnable {
 
     bool space_left3()
     {
-      int i;
-      int j;
       for (i = FIELD_HEIGHT - 1; i >= 0; i--)
       {
         for (j = 0; j < FIELD_WIDTH; j++)
@@ -298,8 +291,6 @@ class GameTetris : public Runnable {
 
     bool space_right()
     {
-      int i;
-      int j;
       for (i = FIELD_HEIGHT - 1; i >= 0; i--)
       {
         for (j = 0; j < FIELD_WIDTH; j++)
@@ -320,8 +311,6 @@ class GameTetris : public Runnable {
 
     bool space_right2()
     {
-      int i;
-      int j;
       for (i = FIELD_HEIGHT - 1; i >= 0; i--)
       {
         for (j = 0; j < FIELD_WIDTH; j++)
@@ -342,8 +331,6 @@ class GameTetris : public Runnable {
 
     bool space_right3()
     {
-      int i;
-      int j;
       for (i = FIELD_HEIGHT - 1; i >= 0; i--)
       {
         for (j = 0; j < FIELD_WIDTH; j++)
@@ -366,8 +353,6 @@ class GameTetris : public Runnable {
     {
       if (space_left())
       {
-        int i;
-        int j;
         for (i = 0; i < FIELD_WIDTH - 1; i++)
         {
           for (j = 0; j < FIELD_HEIGHT; j++)
@@ -391,8 +376,6 @@ class GameTetris : public Runnable {
     {
       if (space_right())
       {
-        int i;
-        int j;
         for (i = FIELD_WIDTH - 1; i > 0; i--)
         {
           for (j = 0; j < FIELD_HEIGHT; j++)
@@ -417,10 +400,8 @@ class GameTetris : public Runnable {
       if (space_below())
       {
         //move down
-        int i;
         for (i = FIELD_HEIGHT - 1; i >= 0; i--)
         {
-          int j;
           for (j = 0; j < FIELD_WIDTH; j++)
           {
             block[j][i] = block[j][i - 1];
@@ -434,8 +415,6 @@ class GameTetris : public Runnable {
       else
       {
         //merge and new block
-        int i;
-        int j;
         for (i = 0; i < FIELD_WIDTH; i++)
         {
           for (j = 0; j < FIELD_HEIGHT; j++)
@@ -463,7 +442,7 @@ class GameTetris : public Runnable {
       if (newBlockIndex == 7) {
         newBlockIndex = 0;
 
-        for (int i = 0; i < 7; i++) {
+        for (i = 0; i < 7; i++) {
           int r = random(i, 6);
           int temp = blockBag[i];
           blockBag[i] = blockBag[r];
@@ -614,8 +593,6 @@ class GameTetris : public Runnable {
 
     bool check_overlap()
     {
-      int i;
-      int j;
       for (i = 0; i < FIELD_HEIGHT; i++)
       {
         for (j = 0; j < FIELD_WIDTH - 1; j++)
@@ -647,8 +624,6 @@ class GameTetris : public Runnable {
 
       int xi = 0;
       int yi = 0;
-      int i = 0;
-      int j = 0;
 
       //detect left
       for (i = FIELD_WIDTH - 1; i >= 0; i--)
@@ -1115,8 +1090,8 @@ class GameTetris : public Runnable {
         }
       }
 
-      int left = (MATRIX_WIDTH - FIELD_WIDTH) / 2;
-      int top = (MATRIX_HEIGHT - FIELD_HEIGHT) / 2;
+      uint8_t left = (MATRIX_WIDTH - FIELD_WIDTH) / 2;
+      uint8_t top = (MATRIX_HEIGHT - FIELD_HEIGHT) / 2;
       //      int right = MATRIX_WIDTH - left;
       //      int bottom = MATRIX_HEIGHT - top;
 

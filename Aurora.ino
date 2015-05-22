@@ -60,6 +60,15 @@ uint8_t backgroundBrightnessMap[brightnessCount] = { 16, 32, 64, 128, 255 };
 #include "MessagePlayer.h"
 MessagePlayer messagePlayer;
 
+// settings file names
+char* brghtnssFilename = (char*) "brghtnss.txt";
+char* bckbrghtFilename = (char*) "bckbrght.txt";
+char* audiosclFilename = (char*) "audioscl.txt";
+char* menuRFilename = (char*) "menuR.txt";
+char* menuGFilename = (char*) "menuG.txt";
+char* menuBFilename = (char*) "menuB.txt";
+char* autoplydFilename = (char*) "autoplyd.txt";
+
 #include "AudioLogic.h"
 
 #include "Effects.h"
@@ -198,14 +207,19 @@ void setup()
   CORE_PIN16_CONFIG = (PORT_PCR_MUX(2) | PORT_PCR_PE | PORT_PCR_PS);
   CORE_PIN17_CONFIG = (PORT_PCR_MUX(2) | PORT_PCR_PE | PORT_PCR_PS);
 
+  // default to patterns
+  menu.currentIndex = 1;
+
   if (sdAvailable) {
     loadRemotesSetting();
     loadRotationSetting();
     enableAudioPatterns = loadByteSetting("enaudpat.txt", 1) > 0;
-    
+
 #if GAMES > 0
     menuItemGames.visible = loadByteSetting("gamesvis.txt", 1) > 0;
 #endif
+
+    loadOverlaySettings();
 
     loadDemoModeSetting();
 
@@ -214,7 +228,6 @@ void setup()
     }
     else {
       saveSettings();
-      menuItemSettings.visible = false;
     }
 
     applyDemoMode();
@@ -225,11 +238,8 @@ void setup()
     menu.visible = false;
   }
 
-  if (!enableAudioPatterns)
-    menu.currentIndex = 1;
-
   menuItemAudioPatterns.visible = enableAudioPatterns;
-  menuItemAudioPatterns.audioScaleEnabled = true;
+  menuItemAudioPatterns.audioScaleEnabled = demoMode == 0;
   menuItemAudioPatterns.playModeEnabled = true;
   menuItemAudioPatterns.paletteEnabled = true;
 
@@ -242,6 +252,25 @@ void setup()
   clockDisplay.readTime();
   // Serial.print(F("isTimeAvailable: "));
   // Serial.println(isTimeAvailable);
+}
+
+void loadOverlaySettings() {
+  byte overlayIndex = loadByteSetting("ovrlyidx.txt", 0);
+
+  menu.overlayIndex = overlayIndex;
+
+  int messageIndex = overlayIndex - clockDisplay.itemCount;
+
+  if (isTimeAvailable && overlayIndex < clockDisplay.itemCount) {
+    clockDisplay.moveTo(overlayIndex);
+    menu.clockVisible = true;
+    menu.messageVisible = false;
+  }
+  else if (messagePlayer.count > 0 && messageIndex >= 0 && messageIndex < messagePlayer.count) {
+    messagePlayer.moveTo(messageIndex);
+    menu.messageVisible = true;
+    menu.clockVisible = false;
+  }
 }
 
 void loop()
@@ -312,7 +341,7 @@ void powerOff()
         command == InputCommand::BrightnessDown)
       return;
 
-    // go idle for a while, converve power
+    // go idle for a while, conserve power
     delay(500);
   }
 }
@@ -321,8 +350,9 @@ void powerOff()
 // we revert to all defaults on startup, all other settings are discarded,
 // and the settings menu is hidden.  The 5 button on the Adafruit remote
 // can be used to show the settings menu and exit demo mode.
+char* demoModeFilename = (char*) "demomode.txt";
 void loadDemoModeSetting() {
-  demoMode = loadByteSetting("demomode.txt", 0);
+  demoMode = loadByteSetting(demoModeFilename, 0);
 }
 
 // Loads which remote(s) should be enabled. This setting is loaded separately
@@ -393,22 +423,22 @@ void loadRotationSetting() {
 }
 
 void loadSettings() {
-  brightness = loadByteSetting("brghtnss.txt", 255);
+  brightness = loadByteSetting(brghtnssFilename, 255);
   boundBrightness();
   matrix.setBrightness(brightness);
 
-  backgroundBrightness = loadByteSetting("bckbrght.txt", 63);
+  backgroundBrightness = loadByteSetting(bckbrghtFilename, 63);
   boundBackgroundBrightness();
   matrix.setBackgroundBrightness(backgroundBrightness);
 
-  audioScale = loadByteSetting("audioscl.txt", 0);
+  audioScale = loadByteSetting(audiosclFilename, 0);
   boundAudioScale();
 
-  menuColor.red = loadByteSetting("menuR.txt", 0);
-  menuColor.green = loadByteSetting("menuG.txt", 0);
-  menuColor.blue = loadByteSetting("menuB.txt", 255);
+  menuColor.red = loadByteSetting(menuRFilename, 0);
+  menuColor.green = loadByteSetting(menuGFilename, 0);
+  menuColor.blue = loadByteSetting(menuBFilename, 255);
 
-  autoPlayDurationSeconds = loadIntSetting("autoplyd.txt", 3, 10);
+  autoPlayDurationSeconds = loadIntSetting(autoplydFilename, 3, 10);
 
   settings.load();
 
@@ -526,7 +556,7 @@ void adjustDemoMode(int delta) {
 void applyDemoMode() {
   if (demoMode != 0) {
     menu.visible = false;
-    menu.clockVisible = true;
+    menu.clockVisible = false;
 
     switch (demoMode) {
       case 1: // autoplay audio patterns
@@ -534,27 +564,27 @@ void applyDemoMode() {
         menu.playMode = Menu::PlaybackState::Autoplay;
         break;
 
-      case 2:
+      case 2: // random audio patterns
         menu.currentIndex = 0;
         menu.playMode = Menu::PlaybackState::Random;
         break;
 
-      case 3:
+      case 3: // autoplay patterns
         menu.currentIndex = 1;
         menu.playMode = Menu::PlaybackState::Autoplay;
         break;
 
-      case 4:
+      case 4: // random patterns
         menu.currentIndex = 1;
         menu.playMode = Menu::PlaybackState::Random;
         break;
 
-      case 5:
+      case 5: // autoplay animations
         menu.currentIndex = 2;
         menu.playMode = Menu::PlaybackState::Autoplay;
         break;
 
-      case 6:
+      case 6: // random animations
         menu.currentIndex = 2;
         menu.playMode = Menu::PlaybackState::Random;
         break;
@@ -563,11 +593,11 @@ void applyDemoMode() {
 }
 
 void saveBrightnessSetting() {
-  saveByteSetting("brghtnss.txt", brightness);
+  saveByteSetting(brghtnssFilename, brightness);
 }
 
 void saveBackgroundBrightnessSetting() {
-  saveByteSetting("bckbrght.txt", backgroundBrightness);
+  saveByteSetting(bckbrghtFilename, backgroundBrightness);
 }
 
 void saveMenuColor() {
@@ -577,24 +607,26 @@ void saveMenuColor() {
 }
 
 void saveMenuR() {
-  saveByteSetting("menuR.txt", menuColor.red);
+  saveByteSetting(menuRFilename, menuColor.red);
 }
 
 void saveMenuG() {
-  saveByteSetting("menuG.txt", menuColor.green);
+  saveByteSetting(menuGFilename, menuColor.green);
 }
 
 void saveMenuB() {
-  saveByteSetting("menuB.txt", menuColor.blue);
+  saveByteSetting(menuBFilename, menuColor.blue);
 }
 
 void saveAutoPlayDurationSeconds() {
-  saveIntSetting("autoplyd.txt", autoPlayDurationSeconds);
+  saveIntSetting(autoplydFilename, autoPlayDurationSeconds);
 }
 
 void saveDemoMode() {
-  saveByteSetting("demomode.txt", demoMode);
+  saveByteSetting(demoModeFilename, demoMode);
 }
+
+char* auroraPath = (char *) "/aurora/";
 
 int loadIntSetting(const char* name, uint8_t maxLength, int defaultValue) {
   if (!sdAvailable)
@@ -602,14 +634,12 @@ int loadIntSetting(const char* name, uint8_t maxLength, int defaultValue) {
 
   int intValue = defaultValue;
 
-  char* path = (char *) "/aurora/";
-
-  if (!SD.exists(path)) {
-    SD.mkdir(path);
+  if (!SD.exists(auroraPath)) {
+    SD.mkdir(auroraPath);
   }
 
-  char filepath[255];
-  strcpy(filepath, path);
+  char filepath[20];
+  strcpy(filepath, auroraPath);
   strcat(filepath, name);
 
   //    Serial.print("loading ");
@@ -640,14 +670,12 @@ int loadByteSetting(const char* name, byte defaultValue) {
 
   byte byteValue = defaultValue;
 
-  char* path = (char *) "/aurora/";
-
-  if (!SD.exists(path)) {
-    SD.mkdir(path);
+  if (!SD.exists(auroraPath)) {
+    SD.mkdir(auroraPath);
   }
 
-  char filepath[255];
-  strcpy(filepath, path);
+  char filepath[20];
+  strcpy(filepath, auroraPath);
   strcat(filepath, name);
 
   File file = SD.open(filepath, FILE_READ);
@@ -673,14 +701,12 @@ tmElements_t loadDateTimeSetting(const char* name) {
   if (!sdAvailable)
     return value;
 
-  char* path = (char *) "/aurora/";
-
-  if (!SD.exists(path)) {
-    SD.mkdir(path);
+  if (!SD.exists(auroraPath)) {
+    SD.mkdir(auroraPath);
   }
 
-  char filepath[255];
-  strcpy(filepath, path);
+  char filepath[20];
+  strcpy(filepath, auroraPath);
   strcat(filepath, name);
 
   File file = SD.open(filepath, FILE_READ);
@@ -715,14 +741,12 @@ void saveIntSetting(const char* name, int value) {
   if (!sdAvailable)
     return;
 
-  char* path = (char *) "/aurora/";
-
-  if (!SD.exists(path)) {
-    SD.mkdir(path);
+  if (!SD.exists(auroraPath)) {
+    SD.mkdir(auroraPath);
   }
 
-  char filepath[255];
-  strcpy(filepath, path);
+  char filepath[20];
+  strcpy(filepath, auroraPath);
   strcat(filepath, name);
 
   // Serial.print("saving ");
@@ -739,14 +763,12 @@ void saveByteSetting(const char* name, byte value) {
   if (!sdAvailable)
     return;
 
-  char* path = (char *) "/aurora/";
-
-  if (!SD.exists(path)) {
-    SD.mkdir(path);
+  if (!SD.exists(auroraPath)) {
+    SD.mkdir(auroraPath);
   }
 
-  char filepath[255];
-  strcpy(filepath, path);
+  char filepath[20];
+  strcpy(filepath, auroraPath);
   strcat(filepath, name);
 
   // Serial.print("saving ");

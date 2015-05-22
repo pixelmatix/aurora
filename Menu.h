@@ -80,7 +80,7 @@ class Menu {
 
     bool canMoveBack = false;
 
-    uint8_t clockOrMessageIndex = 0;
+    uint8_t overlayIndex = 0;
 
     boolean wasStreaming = false;
     boolean visibleBeforeStreaming = true;
@@ -266,7 +266,7 @@ class Menu {
             clockVisible = true;
             updateScrollText = true;
           }
-          else if (command == InputCommand::HideClockOrMessage) {
+          else if (command == InputCommand::HideOverlay) {
             messageVisible = false;
             clockVisible = false;
             updateScrollText = true;
@@ -281,45 +281,45 @@ class Menu {
               if (isHolding) heldButtonHasBeenHandled();
 
               if (!clockVisible && !messageVisible) {
-                // if neither are visible, just show the current clock or message
+                // if neither are visible, just show the current overlay
                 clockDisplay.readTime();
-                clockVisible = isTimeAvailable && clockOrMessageIndex < clockDisplay.itemCount;
+                clockVisible = isTimeAvailable && overlayIndex < clockDisplay.itemCount;
                 messageVisible = !clockVisible;
                 if (messageVisible && messagePlayer.currentIndex < 0)
                   messageVisible = messagePlayer.loadNextMessage();
               }
               else {
-                // if either are visible, turn off the clock or message
+                // if either are visible, turn off the overlay
                 messageVisible = false;
                 clockVisible = false;
               }
             }
             else {
-              // clock or message is visible, move to next
-              clockOrMessageIndex++;
+              // overlay is visible, move to next
+              overlayIndex++;
 
               // if we still have clock faces left, move to the next one
-              if (isTimeAvailable && clockOrMessageIndex < clockDisplay.itemCount) {
-                clockDisplay.moveTo(clockOrMessageIndex);
+              if (isTimeAvailable && overlayIndex < clockDisplay.itemCount) {
+                clockDisplay.moveTo(overlayIndex);
                 clockVisible = true;
                 messageVisible = false;
               }
-              else if (messagePlayer.count > 0) { // && (!isTimeAvailable || clockOrMessageIndex - clockDisplay.itemCount < messagePlayer.count - 1)) {
+              else if (messagePlayer.count > 0) { // && (!isTimeAvailable || overlayIndex - clockDisplay.itemCount < messagePlayer.count - 1)) {
                 // otherwise try to move to the next message
                 if (messagePlayer.loadNextMessage()) {
                   messageVisible = true;
                   clockVisible = false;
                 }
                 else {
-                  clockOrMessageIndex = 0;
-                  clockDisplay.moveTo(clockOrMessageIndex);
+                  overlayIndex = 0;
+                  clockDisplay.moveTo(overlayIndex);
                   messageVisible = false;
                   clockVisible = false;
                 }
               }
               else {
-                clockOrMessageIndex = 0;
-                clockDisplay.moveTo(clockOrMessageIndex);
+                overlayIndex = 0;
+                clockDisplay.moveTo(overlayIndex);
                 messageVisible = false;
                 clockVisible = false;
               }

@@ -135,17 +135,22 @@ class ClockDisplay : public Playlist {
       clockDigitalShort.drawMoveClockIndicator();
     }
 
+    char* clockR = (char*) "clockR.txt";
+    char* clockG = (char*) "clockG.txt";
+    char* clockB = (char*) "clockB.txt";
+    char* clckface = (char*) "clckface.txt";
+
     void loadSettings() {
       clockCountdown.loadSettings();
       clockDigitalShort.loadSettings();
-      currentIndex = loadIntSetting("clckface.txt", 1, 0);
+      currentIndex = loadByteSetting(clckface, 0);
       if (currentIndex >= itemCount)
         currentIndex = itemCount - 1;
       move(0);
 
-      color.red = loadIntSetting("clockR.txt", 3, 255);
-      color.green = loadIntSetting("clockG.txt", 3, 255);
-      color.blue = loadIntSetting("clockB.txt", 3, 255);
+      color.red = loadByteSetting(clockR, 255);
+      color.green = loadByteSetting(clockG, 255);
+      color.blue = loadByteSetting(clockB, 255);
       setColor(color);
     }
 
@@ -153,9 +158,7 @@ class ClockDisplay : public Playlist {
       clockDigitalShort.saveSettings();
       saveClockFaceSetting();
 
-      saveR();
-      saveG();
-      saveB();
+      saveColor();
       setColor(color);
     }
 
@@ -168,25 +171,13 @@ class ClockDisplay : public Playlist {
     }
 
     void saveClockFaceSetting() {
-      saveIntSetting("clckface.txt", currentIndex);
+      saveIntSetting(clckface, currentIndex);
     }
 
     void saveColor() {
-      saveR();
-      saveG();
-      saveB();
-    }
-
-    void saveR() {
-      saveIntSetting("clockR.txt", color.red);
-    }
-
-    void saveG() {
-      saveIntSetting("clockG.txt", color.green);
-    }
-
-    void saveB() {
-      saveIntSetting("clockB.txt", color.blue);
+      saveIntSetting(clockR, color.red);
+      saveIntSetting(clockG, color.green);
+      saveIntSetting(clockB, color.blue);
     }
 };
 

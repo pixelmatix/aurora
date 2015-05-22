@@ -56,7 +56,6 @@
 #include "PatternRainbowSmoke.h"
 #include "PatternSpark.h"
 #include "PatternSpiral.h"
-#include "PatternEffects.h"
 
 class Patterns : public Playlist {
   private:
@@ -97,9 +96,6 @@ class Patterns : public Playlist {
     PatternRainbowSmoke rainbowSmoke;
     PatternSpark spark;
     PatternSpiral spiral;
-    PatternGhost ghost;
-    PatternDots1 dots1;
-    PatternDots2 dots2;
 
     int currentIndex = 0;
     Drawable* currentItem;
@@ -108,7 +104,7 @@ class Patterns : public Playlist {
       return currentIndex;
     }
 
-    static const int PATTERN_COUNT = 39;
+    static const int PATTERN_COUNT = 36;
 
     Drawable* shuffledItems[PATTERN_COUNT];
 
@@ -149,9 +145,6 @@ class Patterns : public Playlist {
       &rainbowSmoke,
       &spark,
       &spiral,
-      &ghost,
-      &dots1,
-      &dots2,
     };
 
   public:

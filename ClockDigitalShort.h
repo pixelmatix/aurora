@@ -94,9 +94,12 @@ class ClockDigitalShort : public Drawable {
       }
     }
 
+    char* clockYFilename = (char*) "clockY.txt";
+    char* clock24hFilename = (char*) "clock24h.txt";
+
     void loadSettings() {
-      y = loadIntSetting("clockY.txt", 2, 11);
-      twentyFourHour = loadIntSetting("clock24h.txt", 2, 11);
+      y = loadByteSetting(clockYFilename, 11);
+      twentyFourHour = loadByteSetting(clock24hFilename, 0) == 1;
       boundY();
     }
 
@@ -105,11 +108,11 @@ class ClockDigitalShort : public Drawable {
     }
 
     void saveClockYSetting() {
-      saveIntSetting("clockY.txt", y);
+      saveIntSetting(clockYFilename, y);
     }
 
     void saveTwentyFourHourSetting() {
-      saveIntSetting("clock24h.txt", twentyFourHour);
+      saveIntSetting(clock24hFilename, twentyFourHour);
     }
 
     void boundY() {

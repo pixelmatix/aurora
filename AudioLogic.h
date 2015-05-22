@@ -83,7 +83,7 @@ uint8_t autoAudioScale = audioScaleMap[audioScaleCount - 1];
 
 // The audioScale sets how much sound is needed in each frequency range to
 // show full height.  Higher numbers are more sensitive.
-uint8_t audioScale = audioScaleMap[1];
+uint8_t audioScale = 0;
 
 bool audioScaleChanged = false;
 bool showingAudioScaleIndicator = false;
@@ -130,7 +130,7 @@ float adjustAudioScale(float audioScale, int delta) {
 }
 
 void saveAudioScaleSetting() {
-  saveByteSetting("audioscl.txt", audioScale);
+  saveByteSetting(audiosclFilename, audioScale);
 }
 
 void adjustAudioScale(int delta) {
