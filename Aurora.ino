@@ -38,7 +38,7 @@
 
 #include <aJSON.h>
 
-#define GAMES 0
+#define GAMES 1
 
 char versionText[] = "v1.5";
 
@@ -117,7 +117,7 @@ StreamingMode streamingMode;
 #include "Menu.h"
 Menu menu;
 
-#if GAMES
+#if GAMES > 0
 #include <QueueArray.h>
 #include "Games.h"
 Games games;
@@ -132,7 +132,7 @@ Settings settings;
 MenuItem menuItemAudioPatterns = MenuItem((char*)"Audio Patterns", &audioPatterns);
 MenuItem menuItemPatterns = MenuItem((char*)"Patterns", &patterns);
 MenuItem menuItemAnimations = MenuItem((char*)"Animations", &animations);
-#if GAMES
+#if GAMES > 0
 MenuItem menuItemGames = MenuItem((char*)"Games", &games);
 #endif
 MenuItem menuItemSettings = MenuItem((char*)"Settings", &settings);
@@ -142,7 +142,7 @@ MenuItem* mainMenuItems [] = {
   &menuItemAudioPatterns,
   &menuItemPatterns,
   &menuItemAnimations,
-#if GAMES
+#if GAMES > 0
   &menuItemGames,
 #endif
   &menuItemSettings,
@@ -208,8 +208,8 @@ void setup()
     loadRotationSetting();
     enableAudioPatterns = loadByteSetting("enaudpat.txt", 1) > 0;
     
-#if GAMES
-    menuItemGames.visible = loadByteSetting("gamesvis.txt", 0) > 0;
+#if GAMES > 0
+    menuItemGames.visible = loadByteSetting("gamesvis.txt", 1) > 0;
 #endif
 
     loadDemoModeSetting();
