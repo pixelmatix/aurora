@@ -71,16 +71,13 @@ uint8_t mapcos8(uint8_t theta, uint8_t lowest = 0, uint8_t highest = 255) {
 // Array of temperature readings at each simulation cell
 byte heat[NUM_LEDS];
 
-// The coordinates for 3 16-bit noise spaces.
-#define NOISE_NUM_LAYERS 1
+uint32_t noise_x;
+uint32_t noise_y;
+uint32_t noise_z;
+uint32_t noise_scale_x;
+uint32_t noise_scale_y;
 
-uint32_t noise_x[NOISE_NUM_LAYERS];
-uint32_t noise_y[NOISE_NUM_LAYERS];
-uint32_t noise_z[NOISE_NUM_LAYERS];
-uint32_t noise_scale_x[NOISE_NUM_LAYERS];
-uint32_t noise_scale_y[NOISE_NUM_LAYERS];
-
-uint8_t noise[NOISE_NUM_LAYERS][MATRIX_WIDTH][MATRIX_HEIGHT];
+uint8_t noise[MATRIX_WIDTH][MATRIX_HEIGHT];
 
 uint8_t noisesmoothing;
 
@@ -669,29 +666,27 @@ class Effects {
     void NoiseVariablesSetup() {
       noisesmoothing = 200;
 
-      for (int i = 0; i < NOISE_NUM_LAYERS; i++) {
-        noise_x[i] = random16();
-        noise_y[i] = random16();
-        noise_z[i] = random16();
-        noise_scale_x[i] = 6000;
-        noise_scale_y[i] = 6000;
-      }
+      noise_x = random16();
+      noise_y = random16();
+      noise_z = random16();
+      noise_scale_x = 6000;
+      noise_scale_y = 6000;
     }
 
-    void FillNoise(byte layer) {
+    void FillNoise() {
       for (uint8_t i = 0; i < MATRIX_WIDTH; i++) {
-        uint32_t ioffset = noise_scale_x[layer] * (i - MATRIX_CENTRE_Y);
+        uint32_t ioffset = noise_scale_x * (i - MATRIX_CENTRE_Y);
 
         for (uint8_t j = 0; j < MATRIX_HEIGHT; j++) {
-          uint32_t joffset = noise_scale_y[layer] * (j - MATRIX_CENTRE_Y);
+          uint32_t joffset = noise_scale_y * (j - MATRIX_CENTRE_Y);
 
-          byte data = inoise16(noise_x[layer] + ioffset, noise_y[layer] + joffset, noise_z[layer]) >> 8;
+          byte data = inoise16(noise_x + ioffset, noise_y + joffset, noise_z) >> 8;
 
-          uint8_t olddata = noise[layer][i][j];
+          uint8_t olddata = noise[i][j];
           uint8_t newdata = scale8( olddata, noisesmoothing ) + scale8( data, 256 - noisesmoothing );
           data = newdata;
 
-          noise[layer][i][j] = data;
+          noise[i][j] = data;
         }
       }
     }
@@ -735,7 +730,7 @@ class Effects {
     void MoveFractionalNoiseX(byte amt = 16) {
       // move delta pixelwise
       for (int y = 0; y < MATRIX_HEIGHT; y++) {
-        uint16_t amount = noise[0][0][y] * amt;
+        uint16_t amount = noise[0][y] * amt;
         byte delta = 31 - (amount / 256);
 
         for (int x = 0; x < MATRIX_WIDTH - delta; x++) {
@@ -751,7 +746,7 @@ class Effects {
       CRGB PixelB;
 
       for (uint8_t y = 0; y < MATRIX_HEIGHT; y++) {
-        uint16_t amount = noise[0][0][y] * amt;
+        uint16_t amount = noise[0][y] * amt;
         byte delta = 31 - (amount / 256);
         byte fractions = amount - (delta * 256);
 
@@ -778,7 +773,7 @@ class Effects {
     void MoveFractionalNoiseY(byte amt = 16) {
       // move delta pixelwise
       for (int x = 0; x < MATRIX_WIDTH; x++) {
-        uint16_t amount = noise[0][x][0] * amt;
+        uint16_t amount = noise[x][0] * amt;
         byte delta = 31 - (amount / 256);
 
         for (int y = 0; y < MATRIX_WIDTH - delta; y++) {
@@ -794,7 +789,7 @@ class Effects {
       CRGB PixelB;
 
       for (uint8_t x = 0; x < MATRIX_HEIGHT; x++) {
-        uint16_t amount = noise[0][x][0] * amt;
+        uint16_t amount = noise[x][0] * amt;
         byte delta = 31 - (amount / 256);
         byte fractions = amount - (delta * 256);
 
@@ -819,11 +814,11 @@ class Effects {
     }
 
     void standardNoiseSmearing() {
-      noise_x[0] += 1000;
-      noise_y[0] += 1000;
-      noise_scale_x[0] = 4000;
-      noise_scale_y[0] = 4000;
-      FillNoise(0);
+      noise_x += 1000;
+      noise_y += 1000;
+      noise_scale_x = 4000;
+      noise_scale_y = 4000;
+      FillNoise();
 
       MoveX(3);
       MoveFractionalNoiseY(4);

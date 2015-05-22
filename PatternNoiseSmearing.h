@@ -58,11 +58,11 @@ class PatternMultipleStream : public Drawable {
       effects.leds[XY(x2, y2)] = effects.ColorFromCurrentPalette(patternNoiseSmearingHue + 128);
 
       // Noise
-      noise_x[0] += 1000;
-      noise_y[0] += 1000;
-      noise_scale_x[0] = 4000;
-      noise_scale_y[0] = 4000;
-      effects.FillNoise(0);
+      noise_x += 1000;
+      noise_y += 1000;
+      noise_scale_x = 4000;
+      noise_scale_y = 4000;
+      effects.FillNoise();
 
       effects.MoveX(8);
       effects.MoveFractionalNoiseX();
@@ -95,12 +95,12 @@ class PatternMultipleStream2 : public Drawable {
 
       effects.leds[XY(15, 15)] += effects.ColorFromCurrentPalette(patternNoiseSmearingHue + 160);
 
-      noise_x[0] += 1000;
-      noise_y[0] += 1000;
-      noise_z[0] += 1000;
-      noise_scale_x[0] = 4000;
-      noise_scale_y[0] = 4000;
-      effects.FillNoise(0);
+      noise_x += 1000;
+      noise_y += 1000;
+      noise_z += 1000;
+      noise_scale_x = 4000;
+      noise_scale_y = 4000;
+      effects.FillNoise();
 
       effects.MoveX(3);
       effects.MoveFractionalNoiseY(4);
@@ -129,12 +129,12 @@ class PatternMultipleStream3 : public Drawable {
       }
 
       // Noise
-      noise_x[0] += 1000;
-      noise_y[0] += 1000;
-      noise_z[0] += 1000;
-      noise_scale_x[0] = 4000;
-      noise_scale_y[0] = 4000;
-      effects.FillNoise(0);
+      noise_x += 1000;
+      noise_y += 1000;
+      noise_z += 1000;
+      noise_scale_x = 4000;
+      noise_scale_y = 4000;
+      effects.FillNoise();
 
       effects.MoveX(3);
       effects.MoveFractionalNoiseY(4);
@@ -161,11 +161,11 @@ class PatternMultipleStream4 : public Drawable {
 
 
       // Noise
-      noise_x[0] += 1000;
-      noise_y[0] += 1000;
-      noise_scale_x[0] = 4000;
-      noise_scale_y[0] = 4000;
-      effects.FillNoise(0);
+      noise_x += 1000;
+      noise_y += 1000;
+      noise_scale_x = 4000;
+      noise_scale_y = 4000;
+      effects.FillNoise();
 
       effects.MoveX(8);
       effects.MoveFractionalNoiseX();
@@ -196,12 +196,12 @@ class PatternMultipleStream5 : public Drawable {
       }
 
       // Noise
-      noise_x[0] += 1000;
-      noise_y[0] += 1000;
-      noise_z[0] += 1000;
-      noise_scale_x[0] = 4000;
-      noise_scale_y[0] = 4000;
-      effects.FillNoise(0);
+      noise_x += 1000;
+      noise_y += 1000;
+      noise_z += 1000;
+      noise_scale_x = 4000;
+      noise_scale_y = 4000;
+      effects.FillNoise();
 
       effects.MoveX(3);
       effects.MoveFractionalNoiseY(4);
@@ -231,12 +231,12 @@ class PatternMultipleStream8 : public Drawable {
       }
 
       // Noise
-      noise_x[0] += 1000;
-      noise_y[0] += 1000;
-      noise_z[0] += 1000;
-      noise_scale_x[0] = 4000;
-      noise_scale_y[0] = 4000;
-      effects.FillNoise(0);
+      noise_x += 1000;
+      noise_y += 1000;
+      noise_z += 1000;
+      noise_scale_x = 4000;
+      noise_scale_y = 4000;
+      effects.FillNoise();
 
       effects.MoveX(3);
       effects.MoveFractionalNoiseX(4);
@@ -265,11 +265,11 @@ class PatternPaletteSmear : public Drawable {
       }
 
       // Noise
-      noise_x[0] += 1000;
-      noise_y[0] += 1000;
-      noise_scale_x[0] = 4000;
-      noise_scale_y[0] = 4000;
-      effects.FillNoise(0);
+      noise_x += 1000;
+      noise_y += 1000;
+      noise_scale_x = 4000;
+      noise_scale_y = 4000;
+      effects.FillNoise();
 
       effects.MoveX(3);
       effects.MoveFractionalNoiseY(4);

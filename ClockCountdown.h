@@ -61,17 +61,17 @@ class ClockCountdown : public Drawable {
         time_t targetTime = makeTime(target);
         time_t currentTime = makeTime(time);
 
-//        Serial.print("target: ");
-//        printTime(target);
-//        Serial.print("current: ");
-//        printTime(time);
+        //        Serial.print("target: ");
+        //        printTime(target);
+        //        Serial.print("current: ");
+        //        printTime(time);
 
         if (targetTime > currentTime) {
           unsigned long timeRemaining = targetTime - currentTime;
 
-          unsigned long hoursRemaining = timeRemaining / SECS_PER_HOUR;
-          unsigned long minutesRemaining = (timeRemaining - (hoursRemaining * SECS_PER_HOUR)) / 60;
-          unsigned long secondsRemaining = timeRemaining - ((hoursRemaining * SECS_PER_HOUR) + (minutesRemaining * 60));
+          uint8_t hoursRemaining = timeRemaining / SECS_PER_HOUR;
+          uint8_t minutesRemaining = (timeRemaining - (hoursRemaining * SECS_PER_HOUR)) / 60;
+          uint8_t secondsRemaining = timeRemaining - ((hoursRemaining * SECS_PER_HOUR) + (minutesRemaining * 60));
 
           sprintf(timeBuffer, "%02d:%02d:%02d", hoursRemaining, minutesRemaining, secondsRemaining);
         }
@@ -85,7 +85,7 @@ class ClockCountdown : public Drawable {
 
       matrix.clearForeground();
       clockDigitalShort.drawFrame(0);
-      
+
       matrix.setForegroundFont(font3x5);
       matrix.setScrollOffsetFromTop(MATRIX_HEIGHT);
       matrix.setScrollColor(clockDigitalShort.color);
@@ -93,7 +93,7 @@ class ClockCountdown : public Drawable {
 
       return 0;
     }
-    
+
     void loadSettings() {
       target = loadDateTimeSetting("countdwn.txt");
     }

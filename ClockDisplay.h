@@ -131,10 +131,6 @@ class ClockDisplay : public Playlist {
       clockDigitalShort.boundY();
     }
 
-    void drawSetTimeIndicator(SetTimeState state) {
-      clockDigitalShort.drawSetTimeIndicator(state);
-    }
-
     void drawMoveClockIndicator() {
       clockDigitalShort.drawMoveClockIndicator();
     }

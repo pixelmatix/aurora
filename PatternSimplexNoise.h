@@ -34,29 +34,29 @@ class PatternSimplexNoise : public Drawable {
 
     void start() {
       // Initialize our coordinates to some random values
-      noise_x[0] = random16();
-      noise_y[0] = random16();
-      noise_z[0] = random16();
+      noise_x = random16();
+      noise_y = random16();
+      noise_z = random16();
     }
 
     unsigned int drawFrame() {
 #if FASTLED_VERSION >= 3001000
       // a new parameter set every 15 seconds
       EVERY_N_SECONDS(15) {
-        noise_x[0] = random16();
-        noise_y[0] = random16();
-        noise_z[0] = random16();
+        noise_x = random16();
+        noise_y = random16();
+        noise_z = random16();
       }
 #endif
 
       uint32_t speed = 100;
 
-      effects.FillNoise(0);
+      effects.FillNoise();
       ShowNoiseLayer(0, 1, 0);
 
-      // noise_x[0] += speed;
-      noise_y[0] += speed;
-      noise_z[0] += speed;
+      // noise_x += speed;
+      noise_y += speed;
+      noise_z += speed;
 
       return 0;
     }
@@ -65,7 +65,7 @@ class PatternSimplexNoise : public Drawable {
     void ShowNoiseLayer(byte layer, byte colorrepeat, byte colorshift) {
       for (uint8_t i = 0; i < MATRIX_WIDTH; i++) {
         for (uint8_t j = 0; j < MATRIX_HEIGHT; j++) {
-          uint8_t pixel = noise[layer][i][j];
+          uint8_t pixel = noise[i][j];
 
           // assign a color depending on the actual palette
           effects.leds[XY(i, j)] = effects.ColorFromCurrentPalette(colorrepeat * (pixel + colorshift), pixel);

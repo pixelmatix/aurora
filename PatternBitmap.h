@@ -42,11 +42,11 @@ public:
 
                 // Noise
                 noise_x[0] += 1000;
-                noise_y[0] += 1000;
-                noise_z[0] += 1000;
-                noise_scale_x[0] = 4000;
-                noise_scale_y[0] = 4000;
-                effects.FillNoise(0);
+                noise_y += 1000;
+                noise_z += 1000;
+                noise_scale_x = 4000;
+                noise_scale_y = 4000;
+                effects.FillNoise();
 
                 // move image (including newly drawn dot) within +/-2 pixels of original position
                 effects.NoiseSmearWithRadius(2);

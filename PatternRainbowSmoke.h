@@ -26,334 +26,337 @@
 #define PatternRainbowSmoke_H
 
 class PatternRainbowSmoke : public Drawable {
-private:
+  private:
     struct Point {
-        int x = 0;
-        int y = 0;
+      uint8_t x = 0;
+      uint8_t y = 0;
     };
 
-    static const int NUMCOLORS = 11;
-    static const int COLOR_COUNT = 1024;
-    int startx = 15;
-    int starty = 15;
+    static const uint8_t NUMCOLORS = 11;
+    static const uint16_t COLOR_COUNT = 1024;
+    uint8_t startx = 15;
+    uint8_t starty = 15;
 
     rgb24 colors[COLOR_COUNT];
-    bool hasColor[MATRIX_WIDTH][MATRIX_HEIGHT];
     bool isAvailable[MATRIX_WIDTH][MATRIX_HEIGHT];
 
-    int currentColorIndex = 0;
-    int algorithm;
+    uint8_t currentColorIndex = 0;
+    uint8_t algorithm;
 
     int colorDifference(rgb24 c1, rgb24 c2) {
-        int r = c1.red - c2.red;
-        int g = c1.green - c2.green;
-        int b = c1.blue - c2.blue;
-        return r * r + g * g + b * b;
+      int r = c1.red - c2.red;
+      int g = c1.green - c2.green;
+      int b = c1.blue - c2.blue;
+      return r * r + g * g + b * b;
+    }
+
+    const CRGB black = { 0, 0, 0 };
+
+    bool hasColor(uint8_t x, uint8_t y) {
+      return effects.leds[XY(x, y)] == black;
     }
 
     void markAvailableNeighbors(Point point) {
-        for (int dy = -1; dy <= 1; dy++) {
-            int ny = point.y + dy;
+      for (char dy = -1; dy <= 1; dy++) {
+        int ny = point.y + dy;
 
-            if (ny == -1 || ny == MATRIX_HEIGHT)
-                continue;
+        if (ny == -1 || ny == MATRIX_HEIGHT)
+          continue;
 
-            for (int dx = -1; dx <= 1; dx++) {
-                if (dx == 0 && dy == 0)
-                    continue;
+        for (int dx = -1; dx <= 1; dx++) {
+          if (dx == 0 && dy == 0)
+            continue;
 
-                int nx = point.x + dx;
+          int nx = point.x + dx;
 
-                if (nx == -1 || nx == MATRIX_WIDTH)
-                    continue;
+          if (nx == -1 || nx == MATRIX_WIDTH)
+            continue;
 
-                if (!hasColor[nx][ny]) {
-                    isAvailable[nx][ny] = true;
-                }
-            }
+          if (!hasColor(nx, ny)) {
+            isAvailable[nx][ny] = true;
+          }
         }
+      }
     }
 
     Point getAvailablePoint(int algorithm, rgb24 color) {
-        switch (algorithm) {
-            case 0:
-                return getAvailablePointWithClosestNeighborColor(color);
-            case 1:
-            default:
-                return getAvailablePointWithClosestAverageNeighborColor(color);
-        }
+      switch (algorithm) {
+        case 0:
+          return getAvailablePointWithClosestNeighborColor(color);
+        case 1:
+        default:
+          return getAvailablePointWithClosestAverageNeighborColor(color);
+      }
     }
 
     Point getAvailablePointWithClosestNeighborColor(rgb24 color) {
-        Point best;
+      Point best;
 
-        // find the pixel with the smallest difference between the current color and all of it's neighbors' colors
-        int smallestDifference = 999999;
-        for (int y = 0; y < MATRIX_HEIGHT; y++) {
-            for (int x = 0; x < MATRIX_WIDTH; x++) {
-                // skip any that arent' available
-                if (!isAvailable[x][y])
-                    continue;
+      // find the pixel with the smallest difference between the current color and all of it's neighbors' colors
+      int smallestDifference = 999999;
+      for (int y = 0; y < MATRIX_HEIGHT; y++) {
+        for (int x = 0; x < MATRIX_WIDTH; x++) {
+          // skip any that arent' available
+          if (!isAvailable[x][y])
+            continue;
 
-                // loop through its neighbors
-                int smallestDifferenceAmongNeighbors = 999999;
-                for (int dy = -1; dy <= 1; dy++) {
-                    if (y + dy == -1 || y + dy == MATRIX_HEIGHT)
-                        continue;
+          // loop through its neighbors
+          int smallestDifferenceAmongNeighbors = 999999;
+          for (int dy = -1; dy <= 1; dy++) {
+            if (y + dy == -1 || y + dy == MATRIX_HEIGHT)
+              continue;
 
-                    for (int dx = -1; dx <= 1; dx++) {
-                        if (x == 0 && y == 0)
-                            continue;
+            for (int dx = -1; dx <= 1; dx++) {
+              if (x == 0 && y == 0)
+                continue;
 
-                        if (x + dx == -1 || x + dx == MATRIX_WIDTH)
-                            continue;
+              if (x + dx == -1 || x + dx == MATRIX_WIDTH)
+                continue;
 
-                        int nx = x + dx;
-                        int ny = y + dy;
+              int nx = x + dx;
+              int ny = y + dy;
 
-                        // skip any neighbors that don't already have a color
-                        if (!hasColor[nx][ny])
-                            continue;
+              // skip any neighbors that don't already have a color
+              if (!hasColor(nx, ny))
+                continue;
 
-                        rgb24 neighborColor = matrix.readPixel(nx, ny);
+              rgb24 neighborColor = matrix.readPixel(nx, ny);
 
-                        int difference = colorDifference(neighborColor, color);
-                        if (difference < smallestDifferenceAmongNeighbors || (difference == smallestDifferenceAmongNeighbors && random(2) == 1)) {
-                            smallestDifferenceAmongNeighbors = difference;
-                        }
-                    }
-                }
-
-                if (smallestDifferenceAmongNeighbors < smallestDifference || (smallestDifferenceAmongNeighbors == smallestDifference && random(2) == 1)) {
-                    smallestDifference = smallestDifferenceAmongNeighbors;
-                    best.x = x;
-                    best.y = y;
-                }
+              int difference = colorDifference(neighborColor, color);
+              if (difference < smallestDifferenceAmongNeighbors || (difference == smallestDifferenceAmongNeighbors && random(2) == 1)) {
+                smallestDifferenceAmongNeighbors = difference;
+              }
             }
-        }
+          }
 
-        return best;
+          if (smallestDifferenceAmongNeighbors < smallestDifference || (smallestDifferenceAmongNeighbors == smallestDifference && random(2) == 1)) {
+            smallestDifference = smallestDifferenceAmongNeighbors;
+            best.x = x;
+            best.y = y;
+          }
+        }
+      }
+
+      return best;
     }
 
     Point getAvailablePointWithClosestAverageNeighborColor(rgb24 color) {
-        Point best;
+      Point best;
 
-        int smallestAverageDifference = 999999;
+      int smallestAverageDifference = 999999;
 
-        for (int y = 0; y < MATRIX_HEIGHT; y++) {
-            for (int x = 0; x < MATRIX_WIDTH; x++) {
-                // skip any that arent' available
-                if (!isAvailable[x][y])
-                    continue;
+      for (uint8_t y = 0; y < MATRIX_HEIGHT; y++) {
+        for (uint8_t x = 0; x < MATRIX_WIDTH; x++) {
+          // skip any that arent' available
+          if (!isAvailable[x][y])
+            continue;
 
-                int neighborCount = 0;
-                int neighborColorDifferenceTotal = 0;
+          int neighborCount = 0;
+          int neighborColorDifferenceTotal = 0;
 
-                // loop through its neighbors
-                for (int dy = -1; dy <= 1; dy++) {
-                    if (y + dy == -1 || y + dy == MATRIX_HEIGHT)
-                        continue;
+          // loop through its neighbors
+          for (char dy = -1; dy <= 1; dy++) {
+            if (y + dy == -1 || y + dy == MATRIX_HEIGHT)
+              continue;
 
-                    for (int dx = -1; dx <= 1; dx++) {
-                        if (x + dx == -1 || x + dx == MATRIX_WIDTH)
-                            continue;
+            for (char dx = -1; dx <= 1; dx++) {
+              if (x + dx == -1 || x + dx == MATRIX_WIDTH)
+                continue;
 
-                        int nx = x + dx;
-                        int ny = y + dy;
+              int nx = x + dx;
+              int ny = y + dy;
 
-                        // skip any neighbors that don't already have a color
-                        if (!hasColor[nx][ny])
-                            continue;
+              // skip any neighbors that don't already have a color
+              if (!hasColor(nx, ny))
+                continue;
 
-                        neighborCount++;
+              neighborCount++;
 
-                        rgb24 neighborColor = matrix.readPixel(nx, ny);
+              rgb24 neighborColor = matrix.readPixel(nx, ny);
 
-                        int difference = colorDifference(neighborColor, color);
-                        neighborColorDifferenceTotal += difference;
-                    }
-                }
-
-                int averageDifferenceAmongNeighbors = neighborColorDifferenceTotal / neighborCount;
-
-                if (averageDifferenceAmongNeighbors < smallestAverageDifference || (averageDifferenceAmongNeighbors == smallestAverageDifference && random(2) == 1)) {
-                    smallestAverageDifference = averageDifferenceAmongNeighbors;
-                    best.x = x;
-                    best.y = y;
-                }
+              int difference = colorDifference(neighborColor, color);
+              neighborColorDifferenceTotal += difference;
             }
-        }
+          }
 
-        return best;
+          int averageDifferenceAmongNeighbors = neighborColorDifferenceTotal / neighborCount;
+
+          if (averageDifferenceAmongNeighbors < smallestAverageDifference || (averageDifferenceAmongNeighbors == smallestAverageDifference && random(2) == 1)) {
+            smallestAverageDifference = averageDifferenceAmongNeighbors;
+            best.x = x;
+            best.y = y;
+          }
+        }
+      }
+
+      return best;
     }
 
     void createPalette() {
-        int colorSort = random(4);
+      uint8_t colorSort = random(4);
 
-        switch (colorSort) {
-            case 0:
-                createPaletteRGB();
-                shuffleColors();
-                break;
-            case 1:
-                createPaletteGBR();
-                shuffleColors();
-                break;
-            case 2:
-                createPaletteBRG();
-                shuffleColors();
-                break;
-            case 3:
-                createPaletteHSV();
-                break;
-        }
+      switch (colorSort) {
+        case 0:
+          createPaletteRGB();
+          shuffleColors();
+          break;
+        case 1:
+          createPaletteGBR();
+          shuffleColors();
+          break;
+        case 2:
+          createPaletteBRG();
+          shuffleColors();
+          break;
+        case 3:
+          createPaletteHSV();
+          break;
+      }
     }
 
     void createPaletteRGB() {
-        int i = 0;
+      int i = 0;
 
-        for (int b = 0; b < NUMCOLORS; b++) {
-            for (int g = 0; g < NUMCOLORS; g++) {
-                for (int r = 0; r < NUMCOLORS; r++) {
-                    rgb24 color;
-                    color.red = r * 255 / (NUMCOLORS - 1);
-                    color.green = g * 255 / (NUMCOLORS - 1);
-                    color.blue = b * 255 / (NUMCOLORS - 1);
-                    colors[i] = color;
+      for (int b = 0; b < NUMCOLORS; b++) {
+        for (int g = 0; g < NUMCOLORS; g++) {
+          for (int r = 0; r < NUMCOLORS; r++) {
+            rgb24 color;
+            color.red = r * 255 / (NUMCOLORS - 1);
+            color.green = g * 255 / (NUMCOLORS - 1);
+            color.blue = b * 255 / (NUMCOLORS - 1);
+            colors[i] = color;
 
-                    i++;
-                    if (i == COLOR_COUNT)
-                        return;
-                }
-            }
+            i++;
+            if (i == COLOR_COUNT)
+              return;
+          }
         }
+      }
     }
 
     void createPaletteGBR() {
-        int i = 0;
+      int i = 0;
 
-        for (int r = 0; r < NUMCOLORS; r++) {
-            for (int b = 0; b < NUMCOLORS; b++) {
-                for (int g = 0; g < NUMCOLORS; g++) {
-                    rgb24 color;
-                    color.red = r * 255 / (NUMCOLORS - 1);
-                    color.green = g * 255 / (NUMCOLORS - 1);
-                    color.blue = b * 255 / (NUMCOLORS - 1);
-                    colors[i] = color;
+      for (int r = 0; r < NUMCOLORS; r++) {
+        for (int b = 0; b < NUMCOLORS; b++) {
+          for (int g = 0; g < NUMCOLORS; g++) {
+            rgb24 color;
+            color.red = r * 255 / (NUMCOLORS - 1);
+            color.green = g * 255 / (NUMCOLORS - 1);
+            color.blue = b * 255 / (NUMCOLORS - 1);
+            colors[i] = color;
 
-                    i++;
-                    if (i == COLOR_COUNT)
-                        return;
-                }
-            }
+            i++;
+            if (i == COLOR_COUNT)
+              return;
+          }
         }
+      }
     }
 
     void createPaletteBRG() {
-        int i = 0;
+      int i = 0;
 
-        for (int r = 0; r < NUMCOLORS; r++) {
-            for (int g = 0; g < NUMCOLORS; g++) {
-                for (int b = 0; b < NUMCOLORS; b++) {
-                    rgb24 color;
-                    color.red = r * 255 / (NUMCOLORS - 1);
-                    color.green = g * 255 / (NUMCOLORS - 1);
-                    color.blue = b * 255 / (NUMCOLORS - 1);
-                    colors[i] = color;
+      for (int r = 0; r < NUMCOLORS; r++) {
+        for (int g = 0; g < NUMCOLORS; g++) {
+          for (int b = 0; b < NUMCOLORS; b++) {
+            rgb24 color;
+            color.red = r * 255 / (NUMCOLORS - 1);
+            color.green = g * 255 / (NUMCOLORS - 1);
+            color.blue = b * 255 / (NUMCOLORS - 1);
+            colors[i] = color;
 
-                    i++;
-                    if (i == COLOR_COUNT)
-                        return;
-                }
-            }
+            i++;
+            if (i == COLOR_COUNT)
+              return;
+          }
         }
+      }
     }
 
     void shuffleColors() {
-        for (int a = 0; a < COLOR_COUNT; a++)
-        {
-            int r = random(a, COLOR_COUNT);
-            rgb24 temp = colors[a];
-            colors[a] = colors[r];
-            colors[r] = temp;
-        }
+      for (int a = 0; a < COLOR_COUNT; a++)
+      {
+        int r = random(a, COLOR_COUNT);
+        rgb24 temp = colors[a];
+        colors[a] = colors[r];
+        colors[r] = temp;
+      }
     }
 
     void createPaletteHSV() {
-        int i = 0;
+      int i = 0;
 
-        uint8_t startHue = random(0, 255);
+      uint8_t startHue = random(0, 255);
 
-        for (uint8_t h = startHue; i < 1024; h += 8) {
-            for (uint16_t s = 0; s < 256; s += 16) {
-                if (i < COLOR_COUNT)
-                    colors[i] = effects.HsvToRgb(h, s, 255);
+      for (uint8_t h = startHue; i < 1024; h += 8) {
+        for (uint16_t s = 0; s < 256; s += 16) {
+          if (i < COLOR_COUNT)
+            colors[i] = effects.HsvToRgb(h, s, 255);
 
-                i++;
-            }
-
-            for (uint16_t v = 256; v > 0; v -= 16) {
-                if (i < COLOR_COUNT)
-                    colors[i] = effects.HsvToRgb(h, 255, v);
-
-                i++;
-            }
+          i++;
         }
+
+        for (uint16_t v = 256; v > 0; v -= 16) {
+          if (i < COLOR_COUNT)
+            colors[i] = effects.HsvToRgb(h, 255, v);
+
+          i++;
+        }
+      }
     }
 
-public:
+  public:
     PatternRainbowSmoke() {
-        name = (char *)"RainbowSmoke";
+      name = (char *)"RainbowSmoke";
     }
 
     unsigned int drawFrame() {
-        if (currentColorIndex == 0) {
-            //randomSeed(analogRead(5));
+      if (currentColorIndex == 0) {
+        //randomSeed(analogRead(5));
 
-            matrix.fillScreen({ 0, 0, 0 });
-            createPalette();
-            algorithm = random(2);
+        matrix.fillScreen({ 0, 0, 0 });
+        createPalette();
+        algorithm = random(2);
 
-            // clear all flags
-            for (int y = 0; y < MATRIX_HEIGHT; y++) {
-                for (int x = 0; x < MATRIX_WIDTH; x++) {
-                    hasColor[x][y] = false;
-                    isAvailable[x][y] = false;
-                }
-            }
+        // clear all flags
+        for (uint8_t y = 0; y < MATRIX_HEIGHT; y++) {
+          for (uint8_t x = 0; x < MATRIX_WIDTH; x++) {
+            isAvailable[x][y] = false;
+          }
         }
+      }
 
-        rgb24 color = colors[currentColorIndex];
-        Point point;
+      rgb24 color = colors[currentColorIndex];
+      Point point;
 
-        if (currentColorIndex == 0){
-            // use a random starting point
-            point.x = random(32);
-            point.y = random(32);
-        }
-        else {
-            point = getAvailablePoint(algorithm, color);
-        }
+      if (currentColorIndex == 0) {
+        // use a random starting point
+        point.x = random(32);
+        point.y = random(32);
+      }
+      else {
+        point = getAvailablePoint(algorithm, color);
+      }
 
-        isAvailable[point.x][point.y] = false;
-        hasColor[point.x][point.y] = true;
+      isAvailable[point.x][point.y] = false;
 
-        matrix.drawPixel(point.x, point.y, color);
+      matrix.drawPixel(point.x, point.y, color);
 
-        markAvailableNeighbors(point);
+      markAvailableNeighbors(point);
 
-        currentColorIndex++;
-        if (currentColorIndex >= COLOR_COUNT) {
-            currentColorIndex = 0;
-            return 3000;
-        }
+      currentColorIndex++;
+      if (currentColorIndex >= COLOR_COUNT) {
+        currentColorIndex = 0;
+        return 3000;
+      }
 
-        return 0;
+      return 0;
     }
 
     void start() {
-        matrix.fillScreen({ 0, 0, 0 });
-        currentColorIndex = 0;
+      matrix.fillScreen({ 0, 0, 0 });
+      currentColorIndex = 0;
     }
 };
 

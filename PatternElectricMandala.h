@@ -53,13 +53,12 @@ class PatternElectricMandala : public Drawable {
 
       // fill coordinates with random values
       // set zoom levels
-      for (int i = 0; i < NUM_LAYERS; i++) {
-        noise_x[i] = random16();
-        noise_y[i] = random16();
-        noise_z[i] = random16();
-        noise_scale_x[i] = 6000;
-        noise_scale_y[i] = 6000;
-      }
+      noise_x = random16();
+      noise_y = random16();
+      noise_z = random16();
+      noise_scale_x = 6000;
+      noise_scale_y = 6000;
+
       // for the random movement
       dx = random8();
       dy = random8();
@@ -76,16 +75,16 @@ class PatternElectricMandala : public Drawable {
         dy = random16(500) - 250; // random16(2000) - 1000 is pretty fast but works fine, too
         dx = random16(500) - 250;
         dz = random16(500) - 250;
-        noise_scale_x[0] = random16(10000) + 2000;
-        noise_scale_y[0] = random16(10000) + 2000;
+        noise_scale_x = random16(10000) + 2000;
+        noise_scale_y = random16(10000) + 2000;
       }
 #endif
 
-      noise_y[0] += dy;
-      noise_x[0] += dx;
-      noise_z[0] += dz;
+      noise_y += dy;
+      noise_x += dx;
+      noise_z += dz;
 
-      effects.FillNoise(0);
+      effects.FillNoise();
       ShowNoiseLayer(0, 1, 0);
 
       effects.Caleidoscope3();
@@ -99,7 +98,7 @@ class PatternElectricMandala : public Drawable {
       for (uint8_t i = 0; i < MATRIX_WIDTH; i++) {
         for (uint8_t j = 0; j < MATRIX_HEIGHT; j++) {
 
-          uint8_t color = noise[layer][i][j];
+          uint8_t color = noise[i][j];
 
           uint8_t bri = color;
 
