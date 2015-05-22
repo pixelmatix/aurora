@@ -34,7 +34,7 @@ class Games : public Runnable {
     GameTetris tetris;
     Drawable exit;
 
-    static const int itemCount = 3;
+    static const uint8_t itemCount = 3;
 
     MenuItem menuItemSnake = MenuItem((char *)"Snake", &snake);
     MenuItem menuItemTetris = MenuItem((char *)"Tetris", &tetris);

@@ -57,7 +57,6 @@
 #include "PatternSpark.h"
 #include "PatternSpiral.h"
 #include "PatternEffects.h"
-//#include "PatternBitmap.h"
 
 class Patterns : public Playlist {
   private:
@@ -101,9 +100,6 @@ class Patterns : public Playlist {
     PatternGhost ghost;
     PatternDots1 dots1;
     PatternDots2 dots2;
-    //    PatternSlowMandala slowMandala;
-    //    PatternMandala8 mandala8;
-    //    PatternBitmap bitmap;
 
     int currentIndex = 0;
     Drawable* currentItem;
@@ -125,7 +121,6 @@ class Patterns : public Playlist {
       &radar,
       &multipleStream4,
       &multipleStream2,
-      //        &multipleStream,
       &life,
       &flowField,
       &pendulumWave,
@@ -157,9 +152,6 @@ class Patterns : public Playlist {
       &ghost,
       &dots1,
       &dots2,
-      //      &slowMandala,
-      //      &mandala8
-      //      &bitmap
     };
 
   public:

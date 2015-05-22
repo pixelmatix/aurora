@@ -61,8 +61,6 @@ bool sparkfunRemoteEnabled = true;
 bool adafruitRemoteEnabled = true;
 bool smartMatrixRemoteEnabled = true;
 bool ronixSixButtonRemoteEnabled = true;
-bool gameARemoteEnabled = true;
-bool gameBRemoteEnabled = true;
 
 // IR Raw Key Codes for SmartMatrix remote
 #define IRCODE_SMARTMATRIX_HELD            0xFFFFFFFF // 4294967295
@@ -122,30 +120,6 @@ bool gameBRemoteEnabled = true;
 #define IRCODE_RONIX_SIX_BUTTON_SELECT 16748655
 #define IRCODE_RONIX_SIX_BUTTON_RIGHT  16732335
 #define IRCODE_RONIX_SIX_BUTTON_DOWN   16756815
-
-#define IRCODE_GAME_A_UP     2814785559
-#define IRCODE_GAME_A_DOWN   3881522439
-#define IRCODE_GAME_A_LEFT   3183975767
-#define IRCODE_GAME_A_RIGHT  2718800199
-#define IRCODE_GAME_A_A      2714386827
-#define IRCODE_GAME_A_B      1156176007
-#define IRCODE_GAME_A_TA     365726790
-#define IRCODE_GAME_A_TB     1741811250
-#define IRCODE_GAME_A_SELECT 3726419671
-#define IRCODE_GAME_A_START  2229327047
-#define IRCODE_GAME_A_RESET  4294967295
-
-#define IRCODE_GAME_B_UP     3428550935
-#define IRCODE_GAME_B_DOWN   200320519
-#define IRCODE_GAME_B_LEFT   3797741143
-#define IRCODE_GAME_B_RIGHT  3332565575
-#define IRCODE_GAME_B_A      3328152203
-#define IRCODE_GAME_B_B      1769941383
-#define IRCODE_GAME_B_TA     979492166
-#define IRCODE_GAME_B_TB     2355576626
-#define IRCODE_GAME_B_SELECT 45217751
-#define IRCODE_GAME_B_START  2843092423
-#define IRCODE_GAME_B_RESET  4294967295
 
 // Low level IR code reading function
 // Function will return 0 if no IR code available
@@ -424,37 +398,6 @@ InputCommand getCommand(unsigned long input) {
 
       case IRCODE_RONIX_SIX_BUTTON_M:
         return InputCommand::CycleBrightness;
-    }
-  }
-
-  if (gameARemoteEnabled) {
-    switch (input) {
-      case IRCODE_GAME_A_UP:
-        return InputCommand::Up;
-
-      case IRCODE_GAME_A_DOWN:
-        return InputCommand::Down;
-
-      case IRCODE_GAME_A_LEFT:
-        return InputCommand::Left;
-
-      case IRCODE_GAME_A_RIGHT:
-        return InputCommand::Right;
-
-      case IRCODE_GAME_A_SELECT:
-        return InputCommand::Back;
-
-      case IRCODE_GAME_A_START:
-        return InputCommand::Select;
-
-      case IRCODE_GAME_A_A:
-        return InputCommand::PlayMode;
-
-      case IRCODE_GAME_A_B:
-        return InputCommand::Palette;
-
-      case IRCODE_GAME_A_TA:
-        return InputCommand::CycleClockAndMessageFiles;
     }
   }
 

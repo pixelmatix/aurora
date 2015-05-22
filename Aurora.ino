@@ -70,11 +70,6 @@ Effects effects;
 #include "GifPlayer.h"
 GifPlayer gifPlayer;
 
-//#include "BitmapPlayer.h"
-//BitmapPlayer bitmapPlayer;
-
-#include "Logo.h"
-
 #include "Drawable.h"
 #include "Playlist.h"
 #include "Runnable.h"
