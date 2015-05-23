@@ -34,14 +34,15 @@ class PatternRainbowSmoke : public Drawable {
 
     static const uint8_t NUMCOLORS = 11;
     static const uint16_t COLOR_COUNT = 1024;
-    uint8_t startx = 15;
-    uint8_t starty = 15;
+    int startx = 15;
+    int starty = 15;
 
     rgb24 colors[COLOR_COUNT];
+    bool hasColor[MATRIX_WIDTH][MATRIX_HEIGHT];
     bool isAvailable[MATRIX_WIDTH][MATRIX_HEIGHT];
 
-    uint8_t currentColorIndex = 0;
-    uint8_t algorithm;
+    int currentColorIndex = 0;
+    int algorithm;
 
     int colorDifference(rgb24 c1, rgb24 c2) {
       int r = c1.red - c2.red;
@@ -50,14 +51,8 @@ class PatternRainbowSmoke : public Drawable {
       return r * r + g * g + b * b;
     }
 
-    const CRGB black = { 0, 0, 0 };
-
-    bool hasColor(uint8_t x, uint8_t y) {
-      return effects.leds[XY(x, y)] == black;
-    }
-
     void markAvailableNeighbors(Point point) {
-      for (char dy = -1; dy <= 1; dy++) {
+      for (int dy = -1; dy <= 1; dy++) {
         int ny = point.y + dy;
 
         if (ny == -1 || ny == MATRIX_HEIGHT)
@@ -72,7 +67,7 @@ class PatternRainbowSmoke : public Drawable {
           if (nx == -1 || nx == MATRIX_WIDTH)
             continue;
 
-          if (!hasColor(nx, ny)) {
+          if (!hasColor[nx][ny]) {
             isAvailable[nx][ny] = true;
           }
         }
@@ -117,7 +112,7 @@ class PatternRainbowSmoke : public Drawable {
               int ny = y + dy;
 
               // skip any neighbors that don't already have a color
-              if (!hasColor(nx, ny))
+              if (!hasColor[nx][ny])
                 continue;
 
               rgb24 neighborColor = matrix.readPixel(nx, ny);
@@ -145,8 +140,8 @@ class PatternRainbowSmoke : public Drawable {
 
       int smallestAverageDifference = 999999;
 
-      for (uint8_t y = 0; y < MATRIX_HEIGHT; y++) {
-        for (uint8_t x = 0; x < MATRIX_WIDTH; x++) {
+      for (int y = 0; y < MATRIX_HEIGHT; y++) {
+        for (int x = 0; x < MATRIX_WIDTH; x++) {
           // skip any that arent' available
           if (!isAvailable[x][y])
             continue;
@@ -155,11 +150,11 @@ class PatternRainbowSmoke : public Drawable {
           int neighborColorDifferenceTotal = 0;
 
           // loop through its neighbors
-          for (char dy = -1; dy <= 1; dy++) {
+          for (int dy = -1; dy <= 1; dy++) {
             if (y + dy == -1 || y + dy == MATRIX_HEIGHT)
               continue;
 
-            for (char dx = -1; dx <= 1; dx++) {
+            for (int dx = -1; dx <= 1; dx++) {
               if (x + dx == -1 || x + dx == MATRIX_WIDTH)
                 continue;
 
@@ -167,7 +162,7 @@ class PatternRainbowSmoke : public Drawable {
               int ny = y + dy;
 
               // skip any neighbors that don't already have a color
-              if (!hasColor(nx, ny))
+              if (!hasColor[nx][ny])
                 continue;
 
               neighborCount++;
@@ -193,7 +188,7 @@ class PatternRainbowSmoke : public Drawable {
     }
 
     void createPalette() {
-      uint8_t colorSort = random(4);
+      int colorSort = random(4);
 
       switch (colorSort) {
         case 0:
@@ -320,8 +315,9 @@ class PatternRainbowSmoke : public Drawable {
         algorithm = random(2);
 
         // clear all flags
-        for (uint8_t y = 0; y < MATRIX_HEIGHT; y++) {
-          for (uint8_t x = 0; x < MATRIX_WIDTH; x++) {
+        for (int y = 0; y < MATRIX_HEIGHT; y++) {
+          for (int x = 0; x < MATRIX_WIDTH; x++) {
+            hasColor[x][y] = false;
             isAvailable[x][y] = false;
           }
         }
@@ -340,6 +336,7 @@ class PatternRainbowSmoke : public Drawable {
       }
 
       isAvailable[point.x][point.y] = false;
+      hasColor[point.x][point.y] = true;
 
       matrix.drawPixel(point.x, point.y, color);
 
