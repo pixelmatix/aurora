@@ -1,9 +1,13 @@
 Aurora
 ======
 
-Aurora runs on SmartMatrix, a beautiful music visualizer, dynamic art display, video game art display, and more.
+Aurora runs on SmartMatrix, a dynamic LED art display and music visualizer.
 
-More information on SmartMatrix: [SmartMatrix Kickstarter]
+[![SmartMatrix](https://ksr-ugc.imgix.net/projects/979600/photo-original.jpg?v=1432073505&w=640&h=480&fit=crop&auto=format&q=92&s=e7f872a3cb2df45c5fbad0a251e4025c)](http://pixl.mx/kick2015)
+
+SmartMatrix is a self-contained 32x32 pixel LED matrix display for music visualization, dynamic patterns, pixel art, and more!
+
+Customize what's on the screen with the included remote control: choose what's playing, show a clock or message on top, and change settings, all from the remote. You don't need a computer or phone to control what's on the screen.
 
 Features
 --------
@@ -16,7 +20,7 @@ Features
 Demo Video
 -------------------------
 
-[![Aurora Demo Video](http://img.youtube.com/vi/dRn1rFWGPWk/0.jpg)](http://www.youtube.com/watch?v=dRn1rFWGPWk)
+[![SmartMatrix Demo Video](https://i.vimeocdn.com/video/518191599_295x166.webp)](https://vimeo.com/user5888427/smartmatrixoverview)
 
 Installation
 ------------
