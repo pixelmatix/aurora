@@ -550,6 +550,20 @@ InputCommand readSerialCommand() {
       return InputCommand::None;
   }
 
+  // temperature
+  item = aJson.getObjectItem(root, "temperature");
+  if (item && item->type == aJson_Int) {
+    setTemperature(item->valueint);
+    return InputCommand::None;
+  }
+
+  // weatherType
+  item = aJson.getObjectItem(root, "weatherType");
+  if (item && item->type == aJson_Int) {
+    setWeatherType(item->valueint);
+    return InputCommand::None;
+  }
+
   // add support for more specialized items here...
 
   // fall back on basic command support

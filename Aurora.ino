@@ -38,7 +38,7 @@
 
 #include <aJSON.h>
 
-#define GAMES 1
+#define GAMES 0
 
 char versionText[] = "v1.5";
 
@@ -109,6 +109,9 @@ AudioPatterns audioPatterns;
 #include "Animations.h"
 Animations animations;
 
+#include "Weather.h"
+Weather weather;
+
 #include "Bitmaps.h"
 
 rgb24 menuColor = CRGB(CRGB::Blue);
@@ -133,13 +136,14 @@ Settings settings;
 #include "SettingsSetTime.h"
 #include "SettingsMoveClock.h"
 
-MenuItem menuItemAudioPatterns = MenuItem((char*)"Audio Patterns", &audioPatterns);
-MenuItem menuItemPatterns = MenuItem((char*)"Patterns", &patterns);
-MenuItem menuItemAnimations = MenuItem((char*)"Animations", &animations);
+MenuItem menuItemAudioPatterns = MenuItem(audioPatterns.name, &audioPatterns);
+MenuItem menuItemPatterns = MenuItem(patterns.name, &patterns);
+MenuItem menuItemAnimations = MenuItem(animations.name, &animations);
 #if GAMES > 0
-MenuItem menuItemGames = MenuItem((char*)"Games", &games);
+MenuItem menuItemGames = MenuItem(games.name, &games);
 #endif
-MenuItem menuItemSettings = MenuItem((char*)"Settings", &settings);
+MenuItem menuItemWeather = MenuItem(weather.name, &weather);
+MenuItem menuItemSettings = MenuItem(settings.name, &settings);
 
 // Main Menu
 MenuItem* mainMenuItems [] = {
@@ -149,6 +153,7 @@ MenuItem* mainMenuItems [] = {
 #if GAMES > 0
   &menuItemGames,
 #endif
+  &menuItemWeather,
   &menuItemSettings,
 };
 
@@ -345,6 +350,16 @@ bool setAnimation(int index) {
   }
 
   return false;
+}
+
+bool setTemperature(int temperature) {
+  weather.temperature = temperature;
+  return true;
+}
+
+bool setWeatherType(int type) {
+  weather.type = type;
+  return true;
 }
 
 void powerOff()
