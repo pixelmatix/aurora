@@ -493,6 +493,25 @@ InputCommand readSerialCommand() {
     return InputCommand::None;
   }
 
+  // audio pattern
+  item = aJson.getObjectItem(root, "audiopattern");
+  if (item && item->type == aJson_String) {
+    //Serial.print(F("Loading audiopattern "));
+    //Serial.println(item->valuestring);
+    if (setAudioPattern(item->valuestring))
+      return InputCommand::Update;
+    else
+      return InputCommand::None;
+  }
+  else if (item && item->type == aJson_Int) {
+    //Serial.print(F("Loading audiopattern "));
+    //Serial.println(item->valueint);
+    if (setAudioPattern(item->valueint))
+      return InputCommand::Update;
+    else
+      return InputCommand::None;
+  }
+
   // pattern
   item = aJson.getObjectItem(root, "pattern");
   if (item && item->type == aJson_String) {
@@ -539,6 +558,10 @@ InputCommand readSerialCommand() {
     // custom commands
     if ((String) item->valuestring == "ListAnimations") {
       listAnimations();
+      return InputCommand::None;
+    }
+    else if ((String) item->valuestring == "ListAudioPatterns") {
+      listAudioPatterns();
       return InputCommand::None;
     }
     else if ((String) item->valuestring == "ListPatterns") {

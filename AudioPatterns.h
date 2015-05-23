@@ -1306,7 +1306,11 @@ class AudioPatterns : public Playlist {
     char* Drawable::name = (char *)"Audio Patterns";
 
     void move(int step) {
-      currentIndex += step;
+      moveTo(currentIndex + step);
+    }
+
+    void moveTo(int index) {
+      currentIndex = index;
 
       if (currentIndex >= PATTERN_COUNT) currentIndex = 0;
       else if (currentIndex < 0) currentIndex = PATTERN_COUNT - 1;
@@ -1325,6 +1329,46 @@ class AudioPatterns : public Playlist {
       (this->*currentItem)();
 
       return 0;
+    }
+    
+    void listAudioPatterns() {
+      Serial.println(F("{"));
+      Serial.print(F("  \"count\": "));
+      Serial.print(PATTERN_COUNT);
+      Serial.println(",");
+      Serial.println(F("  \"results\": ["));
+
+      for (int i = 0; i < PATTERN_COUNT; i++) {
+        Serial.print(F("    \""));
+        Serial.print(i);
+        if (i == PATTERN_COUNT - 1)
+          Serial.println(F("\""));
+        else
+          Serial.println(F("\","));
+      }
+
+      Serial.println("  ]");
+      Serial.println("}");
+    }
+
+    bool setAudioPattern(String name) {
+      for (int i = 0; i < PATTERN_COUNT; i++) {
+        if (name.toInt() == i) {
+          moveTo(i);
+          return true;
+        }
+      }
+
+      return false;
+    }
+
+    bool setAudioPattern(int index) {
+      if (index >= PATTERN_COUNT || index < 0)
+        return false;
+
+      moveTo(index);
+
+      return true;
     }
 };
 

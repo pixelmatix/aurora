@@ -34,15 +34,15 @@ class PatternRainbowSmoke : public Drawable {
 
     static const uint8_t NUMCOLORS = 11;
     static const uint16_t COLOR_COUNT = 1024;
-    int startx = 15;
-    int starty = 15;
+    uint8_t startx = 15;
+    uint8_t starty = 15;
 
     rgb24 colors[COLOR_COUNT];
     bool hasColor[MATRIX_WIDTH][MATRIX_HEIGHT];
     bool isAvailable[MATRIX_WIDTH][MATRIX_HEIGHT];
 
-    int currentColorIndex = 0;
-    int algorithm;
+    uint8_t currentColorIndex = 0;
+    uint8_t algorithm;
 
     int colorDifference(rgb24 c1, rgb24 c2) {
       int r = c1.red - c2.red;

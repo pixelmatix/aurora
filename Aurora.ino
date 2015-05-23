@@ -280,6 +280,28 @@ void loop()
   menu.run(mainMenuItems, mainMenuItemCount);
 }
 
+void listAudioPatterns() {
+  audioPatterns.listAudioPatterns();
+}
+
+bool setAudioPattern(String name) {
+  if (audioPatterns.setAudioPattern(name)) {
+    menu.currentIndex = 0;
+    menu.visible = false;
+    return true;
+  }
+  return false;
+}
+
+bool setAudioPattern(int index) {
+  if (audioPatterns.setAudioPattern(index)) {
+    menu.currentIndex = 0;
+    menu.visible = false;
+    return true;
+  }
+  return false;
+}
+
 void listPatterns() {
   patterns.listPatterns();
 }
