@@ -224,7 +224,7 @@ void setup()
     loadDemoModeSetting();
 
     clockDisplay.loadSettings();
-  
+
     if (demoMode == 0) {
       loadSettings();
     }
@@ -241,7 +241,6 @@ void setup()
   }
 
   menuItemAudioPatterns.visible = enableAudioPatterns;
-  menuItemAudioPatterns.audioScaleEnabled = demoMode == 0;
   menuItemAudioPatterns.playModeEnabled = true;
   menuItemAudioPatterns.paletteEnabled = true;
 
@@ -257,18 +256,18 @@ void setup()
 }
 
 void loadOverlaySettings() {
-  byte overlayIndex = loadByteSetting("ovrlyidx.txt", 0);
-
-  menu.overlayIndex = overlayIndex;
+  byte overlayIndex = loadByteSetting("ovrlyidx.txt", 255);
 
   int messageIndex = overlayIndex - clockDisplay.itemCount;
 
   if (isTimeAvailable && overlayIndex < clockDisplay.itemCount) {
+    menu.overlayIndex = overlayIndex;
     clockDisplay.moveTo(overlayIndex);
     menu.clockVisible = true;
     menu.messageVisible = false;
   }
   else if (messagePlayer.count > 0 && messageIndex >= 0 && messageIndex < messagePlayer.count) {
+    menu.overlayIndex = overlayIndex;
     messagePlayer.moveTo(messageIndex);
     menu.messageVisible = true;
     menu.clockVisible = false;
@@ -549,14 +548,14 @@ void adjustDemoMode(int delta) {
       demoMode++;
   }
 
-  menuItemSettings.visible = demoMode == 0;
   applyDemoMode();
 }
 
 void applyDemoMode() {
+  menuItemAudioPatterns.audioScaleEnabled = demoMode == 0;
+  
   if (demoMode != 0) {
     menu.visible = false;
-    menu.clockVisible = false;
 
     switch (demoMode) {
       case 1: // autoplay audio patterns
