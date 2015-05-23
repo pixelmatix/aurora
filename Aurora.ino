@@ -207,6 +207,10 @@ void setup()
   CORE_PIN16_CONFIG = (PORT_PCR_MUX(2) | PORT_PCR_PE | PORT_PCR_PS);
   CORE_PIN17_CONFIG = (PORT_PCR_MUX(2) | PORT_PCR_PE | PORT_PCR_PS);
 
+  clockDisplay.readTime();
+  // Serial.print(F("isTimeAvailable: "));
+  // Serial.println(isTimeAvailable);
+
   // default to patterns
   menu.currentIndex = 1;
 
@@ -219,11 +223,11 @@ void setup()
     menuItemGames.visible = loadByteSetting("gamesvis.txt", 1) > 0;
 #endif
 
+    clockDisplay.loadSettings();
+
     loadOverlaySettings();
 
     loadDemoModeSetting();
-
-    clockDisplay.loadSettings();
 
     if (demoMode == 0) {
       loadSettings();
@@ -249,17 +253,13 @@ void setup()
 
   menuItemAnimations.visible = sdAvailable && animations.imageCount > 0;
   menuItemAnimations.playModeEnabled = true;
-
-  clockDisplay.readTime();
-  // Serial.print(F("isTimeAvailable: "));
-  // Serial.println(isTimeAvailable);
 }
 
 void loadOverlaySettings() {
   byte overlayIndex = loadByteSetting("ovrlyidx.txt", 255);
 
   int messageIndex = overlayIndex - clockDisplay.itemCount;
-
+  
   if (isTimeAvailable && overlayIndex < clockDisplay.itemCount) {
     menu.overlayIndex = overlayIndex;
     clockDisplay.moveTo(overlayIndex);
@@ -268,7 +268,8 @@ void loadOverlaySettings() {
   }
   else if (messagePlayer.count > 0 && messageIndex >= 0 && messageIndex < messagePlayer.count) {
     menu.overlayIndex = overlayIndex;
-    messagePlayer.moveTo(messageIndex);
+    messagePlayer.moveTo(messageIndex - 1);
+    messagePlayer.loadNextMessage();
     menu.messageVisible = true;
     menu.clockVisible = false;
   }

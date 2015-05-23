@@ -97,16 +97,15 @@ class ClockDisplay : public Playlist {
           hasSetSyncProvider = true;
         }
 
-        uint8_t second = time.Second;
         breakTime(now(), time);
-        return second != time.Second;
+        return true;
       }
     }
 
     void readTime() {
       // reading from the RTC only takes 1-2ms, but there's no point in reading it every frame
       // so we'll only check it every so often, and then cache the time text
-      if (millis() - lastRead > readInterval) {
+      if (lastRead == 0 || millis() - lastRead > readInterval) {
         if (readTimeHardware()) {
           isTimeAvailable = true;
           lastRead = millis();
@@ -138,14 +137,10 @@ class ClockDisplay : public Playlist {
     char* clockR = (char*) "clockR.txt";
     char* clockG = (char*) "clockG.txt";
     char* clockB = (char*) "clockB.txt";
-    char* clckface = (char*) "clckface.txt";
 
     void loadSettings() {
       clockCountdown.loadSettings();
       clockDigitalShort.loadSettings();
-      currentIndex = loadByteSetting(clckface, 0);
-      if (currentIndex >= itemCount)
-        currentIndex = itemCount - 1;
       move(0);
 
       color.red = loadByteSetting(clockR, 255);
@@ -156,7 +151,6 @@ class ClockDisplay : public Playlist {
 
     void saveSettings() {
       clockDigitalShort.saveSettings();
-      saveClockFaceSetting();
 
       saveColor();
       setColor(color);
@@ -168,10 +162,6 @@ class ClockDisplay : public Playlist {
 
     void saveTwentyFourHourSetting() {
       clockDigitalShort.saveTwentyFourHourSetting();
-    }
-
-    void saveClockFaceSetting() {
-      saveIntSetting(clckface, currentIndex);
     }
 
     void saveColor() {
