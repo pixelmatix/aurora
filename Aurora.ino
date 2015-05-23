@@ -223,6 +223,8 @@ void setup()
 
     loadDemoModeSetting();
 
+    clockDisplay.loadSettings();
+  
     if (demoMode == 0) {
       loadSettings();
     }
@@ -441,8 +443,6 @@ void loadSettings() {
   autoPlayDurationSeconds = loadIntSetting(autoplydFilename, 3, 10);
 
   settings.load();
-
-  clockDisplay.loadSettings();
 }
 
 void saveSettings() {

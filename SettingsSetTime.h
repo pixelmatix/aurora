@@ -92,12 +92,7 @@ class SettingsSetTime : public Runnable {
 
       clockDisplay.readTime();
 
-      if (isTimeAvailable) {
-        sprintf(timeBuffer, "%02d-%02d-%02d", time.Hour, time.Minute, time.Second);
-      }
-      else {
-        sprintf(timeBuffer, "No Clock");
-      }
+      sprintf(timeBuffer, "%02d-%02d-%02d", time.Hour, time.Minute, time.Second);
 
       matrix.setScrollOffsetFromTop(MATRIX_HEIGHT);
       matrix.setScrollColor(clockDisplay.color);
@@ -165,8 +160,8 @@ class SettingsSetTime : public Runnable {
           else
             time.Minute += d;
           break;
-          
-          
+
+
         case SetSecond:
           if (d > 0 && time.Second == 59)
             time.Second = 0;
