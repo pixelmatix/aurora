@@ -34,7 +34,9 @@ class Weather : public Playlist {
 
     char* typesPath = (char *) "/weather/";
 
-    char* types[10] = {
+    static const uint8_t weatherTypeCount = 10;
+
+    char* types[weatherTypeCount] = {
       "sunny",
       "cloudy",
       "hail",
@@ -46,6 +48,22 @@ class Weather : public Playlist {
       "snowrain",
       "storm",
     };
+
+    bool setTemperature(int value) {
+      if (value < -999 || value > 999)
+        return false;
+
+      temperature = value;
+    }
+
+    bool setWeatherType(int value) {
+      if (value < 0 || value >= weatherTypeCount)
+        return false;
+
+      type = value;
+
+      openImageFile(types[type]);
+    }
 
     void openImageFile(const char* name) {
       if (!sdAvailable)

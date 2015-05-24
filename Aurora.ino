@@ -353,13 +353,11 @@ bool setAnimation(int index) {
 }
 
 bool setTemperature(int temperature) {
-  weather.temperature = temperature;
-  return true;
+  return weather.setTemperature(temperature);
 }
 
 bool setWeatherType(int type) {
-  weather.type = type;
-  return true;
+  return weather.setWeatherType(type);
 }
 
 void powerOff()
