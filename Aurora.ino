@@ -264,7 +264,7 @@ void loadOverlaySettings() {
   byte overlayIndex = loadByteSetting("ovrlyidx.txt", 255);
 
   int messageIndex = overlayIndex - clockDisplay.itemCount;
-  
+
   if (isTimeAvailable && overlayIndex < clockDisplay.itemCount) {
     menu.overlayIndex = overlayIndex;
     clockDisplay.moveTo(overlayIndex);
@@ -589,7 +589,7 @@ void adjustDemoMode(int delta) {
 
 void applyDemoMode() {
   menuItemAudioPatterns.audioScaleEnabled = demoMode == 0;
-  
+
   if (demoMode != 0) {
     menu.visible = false;
 
@@ -818,6 +818,11 @@ void saveByteSetting(const char* name, byte value) {
 
 void toggleSettingsMenuVisibility() {
   menuItemSettings.visible = !menuItemSettings.visible;
+}
+
+void playNewAnimation() {
+  animations.setup((char *)"/gifs/");
+  setAnimation(animations.imageCount - 1);
 }
 
 // translates from x, y into an index into the LED array

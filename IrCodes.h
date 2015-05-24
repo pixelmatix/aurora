@@ -443,6 +443,49 @@ InputCommand getCommand(String input) {
   return InputCommand::None;
 }
 
+void createFile(aJsonObject * root) {
+  char path[20];
+  uint32_t length = 0;
+
+  aJsonObject* property = aJson.getObjectItem(root, "path");
+  if (property->type == aJson_String) {
+    strcpy(path, property->valuestring);
+    Serial.print(F("path: "));
+    Serial.println(path);
+  }
+
+  property = aJson.getObjectItem(root, "length");
+  if (property->type == aJson_Int) {
+    length = property->valueint;
+    Serial.print(F("length: "));
+    Serial.println(length);
+  }
+
+  if (length < 1) return;
+
+  if (SD.exists(path) && !SD.remove(path)) {
+    return;
+  }
+
+  File file = SD.open(path, FILE_WRITE);
+  if (!file) return;
+
+  uint32_t bytesWritten = 0;
+
+  while (bytesWritten < length) {
+    if (Serial.available() > 0) {
+      int b = Serial.read();
+      if (b >= 0) {
+        file.write((byte)b);
+        bytesWritten++;
+      }
+    }
+  }
+  file.close();
+
+  playNewAnimation();
+}
+
 InputCommand readSerialCommand() {
   if (Serial.available() < 1)
     return InputCommand::None;
@@ -561,6 +604,13 @@ InputCommand readSerialCommand() {
   item = aJson.getObjectItem(root, "weatherType");
   if (item && item->type == aJson_Int) {
     setWeatherType(item->valueint);
+    return InputCommand::None;
+  }
+
+  // createFile
+  item = aJson.getObjectItem(root, "createFile");
+  if (item) {
+    createFile(item);
     return InputCommand::None;
   }
 
