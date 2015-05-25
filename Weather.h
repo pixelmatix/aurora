@@ -37,16 +37,16 @@ class Weather : public Playlist {
     static const uint8_t weatherTypeCount = 10;
 
     char* types[weatherTypeCount] = {
-      "sunny",
-      "cloudy",
-      "hail",
-      "lightnin",
-      "pcloudy",
-      "pcloudrn",
-      "raining",
-      "snow",
-      "snowrain",
-      "storm",
+      (char*) "sunny",
+      (char*) "cloudy",
+      (char*) "hail",
+      (char*) "lightnin",
+      (char*) "pcloudy",
+      (char*) "pcloudrn",
+      (char*) "raining",
+      (char*) "snow",
+      (char*) "snowrain",
+      (char*) "storm",
     };
 
     bool setTemperature(int value) {
@@ -54,6 +54,8 @@ class Weather : public Playlist {
         return false;
 
       temperature = value;
+      
+      return true;
     }
 
     bool setWeatherType(int value) {
@@ -63,6 +65,8 @@ class Weather : public Playlist {
       type = value;
 
       openImageFile(types[type]);
+      
+      return true;
     }
 
     void openImageFile(const char* name) {

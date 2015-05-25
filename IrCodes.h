@@ -447,18 +447,18 @@ void createFile(aJsonObject * root) {
   char path[20];
   uint32_t length = 0;
 
-  aJsonObject* property = aJson.getObjectItem(root, "path");
-  if (property->type == aJson_String) {
-    strcpy(path, property->valuestring);
-    Serial.print(F("path: "));
-    Serial.println(path);
-  }
-
-  property = aJson.getObjectItem(root, "length");
+  aJsonObject* property = aJson.getObjectItem(root, "length");
   if (property->type == aJson_Int) {
     length = property->valueint;
     Serial.print(F("length: "));
     Serial.println(length);
+  }
+
+  property = aJson.getObjectItem(root, "path");
+  if (property->type == aJson_String) {
+    strcpy(path, property->valuestring);
+    Serial.print(F("path: "));
+    Serial.println(path);
   }
 
   if (length < 1) return;
@@ -483,7 +483,10 @@ void createFile(aJsonObject * root) {
   }
   file.close();
 
-  playNewAnimation();
+  reloadAnimations();
+  String name = property->valuestring;
+  name = name.substring(6);
+  setAnimation(name);
 }
 
 InputCommand readSerialCommand() {

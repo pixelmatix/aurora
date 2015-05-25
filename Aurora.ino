@@ -216,6 +216,9 @@ void setup()
   // Serial.print(F("isTimeAvailable: "));
   // Serial.println(isTimeAvailable);
 
+  // set date time callback function
+  SdFile::dateTimeCallback(dateTime);
+
   // default to patterns
   menu.currentIndex = 1;
 
@@ -331,6 +334,10 @@ bool setPattern(int index) {
 
 void listAnimations() {
   animations.listFiles();
+}
+
+void reloadAnimations() {
+  animations.setup((char *)"/gifs/");
 }
 
 bool setAnimation(String name) {
@@ -820,11 +827,6 @@ void toggleSettingsMenuVisibility() {
   menuItemSettings.visible = !menuItemSettings.visible;
 }
 
-void playNewAnimation() {
-  animations.setup((char *)"/gifs/");
-  setAnimation(animations.imageCount - 1);
-}
-
 // translates from x, y into an index into the LED array
 uint16_t XY(uint8_t x, uint8_t y) {
   uint8_t hwx, hwy;
@@ -858,6 +860,15 @@ uint16_t XY(uint8_t x, uint8_t y) {
   }
 
   return (hwy * MATRIX_WIDTH) + hwx;
+}
+
+// call back for file timestamps
+void dateTime(uint16_t* date, uint16_t* time2) {
+  // return date using FAT_DATE macro to format fields
+  *date = FAT_DATE(tmYearToCalendar(time.Year), time.Month, time.Day);
+
+  // return time using FAT_TIME macro to format fields
+  *time2 = FAT_TIME(time.Hour, time.Minute, time.Second);
 }
 
 /////////////////////////////////////////////////////////////
