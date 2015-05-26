@@ -23,6 +23,8 @@
 #ifndef SettingsMenuColor_H
 #define SettingsMenuColor_H
 
+extern void saveMenuColor();
+
 class SettingsMenuColor : public Runnable {
 private:
     int cursorX = 0;
