@@ -476,7 +476,7 @@ void createFile(aJsonObject * root) {
     if (Serial.available() > 0) {
       int b = Serial.read();
       if (b >= 0) {
-        file.write((byte)b);
+        file.write((byte) b);
         bytesWritten++;
       }
     }
@@ -506,10 +506,12 @@ InputCommand readSerialCommand() {
   }
   //Serial.println(F(" done"));
 
+  InputCommand command = InputCommand::None;
+
   // message
   aJsonObject* item = aJson.getObjectItem(root, "message");
   if (item && messagePlayer.readJsonObject(item)) {
-    return InputCommand::ShowCurrentMessage;
+    command = InputCommand::ShowCurrentMessage;
   }
 
   // brightness
@@ -519,7 +521,7 @@ InputCommand readSerialCommand() {
     boundBrightness();
     matrix.setBrightness(brightness);
     saveBrightnessSetting();
-    return InputCommand::None;
+    command = InputCommand::None;
   }
 
   // background brightness
@@ -529,14 +531,14 @@ InputCommand readSerialCommand() {
     boundBackgroundBrightness();
     matrix.setBackgroundBrightness(backgroundBrightness);
     saveBackgroundBrightnessSetting();
-    return InputCommand::None;
+    command = InputCommand::None;
   }
 
   // palette
   item = aJson.getObjectItem(root, "palette");
   if (item && item->type == aJson_String) {
     effects.setPalette(item->valuestring);
-    return InputCommand::None;
+    command = InputCommand::None;
   }
 
   // audio pattern
@@ -545,17 +547,17 @@ InputCommand readSerialCommand() {
     //Serial.print(F("Loading audiopattern "));
     //Serial.println(item->valuestring);
     if (setAudioPattern(item->valuestring))
-      return InputCommand::Update;
+      command = InputCommand::Update;
     else
-      return InputCommand::None;
+      command = InputCommand::None;
   }
   else if (item && item->type == aJson_Int) {
     //Serial.print(F("Loading audiopattern "));
     //Serial.println(item->valueint);
     if (setAudioPattern(item->valueint))
-      return InputCommand::Update;
+      command = InputCommand::Update;
     else
-      return InputCommand::None;
+      command = InputCommand::None;
   }
 
   // pattern
@@ -564,17 +566,17 @@ InputCommand readSerialCommand() {
     //Serial.print(F("Loading pattern "));
     //Serial.println(item->valuestring);
     if (setPattern(item->valuestring))
-      return InputCommand::Update;
+      command = InputCommand::Update;
     else
-      return InputCommand::None;
+      command = InputCommand::None;
   }
   else if (item && item->type == aJson_Int) {
     //Serial.print(F("Loading pattern "));
     //Serial.println(item->valueint);
     if (setPattern(item->valueint))
-      return InputCommand::Update;
+      command = InputCommand::Update;
     else
-      return InputCommand::None;
+      command = InputCommand::None;
   }
 
   // animation
@@ -583,38 +585,38 @@ InputCommand readSerialCommand() {
     //Serial.print(F("Loading animation "));
     //Serial.println(item->valuestring);
     if (setAnimation(item->valuestring))
-      return InputCommand::Update;
+      command = InputCommand::Update;
     else
-      return InputCommand::None;
+      command = InputCommand::None;
   }
   else if (item && item->type == aJson_Int) {
     //Serial.print(F("Loading animation "));
     //Serial.println(item->valueint);
     if (setAnimation(item->valueint))
-      return InputCommand::Update;
+      command = InputCommand::Update;
     else
-      return InputCommand::None;
+      command = InputCommand::None;
   }
 
   // temperature
   item = aJson.getObjectItem(root, "temperature");
   if (item && item->type == aJson_Int) {
     setTemperature(item->valueint);
-    return InputCommand::None;
+    command = InputCommand::None;
   }
 
   // weatherType
   item = aJson.getObjectItem(root, "weatherType");
   if (item && item->type == aJson_Int) {
     setWeatherType(item->valueint);
-    return InputCommand::None;
+    command = InputCommand::None;
   }
 
   // createFile
   item = aJson.getObjectItem(root, "createFile");
   if (item) {
     createFile(item);
-    return InputCommand::None;
+    command = InputCommand::None;
   }
 
   // add support for more specialized items here...
@@ -625,27 +627,27 @@ InputCommand readSerialCommand() {
     // custom commands
     if ((String) item->valuestring == "ListAnimations") {
       listAnimations();
-      return InputCommand::None;
+      command = InputCommand::None;
     }
     else if ((String) item->valuestring == "ListAudioPatterns") {
       listAudioPatterns();
-      return InputCommand::None;
+      command = InputCommand::None;
     }
     else if ((String) item->valuestring == "ListPatterns") {
       listPatterns();
-      return InputCommand::None;
+      command = InputCommand::None;
     }
     else if ((String) item->valuestring == "ListPalettes") {
       effects.listPalettes();
-      return InputCommand::None;
+      command = InputCommand::None;
     }
 
-    InputCommand command = getCommand(item->valuestring);
-    if (command != InputCommand::None)
-      return command;
+    command = getCommand(item->valuestring);
   }
 
-  return InputCommand::None;
+  aJson.deleteItem(root);
+
+  return command;
 }
 
 InputCommand readCommand() {
