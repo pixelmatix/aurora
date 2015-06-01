@@ -51,4 +51,10 @@ void saveIntSetting(const char* name, int value);
 
 uint8_t demoMode = 0;
 
+rgb24 white = { 255, 255, 255 };
+rgb24 gray = { 128, 128, 128 };
+rgb24 black = { 0, 0, 0 };
+rgb24 brown = { 137, 104, 48 };
+rgb24 red = { 255, 0, 0 };
+
 #endif
