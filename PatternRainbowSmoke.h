@@ -41,7 +41,7 @@ class PatternRainbowSmoke : public Drawable {
     bool hasColor[MATRIX_WIDTH][MATRIX_HEIGHT];
     bool isAvailable[MATRIX_WIDTH][MATRIX_HEIGHT];
 
-    uint8_t currentColorIndex = 0;
+    uint16_t currentColorIndex = 0;
     uint8_t algorithm;
 
     int colorDifference(rgb24 c1, rgb24 c2) {
