@@ -22,6 +22,8 @@
 
 #ifndef PatternAnalogClock_H
 
+extern ClockDisplay clockDisplay;
+
 class PatternAnalogClock : public Drawable {
 private:
 #define HOUR_HAND_RADIUS 15

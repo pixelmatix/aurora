@@ -31,6 +31,7 @@
 #define MAX_COLOR_VALUE 255
 
 extern SmartMatrix matrix;
+extern uint16_t XY(uint8_t x, uint8_t y);
 
 #define SWAPint(X,Y) { \
         int temp = X ; \

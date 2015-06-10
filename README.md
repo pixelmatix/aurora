@@ -3,11 +3,31 @@ Aurora
 
 Aurora runs on SmartMatrix, a dynamic LED art display and music visualizer.
 
-[![SmartMatrix](https://ksr-ugc.imgix.net/projects/979600/photo-original.JPG?v=1431226937&w=1024&h=768&fit=crop&auto=format&q=92&s=1aa8ae7a79a25f1c3e2e6ef2cce4a586)](http://pixl.mx/kick2015)
+[![SmartMatrix](https://ksr-ugc.imgix.net/projects/979600/photo-original.jpg?v=1432073505&w=640&h=480&fit=crop&auto=format&q=92&s=e7f872a3cb2df45c5fbad0a251e4025c)](http://pixl.mx/kick2015)
 
 SmartMatrix is a self-contained 32x32 pixel LED matrix display for music visualization, dynamic patterns, pixel art, and more!
 
 Customize what's on the screen with the included remote control: choose what's playing, show a clock or message on top, and change settings, all from the remote. You don't need a computer or phone to control what's on the screen.
+
+Features
+--------
+
+* Procedural pattern viewer
+* Animated GIF slideshow viewer
+* Remote control, allowing for ease of use.
+* Optional Clock display in the foreground, over animation and pattern slideshows (**requires real-time clock chip**).
+
+Demo Video
+-------------------------
+
+[![SmartMatrix Demo Video](https://i.vimeocdn.com/video/518191599_295x166.webp)](https://vimeo.com/user5888427/smartmatrixoverview)
+
+Installation
+------------
+See [Installation](https://github.com/pixelmatix/aurora/wiki/Installation) in the [Aurora Wiki] for instructions on how to load the pre-compiled Aurora program onto the Teensy 3.1
+
+See [Compiling](https://github.com/pixelmatix/aurora/wiki/Compiling) in the [Aurora Wiki] for instructions on how setup the Arduino IDE and all the libraries that are needed to compile Aurora.
+
 
 More Information
 ----------------
@@ -57,6 +77,7 @@ Thanks to these fine game companies for allowing us to use and distribute their 
 ![Tiny Barbarian](https://raw.githubusercontent.com/pixelmatix/aurora/master/sd/gifs/TinyFlex.gif) [Tiny Barbarian] by [StarQuail Games]  
 ![Chasm](https://raw.githubusercontent.com/pixelmatix/aurora/master/sd/gifs/ChasmDaltynCrouch.gif) [Chasm] by [Discord Games]
 
+[SmartMatrix Kickstarter]:https://www.kickstarter.com/projects/pixelmatix/smartmatrix-dynamic-led-art-display-and-music-visu
 [SmartMatrix User Community]:https://plus.google.com/u/0/communities/105354523738870531811
 [Aurora Project]:https://github.com/pixelmatix/aurora
 [Aurora Wiki]:https://github.com/pixelmatix/aurora/wiki

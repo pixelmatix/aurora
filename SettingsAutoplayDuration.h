@@ -23,6 +23,8 @@
 #ifndef SettingsAutoplayDuration_H
 #define SettingsAutoplayDuration_H
 
+extern void saveAutoPlayDurationSeconds();
+
 class SettingsAutoplayDuration : public Runnable {
   private:
     boolean hasChanges = false;
