@@ -15,3 +15,5 @@ Visual Micro
 .project
 .settings/
 Thumbs.db
+*.sln
+*.vcxproj
