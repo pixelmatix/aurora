@@ -35,7 +35,7 @@
  * https://gist.github.com/jblang/cccb8b4f7caedc689c49
  *
  */
- 
+
 #define tpm2Header 0xc9
 #define tpm2netHeader 0x9c
 #define tpm2DataFrame 0xda
@@ -49,89 +49,89 @@ private:
     uint32_t lastData = 1000;
 
     void drawFrameTPM2() {
-      int bufferSize = matrix.getScreenHeight() * matrix.getScreenWidth() * 3;
-      rgb24 *buffer = matrix.backBuffer();
+        int bufferSize = matrix.getScreenHeight() * matrix.getScreenWidth() * 3;
+        rgb24 *buffer = matrix.backBuffer();
 
-      // Check header
-      if (Serial.read() != tpm2Header)
-        return;
-      
-      // Only handle data frames
-      if (Serial.read() != tpm2DataFrame)
-        return;
-
-      int payloadSize = (Serial.read() << 8) | Serial.read();
-
-      // Don't allow frame to overrun buffer
-      if (payloadSize > bufferSize)
-        return;
-          
-      // Copy frame data into buffer
-      int bytesReceived = Serial.readBytes((char *)buffer, payloadSize);
-      
-      // Make sure we received what we were promised
-      if (bytesReceived != payloadSize)
-        return;
-      
-      // Check footer
-      if (Serial.read() != tpm2Footer)
-        return;
-      
-      // If packet has been validated, swap buffers and acknowledge
-        //matrix.swapBuffers();
-      Serial.write(tpm2Acknowledge);
-    }
-
-    void drawFrameTPM2net() {
-      /* 
-       * PixelController sends tpm2.net packets over serial and always uses a payload
-       * size of 170 bytes. This code is assumes that if the protocol is tpm2.net,
-       * we're talking to PixelController, since most other software uses tpm2
-       * instead of tpm2.net when sending over serial links. If other software sends
-       * tpm2.net packets with payloads of different sizes, this code may break.
-       */
-       
-      int bufferSize = matrix.getScreenHeight() * 32 * 3;
-      rgb24 *buffer = matrix.backBuffer();
-      byte currentPacket = 0;
-      byte totalPackets = 255;
-      
-      while (currentPacket < totalPackets) {
         // Check header
-        if (Serial.read() != tpm2netHeader)
-          return;
+        if (Serial.read() != tpm2Header)
+            return;
 
-        // Check packet type        
+        // Only handle data frames
         if (Serial.read() != tpm2DataFrame)
-          return;  
-        
-        int payloadSize = (Serial.read() << 8) | Serial.read();
-      
-        currentPacket = Serial.read();  
-        totalPackets = Serial.read();    
-        
-        // Don't allow data to overrun buffer
-        if (currentPacket * 170 + payloadSize > bufferSize)
-          return;
+            return;
 
-        // Copy frame data into buffer at correct position
-        int bytesReceived = Serial.readBytes((char *)(buffer + currentPacket * 170), payloadSize);
+        int payloadSize = (Serial.read() << 8) | Serial.read();
+
+        // Don't allow frame to overrun buffer
+        if (payloadSize > bufferSize)
+            return;
+
+        // Copy frame data into buffer
+        int bytesReceived = Serial.readBytes((char *) buffer, payloadSize);
 
         // Make sure we received what we were promised
         if (bytesReceived != payloadSize)
-          return;
-      
+            return;
+
         // Check footer
         if (Serial.read() != tpm2Footer)
-          return;
-      }
+            return;
 
-      // Once all the packets have been validated, swap buffers and acknowledge
+        // If packet has been validated, swap buffers and acknowledge
         //matrix.swapBuffers();
-      Serial.write(tpm2Acknowledge);
+        Serial.write(tpm2Acknowledge);
     }
-    
-  public:
+
+    void drawFrameTPM2net() {
+        /*
+         * PixelController sends tpm2.net packets over serial and always uses a payload
+         * size of 170 bytes. This code is assumes that if the protocol is tpm2.net,
+         * we're talking to PixelController, since most other software uses tpm2
+         * instead of tpm2.net when sending over serial links. If other software sends
+         * tpm2.net packets with payloads of different sizes, this code may break.
+         */
+
+        int bufferSize = matrix.getScreenHeight() * 32 * 3;
+        rgb24 *buffer = matrix.backBuffer();
+        byte currentPacket = 0;
+        byte totalPackets = 255;
+
+        while (currentPacket < totalPackets) {
+            // Check header
+            if (Serial.read() != tpm2netHeader)
+                return;
+
+            // Check packet type        
+            if (Serial.read() != tpm2DataFrame)
+                return;
+
+            int payloadSize = (Serial.read() << 8) | Serial.read();
+
+            currentPacket = Serial.read();
+            totalPackets = Serial.read();
+
+            // Don't allow data to overrun buffer
+            if (currentPacket * 170 + payloadSize > bufferSize)
+                return;
+
+            // Copy frame data into buffer at correct position
+            int bytesReceived = Serial.readBytes((char *) (buffer + currentPacket * 170), payloadSize);
+
+            // Make sure we received what we were promised
+            if (bytesReceived != payloadSize)
+                return;
+
+            // Check footer
+            if (Serial.read() != tpm2Footer)
+                return;
+        }
+
+        // Once all the packets have been validated, swap buffers and acknowledge
+        //matrix.swapBuffers();
+        Serial.write(tpm2Acknowledge);
+    }
+
+public:
 
     boolean haveReceivedData = false;
 
@@ -176,36 +176,36 @@ private:
     }
 
     unsigned int drawFrame() {
-      // Make sure serial data is waiting
-      if (Serial.available() > 0) {
-        // Check which protocol we're using
-        switch (Serial.peek()) {
-          case tpm2Header:
-            drawFrameTPM2();
+        // Make sure serial data is waiting
+        if (Serial.available() > 0) {
+            // Check which protocol we're using
+            switch (Serial.peek()) {
+                case tpm2Header:
+                    drawFrameTPM2();
                     // Record when the last data came in
                     lastData = millis();
-            break;
+                    break;
 
-          case tpm2netHeader:
-            drawFrameTPM2net();
+                case tpm2netHeader:
+                    drawFrameTPM2net();
                     // Record when the last data came in
                     lastData = millis();
-            break;
+                    break;
 
-          default:
-            // If we don't recognize the protocol, throw the byte away
-            Serial.read();
+                default:
+                    // If we don't recognize the protocol, throw the byte away
+                    Serial.read();
                     break;
             }
         }
         else if (millis() - lastData > 1000) {
-          // If it's been longer than a second since we last received data
-          // blank the screen and notify that we're waiting for data.
-          matrix.fillScreen({ 0, 0, 0 });
-          matrix.setFont(font3x5);
-          matrix.drawString(3, 24, { 255, 255, 255 }, "Waiting");
-      }
-      return 10;
+            // If it's been longer than a second since we last received data
+            // blank the screen and notify that we're waiting for data.
+            matrix.fillScreen({ 0, 0, 0 });
+            matrix.setFont(font3x5);
+            matrix.drawString(3, 24, { 255, 255, 255 }, "Waiting");
+        }
+        return 10;
     }
 };
 

@@ -70,11 +70,9 @@ public:
             effects.leds[XY(x, y)] += {0, 0, 255};
 
             // millisecond
-            float millisecond = beat16(60) / 65535.0F;
-            radians = (90.0F - (millisecond * 360.0F)) * M_PI / 180.0F;
-            x = round(MATRIX_CENTRE_X + SEC_IND_RADIUS * cos(radians));
-            y = round(MATRIX_CENTRE_Y - SEC_IND_RADIUS * sin(radians));
-            effects.leds[XY(x, y)] += {0, 0, 255};
+            uint8_t xm = beatcos8(60, 0, MATRIX_CENTER_X + SEC_IND_RADIUS);
+            uint8_t ym = beatsin8(60, 0, MATRIX_CENTER_Y + SEC_IND_RADIUS);
+            effects.leds[XY(xm, ym)] += effects.ColorFromCurrentPalette(beat8(1));
         }
         else {
             matrix.setFont(font3x5);

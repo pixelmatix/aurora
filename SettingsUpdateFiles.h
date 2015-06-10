@@ -20,48 +20,20 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef PatternBitmap_H
-#define PatternBitmap_H
+#ifndef SettingsUpdateFiles_H
+#define SettingsUpdateFiles_H
 
-class PatternBitmap : public Drawable {
-private:
-
-public:
-    PatternBitmap() {
-        name = (char *)"Bitmap";
+class SettingsUpdateFiles : public Runnable {
+  public:
+    void run() {
+      restartAndJumpToApp();
     }
 
     unsigned int drawFrame() {
-        char* filename = (char *) "/aurora/pmlogo32.bmp";
-
-            if (sdAvailable) {
-            if (SD.exists(filename)) {
-                effects.DimAll(230);
-
-                bitmapPlayer.drawBitmap(filename, 0, 0, true);
-
-                // Noise
-                effects.noise_x[0] += 1000;
-                effects.noise_y[0] += 1000;
-                effects.noise_z[0] += 1000;
-                effects.noise_scale_x[0] = 4000;
-                effects.noise_scale_y[0] = 4000;
-                effects.FillNoise(0);
-
-                // move image (including newly drawn dot) within +/-2 pixels of original position
-                effects.NoiseSmearWithRadius(2);
-
-                return 0;
-                }
-                else {
-                matrix.drawString(0, 0, { 255, 255, 255 }, (char *)"No file");
-                }
-            }
-            else {
-            matrix.drawString(0, 0, { 255, 255, 255 }, (char *)"No SD");
-            }
-
-        return 30;
+      matrix.fillScreen(CRGB(CRGB::Black));
+      matrix.setFont(font3x5);
+      matrix.drawString(0, 27, { 255, 255, 255 }, versionText);
+      return 0;
     }
 };
 

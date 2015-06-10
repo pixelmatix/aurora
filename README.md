@@ -32,6 +32,7 @@ See [Compiling](https://github.com/pixelmatix/aurora/wiki/Compiling) in the [Aur
 More Information
 ----------------
 
+* [SmartMatrix](http://pixl.mx/kick2015)
 * [Aurora Wiki] on GitHub for documentation
 * [Aurora Project] on GitHub for source code
 * [Aurora Issue Tracker] on GitHub for reporting issues

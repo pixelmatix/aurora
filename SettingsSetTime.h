@@ -24,82 +24,155 @@
 #define SettingsSetTime_H
 
 class SettingsSetTime : public Runnable {
-private:
+  private:
     SetTimeState state = SetHour;
     unsigned int currentStateIndex = 0;
 
-public:
+    char timeBuffer[9];
+
+    void setTimeHardware() {
+      if (hasDS1307RTC)
+        RTC.write(time);
+      else {
+        time_t t = makeTime(time);
+        Teensy3Clock.set(t);
+        setTime(t);
+      }
+    }
+
+  public:
 
     void run() {
-        while (true) {
-            drawFrame();
-            clockDigitalShort.drawFrame();
-            clockDigitalShort.drawSetTimeIndicator(state);
+      while (true) {
+        draw();
 
-            matrix.swapBuffers();
-            matrix.displayForegroundDrawing(false);
+        InputCommand command = readCommand(defaultHoldDelay);
 
-            InputCommand command = readCommand(defaultHoldDelay);
+        switch (command) {
+          case InputCommand::Up:
+            adjust(1);
+            break;
 
-            switch (command) {
-                case InputCommand::Up:
-                    adjust(1);
-                    break;
+          case InputCommand::Down:
+            adjust(-1);
+            break;
 
-                case InputCommand::Down:
-                    adjust(-1);
-                    break;
+          case InputCommand::Left:
+            currentStateIndex--;
+            break;
 
-                case InputCommand::Left:
-                    currentStateIndex--;
-                    break;
+          case InputCommand::Right:
+            currentStateIndex++;
+            break;
 
-                case InputCommand::Right:
-                    currentStateIndex++;
-                    break;
+          case InputCommand::Select:
+          case InputCommand::Back:
+            return;
 
-                case InputCommand::Select:
-                case InputCommand::Back:
-                    return;
-
-                default:
-                    break;
-            }
-
-            if (currentStateIndex > SetTimeStatesCount)
-                currentStateIndex = 0;
-            else if (currentStateIndex < 0)
-                currentStateIndex = SetTimeStatesCount - 1;
-
-            state = SetTimeStates[currentStateIndex];
+          default:
+            break;
         }
+
+        if (currentStateIndex > SetTimeStatesCount)
+          currentStateIndex = 0;
+        else if (currentStateIndex < 0)
+          currentStateIndex = SetTimeStatesCount - 1;
+
+        state = SetTimeStates[currentStateIndex];
+      }
+    }
+
+    void draw() {
+      matrix.fillScreen(CRGB(CRGB::Black));
+
+      int x = 0;
+      int y = 13;
+
+      matrix.setForegroundFont(font3x5);
+
+      clockDisplay.readTime();
+
+      sprintf(timeBuffer, "%02d-%02d-%02d", time.Hour, time.Minute, time.Second);
+
+      matrix.setScrollOffsetFromTop(MATRIX_HEIGHT);
+      matrix.setScrollColor(clockDisplay.color);
+      matrix.clearForeground();
+
+      // draw the time
+      matrix.drawForegroundString(x, y, timeBuffer, true);
+
+      // draw instruction text
+      switch (state) {
+        case SetHour:
+          matrix.drawForegroundString(1, 0, "24 Hour", true);
+          x = 0;
+          break;
+
+        case SetMinute:
+          matrix.drawForegroundString(1, 0, "Minute", true);
+          x = 12;
+          break;
+
+        case SetSecond:
+          matrix.drawForegroundString(1, 0, "Second", true);
+          x = 24;
+          break;
+
+        default:
+          break;
+      }
+
+      // draw up arrows
+      matrix.drawTriangle(x + 0, y - 2, x + 1, y - 3, x + 2, y - 2, CRGB(CRGB::SlateGray));
+      matrix.drawTriangle(x + 4, y - 2, x + 5, y - 3, x + 6, y - 2, CRGB(CRGB::SlateGray));
+
+      // draw down arrows
+      matrix.drawTriangle(x + 0, y + 6, x + 1, y + 7, x + 2, y + 6, CRGB(CRGB::SlateGray));
+      matrix.drawTriangle(x + 4, y + 6, x + 5, y + 7, x + 6, y + 6, CRGB(CRGB::SlateGray));
+
+      matrix.swapBuffers();
+      matrix.displayForegroundDrawing(false);
     }
 
     unsigned int drawFrame() {
-        matrix.fillScreen(CRGB(CRGB::Black));
-        return 0;
+      matrix.fillScreen(CRGB(CRGB::Black));
+      matrix.setFont(font3x5);
+      matrix.drawString(0, 27, { 255, 255, 255 }, versionText);
+      return 0;
     }
 
     void adjust(int d) {
-        switch (state) {
-            case SetHour:
-                time.Hour += d;
-                if (time.Hour > 24)
-                    time.Hour = 0;
-                else if (time.Hour < 0)
-                    time.Hour = 23;
-                RTC.write(time);
-                break;
+      switch (state) {
+        case SetHour:
+          if (d > 0 && time.Hour == 23)
+            time.Hour = 0;
+          else if (d < 1 && time.Hour == 0)
+            time.Hour = 23;
+          else
+            time.Hour += d;
+          break;
 
-            case SetMinute:
-                time.Minute += d;
-                if (time.Minute > 59)
-                    time.Minute = 1;
-                else if (time.Minute < 1)
-                    time.Minute = 59;
-                RTC.write(time);
-                break;
-        }
+        case SetMinute:
+          if (d > 0 && time.Minute == 59)
+            time.Minute = 0;
+          else if (d < 1 && time.Minute == 0)
+            time.Minute = 59;
+          else
+            time.Minute += d;
+          break;
+
+
+        case SetSecond:
+          if (d > 0 && time.Second == 59)
+            time.Second = 0;
+          else if (d < 1 && time.Second == 0)
+            time.Second = 59;
+          else
+            time.Second += d;
+          break;
+      }
+
+      setTimeHardware();
     }
 };
 

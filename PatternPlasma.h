@@ -2,7 +2,7 @@
  * Aurora: https://github.com/pixelmatix/aurora
  * Copyright (c) 2014 Jason Coon
  *
- * Portions of this code are adapted from LedEffects Snake by Robert Atkins: https://bitbucket.org/ratkins/ledeffects/src/26ed3c51912af6fac5f1304629c7b4ab7ac8ca4b/Plasma.cpp?at=default
+ * Portions of this code are adapted from LedEffects Plasma by Robert Atkins: https://bitbucket.org/ratkins/ledeffects/src/26ed3c51912af6fac5f1304629c7b4ab7ac8ca4b/Plasma.cpp?at=default
  * Copyright (c) 2013 Robert Atkins
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -37,28 +37,28 @@ public:
     }
 
     unsigned int drawFrame() {
-    for (int x = 0; x < MATRIX_WIDTH; x++) {
-        for (int y = 0; y < MATRIX_HEIGHT; y++) {
-            int16_t v = 0;
-            uint8_t wibble = sin8(time);
-            v += sin16(x * wibble * 2 + time);
-            v += cos16(y * (128 - wibble) * 2 + time);
-            v += sin16(y * x * cos8(-time) / 2);
+        for (int x = 0; x < MATRIX_WIDTH; x++) {
+            for (int y = 0; y < MATRIX_HEIGHT; y++) {
+                int16_t v = 0;
+                uint8_t wibble = sin8(time);
+                v += sin16(x * wibble * 2 + time);
+                v += cos16(y * (128 - wibble) * 2 + time);
+                v += sin16(y * x * cos8(-time) / 2);
 
-            effects.Pixel(x, y, (v >> 8) + 127);
+                effects.Pixel(x, y, (v >> 8) + 127);
+            }
         }
+
+        time += 1;
+        cycles++;
+
+        if (cycles >= 2048) {
+            time = 0;
+            cycles = 0;
+        }
+
+        return 30;
     }
-
-    time += 1;
-    cycles++;
-
-    if (cycles >= 2048) {
-        time = 0;
-        cycles = 0;
-    }
-
-    return 30;
-}
 };
 
 #endif

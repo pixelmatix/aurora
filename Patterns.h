@@ -27,7 +27,10 @@
 #include "Boid.h"
 #include "Attractor.h"
 
+//#include "PatternPongClock.h"
 #include "PatternNoiseSmearing.h"
+#include "PatternSpiro.h"
+#include "PatternRadar.h"
 #include "PatternAnalogClock.h"
 #include "PatternSwirl.h"
 #include "PatternPendulumWave.h"
@@ -46,6 +49,7 @@
 #include "PatternPlasma.h"
 #include "PatternSnake.h"
 #include "PatternInvaders.h"
+#include "PatternCube.h"
 #include "PatternFire.h"
 #include "PatternLife.h"
 #include "PatternMaze.h"
@@ -53,11 +57,10 @@
 #include "PatternRainbowSmoke.h"
 #include "PatternSpark.h"
 #include "PatternSpiral.h"
-#include "PatternEffects.h"
-//#include "PatternBitmap.h"
 
 class Patterns : public Playlist {
-private:
+  private:
+    //PatternPongClock pongClock;
     PatternPaletteSmear paletteSmear;
     PatternMultipleStream multipleStream;
     PatternMultipleStream2 multipleStream2;
@@ -65,6 +68,8 @@ private:
     PatternMultipleStream4 multipleStream4;
     PatternMultipleStream5 multipleStream5;
     PatternMultipleStream8 multipleStream8;
+    PatternSpiro spiro;
+    PatternRadar radar;
     PatternAnalogClock analogClock;
     PatternSwirl swirl;
     PatternPendulumWave pendulumWave;
@@ -81,8 +86,11 @@ private:
     PatternFlock flock;
     PatternInfinity infinity;
     PatternPlasma plasma;
-    PatternInvaders invaders;
+    PatternInvadersSmall invadersSmall;
+    PatternInvadersMedium invadersMedium;
+    PatternInvadersLarge invadersLarge;
     PatternSnake snake;
+    PatternCube cube;
     PatternFire fire;
     PatternLife life;
     PatternMaze maze;
@@ -90,157 +98,184 @@ private:
     PatternRainbowSmoke rainbowSmoke;
     PatternSpark spark;
     PatternSpiral spiral;
-    PatternGhost ghost;
-    PatternDots1 dots1;
-    PatternDots2 dots2;
-    PatternSlowMandala slowMandala;
-    PatternMandala8 mandala8;
-//    PatternBitmap bitmap;
 
     int currentIndex = 0;
     Drawable* currentItem;
 
+    int getCurrentIndex() {
+      return currentIndex;
+    }
+
     static const int PATTERN_COUNT = 36;
 
+    Drawable* shuffledItems[PATTERN_COUNT];
+
     Drawable* items[PATTERN_COUNT] = {
-        &paletteSmear,
-        &multipleStream8,
-        &multipleStream5,
-        &multipleStream3,
-        &multipleStream4,
-        &multipleStream2,
-//        &multipleStream,
-        &life,
-        &flowField,
-        &pendulumWave,
-        &incrementalDrift,
-        &incrementalDrift2,
-        &munch,
-        &electricMandala,
-        &spin,
-        &simplexNoise,
-        &wave,
-        &attract,
-        &analogClock,
-        &swirl,
-        &bounce,
-        &flock,
-        &infinity,
-        &plasma,
-        &invaders,
-        &snake,
-        &fire,
-        &maze,
-        &pulse,
-        &rainbowSmoke,
-        &spark,
-        &spiral,
-        &ghost,
-        &dots1,
-        &dots2,
-        &slowMandala,
-        &mandala8
-//        &bitmap
+      //&pongClock,
+      &spiro,
+      &paletteSmear,
+      &multipleStream8,
+      &multipleStream5,
+      &multipleStream3,
+      &radar,
+      &multipleStream4,
+      &multipleStream2,
+      &life,
+      &flowField,
+      &pendulumWave,
+      &incrementalDrift,
+      &incrementalDrift2,
+      &munch,
+      &electricMandala,
+      &spin,
+      &simplexNoise,
+      &wave,
+      &attract,
+      &analogClock,
+      &swirl,
+      &bounce,
+      &flock,
+      &infinity,
+      &plasma,
+      &invadersSmall,
+      &invadersMedium,
+      &invadersLarge,
+      &snake,
+      &cube,
+      &fire,
+      &maze,
+      &pulse,
+      &rainbowSmoke,
+      &spark,
+      &spiral,
     };
 
-public:
+  public:
     Patterns() {
-        this->currentItem = items[0];
-        this->currentItem->start();
+      // add the items to the shuffledItems array
+      for (int a = 0; a < PATTERN_COUNT; a++) {
+        shuffledItems[a] = items[a];
+      }
+
+      shuffleItems();
+
+      this->currentItem = items[0];
+      this->currentItem->start();
     }
 
     char* Drawable::name = (char *)"Patterns";
 
     void stop() {
-        if (currentItem)
-            currentItem->stop();
+      if (currentItem)
+        currentItem->stop();
     }
 
     void start() {
-        if (currentItem)
-            currentItem->start();
+      if (currentItem)
+        currentItem->start();
     }
 
     void move(int step) {
-        currentIndex += step;
+      currentIndex += step;
 
-        if (currentIndex >= PATTERN_COUNT) currentIndex = 0;
-        else if (currentIndex < 0) currentIndex = PATTERN_COUNT - 1;
+      if (currentIndex >= PATTERN_COUNT) currentIndex = 0;
+      else if (currentIndex < 0) currentIndex = PATTERN_COUNT - 1;
 
-        moveTo(currentIndex);
-        
-        if (!isTimeAvailable && currentItem == &analogClock)
-          move(step);
-    }
-
-    void moveRandom() {
-        currentIndex = random(0, PATTERN_COUNT);
-
-        if (currentIndex >= PATTERN_COUNT) currentIndex = 0;
-        else if (currentIndex < 0) currentIndex = PATTERN_COUNT - 1;
-
+      if (effects.paletteIndex == effects.RandomPaletteIndex)
         effects.RandomPalette();
 
-        moveTo(currentIndex);
-        
-        if (!isTimeAvailable && currentItem == &analogClock)
-          moveRandom();
+      moveTo(currentIndex);
+
+      if (!isTimeAvailable && currentItem == &analogClock)
+        move(step);
+    }
+
+    void moveRandom(int step) {
+      currentIndex += step;
+
+      if (currentIndex >= PATTERN_COUNT) currentIndex = 0;
+      else if (currentIndex < 0) currentIndex = PATTERN_COUNT - 1;
+
+      if (effects.paletteIndex == effects.RandomPaletteIndex)
+        effects.RandomPalette();
+
+      if (currentItem)
+        currentItem->stop();
+
+      currentItem = shuffledItems[currentIndex];
+
+      if (currentItem)
+        currentItem->start();
+
+      if (!isTimeAvailable && currentItem == &analogClock)
+        moveRandom(step);
+    }
+
+    void shuffleItems() {
+      for (int a = 0; a < PATTERN_COUNT; a++)
+      {
+        int r = random(a, PATTERN_COUNT);
+        Drawable* temp = shuffledItems[a];
+        shuffledItems[a] = shuffledItems[r];
+        shuffledItems[r] = temp;
+      }
     }
 
     void moveTo(int index) {
-        if (currentItem)
-            currentItem->stop();
+      if (currentItem)
+        currentItem->stop();
 
-        currentIndex = index;
+      currentIndex = index;
 
-        currentItem = items[currentIndex];
+      currentItem = items[currentIndex];
 
-        if (currentItem)
-            currentItem->start();
+      if (currentItem)
+        currentItem->start();
     }
 
     unsigned int drawFrame() {
-        return currentItem->drawFrame();
+      ReadAudio();
+      return currentItem->drawFrame();
     }
 
     void listPatterns() {
-        Serial.println(F("{"));
-        Serial.print(F("  \"count\": "));
-        Serial.print(PATTERN_COUNT);
-        Serial.println(",");
-        Serial.println(F("  \"results\": ["));
+      Serial.println(F("{"));
+      Serial.print(F("  \"count\": "));
+      Serial.print(PATTERN_COUNT);
+      Serial.println(",");
+      Serial.println(F("  \"results\": ["));
 
-        for (int i = 0; i < PATTERN_COUNT; i++) {
-            Serial.print(F("    \""));
-            Serial.print(items[i]->name);
-            if(i == PATTERN_COUNT - 1)
-                Serial.println(F("\""));
-            else
-                Serial.println(F("\","));
-        }
+      for (int i = 0; i < PATTERN_COUNT; i++) {
+        Serial.print(F("    \""));
+        Serial.print(items[i]->name);
+        if (i == PATTERN_COUNT - 1)
+          Serial.println(F("\""));
+        else
+          Serial.println(F("\","));
+      }
 
-        Serial.println("  ]");
-        Serial.println("}");
+      Serial.println("  ]");
+      Serial.println("}");
     }
 
     bool setPattern(String name) {
-        for (int i = 0; i < PATTERN_COUNT; i++) {
-            if (name.compareTo(items[i]->name) == 0) {
-                moveTo(i);
-                return true;
-            }
+      for (int i = 0; i < PATTERN_COUNT; i++) {
+        if (name.compareTo(items[i]->name) == 0) {
+          moveTo(i);
+          return true;
         }
+      }
 
-        return false;
+      return false;
     }
 
     bool setPattern(int index) {
-        if (index >= PATTERN_COUNT || index < 0)
-            return false;
+      if (index >= PATTERN_COUNT || index < 0)
+        return false;
 
-        moveTo(index);
+      moveTo(index);
 
-        return true;
+      return true;
     }
 };
 

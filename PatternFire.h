@@ -31,20 +31,17 @@
 #endif
 
 class PatternFire : public Drawable {
-private:
+  private:
 
-    // Array of temperature readings at each simulation cell
-    byte heat[MATRIX_WIDTH * MATRIX_HEIGHT];
-
-public:
+  public:
     PatternFire() {
-        name = (char *)"Fire";
+      name = (char *)"Fire";
     }
 
     // There are two main parameters you can play with to control the look and
     // feel of your fire: COOLING (used in step 1 above), and SPARKING (used
     // in step 3 above).
-    // 
+    //
     // cooling: How much does the air cool as it rises?
     // Less cooling = taller flames.  More cooling = shorter flames.
     // Default 55, suggested range 20-100
@@ -56,46 +53,62 @@ public:
     unsigned int sparking = 50;
 
     unsigned int drawFrame() {
-        for (int x = 0; x < MATRIX_WIDTH; x++) {
-            // Step 1.  Cool down every cell a little
-            for (int y = 0; y < MATRIX_HEIGHT; y++) {
-                int xy = XY(x, y);
-                heat[xy] = qsub8(heat[xy], random(0, ((cooling * 10) / MATRIX_HEIGHT) + 2));
-            }
+      // Add entropy to random number generator; we use a lot of it.
+      random16_add_entropy( random());
 
-            // Step 2.  Heat from each cell drifts 'up' and diffuses a little
-            for (int y = 0; y < MATRIX_HEIGHT; y++) {
-                heat[XY(x, y)] = (heat[XY(x, y + 1)] + heat[XY(x, y + 2)] + heat[XY(x, y + 2)]) / 3;
-            }
+      effects.DimAll(235);
 
-            // Step 2.  Randomly ignite new 'sparks' of heat
-            if (random(255) < sparking) {
-                // int x = (p[0] + p[1] + p[2]) / 3;
-
-                int xy = XY(x, MATRIX_HEIGHT - 1);
-                heat[xy] = qadd8(heat[xy], random(160, 255));
-            }
-
-            // Step 4.  Map from heat cells to LED colors
-            for (int y = 0; y < MATRIX_HEIGHT; y++) {
-                int xy = XY(x, y);
-                byte colorIndex = heat[xy];
-
-                // Recommend that you use values 0-240 rather than
-                // the usual 0-255, as the last 15 colors will be
-                // 'wrapping around' from the hot end to the cold end,
-                // which looks wrong.
-                colorIndex = scale8(colorIndex, 240);
-
-                // override color 0 to ensure a black background?
-                if (colorIndex == 0)
-                    effects.leds[xy] = CRGB::Black;
-                else
-                    effects.leds[xy] = effects.ColorFromCurrentPalette(colorIndex);
-            }
+      for (int x = 0; x < MATRIX_WIDTH; x++) {
+        // Step 1.  Cool down every cell a little
+        for (int y = 0; y < MATRIX_HEIGHT; y++) {
+          int xy = XY(x, y);
+          heat[xy] = qsub8(heat[xy], random8(0, ((cooling * 10) / MATRIX_HEIGHT) + 2));
         }
 
-        return 15;
+        // Step 2.  Heat from each cell drifts 'up' and diffuses a little
+        for (int y = 0; y < MATRIX_HEIGHT; y++) {
+          heat[XY(x, y)] = (heat[XY(x, y + 1)] + heat[XY(x, y + 2)] + heat[XY(x, y + 2)]) / 3;
+        }
+
+        // Step 2.  Randomly ignite new 'sparks' of heat
+        if (random8() < sparking) {
+          // int x = (p[0] + p[1] + p[2]) / 3;
+
+          int xy = XY(x, MATRIX_HEIGHT - 1);
+          heat[xy] = qadd8(heat[xy], random8(160, 255));
+        }
+
+        // Step 4.  Map from heat cells to LED colors
+        for (int y = 0; y < MATRIX_HEIGHT; y++) {
+          int xy = XY(x, y);
+          byte colorIndex = heat[xy];
+
+          // Recommend that you use values 0-240 rather than
+          // the usual 0-255, as the last 15 colors will be
+          // 'wrapping around' from the hot end to the cold end,
+          // which looks wrong.
+          colorIndex = scale8(colorIndex, 240);
+
+          // override color 0 to ensure a black background?
+          if (colorIndex != 0)
+            //                    effects.leds[xy] = CRGB::Black;
+            //                else
+            effects.leds[xy] = effects.ColorFromCurrentPalette(colorIndex);
+        }
+      }
+
+      // Noise
+      noise_x += 1000;
+      noise_y += 1000;
+      noise_z += 1000;
+      noise_scale_x = 4000;
+      noise_scale_y = 4000;
+      effects.FillNoise();
+
+      effects.MoveX(3);
+      effects.MoveFractionalNoiseX(4);
+
+      return 0;
     }
 };
 

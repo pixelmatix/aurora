@@ -25,9 +25,9 @@
 extern Effects effects;
 
 class PatternFlowField : public Drawable {
-public:
+  public:
     PatternFlowField() {
-        name = (char *)"FlowField";
+      name = (char *)"FlowField";
     }
 
     uint16_t x;
@@ -37,60 +37,55 @@ public:
     uint16_t speed = 1;
     uint16_t scale = 26;
 
-    static const int boidCount = 40;
+    static const int count = 40;
 
-    Boid boids[boidCount];
     byte hue = 0;
 
     void start() {
-        x = random16();
-        y = random16();
-        z = random16();
+      x = random16();
+      y = random16();
+      z = random16();
 
-        for (int i = 0; i < boidCount; i++) {
-            boids[i] = Boid(random(MATRIX_WIDTH), 0);
-        }
+      for (int i = 0; i < count; i++) {
+        boids[i] = Boid(random(MATRIX_WIDTH), 0);
+      }
     }
 
     unsigned int drawFrame() {
-        effects.DimAll(240);
+      effects.DimAll(240);
 
-        CRGB color = effects.ColorFromCurrentPalette(hue);
+      // CRGB color = effects.ColorFromCurrentPalette(hue);
 
-        for (int i = 0; i < boidCount; i++) {
-            Boid * boid = &boids[i];
+      for (int i = 0; i < count; i++) {
+        Boid * boid = &boids[i];
 
-            int ioffset = scale * boid->location.x;
-            int joffset = scale * boid->location.y;
+        int ioffset = scale * boid->location.x;
+        int joffset = scale * boid->location.y;
 
-            uint8_t angle = inoise8(x + ioffset, y + joffset, z);
+        byte angle = inoise8(x + ioffset, y + joffset, z);
 
-            boid->velocity.x = cos8(angle) * 0.005;
-            boid->velocity.y = sin8(angle) * 0.005;
-            boid->update();
-            
-            //PVector location = boid->location;
-            //PVector velocity = boid->velocity;
-            //matrix.drawLine(location.x, location.y, location.x - velocity.x, location.y - velocity.y, color);
-            matrix.drawPixel(boid->location.x, boid->location.y, color); // effects.ColorFromCurrentPalette(angle));
+        boid->velocity.x = (float) sin8(angle) * 0.0078125 - 1.0;
+        boid->velocity.y = -((float)cos8(angle) * 0.0078125 - 1.0);
+        boid->update();
 
-            if (boid->location.x < 0 ||
-                boid->location.x > MATRIX_WIDTH ||
-                boid->location.y < 0 ||
-                boid->location.y > MATRIX_HEIGHT) {
-                boid->location.x = random(MATRIX_WIDTH);
-                boid->location.y = 0;
-            }
+        matrix.drawPixel(boid->location.x, boid->location.y, effects.ColorFromCurrentPalette(angle + hue)); // color
 
+        if (boid->location.x < 0 || boid->location.x >= MATRIX_WIDTH ||
+            boid->location.y < 0 || boid->location.y >= MATRIX_HEIGHT) {
+          boid->location.x = random(MATRIX_WIDTH);
+          boid->location.y = 0;
         }
+      }
 
+      EVERY_N_MILLIS(200) {
         hue++;
+      }
 
-        x += speed;
-        y += speed;
-        z += speed;
+      x += speed;
+      y += speed;
+      z += speed;
 
-        return 50;
+      return 50;
     }
 };
 

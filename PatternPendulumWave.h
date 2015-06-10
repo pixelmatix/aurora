@@ -1,13 +1,13 @@
 /*
-* 
+*
 * Inspired by and based on a loading animation for Prismata by Lunarch Studios:
 * http://www.reddit.com/r/gifs/comments/2on8si/connecting_to_server_so_mesmerizing/cmow0sz
-* 
-* Lunarch Studios Inc. hereby publishes the Actionscript 3 source code pasted in this 
-* comment under the Creative Commons CC0 1.0 Universal Public Domain Dedication. 
-* Lunarch Studios Inc. waives all rights to the work worldwide under copyright law, 
-* including all related and neighboring rights, to the extent allowed by law. 
-* You can copy, modify, distribute and perform the work, even for commercial purposes, 
+*
+* Lunarch Studios Inc. hereby publishes the Actionscript 3 source code pasted in this
+* comment under the Creative Commons CC0 1.0 Universal Public Domain Dedication.
+* Lunarch Studios Inc. waives all rights to the work worldwide under copyright law,
+* including all related and neighboring rights, to the extent allowed by law.
+* You can copy, modify, distribute and perform the work, even for commercial purposes,
 * all without asking permission.
 *
 * Aurora: https://github.com/pixelmatix/aurora
@@ -35,35 +35,21 @@
 #define PatternPendulumWave_H
 
 class PatternPendulumWave : public Drawable {
-private:
-    int timeStep = 0;
-
-    int scale = 256 / MATRIX_WIDTH;
-
-public:
+  public:
     PatternPendulumWave() {
-        name = (char *)"Pendulum Wave";
-    }
-
-    void start() {
-        timeStep = 0;
+      name = (char *)"Pendulum Wave";
     }
 
     unsigned int drawFrame() {
-        int16_t y;
+      effects.DimAll(170);
 
-        effects.DimAll(170);
+      for (int x = 0; x < MATRIX_WIDTH; x++)
+      {
+        uint8_t y = beatsin8(x + MATRIX_WIDTH, 0, MATRIX_HEIGHT);
+        matrix.drawPixel(x, y, effects.ColorFromCurrentPalette(x * 7));
+      }
 
-        for (int x = 0; x < MATRIX_WIDTH; x++)
-        {
-            y = beatsin8(x + MATRIX_WIDTH, 0, MATRIX_HEIGHT);
-
-            matrix.drawPixel(x, y, effects.ColorFromCurrentPalette(x * 7));
-        }
-
-        timeStep++;
-
-        return 15;
+      return 15;
     }
 };
 

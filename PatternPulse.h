@@ -27,7 +27,7 @@
 #define PatternPulse_H
 
 class PatternPulse : public Drawable {
-private:
+  private:
     int hue;
     int centerX = 0;
     int centerY = 0;
@@ -36,42 +36,44 @@ private:
     float fadeRate = 0.8;
     int diff;
 
-public:
+  public:
     PatternPulse() {
-        name = (char *)"Pulse";
+      name = (char *)"Pulse";
     }
 
     unsigned int drawFrame() {
-        matrix.fillScreen(CRGB(CRGB::Black));
+      effects.DimAll(235);
 
-        if (step == -1) {
-            centerX = random(32);
-            centerY = random(32);
-            hue = 170;
-            step = 0;
-        }
+      if (step == -1) {
+        centerX = random(32);
+        centerY = random(32);
+        hue = random(256); // 170;
+        step = 0;
+      }
 
-        if (step == 0) {
-            matrix.drawCircle(centerX, centerY, step, effects.ColorFromCurrentPalette(hue));
-            step++;
+      if (step == 0) {
+        matrix.drawCircle(centerX, centerY, step, effects.ColorFromCurrentPalette(hue));
+        step++;
+      }
+      else {
+        if (step < maxSteps) {
+          // initial pulse
+          matrix.drawCircle(centerX, centerY, step, effects.ColorFromCurrentPalette(hue, pow(fadeRate, step - 2) * 255));
+
+          // secondary pulse
+          if (step > 3) {
+            matrix.drawCircle(centerX, centerY, step - 3, effects.ColorFromCurrentPalette(hue, pow(fadeRate, step - 2) * 255));
+          }
+          step++;
         }
         else {
-            if (step < maxSteps) {
-                // initial pulse
-                matrix.drawCircle(centerX, centerY, step, effects.ColorFromCurrentPalette(hue, pow(fadeRate, step - 2) * 255));
-
-                // secondary pulse
-                if (step > 3) {
-                    matrix.drawCircle(centerX, centerY, step - 3, effects.ColorFromCurrentPalette(hue, pow(fadeRate, step - 2) * 255));
-                }
-                step++;
-            }
-            else {
-                step = -1;
-            }
+          step = -1;
         }
+      }
 
-        return 50;
+      effects.standardNoiseSmearing();
+
+      return 30;
     }
 };
 

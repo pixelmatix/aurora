@@ -35,12 +35,12 @@
 #ifndef PatternFlock_H
 
 class PatternFlock : public Drawable {
-public:
+  public:
     PatternFlock() {
-        name = (char *)"Flock";
+      name = (char *)"Flock";
     }
 
-    Boid boids[boidCount];
+    static const int boidCount = 10;
     Boid predator;
 
     PVector wind;
@@ -48,63 +48,76 @@ public:
     bool predatorPresent = true;
 
     void start() {
-        for (int i = 0; i < boidCount; i++) {
-            boids[i] = Boid(15, 15);
-        }
+      for (int i = 0; i < boidCount; i++) {
+        boids[i] = Boid(15, 15);
+        boids[i].maxspeed = 0.380;
+        boids[i].maxforce = 0.015;
+      }
 
-        predatorPresent = random(0, 2) >= 1;
-        if (predatorPresent) {
-            predator = Boid(31, 31);
-            predatorPresent = true;
-            predator.maxforce *= 1.6666666;
-            //predator.maxspeed *= 2.0;
-            predator.neighbordist = 16.0;
-            predator.desiredseparation = 0.0;
-        }
+      predatorPresent = random(0, 2) >= 1;
+      if (predatorPresent) {
+        predator = Boid(31, 31);
+        predatorPresent = true;
+        predator.maxspeed = 0.385;
+        predator.maxforce = 0.020;
+        predator.neighbordist = 16.0;
+        predator.desiredseparation = 0.0;
+      }
     }
 
     unsigned int drawFrame() {
-        //matrix.fillScreen(CRGB::Black);
-        effects.DimAll(120);
+      effects.DimAll(230);
 
-        bool applyWind = random(0, 255) > 250;
-        if (applyWind) {
-            wind.x = Boid::randomf();
-            wind.y = Boid::randomf();
-        }
+      bool applyWind = random(0, 255) > 250;
+      if (applyWind) {
+        wind.x = Boid::randomf() * .015;
+        wind.y = Boid::randomf() * .015;
+      }
 
-        CRGB color = effects.ColorFromCurrentPalette(hue);
+      CRGB color = effects.ColorFromCurrentPalette(hue);
 
-        for (int i = 0; i < boidCount; i++) {
-            Boid * boid = &boids[i];
-
-            if (predatorPresent) {
-                // flee from predator
-                boid->repelForce(predator.location, 10);
-            }
-
-            boid->run(boids);
-            PVector location = boid->location;
-            PVector velocity = boid->velocity;
-            matrix.drawLine(location.x, location.y, location.x - velocity.x, location.y - velocity.y, color);
-
-            if (applyWind) {
-                boid->applyForce(wind);
-                applyWind = false;
-            }
-        }
+      for (int i = 0; i < boidCount; i++) {
+        Boid * boid = &boids[i];
 
         if (predatorPresent) {
-            predator.run(boids);
-            color = effects.ColorFromCurrentPalette((byte) (hue + 128));
-            PVector location = predator.location;
-            PVector velocity = predator.velocity;
-            matrix.drawLine(location.x, location.y, location.x - velocity.x, location.y - velocity.y, color);
+          // flee from predator
+          boid->repelForce(predator.location, 10);
         }
 
-        hue++;
+        boid->run(boids, boidCount);
+        boid->wrapAroundBorders();
+        PVector location = boid->location;
+        // PVector velocity = boid->velocity;
+        // matrix.drawLine(location.x, location.y, location.x - velocity.x, location.y - velocity.y, color);
+        // effects.leds[XY(location.x, location.y)] += color;
+        matrix.drawPixel(location.x, location.y, color);
 
-        return 50;
+        if (applyWind) {
+          boid->applyForce(wind);
+          applyWind = false;
+        }
+      }
+
+      if (predatorPresent) {
+        predator.run(boids, boidCount);
+        predator.wrapAroundBorders();
+        color = effects.ColorFromCurrentPalette(hue + 128);
+        PVector location = predator.location;
+        // PVector velocity = predator.velocity;
+        // matrix.drawLine(location.x, location.y, location.x - velocity.x, location.y - velocity.y, color);
+        // effects.leds[XY(location.x, location.y)] += color;        
+        matrix.drawPixel(location.x, location.y, color);
+      }
+
+      EVERY_N_MILLIS(200) {
+        hue++;
+      }
+      
+      EVERY_N_SECONDS(30) {
+        predatorPresent = !predatorPresent;
+      }
+
+      return 0;
     }
 };
 

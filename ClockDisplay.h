@@ -27,140 +27,148 @@
 #define ClockDisplay_H
 
 class ClockDisplay : public Playlist {
-public:
+  public:
     unsigned int lastRead = 0;
-    const unsigned int readInterval = 250; // ms
+    const unsigned int readInterval = 1000; // ms
 
     int currentIndex = 0;
 
-    static const int itemCount = 2;
+    static const int itemCount = 4;
 
     Drawable* items[itemCount] = {
-        &clockDigitalShort,
-        &clockText,
+      &clockDigitalShort,
+      &clockText,
+      &clockCountdown,
+      &clockPong,
     };
 
     Drawable* currentItem = items[currentIndex];
 
-    rgb24 color;
+    int getCurrentIndex() {
+      return currentIndex;
+    }
+
+    rgb24 color = CRGB(CRGB::White);
 
     void setColor(rgb24 color) {
-        ClockDisplay::color = color;
-        clockDigitalShort.color = color;
-        clockText.color = color;
+      ClockDisplay::color = color;
+      clockDigitalShort.color = color;
+      clockText.color = color;
     }
 
     virtual void move(int step) {
-        moveTo(currentIndex + step);
+      moveTo(currentIndex + step);
     }
 
-    virtual void moveRandom() {
-        moveTo(random(0, itemCount));
+    virtual void moveRandom(int step) {
+      moveTo(random(0, itemCount));
     }
 
     void moveTo(int index) {
-        currentIndex = index;
+      currentIndex = index;
 
-        if (currentIndex >= itemCount)
-            currentIndex = 0;
-        else if (currentIndex < 0)
-            currentIndex = itemCount - 1;
+      if (currentIndex >= itemCount)
+        currentIndex = 0;
+      else if (currentIndex < 0)
+        currentIndex = itemCount - 1;
 
-        if (currentItem)
-            currentItem->stop();
+      if (currentItem)
+        currentItem->stop();
 
-        currentItem = items[currentIndex];
+      currentItem = items[currentIndex];
 
-        if (currentItem)
-            currentItem->start();
+      if (currentItem)
+        currentItem->start();
+    }
+
+    bool hasSetSyncProvider = false;
+
+    bool readTimeHardware() {
+      hasDS1307RTC = false;
+
+      // try to read the DS1307RTC
+      if (RTC.read(time)) {
+        hasDS1307RTC = true;
+        return true;
+      }
+      else {
+        if (!hasSetSyncProvider) {
+          // set the Time library to use Teensy 3.0's RTC to keep time
+          setSyncProvider(getTeensy3Time);
+          hasSetSyncProvider = true;
+        }
+
+        breakTime(now(), time);
+        return true;
+      }
     }
 
     void readTime() {
-        // reading from the RTC only takes 1-2ms, but there's no point in reading it every frame
-        // so we'll only check it every so often, and then cache the time text
-        if (millis() - lastRead > readInterval) {
-            if (RTC.read(time)) {
-                isTimeAvailable = true;
-                lastRead = millis();
-            }
-            else {
-                isTimeAvailable = false;
-            }
+      // reading from the RTC only takes 1-2ms, but there's no point in reading it every frame
+      // so we'll only check it every so often, and then cache the time text
+      if (lastRead == 0 || millis() - lastRead > readInterval) {
+        if (readTimeHardware()) {
+          isTimeAvailable = true;
+          lastRead = millis();
         }
+        else {
+          isTimeAvailable = false;
+        }
+      }
     }
 
     unsigned int drawFrame() {
-        readTime();
+      readTime();
 
-        if (currentItem)
-            currentItem->drawFrame();
+      if (currentItem)
+        currentItem->drawFrame();
 
-        return 0;
+      return 0;
     }
 
     void adjustY(int d) {
-        clockDigitalShort.y += d;
-        clockDigitalShort.boundY();
-    }
-
-    void drawSetTimeIndicator(SetTimeState state) {
-        clockDigitalShort.drawSetTimeIndicator(state);
+      clockDigitalShort.y += d;
+      clockDigitalShort.boundY();
     }
 
     void drawMoveClockIndicator() {
-        clockDigitalShort.drawMoveClockIndicator();
+      clockDigitalShort.drawMoveClockIndicator();
     }
 
-    void loadSettings() {
-        clockDigitalShort.loadSettings();
-        currentIndex = loadIntSetting("clckface.txt", 1, 0);
-        if (currentIndex >= itemCount)
-            currentIndex = itemCount - 1;
-        move(0);
+    char* clockR = (char*) "clockR.txt";
+    char* clockG = (char*) "clockG.txt";
+    char* clockB = (char*) "clockB.txt";
 
-        color.red = loadIntSetting("clockR.txt", 3, 255);
-        color.green = loadIntSetting("clockG.txt", 3, 255);
-        color.blue = loadIntSetting("clockB.txt", 3, 255);
-        setColor(color);
+    void loadSettings() {
+      clockCountdown.loadSettings();
+      clockDigitalShort.loadSettings();
+      move(0);
+
+      color.red = loadByteSetting(clockR, 255);
+      color.green = loadByteSetting(clockG, 255);
+      color.blue = loadByteSetting(clockB, 255);
+      setColor(color);
     }
 
     void saveSettings() {
-        clockDigitalShort.saveSettings();
-        saveClockFaceSetting();
+      clockDigitalShort.saveSettings();
 
-        saveR();
-        saveG();
-        saveB();
+      saveColor();
+      setColor(color);
     }
 
     void saveClockYSetting() {
-        clockDigitalShort.saveClockYSetting();
+      clockDigitalShort.saveClockYSetting();
     }
 
     void saveTwentyFourHourSetting() {
-        clockDigitalShort.saveTwentyFourHourSetting();
-    }
-
-    void saveClockFaceSetting() {
-        saveIntSetting("clckface.txt", currentIndex);
+      clockDigitalShort.saveTwentyFourHourSetting();
     }
 
     void saveColor() {
-        saveR();
-        saveG();
-        saveB();
-    }
-
-    void saveR() {
-        saveIntSetting("clockR.txt", color.red);
-    }
-
-    void saveG() {
-        saveIntSetting("clockG.txt", color.green);
-    }
-
-    void saveB() {
-        saveIntSetting("clockB.txt", color.blue);
+      saveIntSetting(clockR, color.red);
+      saveIntSetting(clockG, color.green);
+      saveIntSetting(clockB, color.blue);
     }
 };
 

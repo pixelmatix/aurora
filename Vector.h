@@ -46,6 +46,10 @@ public:
         return x == v.x && y == v.y;
     }
 
+    bool operator!=(Vector2& v) {
+        return !(x == y);
+    }
+
     Vector2 operator+(Vector2& v) {
         return Vector2(x + v.x, y + v.y);
     }

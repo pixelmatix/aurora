@@ -27,47 +27,47 @@
 #ifndef PatternSwirl_H
 
 class PatternSwirl : public Drawable {
-private:
+  private:
     const uint8_t borderWidth = 2;
 
-public:
+  public:
     PatternSwirl() {
-        name = (char *)"Swirl";
+      name = (char *)"Swirl";
     }
 
     void start() {
     }
 
     unsigned int drawFrame() {
-        // Apply some blurring to whatever's already on the matrix
-        // Note that we never actually clear the matrix, we just constantly
-        // blur it repeatedly.  Since the blurring is 'lossy', there's
-        // an automatic trend toward black -- by design.
-        uint8_t blurAmount = beatsin8(2, 100, 255);
+      // Apply some blurring to whatever's already on the matrix
+      // Note that we never actually clear the matrix, we just constantly
+      // blur it repeatedly.  Since the blurring is 'lossy', there's
+      // an automatic trend toward black -- by design.
+      uint8_t blurAmount = beatsin8(2, 10, 255);
 
-        // Use two out-of-sync sine waves
-        uint8_t  i = beatsin8(27, borderWidth, MATRIX_HEIGHT - borderWidth);
-        uint8_t  j = beatsin8(41, borderWidth, MATRIX_WIDTH - borderWidth);
-        // Also calculate some reflections
-        uint8_t ni = (MATRIX_WIDTH - 1) - i;
-        uint8_t nj = (MATRIX_WIDTH - 1) - j;
-
-        // The color of each point shifts over time, each at a different speed.
-        uint16_t ms = millis();
-        effects.leds[XY(i, j)] += effects.ColorFromCurrentPalette(ms / 11);
-        effects.leds[XY(j, i)] += effects.ColorFromCurrentPalette(ms / 13);
-        effects.leds[XY(ni, nj)] += effects.ColorFromCurrentPalette(ms / 17);
-        effects.leds[XY(nj, ni)] += effects.ColorFromCurrentPalette(ms / 29);
-        effects.leds[XY(i, nj)] += effects.ColorFromCurrentPalette(ms / 37);
-        effects.leds[XY(ni, j)] += effects.ColorFromCurrentPalette(ms / 41);
-        
 #if FASTLED_VERSION >= 3001000
-        blur2d(effects.leds, MATRIX_WIDTH, MATRIX_HEIGHT, blurAmount);
+      blur2d(effects.leds, MATRIX_WIDTH, MATRIX_HEIGHT, blurAmount);
 #else
-        effects.DimAll(blurAmount);
+      effects.DimAll(blurAmount);
 #endif
 
-        return 0;
+      // Use two out-of-sync sine waves
+      uint8_t  i = beatsin8(27, borderWidth, MATRIX_HEIGHT - borderWidth);
+      uint8_t  j = beatsin8(41, borderWidth, MATRIX_WIDTH - borderWidth);
+      // Also calculate some reflections
+      uint8_t ni = (MATRIX_WIDTH - 1) - i;
+      uint8_t nj = (MATRIX_WIDTH - 1) - j;
+
+      // The color of each point shifts over time, each at a different speed.
+      uint16_t ms = millis();
+      effects.leds[XY(i, j)] += effects.ColorFromCurrentPalette(ms / 11);
+      effects.leds[XY(j, i)] += effects.ColorFromCurrentPalette(ms / 13);
+      effects.leds[XY(ni, nj)] += effects.ColorFromCurrentPalette(ms / 17);
+      effects.leds[XY(nj, ni)] += effects.ColorFromCurrentPalette(ms / 29);
+      effects.leds[XY(i, nj)] += effects.ColorFromCurrentPalette(ms / 37);
+      effects.leds[XY(ni, j)] += effects.ColorFromCurrentPalette(ms / 41);
+
+      return 0;
     }
 };
 

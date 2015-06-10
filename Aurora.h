@@ -33,6 +33,8 @@ const int MATRIX_CENTER_Y = MATRIX_HEIGHT / 2;
 const byte MATRIX_CENTRE_X = MATRIX_CENTER_X - 1;
 const byte MATRIX_CENTRE_Y = MATRIX_CENTER_Y - 1;
 
+const uint16_t NUM_LEDS = MATRIX_WIDTH * MATRIX_HEIGHT;
+
 void powerOff();
 void loadSettings();
 int getBrightnessLevel();
@@ -44,8 +46,15 @@ void boundBrightness();
 void boundBackgroundBrightness();
 void saveBrightnessSetting();
 void saveBackgroundBrightnessSetting();
-int loadIntSetting(const char* name, int maxLength, int defaultValue);
+int loadIntSetting(const char* name, uint8_t maxLength, int defaultValue);
 void saveIntSetting(const char* name, int value);
 
+uint8_t demoMode = 0;
+
+rgb24 white = { 255, 255, 255 };
+rgb24 gray = { 128, 128, 128 };
+rgb24 black = { 0, 0, 0 };
+rgb24 brown = { 137, 104, 48 };
+rgb24 red = { 255, 0, 0 };
 
 #endif

@@ -26,61 +26,67 @@
 extern void saveAutoPlayDurationSeconds();
 
 class SettingsAutoplayDuration : public Runnable {
-private:
+  private:
     boolean hasChanges = false;
 
-public:
+  public:
 
     void run() {
-        while (true) {
-            drawFrame();
+      while (true) {
+        matrix.fillScreen(CRGB(CRGB::Black));
 
-            char text[4];
-            sprintf(text, "%d", autoPlayDurationSeconds);
-            matrix.setFont(gohufont11b);
-            matrix.drawString(4, 11, { 255, 255, 255 }, text);
-            matrix.swapBuffers();
-            matrix.displayForegroundDrawing(false);
+        char text[4];
+        sprintf(text, "%d", autoPlayDurationSeconds);
+        matrix.setFont(font3x5);
+        matrix.drawString(1, 2, { 255, 255, 255 }, "Autoplay");
+        matrix.setFont(gohufont11b);
+        matrix.drawString(4, 11, { 255, 255, 255 }, text);
+        matrix.setFont(font3x5);
+        matrix.drawString(3, 25, { 255, 255, 255 }, "seconds");
+        matrix.swapBuffers();
+        matrix.displayForegroundDrawing(false);
 
-            InputCommand command = readCommand(defaultHoldDelay);
+        InputCommand command = readCommand(defaultHoldDelay);
 
-            switch (command) {
-                case InputCommand::Up:
-                    adjust(1);
-                    break;
+        switch (command) {
+          case InputCommand::Up:
+            adjust(1);
+            break;
 
-                case InputCommand::Down:
-                    adjust(-1);
-                    break;
+          case InputCommand::Down:
+            adjust(-1);
+            break;
 
-                case InputCommand::Select:
-                case InputCommand::Back:
-                    if (hasChanges) {
-                        saveAutoPlayDurationSeconds();
-                        hasChanges = false;
-                    }
-                    return;
-
-                default:
-                    break;
+          case InputCommand::Select:
+          case InputCommand::Back:
+            if (hasChanges) {
+              saveAutoPlayDurationSeconds();
+              hasChanges = false;
             }
+            return;
+
+          default:
+            break;
         }
+      }
     }
 
     unsigned int drawFrame() {
-        matrix.fillScreen(CRGB(CRGB::Black));
-        return 0;
+      matrix.fillScreen(CRGB(CRGB::Black));
+      matrix.setFont(font3x5);
+      matrix.drawString(0, 27, { 255, 255, 255 }, versionText);
+      return 0;
     }
 
     void adjust(int d) {
-        hasChanges = true;
+      hasChanges = true;
 
-        autoPlayDurationSeconds += d;
+      autoPlayDurationSeconds += d;
 
-        if (autoPlayDurationSeconds < 1)
-            autoPlayDurationSeconds = 1;
-        else if (autoPlayDurationSeconds > 999)
-            autoPlayDurationSeconds = 999;
+      if (autoPlayDurationSeconds < 1)
+        autoPlayDurationSeconds = 999;
+      else if (autoPlayDurationSeconds > 999)
+        autoPlayDurationSeconds = 1;
     }
 };
 

@@ -2,6 +2,8 @@
  * Aurora: https://github.com/pixelmatix/aurora
  * Copyright (c) 2014 Jason Coon
  *
+ * Inspired by 'Space Invader Generator': https://the8bitpimp.wordpress.com/2013/05/07/space-invader-generator
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
  * the Software without restriction, including without limitation the rights to
@@ -23,35 +25,123 @@
 #ifndef PatternInvaders_H
 #define PatternInvaders_H
 
-class PatternInvaders : public Drawable {
-private:
+class PatternInvadersSmall : public Drawable {
+  private:
+    uint8_t x = 1;
+    uint8_t y = 1;
 
-public:
-    PatternInvaders() {
-        name = (char *)"Invaders";
+  public:
+    PatternInvadersSmall() {
+      name = (char *)"Invaders Small";
+    }
+
+    void start() {
+      matrix.fillScreen(CRGB(CRGB::Black));
     }
 
     unsigned int drawFrame() {
-        matrix.fillScreen(CRGB(CRGB::Black));
+      CRGB color1 = effects.ColorFromCurrentPalette(random(0, 255));
 
-        CRGB color1 = effects.ColorFromCurrentPalette(random(0, 255));
+      for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 5; j++) {
+          CRGB color = CRGB::Black;
 
-        for (int x = 0; x < 3; x++) {
-            for (int y = 0; y < 5; y++) {
-                CRGB color = CRGB::Black;
+          if (random(0, 2) == 1) color = color1;
 
-                if (random(0, 2) == 1) {
-                    color = color1;
-                }
+          matrix.drawPixel(x + i, y + j, color);
 
-                matrix.fillRectangle(1 + x * 6, 1 + y * 6, 5 + x * 6, 5 + y * 6, color);
-
-                if (x < 2)
-                    matrix.fillRectangle(1 + (4 - x) * 6, 1 + y * 6, 5 + (4 - x) * 6, 5 + y * 6, color);
-            }
+          if (i < 2)
+            matrix.drawPixel(x + (4 - i), y + j, color);
         }
+      }
 
-        return 2000;
+      x += 6;
+      if (x > 25) {
+        x = 1;
+        y += 6;
+      }
+
+      if (y > 25) y = x = 1;
+
+      return 125;
+    }
+};
+
+class PatternInvadersMedium : public Drawable {
+  private:
+    uint8_t x = 0;
+    uint8_t y = 0;
+
+  public:
+    PatternInvadersMedium() {
+      name = (char *)"Invaders Medium";
+    }
+
+    void start() {
+      matrix.fillScreen(CRGB(CRGB::Black));
+    }
+
+    unsigned int drawFrame() {
+      CRGB color1 = effects.ColorFromCurrentPalette(random(0, 255));
+
+      for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 5; j++) {
+          CRGB color = CRGB::Black;
+
+          if (random(0, 2) == 1) color = color1;
+
+          matrix.fillRectangle(x + (i * 2), y + (j * 2), x + (i * 2 + 1), y + (j * 2 + 1), color);
+
+          if (i < 2)
+            matrix.fillRectangle(x + (8 - i * 2), y + (j * 2), x + (9 - i * 2), y + (j * 2 + 1), color);
+        }
+      }
+
+      x += 11;
+      if (x > 22) {
+        x = 0;
+        y += 11;
+      }
+
+      if (y > 22) y = x = 0;
+
+      return 500;
+    }
+};
+
+class PatternInvadersLarge : public Drawable {
+  private:
+
+  public:
+    PatternInvadersLarge() {
+      name = (char *)"Invaders Large";
+    }
+
+    void start() {
+      matrix.fillScreen(CRGB(CRGB::Black));
+    }
+
+    unsigned int drawFrame() {
+      matrix.fillScreen(CRGB(CRGB::Black));
+
+      CRGB color1 = effects.ColorFromCurrentPalette(random(0, 255));
+
+      for (int x = 0; x < 3; x++) {
+        for (int y = 0; y < 5; y++) {
+          CRGB color = CRGB::Black;
+
+          if (random(0, 2) == 1) {
+            color = color1;
+          }
+
+          matrix.fillRectangle(1 + x * 6, 1 + y * 6, 5 + x * 6, 5 + y * 6, color);
+
+          if (x < 2)
+            matrix.fillRectangle(1 + (4 - x) * 6, 1 + y * 6, 5 + (4 - x) * 6, 5 + y * 6, color);
+        }
+      }
+
+      return 2000;
     }
 };
 

@@ -29,7 +29,7 @@
 class PatternSnake : public Drawable {
 private:
     static const byte SNAKE_LENGTH = 16;
-    
+
     CRGB colors[SNAKE_LENGTH];
     uint8_t initialHue;
 
@@ -114,25 +114,25 @@ public:
     }
 
     unsigned int drawFrame() {
-    matrix.fillScreen(CRGB(CRGB::Black));
+        matrix.fillScreen(CRGB(CRGB::Black));
 
-    fill_palette(colors, SNAKE_LENGTH, initialHue++, 5, effects.currentPalette, 255, BLEND);
+        fill_palette(colors, SNAKE_LENGTH, initialHue++, 5, effects.currentPalette, 255, LINEARBLEND);
 
-    for (int i = 0; i < snakeCount; i++) {
-        Snake* snake = &snakes[i];
+        for (int i = 0; i < snakeCount; i++) {
+            Snake* snake = &snakes[i];
 
-        snake->shuffleDown();
+            snake->shuffleDown();
 
-        if (random(10) > 7) {
-            snake->newDirection();
+            if (random(10) > 7) {
+                snake->newDirection();
+            }
+
+            snake->move();
+            snake->draw(colors);
         }
 
-        snake->move();
-        snake->draw(colors);
+        return 30;
     }
-
-    return 30;
-}
 };
 
 #endif
