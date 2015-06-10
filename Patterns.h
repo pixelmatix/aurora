@@ -27,7 +27,7 @@
 #include "Boid.h"
 #include "Attractor.h"
 
-#include "PatternPongClock.h"
+//#include "PatternPongClock.h"
 #include "PatternNoiseSmearing.h"
 #include "PatternSpiro.h"
 #include "PatternRadar.h"
@@ -60,7 +60,7 @@
 
 class Patterns : public Playlist {
   private:
-    PatternPongClock pongClock;
+    //PatternPongClock pongClock;
     PatternPaletteSmear paletteSmear;
     PatternMultipleStream multipleStream;
     PatternMultipleStream2 multipleStream2;
@@ -106,12 +106,12 @@ class Patterns : public Playlist {
       return currentIndex;
     }
 
-    static const int PATTERN_COUNT = 37;
+    static const int PATTERN_COUNT = 36;
 
     Drawable* shuffledItems[PATTERN_COUNT];
 
     Drawable* items[PATTERN_COUNT] = {
-      &pongClock,
+      //&pongClock,
       &spiro,
       &paletteSmear,
       &multipleStream8,

@@ -33,12 +33,13 @@ class ClockDisplay : public Playlist {
 
     int currentIndex = 0;
 
-    static const int itemCount = 3;
+    static const int itemCount = 4;
 
     Drawable* items[itemCount] = {
       &clockDigitalShort,
       &clockText,
       &clockCountdown,
+      &clockPong,
     };
 
     Drawable* currentItem = items[currentIndex];

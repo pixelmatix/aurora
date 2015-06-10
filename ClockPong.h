@@ -30,13 +30,17 @@
 * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef PatternPongClock_H
-#define PatternPongClock_H
+#ifndef ClockPong_H
+#define ClockPong_H
 
 #define BAT1_X 2                         // Pong left bat x pos (this is where the ball collision occurs, the bat is drawn 1 behind these coords)
 #define BAT2_X 28
 
-class PatternPongClock : public Drawable {
+#include "Aurora.h"
+extern tmElements_t time;
+extern bool isTimeAvailable;
+
+class ClockPong : public Drawable {
 private:
 
   float ballpos_x, ballpos_y;
@@ -54,50 +58,68 @@ private:
 
   byte mins;
   byte hours;
-  
+
+  elapsedMillis sinceLastFrame;
+
 public:
 
-  PatternPongClock() {
-    name = (char *)"PongClock";
+  ClockPong() {
   }
 
   void start() {
-      int ampm = clockDigitalShort.twentyFourHour ? 0 : 1;
-      //update score / time
-      mins = time.Minute;
-      hours = time.Hour;
-      if (hours > 12) {
-        hours = hours - ampm * 12;
-      }
-      if (hours < 1) {
-        hours = hours + ampm * 12;
-      }
+    int ampm = clockDigitalShort.twentyFourHour ? 0 : 1;
+    //update score / time
+    mins = time.Minute;
+    hours = time.Hour;
+    if (hours > 12) {
+      hours = hours - ampm * 12;
+    }
+    if (hours < 1) {
+      hours = hours + ampm * 12;
+    }
   }
 
   unsigned int drawFrame() {
-    clockDisplay.readTime();
-
-    matrix.fillScreen(black);
+    matrix.setScrollOffsetFromTop(MATRIX_HEIGHT);
+    matrix.setScrollColor(clockText.color);
+    matrix.setForegroundFont(font3x5);
+    matrix.clearForeground();
 
     //draw pitch centre line
     for (byte i = 0; i < 16; i += 2) {
-      matrix.drawPixel(16, i, white);
+      matrix.drawForegroundPixel(16, i);
     }
 
     // draw hh:mm seperator colon that blinks once per second
     if (time.Second % 2 == 0) {
-      matrix.drawPixel(16, 2, gray);
-      matrix.drawPixel(16, 4, gray);
+      matrix.drawForegroundPixel(16, 2);
+      matrix.drawForegroundPixel(16, 4);
     }
 
-    matrix.setFont(font3x5);
+    matrix.setForegroundFont(font3x5);
     char buffer[3];
 
     sprintf(buffer, "%02d", hours);
-    matrix.drawString(8, 1, white, buffer);
+    matrix.drawForegroundString(8, 1, buffer);
 
     sprintf(buffer, "%02d", mins);
-    matrix.drawString(18, 1, white, buffer);
+    matrix.drawForegroundString(18, 1, buffer);
+
+    //plot the ball on the screen
+    byte plot_x = (int) (ballpos_x + 0.5f);
+    byte plot_y = (int) (ballpos_y + 0.5f);
+
+    matrix.drawForegroundPixel(plot_x, plot_y);
+
+    fillForegroundRectangle(BAT1_X - 1, bat1_y, BAT1_X, bat1_y + 5);
+
+    fillForegroundRectangle(BAT2_X + 1, bat2_y, BAT2_X + 2, bat2_y + 5);
+
+    if (sinceLastFrame < 40)
+      return 0;
+
+    while (sinceLastFrame >= 40)
+      sinceLastFrame -= 40;
 
     //if restart flag is 1, setup a new game
     if (restart) {
@@ -218,11 +240,6 @@ public:
       bat1_update = 1;
     }
 
-    //draw bat 1
-    //      if (bat1_update) {
-    matrix.fillRectangle(BAT1_X - 1, bat1_y, BAT1_X, bat1_y + 5, white);
-    //      }
-
     //move bat 2 towards target (dont go any further or bat will move off screen)
     //if bat y greater than target y move down until hit 0
     if (bat2_y > bat2_target_y && bat2_y > 0) {
@@ -235,11 +252,6 @@ public:
       bat2_y++;
       bat2_update = 1;
     }
-
-    //draw bat2
-    //      if (bat2_update) {
-    matrix.fillRectangle(BAT2_X + 1, bat2_y, BAT2_X + 2, bat2_y + 5, white);
-    //      }
 
     //update the ball position using the velocity
     ballpos_x = ballpos_x + ballvel_x;
@@ -353,19 +365,13 @@ public:
       }
     }
 
-    //plot the ball on the screen
-    byte plot_x = (int) (ballpos_x + 0.5f);
-    byte plot_y = (int) (ballpos_y + 0.5f);
-
-    matrix.drawPixel(plot_x, plot_y, white);
-
     //check if a bat missed the ball. if it did, reset the game.
     if ((int) ballpos_x == 0 || (int) ballpos_x == 32) {
       restart = 1;
 
       //update score / time
       int ampm = clockDigitalShort.twentyFourHour ? 0 : 1;
-      
+
       mins = time.Minute;
       hours = time.Hour;
       if (hours > 12) {
@@ -376,7 +382,7 @@ public:
       }
     }
 
-    return 40;
+    return 0;
   }
 
   byte pong_get_ball_endpoint(float tempballpos_x, float  tempballpos_y, float  tempballvel_x, float tempballvel_y) {
@@ -392,5 +398,6 @@ public:
     return tempballpos_y;
   }
 };
+extern ClockPong clockPong;
 
 #endif

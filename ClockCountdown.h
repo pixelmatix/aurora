@@ -31,72 +31,72 @@ extern tmElements_t time;
 extern bool isTimeAvailable;
 
 class ClockCountdown : public Drawable {
-  public:
-    char timeBuffer[9];
+public:
+  char timeBuffer[9];
 
-    tmElements_t target;
-    tmElements_t remaining;
+  tmElements_t target;
+  tmElements_t remaining;
 
-    ClockCountdown() {
-    }
+  ClockCountdown() {
+  }
 
-    void printTime(tmElements_t t) {
-      Serial.print(t.Year);
-      Serial.print("-");
-      Serial.print(t.Month);
-      Serial.print("-");
-      Serial.print(t.Day);
+  void printTime(tmElements_t t) {
+    Serial.print(t.Year);
+    Serial.print("-");
+    Serial.print(t.Month);
+    Serial.print("-");
+    Serial.print(t.Day);
 
-      Serial.print(" ");
+    Serial.print(" ");
 
-      Serial.print(t.Hour);
-      Serial.print(":");
-      Serial.print(t.Minute);
-      Serial.print(":");
-      Serial.println(t.Second);
-    }
+    Serial.print(t.Hour);
+    Serial.print(":");
+    Serial.print(t.Minute);
+    Serial.print(":");
+    Serial.println(t.Second);
+  }
 
-    unsigned int drawFrame() {
-      if (isTimeAvailable) {
-        time_t targetTime = makeTime(target);
-        time_t currentTime = makeTime(time);
+  unsigned int drawFrame() {
+    if (isTimeAvailable) {
+      time_t targetTime = makeTime(target);
+      time_t currentTime = makeTime(time);
 
-        //        Serial.print("target: ");
-        //        printTime(target);
-        //        Serial.print("current: ");
-        //        printTime(time);
+      //        Serial.print("target: ");
+      //        printTime(target);
+      //        Serial.print("current: ");
+      //        printTime(time);
 
-        if (targetTime > currentTime) {
-          unsigned long timeRemaining = targetTime - currentTime;
+      if (targetTime > currentTime) {
+        unsigned long timeRemaining = targetTime - currentTime;
 
-          uint8_t hoursRemaining = timeRemaining / SECS_PER_HOUR;
-          uint8_t minutesRemaining = (timeRemaining - (hoursRemaining * SECS_PER_HOUR)) / 60;
-          uint8_t secondsRemaining = timeRemaining - ((hoursRemaining * SECS_PER_HOUR) + (minutesRemaining * 60));
+        uint8_t hoursRemaining = timeRemaining / SECS_PER_HOUR;
+        uint8_t minutesRemaining = (timeRemaining - (hoursRemaining * SECS_PER_HOUR)) / 60;
+        uint8_t secondsRemaining = timeRemaining - ((hoursRemaining * SECS_PER_HOUR) + (minutesRemaining * 60));
 
-          sprintf(timeBuffer, "%02d:%02d:%02d", hoursRemaining, minutesRemaining, secondsRemaining);
-        }
-        else {
-          sprintf(timeBuffer, "%02d:%02d:%02d", 0, 0, 0);
-        }
+        sprintf(timeBuffer, "%02d:%02d:%02d", hoursRemaining, minutesRemaining, secondsRemaining);
       }
       else {
-        sprintf(timeBuffer, "No Clock");
+        sprintf(timeBuffer, "%02d:%02d:%02d", 0, 0, 0);
       }
-
-      matrix.clearForeground();
-      clockDigitalShort.drawFrame(0);
-
-      matrix.setForegroundFont(font3x5);
-      matrix.setScrollOffsetFromTop(MATRIX_HEIGHT);
-      matrix.setScrollColor(clockDigitalShort.color);
-      matrix.drawForegroundString(1, 26, timeBuffer, true);
-
-      return 0;
+    }
+    else {
+      sprintf(timeBuffer, "No Clock");
     }
 
-    void loadSettings() {
-      target = loadDateTimeSetting("countdwn.txt");
-    }
+    matrix.clearForeground();
+    clockDigitalShort.drawFrame(0);
+
+    matrix.setForegroundFont(font3x5);
+    matrix.setScrollOffsetFromTop(MATRIX_HEIGHT);
+    matrix.setScrollColor(clockDigitalShort.color);
+    matrix.drawForegroundString(1, 26, timeBuffer, true);
+
+    return 0;
+  }
+
+  void loadSettings() {
+    target = loadDateTimeSetting("countdwn.txt");
+  }
 };
 extern ClockCountdown clockCountdown;
 

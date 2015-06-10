@@ -39,8 +39,9 @@
 #include <aJSON.h>
 
 #define GAMES 0
+#define WEATHER 0
 
-char versionText[] = "v1.5";
+char versionText [] = "v1.5";
 
 bool sdAvailable = false;
 SmartMatrix matrix;
@@ -97,6 +98,9 @@ ClockText clockText;
 #include "ClockCountdown.h"
 ClockCountdown clockCountdown;
 
+#include "ClockPong.h"
+ClockPong clockPong;
+
 #include "ClockDisplay.h"
 ClockDisplay clockDisplay;
 
@@ -109,8 +113,10 @@ AudioPatterns audioPatterns;
 #include "Animations.h"
 Animations animations;
 
+#if WEATHER > 0
 #include "Weather.h"
 Weather weather;
+#endif
 
 #include "Bitmaps.h"
 
@@ -142,7 +148,9 @@ MenuItem menuItemAnimations = MenuItem(animations.name, &animations);
 #if GAMES > 0
 MenuItem menuItemGames = MenuItem(games.name, &games);
 #endif
+#if WEATHER > 0
 MenuItem menuItemWeather = MenuItem(weather.name, &weather);
+#endif
 MenuItem menuItemSettings = MenuItem(settings.name, &settings);
 
 // Main Menu
@@ -153,7 +161,9 @@ MenuItem* mainMenuItems [] = {
 #if GAMES > 0
   &menuItemGames,
 #endif
+#if WEATHER > 0
   &menuItemWeather,
+#endif
   &menuItemSettings,
 };
 
@@ -187,7 +197,7 @@ void setup()
   matrix.setScrollOffsetFromTop(25);
   matrix.setScrollSpeed(80);
   matrix.setScrollMode(wrapForward);
-  matrix.fillScreen(rgb24 { 0, 0, 0 });
+  matrix.fillScreen(rgb24{ 0, 0, 0 });
 
   matrix.swapBuffers();
 
@@ -360,11 +370,15 @@ bool setAnimation(int index) {
 }
 
 bool setTemperature(int temperature) {
+#if WEATHER > 0
   return weather.setTemperature(temperature);
+#endif
 }
 
 bool setWeatherType(int type) {
+#if WEATHER > 0
   return weather.setWeatherType(type);
+#endif
 }
 
 void powerOff()
@@ -380,9 +394,9 @@ void powerOff()
   while (true) {
     InputCommand command = readCommand();
     if (command == InputCommand::Power ||
-        command == InputCommand::CycleBrightness ||
-        command == InputCommand::BrightnessUp ||
-        command == InputCommand::BrightnessDown)
+      command == InputCommand::CycleBrightness ||
+      command == InputCommand::BrightnessUp ||
+      command == InputCommand::BrightnessDown)
       return;
 
     // go idle for a while, conserve power
@@ -835,13 +849,16 @@ uint16_t XY(uint8_t x, uint8_t y) {
   if (rotation == rotation0) {
     hwx = x;
     hwy = y;
-  } else if (rotation == rotation180) {
+  }
+  else if (rotation == rotation180) {
     hwx = (MATRIX_WIDTH - 1) - x;
     hwy = (MATRIX_HEIGHT - 1) - y;
-  } else if (rotation == rotation90) {
+  }
+  else if (rotation == rotation90) {
     hwx = (MATRIX_WIDTH - 1) - y;
     hwy = x;
-  } else { /* if (screenConfig.rotation == rotation270)*/
+  }
+  else { /* if (screenConfig.rotation == rotation270)*/
     hwx = y;
     hwy = (MATRIX_HEIGHT - 1) - x;
   }
@@ -876,71 +893,71 @@ void dateTime(uint16_t* date, uint16_t* time2) {
 #ifdef __cplusplus
 extern "C" {
 #endif
-void jumpToApplicationAt0x38080() {
-  /* Load stack pointer and program counter from start of new program */
-  asm("movw r0, #0x8080");
-  asm("movt r0, #0x0003");
-  asm("ldr sp, [r0]");
-  asm("ldr pc, [r0, #4]");
-}
-
-void jumpToApplicationAt0x8080() {
-  /* Load stack pointer and program counter from start of new program */
-  asm("movw r0, #0x8080");
-  asm("ldr sp, [r0]");
-  asm("ldr pc, [r0, #4]");
-}
-
-/*
- * These are the minimum peripherals that needed to be disabled to allow the
- * uTasker USB-MSD application to work.  You may need to reset more peripherals
- * depending on the application you are running, and what other peripherals
- * your sketch uses if you add more to this example than just blinking an LED
-*/
-void resetPeripherals() {
-  /* set (some of) USB back to normal */
-  NVIC_DISABLE_IRQ(IRQ_USBOTG);
-  NVIC_CLEAR_PENDING(IRQ_USBOTG);
-  SIM_SCGC4 &= ~(SIM_SCGC4_USBOTG);
-
-  /* disable all GPIO interrupts */
-  NVIC_DISABLE_IRQ(IRQ_PORTA);
-  NVIC_DISABLE_IRQ(IRQ_PORTB);
-  NVIC_DISABLE_IRQ(IRQ_PORTC);
-  NVIC_DISABLE_IRQ(IRQ_PORTD);
-  NVIC_DISABLE_IRQ(IRQ_PORTE);
-
-  /* set (some of) ADC1 back to normal */
-  // wait until calibration is complete
-  while (ADC1_SC3 & ADC_SC3_CAL);
-
-  // clear flag if calibration failed
-  if (ADC1_SC3 & 1 << 6)
-    ADC1_SC3 |= 1 << 6;
-
-  // clear conversion complete flag (which could trigger ISR otherwise)
-  if (ADC1_SC1A & 1 << 7)
-    ADC1_SC1A |= 1 << 7;
-
-  /* set some clocks back to default/reset settings */
-  MCG_C1 = MCG_C1_CLKS(2) | MCG_C1_FRDIV(4);
-  SIM_CLKDIV1 = 0;
-  SIM_CLKDIV2 = 0;
-}
-
-void startup_late_hook(void) {
-  // look for the condition that indicates we want to jump to the application with offset
-  if (eeprom_read_byte(0) == 0xAE) {
-
-    // clear the condition
-    eeprom_write_byte(0, 0);
-
-    // set peripherals (mostly) back to normal then jump
-    __disable_irq();
-    resetPeripherals();
-    jumpToApplicationAt0x38080();
+  void jumpToApplicationAt0x38080() {
+    /* Load stack pointer and program counter from start of new program */
+    asm("movw r0, #0x8080");
+    asm("movt r0, #0x0003");
+    asm("ldr sp, [r0]");
+    asm("ldr pc, [r0, #4]");
   }
-}
+
+  void jumpToApplicationAt0x8080() {
+    /* Load stack pointer and program counter from start of new program */
+    asm("movw r0, #0x8080");
+    asm("ldr sp, [r0]");
+    asm("ldr pc, [r0, #4]");
+  }
+
+  /*
+   * These are the minimum peripherals that needed to be disabled to allow the
+   * uTasker USB-MSD application to work.  You may need to reset more peripherals
+   * depending on the application you are running, and what other peripherals
+   * your sketch uses if you add more to this example than just blinking an LED
+   */
+  void resetPeripherals() {
+    /* set (some of) USB back to normal */
+    NVIC_DISABLE_IRQ(IRQ_USBOTG);
+    NVIC_CLEAR_PENDING(IRQ_USBOTG);
+    SIM_SCGC4 &= ~(SIM_SCGC4_USBOTG);
+
+    /* disable all GPIO interrupts */
+    NVIC_DISABLE_IRQ(IRQ_PORTA);
+    NVIC_DISABLE_IRQ(IRQ_PORTB);
+    NVIC_DISABLE_IRQ(IRQ_PORTC);
+    NVIC_DISABLE_IRQ(IRQ_PORTD);
+    NVIC_DISABLE_IRQ(IRQ_PORTE);
+
+    /* set (some of) ADC1 back to normal */
+    // wait until calibration is complete
+    while (ADC1_SC3 & ADC_SC3_CAL);
+
+    // clear flag if calibration failed
+    if (ADC1_SC3 & 1 << 6)
+      ADC1_SC3 |= 1 << 6;
+
+    // clear conversion complete flag (which could trigger ISR otherwise)
+    if (ADC1_SC1A & 1 << 7)
+      ADC1_SC1A |= 1 << 7;
+
+    /* set some clocks back to default/reset settings */
+    MCG_C1 = MCG_C1_CLKS(2) | MCG_C1_FRDIV(4);
+    SIM_CLKDIV1 = 0;
+    SIM_CLKDIV2 = 0;
+  }
+
+  void startup_late_hook(void) {
+    // look for the condition that indicates we want to jump to the application with offset
+    if (eeprom_read_byte(0) == 0xAE) {
+
+      // clear the condition
+      eeprom_write_byte(0, 0);
+
+      // set peripherals (mostly) back to normal then jump
+      __disable_irq();
+      resetPeripherals();
+      jumpToApplicationAt0x38080();
+    }
+  }
 #ifdef __cplusplus
 }
 #endif
