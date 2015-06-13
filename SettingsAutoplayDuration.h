@@ -23,7 +23,7 @@
 #ifndef SettingsAutoplayDuration_H
 #define SettingsAutoplayDuration_H
 
-extern void saveAutoPlayDurationSeconds();
+#include "Externs.h"
 
 class SettingsAutoplayDuration : public Runnable {
   private:

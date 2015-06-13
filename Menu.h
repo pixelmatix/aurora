@@ -23,14 +23,8 @@
 #ifndef Menu_H
 #define Menu_H
 
-extern uint8_t brightness;
-extern uint8_t backgroundBrightness;
-extern const uint8_t brightnessCount;
-extern MessagePlayer messagePlayer;
-extern ClockDisplay clockDisplay;
-extern int autoPlayDurationSeconds;
-extern rgb24 menuColor;
-extern StreamingMode streamingMode;
+#include "Externs.h"
+
 // Menu where a single entry is shown at a time.
 class Menu {
   public:

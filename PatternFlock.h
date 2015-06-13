@@ -33,6 +33,7 @@
 // Rules: Cohesion, Separation, Alignment
 
 #ifndef PatternFlock_H
+#define PatternFlock_H
 
 class PatternFlock : public Drawable {
   public:

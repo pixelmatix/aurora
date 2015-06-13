@@ -38,6 +38,8 @@
 #define MSGEQ7_STROBE_PIN 1
 #define MSGEQ7_RESET_PIN 0
 
+#include "Externs.h"
+
 const int bandCount = 7;
 // the 10Bit (0-1023) audio band values
 int levels[bandCount];

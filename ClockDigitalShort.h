@@ -27,8 +27,8 @@
 #define ClockDigitalShort_H
 
 #include "Aurora.h"
-extern tmElements_t time;
-extern bool isTimeAvailable;
+#include "Externs.h"
+
 
 enum SetTimeState {
   SetHour,

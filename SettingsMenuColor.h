@@ -23,7 +23,7 @@
 #ifndef SettingsMenuColor_H
 #define SettingsMenuColor_H
 
-extern void saveMenuColor();
+#include "Externs.h"
 
 class SettingsMenuColor : public Runnable {
   private:

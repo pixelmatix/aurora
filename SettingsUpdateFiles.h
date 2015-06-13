@@ -23,6 +23,8 @@
 #ifndef SettingsUpdateFiles_H
 #define SettingsUpdateFiles_H
 
+#include "Externs.h"
+
 class SettingsUpdateFiles : public Runnable {
   public:
     void run() {

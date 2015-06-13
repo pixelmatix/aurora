@@ -29,7 +29,6 @@
 
 #ifndef AudioPatterns_H
 #define AudioPatterns_H
-
 class AudioPatterns : public Playlist {
   public:
     bool paused = true;

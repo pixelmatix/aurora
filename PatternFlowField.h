@@ -22,7 +22,7 @@
 
 #ifndef PatternFlowField_H
 
-extern Effects effects;
+#include "Externs.h"
 
 class PatternFlowField : public Drawable {
   public:

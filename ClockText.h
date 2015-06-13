@@ -27,8 +27,7 @@
 #define ClockText_H
 
 #include "Aurora.h"
-extern tmElements_t time;
-extern bool isTimeAvailable;
+#include "Externs.h"
 
 class ClockText : public Drawable {
   private:

@@ -36,7 +36,8 @@
 #include "SettingsUpdateFiles.h"
 #include "SettingsDemoMode.h"
 
-extern GifPlayer gifPlayer;
+#include "Externs.h"
+
 
 class Settings : public Runnable {
   private:

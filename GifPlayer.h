@@ -30,7 +30,7 @@
 #include "Aurora.h"
 #include "pixeltypes.h"
 
-extern SmartMatrix matrix;
+#include "Externs.h"
 
 class GifPlayer {
   public:

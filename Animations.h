@@ -26,7 +26,7 @@
 #ifndef Animations_H
 #define Animations_H
 
-extern GifPlayer gifPlayer;
+#include "Externs.h"
 
 class Animations : public Playlist {
   public:

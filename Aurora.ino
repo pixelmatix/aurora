@@ -1,3 +1,4 @@
+
 /*
  * Aurora: https://github.com/pixelmatix/aurora
  * Copyright (c) 2014 Jason Coon
@@ -135,7 +136,6 @@ Menu menu;
 #include "Games.h"
 Games games;
 #endif
-
 #include "Settings.h"
 Settings settings;
 
@@ -323,6 +323,7 @@ bool setAudioPattern(int index) {
 void listPatterns() {
   patterns.listPatterns();
 }
+
 
 bool setPattern(String name) {
   if (patterns.setPattern(name)) {
@@ -966,7 +967,7 @@ extern "C" {
 #define CPU_RESTART_VAL 0x5FA0004
 #define CPU_RESTART() (*CPU_RESTART_ADDR = CPU_RESTART_VAL);
 
-extern void restartAndJumpToApp(void) {
+void restartAndJumpToApp(void) {
   eeprom_write_byte(0, 0xAE);
 
   CPU_RESTART();
