@@ -27,6 +27,7 @@
 
 #ifndef IrCodes_H
 #define IrCodes_H
+
 #include "Externs.h"
 
 enum class InputCommand {

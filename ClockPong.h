@@ -37,8 +37,7 @@
 #define BAT2_X 28
 
 #include "Aurora.h"
-extern tmElements_t time;
-extern bool isTimeAvailable;
+#include "Externs.h"
 
 class ClockPong : public Drawable {
 private:

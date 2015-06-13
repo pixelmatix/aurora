@@ -22,7 +22,7 @@
 
 #ifndef PatternAnalogClock_H
 
-extern ClockDisplay clockDisplay;
+#include "Externs.h"
 
 class PatternAnalogClock : public Drawable {
 private:

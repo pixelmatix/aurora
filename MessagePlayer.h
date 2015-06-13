@@ -23,7 +23,7 @@
 #ifndef MessagePlayer_H
 #define MessagePlayer_H
 
-extern bool sdAvailable;
+#include "Externs.h"
 
 class MessagePlayer {
 private:
