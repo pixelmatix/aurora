@@ -373,12 +373,16 @@ bool setAnimation(int index) {
 bool setTemperature(int temperature) {
 #if WEATHER > 0
   return weather.setTemperature(temperature);
+#else
+  return false;
 #endif
 }
 
 bool setWeatherType(int type) {
 #if WEATHER > 0
   return weather.setWeatherType(type);
+#else
+  return false;
 #endif
 }
 
