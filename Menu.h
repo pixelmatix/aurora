@@ -114,6 +114,8 @@ class Menu {
         unsigned int requestedDelayTimeout = millis() + requestedDelay;
 
         while (true) {
+          updateStatusLed();
+
           updateForeground(menuItems, menuItemsCount);
 
           InputCommand command = readCommand(defaultHoldDelay);

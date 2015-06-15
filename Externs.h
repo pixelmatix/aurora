@@ -11,6 +11,8 @@
 #define EXTERNS_H_
 
 extern char versionText[];
+extern elapsedMillis sinceStatusLedToggled;
+extern boolean statusLedState;
 extern bool sdAvailable;
 extern SmartMatrix matrix;
 extern IRrecv irReceiver;
@@ -51,6 +53,7 @@ extern void toggleSettingsMenuVisibility();
 extern void adjustDemoMode(int delta);
 extern void saveDemoMode();
 extern void saveMenuColor();
+extern void updateStatusLed();
 
 class GifPlayer;
 class Weather;

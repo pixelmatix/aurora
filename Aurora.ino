@@ -44,6 +44,9 @@
 
 char versionText [] = "v1.5";
 
+elapsedMillis sinceStatusLedToggled;
+boolean statusLedState = false;
+
 bool sdAvailable = false;
 SmartMatrix matrix;
 IRrecv irReceiver(IR_RECV_PIN);
@@ -178,6 +181,12 @@ time_t getTeensy3Time()
 
 void setup()
 {
+#ifdef STATUS_LED
+  pinMode(STATUS_LED, OUTPUT);
+  digitalWrite(STATUS_LED, HIGH);
+  statusLedState = true;
+#endif
+
   // Setup serial interface
   Serial.begin(115200);
 
@@ -397,6 +406,8 @@ void powerOff()
   matrix.displayForegroundDrawing(false);
 
   while (true) {
+    updateStatusLed();
+
     InputCommand command = readCommand();
     if (command == InputCommand::Power ||
       command == InputCommand::CycleBrightness ||
@@ -891,6 +902,14 @@ void dateTime(uint16_t* date, uint16_t* time2) {
 
   // return time using FAT_TIME macro to format fields
   *time2 = FAT_TIME(time.Hour, time.Minute, time.Second);
+}
+
+void updateStatusLed() {
+  if (sinceStatusLedToggled > 1000) {
+    sinceStatusLedToggled = 0;
+    statusLedState = !statusLedState;
+    digitalWrite(STATUS_LED, statusLedState ? HIGH : LOW);
+  }
 }
 
 /////////////////////////////////////////////////////////////
