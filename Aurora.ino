@@ -912,6 +912,19 @@ void updateStatusLed() {
   }
 }
 
+// returns whether external power is supplied, as opposed to just USB power
+// applies to Kickstarter hardware, as it can be powered by just USB
+bool hasExternalPower() {
+#ifdef POWER_PIN
+  int level = analogRead(POWER_PIN);
+  Serial.print("power pin level: ");
+  Serial.println(level);
+  return level >= EXTERNAL_POWER_MIN;
+#else
+  return true;
+#endif
+}
+
 /////////////////////////////////////////////////////////////
 // the assembly code must be run inside a C, not C++ function
 #ifdef __cplusplus

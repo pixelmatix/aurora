@@ -24,3 +24,4 @@
 #define IR_RECV_PIN 18
 #define HAS_IR 1
 #define STATUS_LED 24
+#define POWER_PIN A13

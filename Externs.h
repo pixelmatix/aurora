@@ -54,6 +54,7 @@ extern void adjustDemoMode(int delta);
 extern void saveDemoMode();
 extern void saveMenuColor();
 extern void updateStatusLed();
+extern bool hasExternalPower();
 
 class GifPlayer;
 class Weather;
