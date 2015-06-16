@@ -187,6 +187,10 @@ void setup()
   statusLedState = true;
 #endif
 
+#ifdef RESET_PIN
+  pinMode(RESET_PIN, INPUT_PULLUP);
+#endif
+
   // Setup serial interface
   Serial.begin(115200);
 
@@ -416,7 +420,7 @@ void powerOff()
       return;
 
     // go idle for a while, conserve power
-    delay(500);
+    delay(250);
   }
 }
 
