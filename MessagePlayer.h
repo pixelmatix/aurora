@@ -73,7 +73,7 @@ public:
         fileCount = countFiles(directoryName);
         count = fileCount;
         
-        File messagesFile = SD.open("/messages/messages.txt", FILE_READ);
+        File messagesFile = SD.open("/messages.txt", FILE_READ);
         if(messagesFile) {
           messagesFileLineCount = countMessagesFileLines(messagesFile);
           count += messagesFileLineCount - 1;
@@ -197,18 +197,23 @@ public:
         }
 
         char name[13];
+        char filepath[255];
         
-        if(currentIndex < messagesFileLineCount)
+        if(currentIndex < messagesFileLineCount) {
           strcpy(name, "messages.txt");
-        else 
+
+          strcpy(filepath, "/");
+          strcat(filepath, name);
+        }
+        else {
           getNameByIndex(path, currentIndex - messagesFileLineCount, name, fileCount);
+          
+          strcpy(filepath, path);
+          strcat(filepath, name);
+        }
 
         // Serial.print(F("message file name: "));
         // Serial.println(name);
-
-        char filepath[255];
-        strcpy(filepath, path);
-        strcat(filepath, name);
 
         // Serial.print(F("message file path: "));
         // Serial.println(filepath);
@@ -221,10 +226,10 @@ public:
 
         strcpy(message, "");
         color = { 0, 0, 0 };
-        offsetFromTop = 1;
-        offsetFromLeft = 1;
+        offsetFromTop = 11;
+        offsetFromLeft = 0;
         fontName = gohufont11b;
-        scrollSpeed = 24;
+        scrollSpeed = 50;
         scrollMode = wrapForward;
 
         colorSpecified = false;
@@ -253,7 +258,7 @@ public:
       
       while(index <= currentIndex) {
         String text = readLine(file);
-        text.toCharArray(message, text.length());
+        text.toCharArray(message, textLayerMaxStringLength);
         index++;
       }
     }
