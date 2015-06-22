@@ -197,6 +197,8 @@ void setup()
   delay(250);
   // Serial.println(F("starting..."));
 
+  readProductID();
+
   // Initialize the IR receiver
   irReceiver.enableIRIn();
 
@@ -916,17 +918,59 @@ void updateStatusLed() {
   }
 }
 
+bool supportsUsbPower = false;
+
 // returns whether external power is supplied, as opposed to just USB power
 // applies to Kickstarter hardware, as it can be powered by just USB
 bool hasExternalPower() {
 #ifdef POWER_PIN
+  if(!supportsUsbPower)
+    return true;
+
   int level = analogRead(POWER_PIN);
-  Serial.print("power pin level: ");
-  Serial.println(level);
+  // Serial.print("power pin level: ");
+  // Serial.println(level);
   return level >= EXTERNAL_POWER_MIN;
 #else
   return true;
 #endif
+}
+
+union ProductID
+{
+   unsigned long value;
+   byte bytes[4];
+};
+
+ProductID productID;
+
+void readProductID() {
+  productID.bytes[0] = (*(uint8_t *)0x7FFC);
+  productID.bytes[1] = (*(uint8_t *)0x7FFD);
+  productID.bytes[2] = (*(uint8_t *)0x7FFE);
+  productID.bytes[3] = (*(uint8_t *)0x7FFF);
+
+  switch(productID.value) {
+    case 0x00000000:
+    case 0x00000010:
+    case 0xFFFFFFFF:
+      supportsUsbPower = true;
+      break;
+
+    default:
+      supportsUsbPower = false;
+  }
+
+  //Serial.print("ProductID: ");
+  //Serial.print(productID.bytes[0]);
+  //Serial.print(productID.bytes[0]);
+  //Serial.print(productID.bytes[0]);
+  //Serial.print(productID.bytes[0]);
+  //Serial.println("");
+  //
+  //Serial.print("ProductID: ");
+  //Serial.print(productID.value);
+  //Serial.println("");
 }
 
 /////////////////////////////////////////////////////////////
