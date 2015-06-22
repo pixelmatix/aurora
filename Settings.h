@@ -57,7 +57,7 @@ class Settings : public Runnable {
     //SettingsDemoMode demoMode;
     Drawable exit;
 
-    static const int itemCount = 13;
+    static const int itemCount = 12;
 
     MenuItem menuItemBrightness = MenuItem((char *)"Brightness", &brightness);
     MenuItem menuItemBgBrightness = MenuItem((char *)"BG Brightness", &backgroundBrightness);
