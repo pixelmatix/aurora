@@ -34,7 +34,7 @@
 #include "SettingsAutoplayDuration.h"
 #include "SettingsAudioCalibration.h"
 #include "SettingsUpdateFiles.h"
-#include "SettingsDemoMode.h"
+//#include "SettingsDemoMode.h"
 
 #include "Externs.h"
 
@@ -54,7 +54,7 @@ class Settings : public Runnable {
     SettingsAutoplayDuration setAutoplayDuration;
     SettingsAudioCalibration audioCalibration;
     SettingsUpdateFiles updateFiles;
-    SettingsDemoMode demoMode;
+    //SettingsDemoMode demoMode;
     Drawable exit;
 
     static const int itemCount = 13;
@@ -70,7 +70,7 @@ class Settings : public Runnable {
     MenuItem menuItemSetDate = MenuItem((char *)"Set Date", &setDate);
     MenuItem menuItemNoiseReduction = MenuItem((char *)"Audio Calibration", &audioCalibration);
     MenuItem menuItemUpdateFiles = MenuItem((char *)"Update Files", &updateFiles);
-    MenuItem menuItemDemoMode = MenuItem((char *)"Demo Mode", &demoMode);
+    //MenuItem menuItemDemoMode = MenuItem((char *)"Demo Mode", &demoMode);
     MenuItem menuItemExit = MenuItem((char *)"Exit Settings", &exit, true);
 
     MenuItem* menuItems[itemCount] = {
@@ -85,7 +85,7 @@ class Settings : public Runnable {
       &menuItemSetDate,
       &menuItemNoiseReduction,
       &menuItemUpdateFiles,
-      &menuItemDemoMode,
+      //&menuItemDemoMode,
       &menuItemExit,
     };
 
