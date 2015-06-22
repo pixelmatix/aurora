@@ -36,13 +36,13 @@ class ClockDisplay : public Playlist {
 
     int currentIndex = 0;
 
-    static const int itemCount = 4;
+    uint8_t itemCount = 4;
 
-    Drawable* items[itemCount] = {
+    Drawable* items[4] = {
       &clockDigitalShort,
       &clockText,
-      &clockCountdown,
       &clockPong,
+      &clockCountdown,
     };
 
     Drawable* currentItem = items[currentIndex];
@@ -145,6 +145,13 @@ class ClockDisplay : public Playlist {
     void loadSettings() {
       clockCountdown.loadSettings();
       clockDigitalShort.loadSettings();
+
+      readTime();
+      time_t currentTime = makeTime(time);
+      if (clockCountdown.targetTime <= currentTime) {
+        itemCount--;
+      }
+
       move(0);
 
       color.red = loadByteSetting(clockR, 255);

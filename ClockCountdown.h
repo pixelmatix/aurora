@@ -37,6 +37,8 @@ public:
   tmElements_t target;
   tmElements_t remaining;
 
+  time_t targetTime;
+
   ClockCountdown() {
   }
 
@@ -58,7 +60,6 @@ public:
 
   unsigned int drawFrame() {
     if (isTimeAvailable) {
-      time_t targetTime = makeTime(target);
       time_t currentTime = makeTime(time);
 
       //        Serial.print("target: ");
@@ -96,6 +97,7 @@ public:
 
   void loadSettings() {
     target = loadDateTimeSetting("countdwn.txt");
+    targetTime = makeTime(target);
   }
 };
 extern ClockCountdown clockCountdown;
