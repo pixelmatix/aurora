@@ -32,6 +32,7 @@ extern char* menuBFilename;
 extern char* autoplydFilename;
 extern bool isTimeAvailable;
 extern int autoPlayDurationSeconds;
+extern boolean hasTeensyRTC;
 
 extern bool setPattern(String name);
 extern bool setAnimation(String name);
