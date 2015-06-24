@@ -115,7 +115,7 @@ public:
 
       while (true) {
         if (!hasExternalPower()) {
-          matrix.setBrightness(1);
+          matrix.setBrightness(0);
           matrix.setBackgroundBrightness(1);
         }
         else {

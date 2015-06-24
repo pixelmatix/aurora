@@ -52,6 +52,7 @@ SmartMatrix matrix;
 IRrecv irReceiver(IR_RECV_PIN);
 
 boolean hasDS1307RTC = false;
+boolean hasTeensyRTC = false;
 
 rotationDegrees rotation = rotation0;
 
@@ -237,7 +238,16 @@ void setup()
   CORE_PIN16_CONFIG = (PORT_PCR_MUX(2) | PORT_PCR_PE | PORT_PCR_PS);
   CORE_PIN17_CONFIG = (PORT_PCR_MUX(2) | PORT_PCR_PE | PORT_PCR_PS);
 
+  // check for Teensy RTC crystal
+  uint32_t rtcprescale=RTC_TPR;
+  delay(1);
+  hasTeensyRTC = rtcprescale != RTC_TPR;
+  
+  // Serial.print(F("hasTeensyRTC: "));
+  // Serial.println(hasTeensyRTC);
+
   clockDisplay.readTime();
+  
   // Serial.print(F("isTimeAvailable: "));
   // Serial.println(isTimeAvailable);
 
@@ -911,11 +921,13 @@ void dateTime(uint16_t* date, uint16_t* time2) {
 }
 
 void updateStatusLed() {
+#ifdef STATUS_LED
   if (sinceStatusLedToggled > 1000) {
     sinceStatusLedToggled = 0;
     statusLedState = !statusLedState;
     digitalWrite(STATUS_LED, statusLedState ? HIGH : LOW);
   }
+#endif
 }
 
 bool supportsUsbPower = false;
@@ -951,9 +963,9 @@ void readProductID() {
   productID.bytes[3] = (*(uint8_t *)0x7FFF);
 
   switch(productID.value) {
-    case 0x00000000:
     case 0x00000010:
-    case 0xFFFFFFFF:
+    //case 0x00000000:
+    //case 0xFFFFFFFF:
       supportsUsbPower = true;
       break;
 
@@ -961,16 +973,8 @@ void readProductID() {
       supportsUsbPower = false;
   }
 
-  //Serial.print("ProductID: ");
-  //Serial.print(productID.bytes[0]);
-  //Serial.print(productID.bytes[0]);
-  //Serial.print(productID.bytes[0]);
-  //Serial.print(productID.bytes[0]);
-  //Serial.println("");
-  //
-  //Serial.print("ProductID: ");
-  //Serial.print(productID.value);
-  //Serial.println("");
+  Serial.print("ProductID: 0x");
+  Serial.println(productID.value, HEX);
 }
 
 /////////////////////////////////////////////////////////////

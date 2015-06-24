@@ -653,6 +653,7 @@ InputCommand readSerialCommand() {
 bool ignoreResetPin = false;
 
 InputCommand readHardwareCommand() {
+#ifdef RESET_PIN
   if (digitalRead(RESET_PIN) == LOW) {
     if (!ignoreResetPin) {
       ignoreResetPin = true;
@@ -662,6 +663,7 @@ InputCommand readHardwareCommand() {
   else {
     ignoreResetPin = false;
   }
+#endif
 
   return InputCommand::None;
 }

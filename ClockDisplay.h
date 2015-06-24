@@ -94,7 +94,7 @@ class ClockDisplay : public Playlist {
         hasDS1307RTC = true;
         return true;
       }
-      else {
+      else if (hasTeensyRTC) {
         if (!hasSetSyncProvider) {
           // set the Time library to use Teensy 3.0's RTC to keep time
           setSyncProvider(getTeensy3Time);
@@ -104,6 +104,8 @@ class ClockDisplay : public Playlist {
         breakTime(now(), time);
         return true;
       }
+
+      return false;
     }
 
     void readTime() {
