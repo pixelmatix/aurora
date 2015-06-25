@@ -42,7 +42,7 @@
 #define GAMES 0
 #define WEATHER 0
 
-char versionText [] = "v1.5";
+char versionText [] = "v1.6";
 
 elapsedMillis sinceStatusLedToggled;
 boolean statusLedState = false;
@@ -963,9 +963,7 @@ void readProductID() {
   productID.bytes[3] = (*(uint8_t *)0x7FFF);
 
   switch(productID.value) {
-    case 0x00000010:
-    //case 0x00000000:
-    //case 0xFFFFFFFF:
+    case 0x10000000:
       supportsUsbPower = true;
       break;
 
