@@ -42,7 +42,7 @@
 #define GAMES 0
 #define WEATHER 0
 
-char versionText [] = "v1.5";
+char versionText [] = "v1.6";
 
 elapsedMillis sinceStatusLedToggled;
 boolean statusLedState = false;
@@ -52,6 +52,7 @@ SmartMatrix matrix;
 IRrecv irReceiver(IR_RECV_PIN);
 
 boolean hasDS1307RTC = false;
+boolean hasTeensyRTC = false;
 
 rotationDegrees rotation = rotation0;
 
@@ -187,11 +188,17 @@ void setup()
   statusLedState = true;
 #endif
 
+#ifdef RESET_PIN
+  pinMode(RESET_PIN, INPUT_PULLUP);
+#endif
+
   // Setup serial interface
   Serial.begin(115200);
 
   delay(250);
   // Serial.println(F("starting..."));
+
+  readProductID();
 
   // Initialize the IR receiver
   irReceiver.enableIRIn();
@@ -231,7 +238,16 @@ void setup()
   CORE_PIN16_CONFIG = (PORT_PCR_MUX(2) | PORT_PCR_PE | PORT_PCR_PS);
   CORE_PIN17_CONFIG = (PORT_PCR_MUX(2) | PORT_PCR_PE | PORT_PCR_PS);
 
+  // check for Teensy RTC crystal
+  uint32_t rtcprescale=RTC_TPR;
+  delay(1);
+  hasTeensyRTC = rtcprescale != RTC_TPR;
+  
+  // Serial.print(F("hasTeensyRTC: "));
+  // Serial.println(hasTeensyRTC);
+
   clockDisplay.readTime();
+  
   // Serial.print(F("isTimeAvailable: "));
   // Serial.println(isTimeAvailable);
 
@@ -416,7 +432,7 @@ void powerOff()
       return;
 
     // go idle for a while, conserve power
-    delay(500);
+    delay(250);
   }
 }
 
@@ -905,11 +921,58 @@ void dateTime(uint16_t* date, uint16_t* time2) {
 }
 
 void updateStatusLed() {
+#ifdef STATUS_LED
   if (sinceStatusLedToggled > 1000) {
     sinceStatusLedToggled = 0;
     statusLedState = !statusLedState;
     digitalWrite(STATUS_LED, statusLedState ? HIGH : LOW);
   }
+#endif
+}
+
+bool supportsUsbPower = false;
+
+// returns whether external power is supplied, as opposed to just USB power
+// applies to Kickstarter hardware, as it can be powered by just USB
+bool hasExternalPower() {
+#ifdef POWER_PIN
+  if(!supportsUsbPower)
+    return true;
+
+  int level = analogRead(POWER_PIN);
+  // Serial.print("power pin level: ");
+  // Serial.println(level);
+  return level >= EXTERNAL_POWER_MIN;
+#else
+  return true;
+#endif
+}
+
+union ProductID
+{
+   unsigned long value;
+   byte bytes[4];
+};
+
+ProductID productID;
+
+void readProductID() {
+  productID.bytes[0] = (*(uint8_t *)0x7FFC);
+  productID.bytes[1] = (*(uint8_t *)0x7FFD);
+  productID.bytes[2] = (*(uint8_t *)0x7FFE);
+  productID.bytes[3] = (*(uint8_t *)0x7FFF);
+
+  switch(productID.value) {
+    case 0x10000000:
+      supportsUsbPower = true;
+      break;
+
+    default:
+      supportsUsbPower = false;
+  }
+
+  Serial.print("ProductID: 0x");
+  Serial.println(productID.value, HEX);
 }
 
 /////////////////////////////////////////////////////////////

@@ -650,8 +650,29 @@ InputCommand readSerialCommand() {
   return command;
 }
 
+bool ignoreResetPin = false;
+
+InputCommand readHardwareCommand() {
+#ifdef RESET_PIN
+  if (digitalRead(RESET_PIN) == LOW) {
+    if (!ignoreResetPin) {
+      ignoreResetPin = true;
+      return InputCommand::Power;
+    }
+  }
+  else {
+    ignoreResetPin = false;
+  }
+#endif
+
+  return InputCommand::None;
+}
+
 InputCommand readCommand() {
   InputCommand command = getCommand(readIRCode());
+
+  if (command == InputCommand::None)
+    command = readHardwareCommand();
 
   if (command == InputCommand::None)
     command = readSerialCommand();
@@ -661,6 +682,9 @@ InputCommand readCommand() {
 
 InputCommand readCommand(unsigned int holdDelay) {
   InputCommand command = getCommand(readIRCode(holdDelay));
+
+  if (command == InputCommand::None)
+    command = readHardwareCommand();
 
   if (command == InputCommand::None)
     command = readSerialCommand();
