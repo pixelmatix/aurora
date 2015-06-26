@@ -140,6 +140,7 @@ class Settings : public Runnable {
       menuItemClockColor.visible = isTimeAvailable;
       menuItemClock24Hour.visible = isTimeAvailable;
       menuItemSetTime.visible = isTimeAvailable;
+      menuItemSetDate.visible = isTimeAvailable;
 
       menuItemUpdateFiles.visible = *(unsigned long *)0x38080 != 0xffffffff && sdAvailable;
 
