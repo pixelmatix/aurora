@@ -61,6 +61,7 @@
 class Patterns : public Playlist {
   private:
     //PatternPongClock pongClock;
+    PatternRainbowFlag rainbowFlag;
     PatternPaletteSmear paletteSmear;
     PatternMultipleStream multipleStream;
     PatternMultipleStream2 multipleStream2;
@@ -106,12 +107,13 @@ class Patterns : public Playlist {
       return currentIndex;
     }
 
-    static const int PATTERN_COUNT = 36;
+    static const int PATTERN_COUNT = 37;
 
     Drawable* shuffledItems[PATTERN_COUNT];
 
     Drawable* items[PATTERN_COUNT] = {
       //&pongClock,
+      &rainbowFlag,
       &spiro,
       &paletteSmear,
       &multipleStream8,
