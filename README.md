@@ -24,7 +24,7 @@ Demo Video
 
 Installation
 ------------
-See [Installation](https://github.com/pixelmatix/aurora/wiki/Installation) in the [Aurora Wiki] for instructions on how to load the pre-compiled Aurora program onto the Teensy 3.1
+See [SmartMatrix Shield Installation](https://github.com/pixelmatix/aurora/wiki/SmartMatrix-Shield-Installation) in the [Aurora Wiki] for instructions on how to load the pre-compiled Aurora program onto the Teensy 3.1
 
 See [Compiling](https://github.com/pixelmatix/aurora/wiki/Compiling) in the [Aurora Wiki] for instructions on how setup the Arduino IDE and all the libraries that are needed to compile Aurora.
 
