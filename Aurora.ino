@@ -27,7 +27,7 @@
 
 #include "Aurora.h"
 
-#include <SmartMatrix_32x32.h>
+#include <SmartMatrix3.h>
 #include <FastLED.h>
 #include <IRremote.h>
 #include <SPI.h>
@@ -42,13 +42,14 @@
 #define GAMES 0
 #define WEATHER 0
 
+SMARTMATRIX_ALLOCATE_BUFFERS(kMatrixWidth, kMatrixHeight, kColorDepthRgb, kDmaBufferRows);
+
 char versionText [] = "v1.6";
 
 elapsedMillis sinceStatusLedToggled;
 boolean statusLedState = false;
 
 bool sdAvailable = false;
-SmartMatrix matrix;
 IRrecv irReceiver(IR_RECV_PIN);
 
 boolean hasDS1307RTC = false;
@@ -203,8 +204,8 @@ void setup()
   // Initialize the IR receiver
   irReceiver.enableIRIn();
 
-  // Initialize 32x32 LED Matrix
-  matrix.begin();
+  // Initialize Matrix
+  SMARTMATRIX_SETUP_DEFAULT_LAYERS(kMatrixWidth, kMatrixHeight);
   matrix.setRotation(rotation);
   matrix.setBrightness(brightness);
   matrix.setColorCorrection(cc24);

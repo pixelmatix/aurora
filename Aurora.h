@@ -25,7 +25,15 @@
 #ifndef AURORA_H_
 #define AURORA_H_
 
-#include <SmartMatrix_32x32.h>
+#include <SmartMatrix3.h>
+
+const uint8_t kMatrixHeight = 32;       // known working: 16, 32
+const uint8_t kMatrixWidth = 32;        // known working: 32, 64
+const uint8_t kColorDepthRgb = 36;      // known working: 36, 48 (24 isn't efficient and has color correction issues)
+const uint8_t kDmaBufferRows = 4;       // known working: 4
+
+#define MATRIX_HEIGHT kMatrixHeight
+#define MATRIX_WIDTH kMatrixWidth
 
 const int MATRIX_CENTER_X = MATRIX_WIDTH / 2;
 const int MATRIX_CENTER_Y = MATRIX_HEIGHT / 2;
