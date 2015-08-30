@@ -31,9 +31,6 @@
 
 #define MAX_COLOR_VALUE 255
 
-extern SmartMatrix matrix;
-extern uint16_t XY(uint8_t x, uint8_t y);
-
 #define SWAPint(X,Y) { \
         int temp = X ; \
         X = Y ; \
@@ -59,7 +56,7 @@ void drawForegroundHLine(int16_t x0, int16_t x1, int16_t y) {
   int i;
 
   for (i = x0; i <= x1; i++) {
-    matrix.drawForegroundPixel(i, y);
+    indexedLayer.drawPixel(i, y, 1);
   }
 }
 
@@ -337,7 +334,7 @@ public:
   }
 
   void PrepareFrame() {
-    leds = (CRGB*) matrix.backBuffer();
+    leds = (CRGB*) backgroundLayer.backBuffer();
   }
 
   void ShowFrame() {
@@ -347,8 +344,8 @@ public:
     currentPalette = targetPalette;
     //#endif
 
-    matrix.swapBuffers();
-    leds = (CRGB*) matrix.backBuffer();
+    backgroundLayer.swapBuffers();
+    leds = (CRGB*) backgroundLayer.backBuffer();
     LEDS.countFPS();
   }
 

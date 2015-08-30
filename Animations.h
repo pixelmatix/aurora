@@ -26,8 +26,6 @@
 #ifndef Animations_H
 #define Animations_H
 
-#include "Externs.h"
-
 class Animations : public Playlist {
   public:
 
@@ -116,21 +114,21 @@ class Animations : public Playlist {
 
     unsigned int drawFrame() {
       if (!sdAvailable) {
-        matrix.fillScreen({ 0, 0, 0 });
-        matrix.setFont(font5x7);
-        matrix.drawString(4, 24, { 255, 255, 255 }, "No SD");
+        backgroundLayer.fillScreen({ 0, 0, 0 });
+        indexedLayer.setFont(font5x7);
+        indexedLayer.drawString(4, 24, 1, "No SD");
         return 30;
       }
       else if (imageCount < 0) {
-        matrix.fillScreen({ 0, 0, 0 });
-        matrix.setFont(font3x5);
-        matrix.drawString(3, 24, { 255, 255, 255 }, "No dir");
+        backgroundLayer.fillScreen({ 0, 0, 0 });
+        indexedLayer.setFont(font3x5);
+        indexedLayer.drawString(3, 24, 1, "No dir");
         return 30;
       }
       else if (imageCount < 1) {
-        matrix.fillScreen({ 0, 0, 0 });
-        matrix.setFont(font3x5);
-        matrix.drawString(3, 24, { 255, 255, 255 }, "No gifs");
+        backgroundLayer.fillScreen({ 0, 0, 0 });
+        indexedLayer.setFont(font3x5);
+        indexedLayer.drawString(3, 24, 1, "No gifs");
         return 30;
       }
 

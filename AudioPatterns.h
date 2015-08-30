@@ -113,8 +113,8 @@ class AudioPatterns : public Playlist {
           continue;
 
         CRGB color = effects.ColorFromCurrentPalette(level / 4);
-        //            matrix.drawCircle(15, 15, i * 2 + 0, color);
-        matrix.drawCircle(15, 15, i * 2 + 1, color);
+        //            backgroundLayer.drawCircle(15, 15, i * 2 + 0, color);
+        backgroundLayer.drawCircle(15, 15, i * 2 + 1, color);
       }
     }
 
@@ -134,9 +134,9 @@ class AudioPatterns : public Playlist {
           continue;
 
         CRGB color = effects.ColorFromCurrentPalette(level / 4);
-        //matrix.drawRectangle(i, i, (MATRIX_WIDTH - 1) - i, (MATRIX_HEIGHT - 1) - i, color);
+        //backgroundLayer.drawRectangle(i, i, (MATRIX_WIDTH - 1) - i, (MATRIX_HEIGHT - 1) - i, color);
 
-        matrix.drawRectangle(
+        backgroundLayer.drawRectangle(
           15 - i * 2, 15 - i * 2, // upper left
           16 + i * 2, 16 + i * 2, // lower right
           color);
@@ -153,12 +153,12 @@ class AudioPatterns : public Playlist {
       }
       // draw lines according to the band levels
       for (int i = 0; i < bandCount; i++) {
-        matrix.drawLine((MATRIX_WIDTH - bandCount) + i, MATRIX_HEIGHT - 1, (MATRIX_WIDTH - bandCount) + i, (MATRIX_HEIGHT - 1) - levels[i] / 256, effects.ColorFromCurrentPalette((-i) * 15));
+        backgroundLayer.drawLine((MATRIX_WIDTH - bandCount) + i, MATRIX_HEIGHT - 1, (MATRIX_WIDTH - bandCount) + i, (MATRIX_HEIGHT - 1) - levels[i] / 256, effects.ColorFromCurrentPalette((-i) * 15));
       }
     }
 
     void analyzerPixels() {
-      matrix.fillScreen({ 0, 0, 0 });
+      backgroundLayer.fillScreen({ 0, 0, 0 });
       drawAnalyzerPixels();
     }
 
@@ -236,7 +236,7 @@ class AudioPatterns : public Playlist {
     }
 
     void lineChart() {
-      matrix.fillScreen({ 0, 0, 0 });
+      backgroundLayer.fillScreen({ 0, 0, 0 });
       analyzerLinesByIntensity();
     }
 
@@ -270,7 +270,7 @@ class AudioPatterns : public Playlist {
     }
 
     void analyzerColumns() {
-      matrix.fillScreen({ 0, 0, 0 });
+      backgroundLayer.fillScreen({ 0, 0, 0 });
       analyzerColumnsByIntensity();
     }
 
@@ -299,7 +299,7 @@ class AudioPatterns : public Playlist {
         int level = interpolatedLevels[x / horizontalPixelsPerBand];
 
         CRGB color = effects.ColorFromCurrentPalette(x * 40);
-        matrix.drawLine(x, MATRIX_HEIGHT - level / MATRIX_HEIGHT, x, 31, color);
+        backgroundLayer.drawLine(x, MATRIX_HEIGHT - level / MATRIX_HEIGHT, x, 31, color);
       }
     }
 
@@ -309,7 +309,7 @@ class AudioPatterns : public Playlist {
 
         CRGB color = effects.ColorFromCurrentPalette(level / 4);
 
-        matrix.drawLine(x, MATRIX_HEIGHT - level / MATRIX_HEIGHT, x, 31, color);
+        backgroundLayer.drawLine(x, MATRIX_HEIGHT - level / MATRIX_HEIGHT, x, 31, color);
       }
     }
 
@@ -326,7 +326,7 @@ class AudioPatterns : public Playlist {
         y = y >= MATRIX_HEIGHT ? MATRIX_HEIGHT - 1 : y;
         nextY = nextY >= MATRIX_HEIGHT ? MATRIX_HEIGHT - 1 : nextY;
 
-        matrix.drawLine(2 * i, y, 2 + 2 * i, nextY, color);
+        backgroundLayer.drawLine(2 * i, y, 2 + 2 * i, nextY, color);
       }
     }
 
@@ -511,7 +511,7 @@ class AudioPatterns : public Playlist {
             radians = radians(angle - degreesPerLine);
             int x2 = x0 + length * sin(radians);
             int y2 = y0 + length * cos(radians);
-            matrix.fillTriangle(x0, y0, x1, y1, x2, y2, color);
+            backgroundLayer.fillTriangle(x0, y0, x1, y1, x2, y2, color);
           }
           angle -= degreesPerLine;
         }
@@ -552,7 +552,7 @@ class AudioPatterns : public Playlist {
     //            float radians = radians(angle);
     //            int x1 = x0 + length * sin(radians);
     //            int y1 = y0 + length * cos(radians);
-    //            matrix.drawLine(x0, y0, x1, y1, color);
+    //            backgroundLayer.drawLine(x0, y0, x1, y1, color);
     //          }
     //          angle -= degreesPerLine;
     //        }
@@ -582,7 +582,7 @@ class AudioPatterns : public Playlist {
     //            int y1 = y0 + 16 * cos(radians);
     //            int x2 = x1 - length * sin(radians);
     //            int y2 = y1 - length * cos(radians);
-    //            matrix.drawLine(x1, y1, x2, y2, color);
+    //            backgroundLayer.drawLine(x1, y1, x2, y2, color);
     //          }
     //          angle -= degreesPerLine;
     //        }
@@ -628,7 +628,7 @@ class AudioPatterns : public Playlist {
     uint16_t y;
     uint16_t z;
 
-    // We're using the x/y dimensions to map to the x/y pixels on the matrix.  We'll
+    // We're using the x/y dimensions to map to the x/y pixels.  We'll
     // use the z-axis for "time".  speed determines how fast time moves forward.  Try
     // 1 for a very slow moving effect, or 60 for something that ends up looking like
     // water.
@@ -920,7 +920,7 @@ class AudioPatterns : public Playlist {
           level = peaks[bandIndex];
 
         uint8_t y = beatsin8(x + MATRIX_WIDTH, 0, MATRIX_HEIGHT);
-        matrix.drawPixel(x, y, effects.ColorFromCurrentPalette(level / 4));
+        backgroundLayer.drawPixel(x, y, effects.ColorFromCurrentPalette(level / 4));
       }
     }
 
@@ -944,7 +944,7 @@ class AudioPatterns : public Playlist {
 
         CRGB color = effects.ColorFromCurrentPalette(level / 4);
 
-        matrix.drawPixel(x, y, color);
+        backgroundLayer.drawPixel(x, y, color);
       }
     }
 
@@ -980,7 +980,7 @@ class AudioPatterns : public Playlist {
 
         CRGB color = effects.ColorFromCurrentPalette(level / 4);
 
-        matrix.drawPixel(x, y, color);
+        backgroundLayer.drawPixel(x, y, color);
       }
     }
 
@@ -1033,7 +1033,7 @@ class AudioPatterns : public Playlist {
 
         boids[i] = boid;
 
-        matrix.drawPixel(boid.location.x, boid.location.y, effects.ColorFromCurrentPalette(((MATRIX_HEIGHT - 1) - boid.location.y) * 7));
+        backgroundLayer.drawPixel(boid.location.x, boid.location.y, effects.ColorFromCurrentPalette(((MATRIX_HEIGHT - 1) - boid.location.y) * 7));
       }
     }
 
@@ -1154,10 +1154,10 @@ class AudioPatterns : public Playlist {
         int level = interpolatedLevels[i];
 
         CRGB color = effects.ColorFromCurrentPalette(i * 15, level / 4);
-        matrix.drawPixel(i, i, color);
-        matrix.drawPixel(i, (MATRIX_HEIGHT - 1) - i, color);
-        matrix.drawPixel((MATRIX_WIDTH - 1) - i, i, color);
-        matrix.drawPixel((MATRIX_WIDTH - 1) - i, (MATRIX_HEIGHT - 1) - i, color);
+        backgroundLayer.drawPixel(i, i, color);
+        backgroundLayer.drawPixel(i, (MATRIX_HEIGHT - 1) - i, color);
+        backgroundLayer.drawPixel((MATRIX_WIDTH - 1) - i, i, color);
+        backgroundLayer.drawPixel((MATRIX_WIDTH - 1) - i, (MATRIX_HEIGHT - 1) - i, color);
       }
     }
 
@@ -1168,10 +1168,10 @@ class AudioPatterns : public Playlist {
         int level = interpolatedLevels[i];
 
         CRGB color = effects.ColorFromCurrentPalette(i * 15, level / 4);
-        matrix.drawPixel(i, MATRIX_CENTRE_Y, color);
-        matrix.drawPixel(MATRIX_CENTRE_X, i, color);
-        matrix.drawPixel((MATRIX_WIDTH - 1) - i, MATRIX_CENTRE_Y, color);
-        matrix.drawPixel(MATRIX_CENTRE_X, (MATRIX_HEIGHT - 1) - i, color);
+        backgroundLayer.drawPixel(i, MATRIX_CENTRE_Y, color);
+        backgroundLayer.drawPixel(MATRIX_CENTRE_X, i, color);
+        backgroundLayer.drawPixel((MATRIX_WIDTH - 1) - i, MATRIX_CENTRE_Y, color);
+        backgroundLayer.drawPixel(MATRIX_CENTRE_X, (MATRIX_HEIGHT - 1) - i, color);
       }
     }
 
@@ -1199,7 +1199,7 @@ class AudioPatterns : public Playlist {
     //        localtheta = theta + (i * 2) * (256 / 14);
     //        x = mapcos8(localtheta, 2, MATRIX_WIDTH - 2);
     //        y = mapsin8(localtheta, 2, MATRIX_HEIGHT - 2);
-    //        matrix.fillCircle(x, y, 3, color);
+    //        backgroundLayer.fillCircle(x, y, 3, color);
     //
     //        // offset = i * 2 + 3;
     //        // color = effects.ColorFromCurrentPalette(offset * 18, brightness);
@@ -1207,7 +1207,7 @@ class AudioPatterns : public Playlist {
     //        localtheta = theta + (i * 2 + 1) * (256 / 14);
     //        x = mapcos8(localtheta, 2, MATRIX_WIDTH - 2);
     //        y = mapsin8(localtheta, 2, MATRIX_HEIGHT - 2);
-    //        matrix.fillCircle(x, y, 3, color);
+    //        backgroundLayer.fillCircle(x, y, 3, color);
     //      }
     //
     //      EVERY_N_MILLIS(1) {

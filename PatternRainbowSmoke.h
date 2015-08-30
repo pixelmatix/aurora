@@ -115,7 +115,7 @@ class PatternRainbowSmoke : public Drawable {
               if (!hasColor[nx][ny])
                 continue;
 
-              rgb24 neighborColor = matrix.readPixel(nx, ny);
+              rgb24 neighborColor = backgroundLayer.readPixel(nx, ny);
 
               int difference = colorDifference(neighborColor, color);
               if (difference < smallestDifferenceAmongNeighbors || (difference == smallestDifferenceAmongNeighbors && random(2) == 1)) {
@@ -167,7 +167,7 @@ class PatternRainbowSmoke : public Drawable {
 
               neighborCount++;
 
-              rgb24 neighborColor = matrix.readPixel(nx, ny);
+              rgb24 neighborColor = backgroundLayer.readPixel(nx, ny);
 
               int difference = colorDifference(neighborColor, color);
               neighborColorDifferenceTotal += difference;
@@ -310,7 +310,7 @@ class PatternRainbowSmoke : public Drawable {
       if (currentColorIndex == 0) {
         //randomSeed(analogRead(5));
 
-        matrix.fillScreen({ 0, 0, 0 });
+        backgroundLayer.fillScreen({ 0, 0, 0 });
         createPalette();
         algorithm = random(2);
 
@@ -338,7 +338,7 @@ class PatternRainbowSmoke : public Drawable {
       isAvailable[point.x][point.y] = false;
       hasColor[point.x][point.y] = true;
 
-      matrix.drawPixel(point.x, point.y, color);
+      backgroundLayer.drawPixel(point.x, point.y, color);
 
       markAvailableNeighbors(point);
 
@@ -352,7 +352,7 @@ class PatternRainbowSmoke : public Drawable {
     }
 
     void start() {
-      matrix.fillScreen({ 0, 0, 0 });
+      backgroundLayer.fillScreen({ 0, 0, 0 });
       currentColorIndex = 0;
     }
 };

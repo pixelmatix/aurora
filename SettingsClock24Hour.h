@@ -30,7 +30,7 @@ class SettingsClock24Hour : public Runnable {
   public:
     void run() {
       while (true) {
-        matrix.fillScreen(CRGB(CRGB::Black));
+        backgroundLayer.fillScreen(CRGB(CRGB::Black));
 
         int16_t x = 2;
 
@@ -45,25 +45,25 @@ class SettingsClock24Hour : public Runnable {
         int16_t y = clockDigitalShort.y;
 
         // upper indicators (in case the clock's at the bottom)
-        matrix.drawTriangle(x + 0, y - 1, x + 1, y - 2, x + 2, y - 1, CRGB(CRGB::SlateGray));
-        matrix.drawTriangle(x + 6, y - 1, x + 7, y - 2, x + 8, y - 1, CRGB(CRGB::SlateGray));
+        backgroundLayer.drawTriangle(x + 0, y - 1, x + 1, y - 2, x + 2, y - 1, CRGB(CRGB::SlateGray));
+        backgroundLayer.drawTriangle(x + 6, y - 1, x + 7, y - 2, x + 8, y - 1, CRGB(CRGB::SlateGray));
 
         // lower indicators (in case the clock's at the top)
-        matrix.drawTriangle(x + 0, y + 11, x + 1, y + 12, x + 2, y + 11, CRGB(CRGB::SlateGray));
-        matrix.drawTriangle(x + 6, y + 11, x + 7, y + 12, x + 8, y + 11, CRGB(CRGB::SlateGray));
+        backgroundLayer.drawTriangle(x + 0, y + 11, x + 1, y + 12, x + 2, y + 11, CRGB(CRGB::SlateGray));
+        backgroundLayer.drawTriangle(x + 6, y + 11, x + 7, y + 12, x + 8, y + 11, CRGB(CRGB::SlateGray));
 
         y += 3;
 
-        matrix.setForegroundFont(font3x5);
-        matrix.setScrollOffsetFromTop(MATRIX_HEIGHT);
-        matrix.setScrollColor(clockDisplay.color);
-        matrix.clearForeground();
-        matrix.drawForegroundString(x, y, timeBuffer, true);
+        scrollingLayer.setFont(font3x5);
+        scrollingLayer.setOffsetFromTop(MATRIX_HEIGHT);
+        scrollingLayer.setColor(clockDisplay.color);
+        indexedLayer.fillScreen(0);
+        indexedLayer.drawString(x, y, 1, timeBuffer);
 
         //clockDigitalShort.drawSetTimeIndicator(SetHour);
 
-        matrix.swapBuffers();
-        matrix.displayForegroundDrawing(false);
+        backgroundLayer.swapBuffers();
+        indexedLayer.swapBuffers();
 
         InputCommand command = readCommand(defaultHoldDelay);
 
@@ -89,9 +89,9 @@ class SettingsClock24Hour : public Runnable {
     }
 
     unsigned int drawFrame() {
-      matrix.fillScreen(CRGB(CRGB::Black));
-      matrix.setFont(font3x5);
-      matrix.drawString(0, 27, { 255, 255, 255 }, versionText);
+      backgroundLayer.fillScreen(CRGB(CRGB::Black));
+      backgroundLayer.setFont(font3x5);
+      backgroundLayer.drawString(0, 27, { 255, 255, 255 }, versionText);
       return 0;
     }
 };

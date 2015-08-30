@@ -89,9 +89,9 @@ class PatternFlock : public Drawable {
         boid->wrapAroundBorders();
         PVector location = boid->location;
         // PVector velocity = boid->velocity;
-        // matrix.drawLine(location.x, location.y, location.x - velocity.x, location.y - velocity.y, color);
+        // backgroundLayer.drawLine(location.x, location.y, location.x - velocity.x, location.y - velocity.y, color);
         // effects.leds[XY(location.x, location.y)] += color;
-        matrix.drawPixel(location.x, location.y, color);
+        backgroundLayer.drawPixel(location.x, location.y, color);
 
         if (applyWind) {
           boid->applyForce(wind);
@@ -105,9 +105,9 @@ class PatternFlock : public Drawable {
         color = effects.ColorFromCurrentPalette(hue + 128);
         PVector location = predator.location;
         // PVector velocity = predator.velocity;
-        // matrix.drawLine(location.x, location.y, location.x - velocity.x, location.y - velocity.y, color);
+        // backgroundLayer.drawLine(location.x, location.y, location.x - velocity.x, location.y - velocity.y, color);
         // effects.leds[XY(location.x, location.y)] += color;        
-        matrix.drawPixel(location.x, location.y, color);
+        backgroundLayer.drawPixel(location.x, location.y, color);
       }
 
       EVERY_N_MILLIS(200) {

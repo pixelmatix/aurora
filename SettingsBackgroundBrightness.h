@@ -49,7 +49,7 @@ class SettingsBackgroundBrightness : public Runnable {
             }
 
             hsv2rgb_rainbow(chsv, crgb);
-            matrix.drawPixel(x, y, crgb);
+            backgroundLayer.drawPixel(x, y, crgb);
           }
         }
 
@@ -59,10 +59,10 @@ class SettingsBackgroundBrightness : public Runnable {
         for (int y = 0; y < MATRIX_HEIGHT; y += 1) {
           chsv = CHSV(0, 0, 255 - y * 6);
           hsv2rgb_rainbow(chsv, crgb);
-          matrix.drawPixel(x, y, crgb);
+          backgroundLayer.drawPixel(x, y, crgb);
         }
 
-        matrix.swapBuffers();
+        backgroundLayer.swapBuffers();
 
         int level = ((float) getBackgroundBrightnessLevel() / (float) (brightnessCount - 1)) * 100;
         if (level < 1 && brightness > 0)
@@ -70,12 +70,12 @@ class SettingsBackgroundBrightness : public Runnable {
 
         sprintf(text, "%3d%%", level);
 
-        matrix.setScrollOffsetFromTop(MATRIX_HEIGHT);
-        matrix.setForegroundFont(gohufont11b);
-        matrix.setScrollColor({ 255, 255, 255 });
-        matrix.clearForeground();
-        matrix.drawForegroundString(4, 11, text, true);
-        matrix.displayForegroundDrawing(false);
+        scrollingLayer.setOffsetFromTop(MATRIX_HEIGHT);
+        scrollingLayer.setFont(gohufont11b);
+        scrollingLayer.setColor({ 255, 255, 255 });
+        indexedLayer.fillScreen(0);
+        indexedLayer.drawString(4, 11, 1, text);
+        indexedLayer.swapBuffers();
 
         InputCommand command = readCommand(defaultHoldDelay);
 
@@ -105,9 +105,9 @@ class SettingsBackgroundBrightness : public Runnable {
     }
 
     unsigned int drawFrame() {
-      matrix.fillScreen(CRGB(CRGB::Black));
-      matrix.setFont(font3x5);
-      matrix.drawString(0, 27, { 255, 255, 255 }, versionText);
+      backgroundLayer.fillScreen(CRGB(CRGB::Black));
+      backgroundLayer.setFont(font3x5);
+      backgroundLayer.drawString(0, 27, { 255, 255, 255 }, versionText);
       return 0;
     }
 };

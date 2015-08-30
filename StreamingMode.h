@@ -50,7 +50,7 @@ private:
 
     void drawFrameTPM2() {
         int bufferSize = matrix.getScreenHeight() * matrix.getScreenWidth() * 3;
-        rgb24 *buffer = matrix.backBuffer();
+        rgb24 *buffer = backgroundLayer.backBuffer();
 
         // Check header
         if (Serial.read() != tpm2Header)
@@ -78,7 +78,7 @@ private:
             return;
 
         // If packet has been validated, swap buffers and acknowledge
-        //matrix.swapBuffers();
+        //backgroundLayer.swapBuffers();
         Serial.write(tpm2Acknowledge);
     }
 
@@ -92,7 +92,7 @@ private:
          */
 
         int bufferSize = matrix.getScreenHeight() * 32 * 3;
-        rgb24 *buffer = matrix.backBuffer();
+        rgb24 *buffer = backgroundLayer.backBuffer();
         byte currentPacket = 0;
         byte totalPackets = 255;
 
@@ -127,7 +127,7 @@ private:
         }
 
         // Once all the packets have been validated, swap buffers and acknowledge
-        //matrix.swapBuffers();
+        //backgroundLayer.swapBuffers();
         Serial.write(tpm2Acknowledge);
     }
 
@@ -201,9 +201,9 @@ public:
         else if (millis() - lastData > 1000) {
             // If it's been longer than a second since we last received data
             // blank the screen and notify that we're waiting for data.
-            matrix.fillScreen({ 0, 0, 0 });
-            matrix.setFont(font3x5);
-            matrix.drawString(3, 24, { 255, 255, 255 }, "Waiting");
+            backgroundLayer.fillScreen({ 0, 0, 0 });
+            backgroundLayer.setFont(font3x5);
+            backgroundLayer.drawString(3, 24, { 255, 255, 255 }, "Waiting");
         }
         return 10;
     }

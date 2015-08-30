@@ -96,12 +96,12 @@ class SettingsSetDate : public Runnable {
     }
 
     void draw() {
-      matrix.fillScreen(CRGB(CRGB::Black));
+      backgroundLayer.fillScreen(CRGB(CRGB::Black));
 
       int x = 0;
       int y = 13;
 
-      matrix.setForegroundFont(font3x5);
+      scrollingLayer.setFont(font3x5);
 
       if (isTimeAvailable) {
         uint16_t year = time.Year + 1970;
@@ -116,27 +116,27 @@ class SettingsSetDate : public Runnable {
         sprintf(timeBuffer, "No Clock");
       }
 
-      matrix.setScrollOffsetFromTop(MATRIX_HEIGHT);
-      matrix.setScrollColor(clockDisplay.color);
-      matrix.clearForeground();
+      scrollingLayer.setOffsetFromTop(MATRIX_HEIGHT);
+      scrollingLayer.setColor(clockDisplay.color);
+      indexedLayer.fillScreen(0);
 
       // draw the date
-      matrix.drawForegroundString(x, y, timeBuffer, true);
+      indexedLayer.drawString(x, y, 1, timeBuffer);
 
       // draw instruction text
       switch (state) {
         case SetYear:
-          matrix.drawForegroundString(1, 0, "Year", true);
+          indexedLayer.drawString(1, 0, 1, "Year");
           x = 0;
           break;
 
         case SetMonth:
-          matrix.drawForegroundString(1, 0, "Month", true);
+          indexedLayer.drawString(1, 0, 1, "Month");
           x = 12;
           break;
 
         case SetDay:
-          matrix.drawForegroundString(1, 0, "Day", true);
+          indexedLayer.drawString(1, 0, 1, "Day");
           x = 24;
           break;
 
@@ -145,21 +145,21 @@ class SettingsSetDate : public Runnable {
       }
 
       // draw up arrows
-      matrix.drawTriangle(x + 0, y - 2, x + 1, y - 3, x + 2, y - 2, CRGB(CRGB::SlateGray));
-      matrix.drawTriangle(x + 4, y - 2, x + 5, y - 3, x + 6, y - 2, CRGB(CRGB::SlateGray));
+      backgroundLayer.drawTriangle(x + 0, y - 2, x + 1, y - 3, x + 2, y - 2, CRGB(CRGB::SlateGray));
+      backgroundLayer.drawTriangle(x + 4, y - 2, x + 5, y - 3, x + 6, y - 2, CRGB(CRGB::SlateGray));
 
       // draw down arrows
-      matrix.drawTriangle(x + 0, y + 6, x + 1, y + 7, x + 2, y + 6, CRGB(CRGB::SlateGray));
-      matrix.drawTriangle(x + 4, y + 6, x + 5, y + 7, x + 6, y + 6, CRGB(CRGB::SlateGray));
+      backgroundLayer.drawTriangle(x + 0, y + 6, x + 1, y + 7, x + 2, y + 6, CRGB(CRGB::SlateGray));
+      backgroundLayer.drawTriangle(x + 4, y + 6, x + 5, y + 7, x + 6, y + 6, CRGB(CRGB::SlateGray));
 
-      matrix.swapBuffers();
-      matrix.displayForegroundDrawing(false);
+      backgroundLayer.swapBuffers();
+      indexedLayer.swapBuffers();
     }
 
     unsigned int drawFrame() {
-      matrix.fillScreen(CRGB(CRGB::Black));
-      matrix.setFont(font3x5);
-      matrix.drawString(0, 27, { 255, 255, 255 }, versionText);
+      backgroundLayer.fillScreen(CRGB(CRGB::Black));
+      backgroundLayer.setFont(font3x5);
+      backgroundLayer.drawString(0, 27, { 255, 255, 255 }, versionText);
       return 0;
     }
 

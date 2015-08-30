@@ -26,9 +26,6 @@
 #ifndef ClockDisplay_H
 #define ClockDisplay_H
 
-#include "Externs.h"
-
-
 class ClockDisplay : public Playlist {
   public:
     unsigned int lastRead = 0;

@@ -1,4 +1,3 @@
-
 /*
  * Aurora: https://github.com/pixelmatix/aurora
  * Copyright (c) 2014 Jason Coon
@@ -25,9 +24,41 @@
 
 #include "Hardware.h"
 
-#include "Aurora.h"
-
 #include <SmartMatrix3.h>
+
+#define COLOR_DEPTH 24                  // known working: 24, 48 - If the sketch uses type `rgb24` directly, COLOR_DEPTH must be 24
+const uint8_t kMatrixHeight = 32;       // known working: 16, 32
+const uint8_t kMatrixWidth = 32;        // known working: 32, 64
+const uint8_t kDmaBufferRows = 4;       // known working: 4
+const uint8_t kRefreshDepth = 36;       // known working: 24, 36, 48
+const uint8_t kMatrixOptions = (SMARTMATRIX_OPTIONS_NONE);
+const uint8_t kBackgroundLayerOptions = (SM_BACKGROUND_OPTIONS_NONE);
+const uint8_t kScrollingLayerOptions = (SM_SCROLLING_OPTIONS_NONE);
+const uint8_t kIndexedLayerOptions = (SM_INDEXED_OPTIONS_NONE);
+
+#define MATRIX_HEIGHT kMatrixHeight
+#define MATRIX_WIDTH kMatrixWidth
+
+const int MATRIX_CENTER_X = MATRIX_WIDTH / 2;
+const int MATRIX_CENTER_Y = MATRIX_HEIGHT / 2;
+
+const uint16_t EXTERNAL_POWER_MIN = 500;
+
+const byte MATRIX_CENTRE_X = MATRIX_CENTER_X - 1;
+const byte MATRIX_CENTRE_Y = MATRIX_CENTER_Y - 1;
+
+const uint16_t NUM_LEDS = MATRIX_WIDTH * MATRIX_HEIGHT;
+
+uint8_t demoMode = 0;
+
+rgb24 white = { 255, 255, 255 };
+rgb24 gray = { 128, 128, 128 };
+rgb24 black = { 0, 0, 0 };
+rgb24 brown = { 137, 104, 48 };
+rgb24 red = { 255, 0, 0 };
+
+char* auroraPath = (char *) "/aurora/";
+
 #include <FastLED.h>
 #include <IRremote.h>
 #include <SPI.h>
@@ -42,9 +73,12 @@
 #define GAMES 0
 #define WEATHER 0
 
-SMARTMATRIX_ALLOCATE_BUFFERS(kMatrixWidth, kMatrixHeight, kColorDepthRgb, kDmaBufferRows);
+SMARTMATRIX_ALLOCATE_BUFFERS(matrix, kMatrixWidth, kMatrixHeight, kRefreshDepth, kDmaBufferRows, kMatrixOptions);
+SMARTMATRIX_ALLOCATE_BACKGROUND_LAYER(backgroundLayer, kMatrixWidth, kMatrixHeight, COLOR_DEPTH, kBackgroundLayerOptions);
+SMARTMATRIX_ALLOCATE_SCROLLING_LAYER(scrollingLayer, kMatrixWidth, kMatrixHeight, COLOR_DEPTH, kScrollingLayerOptions);
+SMARTMATRIX_ALLOCATE_INDEXED_LAYER(indexedLayer, kMatrixWidth, kMatrixHeight, COLOR_DEPTH, kIndexedLayerOptions);
 
-char versionText [] = "v1.6";
+char versionText [] = "v1.7";
 
 elapsedMillis sinceStatusLedToggled;
 boolean statusLedState = false;
@@ -205,18 +239,27 @@ void setup()
   irReceiver.enableIRIn();
 
   // Initialize Matrix
-  SMARTMATRIX_SETUP_DEFAULT_LAYERS(kMatrixWidth, kMatrixHeight);
+  matrix.addLayer(&backgroundLayer); 
+  matrix.addLayer(&scrollingLayer); 
+  matrix.addLayer(&indexedLayer); 
+  matrix.begin();
+  
   matrix.setRotation(rotation);
   matrix.setBrightness(brightness);
-  matrix.setColorCorrection(cc24);
-  matrix.setFont(gohufont11b);
-  matrix.setScrollStartOffsetFromLeft(8);
-  matrix.setScrollOffsetFromTop(25);
-  matrix.setScrollSpeed(80);
-  matrix.setScrollMode(wrapForward);
-  matrix.fillScreen(rgb24{ 0, 0, 0 });
+  
+  scrollingLayer.enableColorCorrection(true);
+  scrollingLayer.setFont(gohufont11b);
+  scrollingLayer.setOffsetFromTop(25);
+  scrollingLayer.setStartOffsetFromLeft(8);
+  scrollingLayer.setSpeed(80);
+  scrollingLayer.setMode(wrapForward);
 
-  matrix.swapBuffers();
+  indexedLayer.enableColorCorrection(true);
+  indexedLayer.setIndexedColor(1, {255, 255, 255});
+  
+  backgroundLayer.enableColorCorrection(true);
+  backgroundLayer.fillScreen(rgb24{ 0, 0, 0 });
+  backgroundLayer.swapBuffers();
 
   pinMode(SD_CARD_CS, OUTPUT);
   sdAvailable = SD.begin(SD_CARD_CS);
@@ -415,12 +458,13 @@ bool setWeatherType(int type) {
 void powerOff()
 {
   // clear the display
-  matrix.clearForeground();
-  matrix.scrollText("", 1);
-  matrix.fillScreen(CRGB(CRGB::Black));
-  matrix.swapBuffers();
-  matrix.clearForeground();
-  matrix.displayForegroundDrawing(false);
+  scrollingLayer.start("", 1);
+  
+  indexedLayer.fillScreen(0);
+  indexedLayer.swapBuffers();
+  
+  backgroundLayer.fillScreen(CRGB(CRGB::Black));
+  backgroundLayer.swapBuffers();
 
   while (true) {
     updateStatusLed();
@@ -520,7 +564,7 @@ void loadSettings() {
 
   backgroundBrightness = loadByteSetting(bckbrghtFilename, 63);
   boundBackgroundBrightness();
-  matrix.setBackgroundBrightness(backgroundBrightness);
+  backgroundLayer.setBrightness(backgroundBrightness);
 
   audioScale = loadByteSetting(audiosclFilename, 0);
   boundAudioScale();
@@ -577,6 +621,7 @@ void adjustBrightness(int delta, boolean wrap) {
   brightness = brightnessMap[level];
   boundBrightness();
   matrix.setBrightness(brightness);
+  backgroundLayer.setBrightness(backgroundBrightness);
 }
 
 uint8_t cycleBrightness() {
@@ -606,7 +651,7 @@ void adjustBackgroundBrightness(int d) {
 
   backgroundBrightness = backgroundBrightnessMap[level];
   boundBackgroundBrightness();
-  matrix.setBackgroundBrightness(backgroundBrightness);
+  backgroundLayer.setBrightness(backgroundBrightness);
 }
 
 void boundBrightness() {
@@ -715,8 +760,6 @@ void saveDemoMode() {
   saveByteSetting(demoModeFilename, demoMode);
 }
 
-char* auroraPath = (char *) "/aurora/";
-
 int loadIntSetting(const char* name, uint8_t maxLength, int defaultValue) {
   if (!sdAvailable)
     return defaultValue;
@@ -782,48 +825,6 @@ int loadByteSetting(const char* name, byte defaultValue) {
   }
 
   return byteValue;
-}
-
-tmElements_t loadDateTimeSetting(const char* name) {
-  tmElements_t value;
-
-  if (!sdAvailable)
-    return value;
-
-  if (!SD.exists(auroraPath)) {
-    SD.mkdir(auroraPath);
-  }
-
-  char filepath[20];
-  strcpy(filepath, auroraPath);
-  strcat(filepath, name);
-
-  File file = SD.open(filepath, FILE_READ);
-  if (file) {
-    char c;
-    value.Year = CalendarYrToTm(readInt(file, 4));
-    if (c >= 0) value.Month = readInt(file, 2);
-    if (c >= 0) value.Day = readInt(file, 2);
-    if (c >= 0) value.Hour = readInt(file, 2);
-    if (c >= 0) value.Minute = readInt(file, 2);
-    if (c >= 0) value.Second = readInt(file, 2);
-
-    file.close();
-  }
-
-  return value;
-}
-
-int readInt(File &file, uint8_t maxLength) {
-  String text;
-  char c = file.read();
-  int length = 1;
-  while (c >= 0 && length <= maxLength) {
-    text.append(c);
-    c = file.read();
-    length++;
-  }
-  return text.toInt();
 }
 
 void saveIntSetting(const char* name, int value) {

@@ -61,36 +61,36 @@ public:
             case 0:
                 for (int x = 0; x < MATRIX_WIDTH; x++) {
                     n = quadwave8(x * 2 + theta) / scale;
-                    matrix.drawPixel(x, n, effects.ColorFromCurrentPalette(x + hue));
+                    backgroundLayer.drawPixel(x, n, effects.ColorFromCurrentPalette(x + hue));
                     if (waveCount == 2)
-                        matrix.drawPixel(x, maxY - n, effects.ColorFromCurrentPalette(x + hue));
+                        backgroundLayer.drawPixel(x, maxY - n, effects.ColorFromCurrentPalette(x + hue));
                 }
                 break;
 
             case 1:
                 for (int y = 0; y < MATRIX_HEIGHT; y++) {
                     n = quadwave8(y * 2 + theta) / scale;
-                    matrix.drawPixel(n, y, effects.ColorFromCurrentPalette(y + hue));
+                    backgroundLayer.drawPixel(n, y, effects.ColorFromCurrentPalette(y + hue));
                     if (waveCount == 2)
-                        matrix.drawPixel(maxX - n, y, effects.ColorFromCurrentPalette(y + hue));
+                        backgroundLayer.drawPixel(maxX - n, y, effects.ColorFromCurrentPalette(y + hue));
                 }
                 break;
 
             case 2:
                 for (int x = 0; x < MATRIX_WIDTH; x++) {
                     n = quadwave8(x * 2 - theta) / scale;
-                    matrix.drawPixel(x, n, effects.ColorFromCurrentPalette(x + hue));
+                    backgroundLayer.drawPixel(x, n, effects.ColorFromCurrentPalette(x + hue));
                     if (waveCount == 2)
-                        matrix.drawPixel(x, maxY - n, effects.ColorFromCurrentPalette(x + hue));
+                        backgroundLayer.drawPixel(x, maxY - n, effects.ColorFromCurrentPalette(x + hue));
                 }
                 break;
 
             case 3:
                 for (int y = 0; y < MATRIX_HEIGHT; y++) {
                     n = quadwave8(y * 2 - theta) / scale;
-                    matrix.drawPixel(n, y, effects.ColorFromCurrentPalette(y + hue));
+                    backgroundLayer.drawPixel(n, y, effects.ColorFromCurrentPalette(y + hue));
                     if (waveCount == 2)
-                        matrix.drawPixel(maxX - n, y, effects.ColorFromCurrentPalette(y + hue));
+                        backgroundLayer.drawPixel(maxX - n, y, effects.ColorFromCurrentPalette(y + hue));
                 }
                 break;
         }

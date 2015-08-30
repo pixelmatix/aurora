@@ -36,7 +36,7 @@ class PatternInvadersSmall : public Drawable {
     }
 
     void start() {
-      matrix.fillScreen(CRGB(CRGB::Black));
+      backgroundLayer.fillScreen(CRGB(CRGB::Black));
     }
 
     unsigned int drawFrame() {
@@ -48,10 +48,10 @@ class PatternInvadersSmall : public Drawable {
 
           if (random(0, 2) == 1) color = color1;
 
-          matrix.drawPixel(x + i, y + j, color);
+          backgroundLayer.drawPixel(x + i, y + j, color);
 
           if (i < 2)
-            matrix.drawPixel(x + (4 - i), y + j, color);
+            backgroundLayer.drawPixel(x + (4 - i), y + j, color);
         }
       }
 
@@ -78,7 +78,7 @@ class PatternInvadersMedium : public Drawable {
     }
 
     void start() {
-      matrix.fillScreen(CRGB(CRGB::Black));
+      backgroundLayer.fillScreen(CRGB(CRGB::Black));
     }
 
     unsigned int drawFrame() {
@@ -90,10 +90,10 @@ class PatternInvadersMedium : public Drawable {
 
           if (random(0, 2) == 1) color = color1;
 
-          matrix.fillRectangle(x + (i * 2), y + (j * 2), x + (i * 2 + 1), y + (j * 2 + 1), color);
+          backgroundLayer.fillRectangle(x + (i * 2), y + (j * 2), x + (i * 2 + 1), y + (j * 2 + 1), color);
 
           if (i < 2)
-            matrix.fillRectangle(x + (8 - i * 2), y + (j * 2), x + (9 - i * 2), y + (j * 2 + 1), color);
+            backgroundLayer.fillRectangle(x + (8 - i * 2), y + (j * 2), x + (9 - i * 2), y + (j * 2 + 1), color);
         }
       }
 
@@ -118,11 +118,11 @@ class PatternInvadersLarge : public Drawable {
     }
 
     void start() {
-      matrix.fillScreen(CRGB(CRGB::Black));
+      backgroundLayer.fillScreen(CRGB(CRGB::Black));
     }
 
     unsigned int drawFrame() {
-      matrix.fillScreen(CRGB(CRGB::Black));
+      backgroundLayer.fillScreen(CRGB(CRGB::Black));
 
       CRGB color1 = effects.ColorFromCurrentPalette(random(0, 255));
 
@@ -134,10 +134,10 @@ class PatternInvadersLarge : public Drawable {
             color = color1;
           }
 
-          matrix.fillRectangle(1 + x * 6, 1 + y * 6, 5 + x * 6, 5 + y * 6, color);
+          backgroundLayer.fillRectangle(1 + x * 6, 1 + y * 6, 5 + x * 6, 5 + y * 6, color);
 
           if (x < 2)
-            matrix.fillRectangle(1 + (4 - x) * 6, 1 + y * 6, 5 + (4 - x) * 6, 5 + y * 6, color);
+            backgroundLayer.fillRectangle(1 + (4 - x) * 6, 1 + y * 6, 5 + (4 - x) * 6, 5 + y * 6, color);
         }
       }
 

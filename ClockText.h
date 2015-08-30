@@ -26,8 +26,7 @@
 #ifndef ClockText_H
 #define ClockText_H
 
-#include "Aurora.h"
-#include "Externs.h"
+
 
 class ClockText : public Drawable {
   private:
@@ -78,10 +77,10 @@ class ClockText : public Drawable {
     }
 
     unsigned int drawFrame(const int cy) {
-      matrix.setScrollOffsetFromTop(MATRIX_HEIGHT);
-      matrix.setScrollColor(color);
-      matrix.setForegroundFont(font3x5);
-      matrix.clearForeground();
+      scrollingLayer.setOffsetFromTop(MATRIX_HEIGHT);
+      scrollingLayer.setColor(color);
+      scrollingLayer.setFont(font3x5);
+      indexedLayer.fillScreen(0);
 
       int x = 1;
 
@@ -93,34 +92,34 @@ class ClockText : public Drawable {
           hour -= 12;
 
         if (minute == 0) {
-          matrix.drawForegroundString(x, cy, onesStrings[hour]);
-          matrix.drawForegroundString(x, cy + 7, "o'clock");
+          indexedLayer.drawString(x, cy, 1, onesStrings[hour]);
+          indexedLayer.drawString(x, cy + 7, 1, "o'clock");
         }
         else if (minute < 10) {
-          matrix.drawForegroundString(x, cy, onesStrings[minute]);
-          matrix.drawForegroundString(x, cy + 7, "past");
-          matrix.drawForegroundString(x, cy + 14, onesStrings[hour]);
+          indexedLayer.drawString(x, cy, 2, onesStrings[minute]);
+          indexedLayer.drawString(x, cy + 7, 1, "past");
+          indexedLayer.drawString(x, cy + 14, 1, onesStrings[hour]);
         }
         else if (minute == 17) {
-          matrix.drawForegroundString(x, cy, onesStrings[hour]);
-          matrix.drawForegroundString(x, cy + 7, onesStrings[7]);
-          matrix.drawForegroundString(x, cy + 14, "teen");
+          indexedLayer.drawString(x, cy, 1, onesStrings[hour]);
+          indexedLayer.drawString(x, cy + 7, 1, onesStrings[7]);
+          indexedLayer.drawString(x, cy + 14, 1, "teen");
         }
         else if (minute < 20) {
-          matrix.drawForegroundString(x, cy, onesStrings[hour]);
-          matrix.drawForegroundString(x, cy + 7, onesStrings[minute]);
+          indexedLayer.drawString(x, cy, 1, onesStrings[hour]);
+          indexedLayer.drawString(x, cy + 7, 1, onesStrings[minute]);
         }
         else {
-          matrix.drawForegroundString(x, cy, onesStrings[hour]);
-          matrix.drawForegroundString(x, cy + 7, tensStrings[minute / 10 - 2]);
+          indexedLayer.drawString(x, cy, 1, onesStrings[hour]);
+          indexedLayer.drawString(x, cy + 7, 1, tensStrings[minute / 10 - 2]);
 
           if (minute % 10 > 0) {
-            matrix.drawForegroundString(x, cy + 14, onesStrings[minute % 10]);
+            indexedLayer.drawString(x, cy + 14, 1, onesStrings[minute % 10]);
           }
         }
       }
       else {
-        matrix.drawForegroundString(x, cy, "No Clock", true);
+        indexedLayer.drawString(x, cy, 1, "No Clock");
       }
 
       return 0;

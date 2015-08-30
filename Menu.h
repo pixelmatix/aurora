@@ -23,8 +23,6 @@
 #ifndef Menu_H
 #define Menu_H
 
-#include "Externs.h"
-
 // Menu where a single entry is shown at a time.
 class Menu {
 public:
@@ -116,11 +114,11 @@ public:
       while (true) {
         if (!hasExternalPower()) {
           matrix.setBrightness(0);
-          matrix.setBackgroundBrightness(1);
+          backgroundLayer.setBrightness(1);
         }
         else {
           matrix.setBrightness(brightness);
-          matrix.setBackgroundBrightness(backgroundBrightness);
+          backgroundLayer.setBrightness(backgroundBrightness);
         }
 
         updateStatusLed();
@@ -196,7 +194,7 @@ public:
             return;
           }
           else if (isRunnable) {
-            matrix.scrollText("", 1);
+            scrollingLayer.start("", 1);
             currentRunnable->run();
           }
           else {
@@ -361,11 +359,11 @@ public:
         else if (command == InputCommand::FreezeDisplay) {
           freezeDisplay = !freezeDisplay;
           if (freezeDisplay)
-            matrix.setScrollSpeed(0);
+            scrollingLayer.setSpeed(0);
           else if (messageVisible)
-            matrix.setScrollSpeed(messagePlayer.scrollSpeed);
+            scrollingLayer.setSpeed(messagePlayer.scrollSpeed);
           else
-            matrix.setScrollSpeed(scrollSpeed);
+            scrollingLayer.setSpeed(scrollSpeed);
         }
         else {
           if (playMode != Paused && millis() >= autoPlayTimeout) {
@@ -459,14 +457,14 @@ private:
       previousIndex = currentIndex;
       updateScrollText = false;
 
-      matrix.clearForeground();
+      indexedLayer.fillScreen(0);
 
       if (brightnessChanged || showingBrightnessIndicator) {
         brightnessChanged = false;
-        matrix.setForegroundFont(gohufont11b);
-        matrix.setScrollColor(menuColor);
-        matrix.setScrollOffsetFromTop(MATRIX_HEIGHT);
-        matrix.setBackgroundBrightness(backgroundBrightness);
+        scrollingLayer.setFont(gohufont11b);
+        scrollingLayer.setColor(menuColor);
+        scrollingLayer.setOffsetFromTop(MATRIX_HEIGHT);
+        backgroundLayer.setBrightness(backgroundBrightness);
 
         int level = ((float) getBrightnessLevel() / (float) (brightnessCount - 1)) * 100;
         if (level < 1 && brightness > 0)
@@ -475,14 +473,14 @@ private:
         char text[4];
         sprintf(text, "%3d%%", level);
 
-        matrix.drawForegroundString(4, 11, text, true);
+        indexedLayer.drawString(4, 11, 1, text);
       }
       else if (audioScaleChanged || showingAudioScaleIndicator) {
         audioScaleChanged = false;
-        matrix.setForegroundFont(font3x5);
-        matrix.setScrollColor(menuColor);
-        matrix.setScrollOffsetFromTop(MATRIX_HEIGHT);
-        matrix.setBackgroundBrightness(backgroundBrightness);
+        scrollingLayer.setFont(font3x5);
+        scrollingLayer.setColor(menuColor);
+        scrollingLayer.setOffsetFromTop(MATRIX_HEIGHT);
+        backgroundLayer.setBrightness(backgroundBrightness);
 
         char text[8];
         if (audioScale == 0)
@@ -490,94 +488,94 @@ private:
         else
           sprintf(text, "%d", audioScale);
 
-        matrix.drawForegroundString(1, 1, text, true);
+        indexedLayer.drawString(1, 1, 1, text);
       }
       else if (paletteChanged || showingPaletteIndicator) {
         paletteChanged = false;
-        matrix.setForegroundFont(font3x5);
-        matrix.setScrollColor(menuColor);
-        matrix.setScrollOffsetFromTop(MATRIX_HEIGHT);
-        matrix.setBackgroundBrightness(backgroundBrightness);
+        scrollingLayer.setFont(font3x5);
+        scrollingLayer.setColor(menuColor);
+        scrollingLayer.setOffsetFromTop(MATRIX_HEIGHT);
+        backgroundLayer.setBrightness(backgroundBrightness);
 
-        matrix.drawForegroundString(0, 14, effects.currentPaletteName, true);
+        indexedLayer.drawString(0, 14, 1, effects.currentPaletteName);
       }
       else if (showingPatternIndicator) {
         if (isPlaylist) {
-          matrix.setForegroundFont(font3x5);
-          matrix.setScrollColor(menuColor);
-          matrix.setScrollOffsetFromTop(MATRIX_HEIGHT);
-          matrix.setBackgroundBrightness(backgroundBrightness);
+          scrollingLayer.setFont(font3x5);
+          scrollingLayer.setColor(menuColor);
+          scrollingLayer.setOffsetFromTop(MATRIX_HEIGHT);
+          backgroundLayer.setBrightness(backgroundBrightness);
 
           int currentIndex = currentPlaylist->getCurrentIndex();
           char currentItemName[10];
           itoa(currentIndex, currentItemName, 10);
 
-          matrix.drawForegroundString(1, 14, currentItemName, true);
+          indexedLayer.drawString(1, 14, 1, currentItemName);
         }
       }
       else if (playModeChanged || showingPlayModeIndicator) {
         playModeChanged = false;
-        matrix.setForegroundFont(font3x5);
-        matrix.setScrollColor(menuColor);
-        matrix.setScrollOffsetFromTop(MATRIX_HEIGHT);
-        matrix.setBackgroundBrightness(backgroundBrightness);
+        scrollingLayer.setFont(font3x5);
+        scrollingLayer.setColor(menuColor);
+        scrollingLayer.setOffsetFromTop(MATRIX_HEIGHT);
+        backgroundLayer.setBrightness(backgroundBrightness);
 
         switch (playMode) {
           case Paused:
-            matrix.drawForegroundMonoBitmap(12, 10, pauseBitmapWidth, pauseBitmapHeight, pauseBitmap, true);
-            matrix.drawForegroundString(0, 18, "  Pause", true);
+            indexedLayer.drawMonoBitmap(12, 10, pauseBitmapWidth, pauseBitmapHeight, 1, pauseBitmap);
+            indexedLayer.drawString(0, 18, 1, "  Pause");
             break;
           case Autoplay:
-            matrix.drawForegroundMonoBitmap(12, 10, playBitmapWidth, playBitmapHeight, playBitmap, true);
-            matrix.drawForegroundString(0, 18, "Autoplay", true);
+            indexedLayer.drawMonoBitmap(12, 10, playBitmapWidth, playBitmapHeight, 1, playBitmap);
+            indexedLayer.drawString(0, 18, 1, "Autoplay");
             break;
           case Random:
-            matrix.drawForegroundMonoBitmap(12, 10, playBitmapWidth, playBitmapHeight, playBitmap, true);
-            matrix.drawForegroundString(0, 18, " Random", true);
+            indexedLayer.drawMonoBitmap(12, 10, playBitmapWidth, playBitmapHeight, 1, playBitmap);
+            indexedLayer.drawString(0, 18, 1, " Random");
             break;
         }
       }
       else if (visible) {
         char *name = currentMenuItem->name;
-        matrix.setScrollMode(wrapForwardFromLeft); /* wrapForward, bounceForward, bounceReverse, stopped, off, wrapForwardFromLeft */
-        matrix.setScrollSpeed(scrollSpeed);
-        matrix.setScrollFont(gohufont11b);
-        matrix.setScrollColor(menuColor);
-        matrix.setScrollOffsetFromTop(menuStart);
-        matrix.setBackgroundBrightness(backgroundBrightness);
-        matrix.scrollText(name, -1);
+        scrollingLayer.setMode(wrapForwardFromLeft); /* wrapForward, bounceForward, bounceReverse, stopped, off, wrapForwardFromLeft */
+        scrollingLayer.setSpeed(scrollSpeed);
+        scrollingLayer.setFont(gohufont11b);
+        scrollingLayer.setColor(menuColor);
+        scrollingLayer.setOffsetFromTop(menuStart);
+        backgroundLayer.setBrightness(backgroundBrightness);
+        scrollingLayer.start(name, -1);
       }
       else if (messageVisible) {
         char *name = messagePlayer.message;
-        matrix.setScrollMode(messagePlayer.scrollMode);
-        matrix.setScrollSpeed(messagePlayer.scrollSpeed);
-        matrix.setScrollFont(messagePlayer.getFont());
-        matrix.setScrollColor(messagePlayer.color);
-        matrix.setScrollOffsetFromTop(messagePlayer.offsetFromTop);
-        matrix.setBackgroundBrightness(backgroundBrightness);
-        matrix.scrollText(name, -1);
+        scrollingLayer.setMode(messagePlayer.scrollMode);
+        scrollingLayer.setSpeed(messagePlayer.scrollSpeed);
+        scrollingLayer.setFont(messagePlayer.getFont());
+        scrollingLayer.setColor(messagePlayer.color);
+        scrollingLayer.setOffsetFromTop(messagePlayer.offsetFromTop);
+        backgroundLayer.setBrightness(backgroundBrightness);
+        scrollingLayer.start(name, -1);
       }
       else if (clockVisible) {
-        matrix.scrollText("", 1);
-        matrix.setBackgroundBrightness(backgroundBrightness);
+        scrollingLayer.start("", 1);
+        backgroundLayer.setBrightness(backgroundBrightness);
       }
       else {
-        matrix.scrollText("", 1);
-        matrix.setBackgroundBrightness(255);
+        scrollingLayer.start("", 1);
+        backgroundLayer.setBrightness(255);
       }
 
       if (!visible && !showingPlayModeIndicator && !showingBrightnessIndicator && !showingAudioScaleIndicator && !showingPaletteIndicator && clockVisible) {
         clockDisplay.drawFrame();
       }
 
-      matrix.displayForegroundDrawing(false);
+      indexedLayer.swapBuffers();
     }
     else if (!visible && !showingPlayModeIndicator && !showingBrightnessIndicator && !showingAudioScaleIndicator && !showingPaletteIndicator && clockVisible) {
-      matrix.clearForeground();
+      indexedLayer.fillScreen(0);
 
       clockDisplay.drawFrame();
 
-      matrix.displayForegroundDrawing(false);
+      indexedLayer.swapBuffers();
     }
   }
 

@@ -30,13 +30,13 @@ class SettingsMoveClock : public Runnable {
   public:
     void run() {
       while (true) {
-        matrix.fillScreen(CRGB(CRGB::Black));
+        backgroundLayer.fillScreen(CRGB(CRGB::Black));
 
         clockDigitalShort.drawFrame();
         clockDigitalShort.drawMoveClockIndicator();
 
-        matrix.swapBuffers();
-        matrix.displayForegroundDrawing(false);
+        backgroundLayer.swapBuffers();
+        indexedLayer.swapBuffers();
 
         InputCommand command = readCommand(defaultHoldDelay);
 
@@ -66,9 +66,9 @@ class SettingsMoveClock : public Runnable {
     }
 
     unsigned int drawFrame() {
-      matrix.fillScreen(CRGB(CRGB::Black));
-      matrix.setFont(font3x5);
-      matrix.drawString(0, 27, { 255, 255, 255 }, versionText);
+      backgroundLayer.fillScreen(CRGB(CRGB::Black));
+      backgroundLayer.setFont(font3x5);
+      backgroundLayer.drawString(0, 27, { 255, 255, 255 }, versionText);
       return 0;
     }
 };

@@ -41,7 +41,7 @@ class PatternIncrementalDrift : public Drawable {
         uint8_t x = beatcos8((17 - i) * 2, MATRIX_CENTER_X - i, MATRIX_CENTER_X + i);
         uint8_t y = beatsin8((17 - i) * 2, MATRIX_CENTER_Y - i, MATRIX_CENTER_Y + i);
 
-        matrix.drawPixel(x, y, color);
+        backgroundLayer.drawPixel(x, y, color);
       }
 
       return 0;

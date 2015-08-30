@@ -36,9 +36,6 @@
 #include "SettingsUpdateFiles.h"
 //#include "SettingsDemoMode.h"
 
-#include "Externs.h"
-
-
 class Settings : public Runnable {
   private:
     Menu settingsMenu;
@@ -158,9 +155,6 @@ class Settings : public Runnable {
         }
       }
 
-      // matrix.setFont(font3x5);
-      // matrix.drawString(0, 27, { 255, 255, 255 }, "v1.5");
-
       if (result < 0) {
         result = 30;
       }
@@ -169,7 +163,7 @@ class Settings : public Runnable {
     }
 
     void start() {
-      matrix.fillScreen(CRGB(CRGB::Black));
+      backgroundLayer.fillScreen(CRGB(CRGB::Black));
       openImageFile();
     }
 
