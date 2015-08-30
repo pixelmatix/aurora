@@ -237,7 +237,7 @@ public:
     }
 
     strcpy(message, "");
-    color = CRGB(CRGB::Black);
+    color = CRGB(CRGB::White);
     offsetFromTop = 11;
     offsetFromLeft = 0;
     fontName = gohufont11b;
@@ -255,7 +255,7 @@ public:
       readJsonFile(file);
 
     if (!colorSpecified)
-      color =  CRGB(CRGB::Black);
+      color =  CRGB(CRGB::White);
 
     file.close();
 

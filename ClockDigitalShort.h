@@ -63,14 +63,14 @@ class ClockDigitalShort : public Drawable {
         else if (!twentyFourHour && hour == 0)
           hour = 12;
 
-        scrollingLayer.setFont(gohufont11b);
+        indexedLayer.setFont(gohufont11b);
         sprintf(timeBuffer, "%d:%02d", hour, time.Minute);
 
         if (hour < 10)
           x = 4;
       }
       else {
-        scrollingLayer.setFont(font3x5);
+        indexedLayer.setFont(font3x5);
         sprintf(timeBuffer, "No Clock");
       }
 

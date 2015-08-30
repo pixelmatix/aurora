@@ -101,7 +101,7 @@ class SettingsSetDate : public Runnable {
       int x = 0;
       int y = 13;
 
-      scrollingLayer.setFont(font3x5);
+      indexedLayer.setFont(font3x5);
 
       if (isTimeAvailable) {
         uint16_t year = time.Year + 1970;
@@ -116,8 +116,7 @@ class SettingsSetDate : public Runnable {
         sprintf(timeBuffer, "No Clock");
       }
 
-      scrollingLayer.setOffsetFromTop(MATRIX_HEIGHT);
-      scrollingLayer.setColor(clockDisplay.color);
+      indexedLayer.setIndexedColor(1, clockDisplay.color);
       indexedLayer.fillScreen(0);
 
       // draw the date

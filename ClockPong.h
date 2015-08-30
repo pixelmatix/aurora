@@ -78,9 +78,8 @@ public:
   }
 
   unsigned int drawFrame() {
-    scrollingLayer.setOffsetFromTop(MATRIX_HEIGHT);
-    scrollingLayer.setColor(clockText.color);
-    scrollingLayer.setFont(font3x5);
+    indexedLayer.setIndexedColor(1, clockText.color);
+    indexedLayer.setFont(font3x5);
     indexedLayer.fillScreen(0);
 
     //draw pitch centre line
@@ -94,7 +93,7 @@ public:
       indexedLayer.drawPixel(16, 4, 1);
     }
 
-    scrollingLayer.setFont(font3x5);
+    indexedLayer.setFont(font3x5);
     char buffer[3];
 
     sprintf(buffer, "%02d", hours);

@@ -32,9 +32,8 @@ class SettingsDemoMode : public Runnable {
       while (true) {
         backgroundLayer.fillScreen(CRGB(CRGB::Black));
 
-        scrollingLayer.setOffsetFromTop(MATRIX_HEIGHT);
-        scrollingLayer.setFont(font3x5);
-        scrollingLayer.setColor({ 255, 255, 255 });
+        indexedLayer.setFont(font3x5);
+        indexedLayer.setIndexedColor({ 255, 255, 255 });
         indexedLayer.fillScreen(0);
 
         switch (demoMode) {

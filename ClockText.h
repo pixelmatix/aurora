@@ -77,9 +77,8 @@ class ClockText : public Drawable {
     }
 
     unsigned int drawFrame(const int cy) {
-      scrollingLayer.setOffsetFromTop(MATRIX_HEIGHT);
-      scrollingLayer.setColor(color);
-      scrollingLayer.setFont(font3x5);
+      indexedLayer.setIndexedColor(1, color);
+      indexedLayer.setFont(font3x5);
       indexedLayer.fillScreen(0);
 
       int x = 1;

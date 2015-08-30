@@ -70,9 +70,8 @@ class SettingsBrightness : public Runnable {
 
         sprintf(text, "%3d%%", level);
 
-        scrollingLayer.setOffsetFromTop(MATRIX_HEIGHT);
-        scrollingLayer.setFont(gohufont11b);
-        scrollingLayer.setColor({ 255, 255, 255 });
+        indexedLayer.setFont(gohufont11b);
+        indexedLayer.setIndexedColor(0, CRGB(CRGB::White));
         indexedLayer.fillScreen(0);
         indexedLayer.drawString(4, 11, 1, text);
         indexedLayer.swapBuffers();

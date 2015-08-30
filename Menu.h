@@ -459,12 +459,12 @@ private:
 
       indexedLayer.fillScreen(0);
 
+      scrollingLayer.start("", 1);
+        
       if (brightnessChanged || showingBrightnessIndicator) {
         brightnessChanged = false;
-        scrollingLayer.setFont(gohufont11b);
-        scrollingLayer.setColor(menuColor);
-        scrollingLayer.setOffsetFromTop(MATRIX_HEIGHT);
-        backgroundLayer.setBrightness(backgroundBrightness);
+        indexedLayer.setFont(gohufont11b);
+        indexedLayer.setIndexedColor(1, menuColor);
 
         int level = ((float) getBrightnessLevel() / (float) (brightnessCount - 1)) * 100;
         if (level < 1 && brightness > 0)
@@ -477,10 +477,8 @@ private:
       }
       else if (audioScaleChanged || showingAudioScaleIndicator) {
         audioScaleChanged = false;
-        scrollingLayer.setFont(font3x5);
-        scrollingLayer.setColor(menuColor);
-        scrollingLayer.setOffsetFromTop(MATRIX_HEIGHT);
-        backgroundLayer.setBrightness(backgroundBrightness);
+        indexedLayer.setFont(font3x5);
+        indexedLayer.setIndexedColor(1, menuColor);
 
         char text[8];
         if (audioScale == 0)
@@ -492,19 +490,15 @@ private:
       }
       else if (paletteChanged || showingPaletteIndicator) {
         paletteChanged = false;
-        scrollingLayer.setFont(font3x5);
-        scrollingLayer.setColor(menuColor);
-        scrollingLayer.setOffsetFromTop(MATRIX_HEIGHT);
-        backgroundLayer.setBrightness(backgroundBrightness);
+        indexedLayer.setFont(font3x5);
+        indexedLayer.setIndexedColor(1, menuColor);
 
         indexedLayer.drawString(0, 14, 1, effects.currentPaletteName);
       }
       else if (showingPatternIndicator) {
         if (isPlaylist) {
-          scrollingLayer.setFont(font3x5);
-          scrollingLayer.setColor(menuColor);
-          scrollingLayer.setOffsetFromTop(MATRIX_HEIGHT);
-          backgroundLayer.setBrightness(backgroundBrightness);
+          indexedLayer.setFont(font3x5);
+          indexedLayer.setIndexedColor(1, menuColor);
 
           int currentIndex = currentPlaylist->getCurrentIndex();
           char currentItemName[10];
@@ -515,10 +509,8 @@ private:
       }
       else if (playModeChanged || showingPlayModeIndicator) {
         playModeChanged = false;
-        scrollingLayer.setFont(font3x5);
-        scrollingLayer.setColor(menuColor);
-        scrollingLayer.setOffsetFromTop(MATRIX_HEIGHT);
-        backgroundLayer.setBrightness(backgroundBrightness);
+        indexedLayer.setFont(font3x5);
+        indexedLayer.setIndexedColor(1, menuColor);
 
         switch (playMode) {
           case Paused:
@@ -542,27 +534,23 @@ private:
         scrollingLayer.setFont(gohufont11b);
         scrollingLayer.setColor(menuColor);
         scrollingLayer.setOffsetFromTop(menuStart);
-        backgroundLayer.setBrightness(backgroundBrightness);
         scrollingLayer.start(name, -1);
       }
       else if (messageVisible) {
-        char *name = messagePlayer.message;
+        char *message = messagePlayer.message;
         scrollingLayer.setMode(messagePlayer.scrollMode);
         scrollingLayer.setSpeed(messagePlayer.scrollSpeed);
         scrollingLayer.setFont(messagePlayer.getFont());
         scrollingLayer.setColor(messagePlayer.color);
         scrollingLayer.setOffsetFromTop(messagePlayer.offsetFromTop);
-        backgroundLayer.setBrightness(backgroundBrightness);
-        scrollingLayer.start(name, -1);
+        scrollingLayer.start(message, -1);
       }
-      else if (clockVisible) {
-        scrollingLayer.start("", 1);
-        backgroundLayer.setBrightness(backgroundBrightness);
-      }
-      else {
-        scrollingLayer.start("", 1);
-        backgroundLayer.setBrightness(255);
-      }
+//      else if (clockVisible) {
+//        scrollingLayer.start("", 1);
+//      }
+//      else {
+//        scrollingLayer.start("", 1);
+//      }
 
       if (!visible && !showingPlayModeIndicator && !showingBrightnessIndicator && !showingAudioScaleIndicator && !showingPaletteIndicator && clockVisible) {
         clockDisplay.drawFrame();

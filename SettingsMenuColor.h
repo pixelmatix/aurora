@@ -111,9 +111,9 @@ class SettingsMenuColor : public Runnable {
         // draw the clock numbers at the bottom, so we can see the selected color better, without leaving the settings item
         menuColor = selectedColor;
 
-        scrollingLayer.setColor(selectedColor);
+        indexedLayer.setIndexedColor(1, selectedColor);
         indexedLayer.fillScreen(0);
-        scrollingLayer.setFont(gohufont11b);
+        indexedLayer.setFont(gohufont11b);
 
         if (cursorY >= 18) {
           indexedLayer.drawString(0, 0, 1, "Menu");
@@ -175,7 +175,7 @@ class SettingsMenuColor : public Runnable {
     unsigned int drawFrame() {
       backgroundLayer.fillScreen(CRGB(CRGB::Black));
       backgroundLayer.setFont(font3x5);
-      indexedLayer.drawString(0, 27, 1, versionText);
+      backgroundLayer.drawString(0, 27, { 255, 255, 255 }, versionText);
       return 0;
     }
 

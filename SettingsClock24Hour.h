@@ -54,9 +54,8 @@ class SettingsClock24Hour : public Runnable {
 
         y += 3;
 
-        scrollingLayer.setFont(font3x5);
-        scrollingLayer.setOffsetFromTop(MATRIX_HEIGHT);
-        scrollingLayer.setColor(clockDisplay.color);
+        indexedLayer.setFont(font3x5);
+        indexedLayer.setIndexedColor(1, clockDisplay.color);
         indexedLayer.fillScreen(0);
         indexedLayer.drawString(x, y, 1, timeBuffer);
 
