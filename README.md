@@ -20,7 +20,7 @@ Features
 Demo Video
 -------------------------
 
-[![SmartMatrix Demo Video](https://i.vimeocdn.com/video/518191599_295x166.webp)](https://vimeo.com/user5888427/smartmatrixoverview)
+[![SmartMatrix Demo Video](http://docs.pixelmatix.com/SmartMatrix/photos/GithubAuroraReadmeVimeoLink.png)](https://vimeo.com/user5888427/smartmatrixoverview)
 
 Installation
 ------------
