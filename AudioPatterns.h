@@ -114,7 +114,7 @@ class AudioPatterns : public Playlist {
 
         CRGB color = effects.ColorFromCurrentPalette(level / 4);
         //            backgroundLayer.drawCircle(15, 15, i * 2 + 0, color);
-        backgroundLayer.drawCircle(15, 15, i * 2 + 1, color);
+        backgroundLayer.drawCircle(MATRIX_CENTRE_X, MATRIX_CENTRE_Y, i * 2 + 1, color);
       }
     }
 
@@ -251,7 +251,7 @@ class AudioPatterns : public Playlist {
     }
 
     void lineChartWithSpiral() {
-      effects.SpiralStream(15, 15, 16, 120);
+      effects.SpiralStream(MATRIX_CENTRE_X, MATRIX_CENTRE_Y, MATRIX_WIDTH / 2, 120);
       analyzerLinesByIntensity();
     }
 
@@ -285,7 +285,7 @@ class AudioPatterns : public Playlist {
     }
 
     void analyzerColumnsWithOneLargeSpiralStream() {
-      effects.SpiralStream(15, 15, 16, 120);
+      effects.SpiralStream(MATRIX_CENTRE_X, MATRIX_CENTRE_Y, MATRIX_WIDTH / 2, 120);
       analyzerColumnsByIntensity();
     }
 
@@ -299,7 +299,7 @@ class AudioPatterns : public Playlist {
         int level = interpolatedLevels[x / horizontalPixelsPerBand];
 
         CRGB color = effects.ColorFromCurrentPalette(x * 40);
-        backgroundLayer.drawLine(x, MATRIX_HEIGHT - level / MATRIX_HEIGHT, x, 31, color);
+        backgroundLayer.drawLine(x, MATRIX_HEIGHT - level / MATRIX_HEIGHT, x, MATRIX_HEIGHT - 1, color);
       }
     }
 
@@ -309,7 +309,7 @@ class AudioPatterns : public Playlist {
 
         CRGB color = effects.ColorFromCurrentPalette(level / 4);
 
-        backgroundLayer.drawLine(x, MATRIX_HEIGHT - level / MATRIX_HEIGHT, x, 31, color);
+        backgroundLayer.drawLine(x, (MATRIX_HEIGHT - 1) - level / levelsPerVerticalPixel, x, MATRIX_HEIGHT - 1, color);
       }
     }
 
@@ -487,8 +487,8 @@ class AudioPatterns : public Playlist {
       effects.DimAll(235);
       //      effects.SpiralStream(15, 15, 16, 120);
 
-      int x0 = 15;
-      int y0 = 15;
+      int x0 = MATRIX_CENTRE_X;
+      int y0 = MATRIX_CENTRE_Y;
       int linesPerBand = 2;
 
       if (linesPerBand * bandCount > 32)
@@ -503,7 +503,7 @@ class AudioPatterns : public Playlist {
 
         for (int i = 0; i < linesPerBand; i++) {
           CRGB color = effects.ColorFromCurrentPalette(level / 4);
-          float length = level / 64.0 - 1.0;
+          float length = level / (float)((float)MATRIX_WIDTH / 2.0) - 1.0;
           if (length > 0.0) {
             float radians = radians(angle);
             int x1 = x0 + length * sin(radians);

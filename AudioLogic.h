@@ -42,7 +42,7 @@ const int bandCount = 7;
 // the 10Bit (0-1023) audio band values
 int levels[bandCount];
 int peaks[bandCount];
-static const int defaultPeakDecay = 8;
+static const int defaultPeakDecay = (1024 / MATRIX_HEIGHT) / 4;
 int peakDecay = defaultPeakDecay;
 bool drawPeaks = true;
 
@@ -55,6 +55,8 @@ const uint8_t interpolatedBandCount = 16;
 int interpolatedLevels[interpolatedBandCount];
 
 int horizontalPixelsPerBand = MATRIX_WIDTH / interpolatedBandCount;
+
+int levelsPerVerticalPixel = 1024 / MATRIX_HEIGHT;
 
 // AGC scale adjustment parameters
 // adjust these thresholds to control at what level the scale is adjusted
