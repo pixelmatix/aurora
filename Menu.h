@@ -33,7 +33,7 @@ public:
     Random,
   };
 
-  int menuStart = 11;
+  int menuStart = MATRIX_HEIGHT / 2 - 4; // 11;
   MenuItem* currentMenuItem;
   Playlist* currentPlaylist;
   bool isPlaylist = false;
