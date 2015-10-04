@@ -211,7 +211,7 @@ class AudioPatterns : public Playlist {
         int level = interpolatedLevels[x / horizontalPixelsPerBand];
 
         uint8_t colorIndex = level / 4;
-        uint8_t y = MATRIX_HEIGHT - level / MATRIX_HEIGHT;
+        uint8_t y = (MATRIX_HEIGHT - 1) - level / levelsPerVerticalPixel;
         effects.Pixel(x, y, colorIndex);
       }
     }
@@ -299,7 +299,7 @@ class AudioPatterns : public Playlist {
         int level = interpolatedLevels[x / horizontalPixelsPerBand];
 
         CRGB color = effects.ColorFromCurrentPalette(x * 40);
-        backgroundLayer.drawLine(x, MATRIX_HEIGHT - level / MATRIX_HEIGHT, x, MATRIX_HEIGHT - 1, color);
+        backgroundLayer.drawLine(x, (MATRIX_HEIGHT - 1) - level / levelsPerVerticalPixel, x, MATRIX_HEIGHT - 1, color);
       }
     }
 
@@ -320,8 +320,8 @@ class AudioPatterns : public Playlist {
 
         CRGB color = effects.ColorFromCurrentPalette(level / 4);
 
-        uint8_t y = MATRIX_HEIGHT - level / MATRIX_HEIGHT;
-        uint8_t nextY = MATRIX_HEIGHT - nextLevel / MATRIX_HEIGHT;
+        uint8_t y = (MATRIX_HEIGHT - 1) - level / levelsPerVerticalPixel;
+        uint8_t nextY = (MATRIX_HEIGHT - 1) - nextLevel / levelsPerVerticalPixel;
 
         y = y >= MATRIX_HEIGHT ? MATRIX_HEIGHT - 1 : y;
         nextY = nextY >= MATRIX_HEIGHT ? MATRIX_HEIGHT - 1 : nextY;
@@ -342,10 +342,10 @@ class AudioPatterns : public Playlist {
 
         uint8_t colorIndex = level / 4;
 
-        uint8_t y = (MATRIX_HEIGHT / 2) - level / (MATRIX_HEIGHT * 2);
+        uint8_t y = MATRIX_CENTER_Y - level / (1024 / MATRIX_CENTER_Y);
         effects.Pixel(x, y, colorIndex);
 
-        y = (MATRIX_HEIGHT / 2) + level / (MATRIX_HEIGHT * 2);
+        y = MATRIX_CENTER_Y + level / (1024 / MATRIX_CENTER_Y);
         effects.Pixel(x, y, colorIndex);
       }
 
@@ -1045,7 +1045,7 @@ class AudioPatterns : public Playlist {
         for (uint8_t x = 0; x < MATRIX_WIDTH; x++) {
           int level = interpolatedLevels[x / horizontalPixelsPerBand];
 
-          effects.leds[XY(x, y)] += effects.ColorFromCurrentPalette(level / 5, y * 8 + 7);
+          effects.leds[XY(x, y)] += effects.ColorFromCurrentPalette(level / 5, y * (256 / MATRIX_HEIGHT));
         }
       }
 
