@@ -45,7 +45,7 @@ class PatternSpiro : public Drawable {
     }
 
     unsigned int drawFrame() {
-      effects.DimAll(254);
+      effects.DimAll(250);
 
       for (int i = 0; i < spirocount; i++) {
         uint8_t x = mapsin8(theta1 + i * spirooffset, minx, maxx);
@@ -58,16 +58,26 @@ class PatternSpiro : public Drawable {
         effects.leds[XY(x2, y2)] += color;
       }
 
-      theta2 += 1;
+      theta2 += 2;
 
-      EVERY_N_MILLIS(25) {
+      EVERY_N_MILLIS(12) {
         theta1 += 1;
 
-        if (theta1 == 64 || theta1 == 192) {
-          if (spirocount == 16 || spirocount == 1) spiroincrement = !spiroincrement;
+        if (theta1 == 128) {
+          if (spirocount >= 64 || spirocount == 1) spiroincrement = !spiroincrement;
 
-          if (spiroincrement) spirocount++;
-          else spirocount--;
+          if (spiroincrement) {
+            if(spirocount >= 4)
+              spirocount *= 2;
+            else
+              spirocount += 1;
+          }
+          else {
+            if(spirocount >= 4)
+              spirocount /= 2;
+            else
+              spirocount -= 1;
+          }
 
           spirooffset = 256 / spirocount;
         }

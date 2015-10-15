@@ -42,7 +42,7 @@ const int bandCount = 7;
 // the 10Bit (0-1023) audio band values
 int levels[bandCount];
 int peaks[bandCount];
-static const int defaultPeakDecay = (1024 / MATRIX_HEIGHT) / 4;
+static const int defaultPeakDecay = (1024 / MATRIX_HEIGHT) / 2;
 int peakDecay = defaultPeakDecay;
 bool drawPeaks = true;
 
