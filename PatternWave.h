@@ -30,17 +30,17 @@ private:
     byte theta = 0;
 
     byte hueUpdate = 0;
-    byte hueUpdateFrequency = 5;
+    byte hueUpdateFrequency = 0;
     byte hue = 0;
 
     byte rotation = 0;
 
-    int scale = 256 / MATRIX_WIDTH;
+    uint8_t scale = 256 / MATRIX_WIDTH;
 
-    int maxX = MATRIX_WIDTH - 1;
-    int maxY = MATRIX_HEIGHT - 1;
+    uint8_t maxX = MATRIX_WIDTH - 1;
+    uint8_t maxY = MATRIX_HEIGHT - 1;
 
-    int waveCount = 1;
+    uint8_t waveCount = 1;
 
 public:
     PatternWave() {
