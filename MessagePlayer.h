@@ -23,8 +23,6 @@
 #ifndef MessagePlayer_H
 #define MessagePlayer_H
 
-#include "Externs.h"
-
 class MessagePlayer {
 private:
   const char* path;
@@ -239,7 +237,7 @@ public:
     }
 
     strcpy(message, "");
-    color = { 0, 0, 0 };
+    color = CRGB(CRGB::White);
     offsetFromTop = 11;
     offsetFromLeft = 0;
     fontName = gohufont11b;
@@ -257,7 +255,7 @@ public:
       readJsonFile(file);
 
     if (!colorSpecified)
-      color = { 255, 255, 255 };
+      color =  CRGB(CRGB::White);
 
     file.close();
 

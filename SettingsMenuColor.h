@@ -23,8 +23,6 @@
 #ifndef SettingsMenuColor_H
 #define SettingsMenuColor_H
 
-#include "Externs.h"
-
 class SettingsMenuColor : public Runnable {
   private:
     int cursorX = 0;
@@ -61,7 +59,7 @@ class SettingsMenuColor : public Runnable {
 
     void run() {
       while (true) {
-        matrix.fillScreen(CRGB(CRGB::Black));
+        backgroundLayer.fillScreen(CRGB(CRGB::Black));
 
         // draw an RGB grid, Hue from 0 to 248 left to right (256 is the same as 0)
         // Saturation from 15 (mostly white) to 255 (fully-saturated color) top to middle (0 to 16), skipping 0 which is white and will be handled in the right-most column)
@@ -81,7 +79,7 @@ class SettingsMenuColor : public Runnable {
             }
 
             hsv2rgb_rainbow(chsv, crgb);
-            matrix.drawPixel(x, y, crgb);
+            backgroundLayer.drawPixel(x, y, crgb);
 
             if (x == cursorX && y == cursorY)
               selectedColor = crgb;
@@ -94,7 +92,7 @@ class SettingsMenuColor : public Runnable {
         for (int y = 0; y < MATRIX_HEIGHT; y += 1) {
           chsv = CHSV(0, 0, 255 - y * 6);
           hsv2rgb_rainbow(chsv, crgb);
-          matrix.drawPixel(x, y, crgb);
+          backgroundLayer.drawPixel(x, y, crgb);
 
           if (x == cursorX && y == cursorY)
             selectedColor = crgb;
@@ -104,28 +102,28 @@ class SettingsMenuColor : public Runnable {
         uint8_t v = cursorY * 8;
         crgb = CRGB(v, v, v);
         // horizontal cursor lines
-        matrix.drawLine(cursorX - 4, cursorY, cursorX - 2, cursorY, crgb);
-        matrix.drawLine(cursorX + 4, cursorY, cursorX + 2, cursorY, crgb);
+        backgroundLayer.drawLine(cursorX - 4, cursorY, cursorX - 2, cursorY, crgb);
+        backgroundLayer.drawLine(cursorX + 4, cursorY, cursorX + 2, cursorY, crgb);
         // vertical cursor lines
-        matrix.drawLine(cursorX, cursorY - 4, cursorX, cursorY - 2, crgb);
-        matrix.drawLine(cursorX, cursorY + 4, cursorX, cursorY + 2, crgb);
+        backgroundLayer.drawLine(cursorX, cursorY - 4, cursorX, cursorY - 2, crgb);
+        backgroundLayer.drawLine(cursorX, cursorY + 4, cursorX, cursorY + 2, crgb);
 
         // draw the clock numbers at the bottom, so we can see the selected color better, without leaving the settings item
         menuColor = selectedColor;
 
-        matrix.setScrollColor(selectedColor);
-        matrix.clearForeground();
-        matrix.setForegroundFont(gohufont11b);
+        indexedLayer.setIndexedColor(1, selectedColor);
+        indexedLayer.fillScreen(0);
+        indexedLayer.setFont(gohufont11b);
 
         if (cursorY >= 18) {
-          matrix.drawForegroundString(0, 0, "Menu");
+          indexedLayer.drawString(0, 0, 1, "Menu");
         }
         else {
-          matrix.drawForegroundString(0, 23, "Menu");
+          indexedLayer.drawString(0, 23, 1, "Menu");
         }
 
-        matrix.displayForegroundDrawing(false);
-        matrix.swapBuffers();
+        indexedLayer.swapBuffers();
+        backgroundLayer.swapBuffers();
 
         InputCommand command = readCommand(defaultHoldDelay);
 
@@ -175,9 +173,9 @@ class SettingsMenuColor : public Runnable {
     }
 
     unsigned int drawFrame() {
-      matrix.fillScreen(CRGB(CRGB::Black));
-      matrix.setFont(font3x5);
-      matrix.drawString(0, 27, { 255, 255, 255 }, versionText);
+      backgroundLayer.fillScreen(CRGB(CRGB::Black));
+      backgroundLayer.setFont(font3x5);
+      backgroundLayer.drawString(0, 27, { 255, 255, 255 }, versionText);
       return 0;
     }
 

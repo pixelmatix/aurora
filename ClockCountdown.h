@@ -26,8 +26,6 @@
 #ifndef ClockCountdown_H
 #define ClockCountdown_H
 
-#include "Aurora.h"
-#include "Externs.h"
 
 
 class ClockCountdown : public Drawable {
@@ -84,15 +82,56 @@ public:
       sprintf(timeBuffer, "No Clock");
     }
 
-    matrix.clearForeground();
+    indexedLayer.fillScreen(0);
     clockDigitalShort.drawFrame(0);
 
-    matrix.setForegroundFont(font3x5);
-    matrix.setScrollOffsetFromTop(MATRIX_HEIGHT);
-    matrix.setScrollColor(clockDigitalShort.color);
-    matrix.drawForegroundString(1, 26, timeBuffer, true);
+    indexedLayer.setFont(font3x5);
+    indexedLayer.setIndexedColor(1, clockDigitalShort.color);
+    indexedLayer.drawString(1, 26, 1, timeBuffer);
 
     return 0;
+  }
+  
+  tmElements_t loadDateTimeSetting(const char* name) {
+    tmElements_t value;
+  
+    if (!sdAvailable)
+      return value;
+  
+    if (!SD.exists(auroraPath)) {
+      SD.mkdir(auroraPath);
+    }
+  
+    char filepath[20];
+    strcpy(filepath, auroraPath);
+    strcat(filepath, name);
+  
+    File file = SD.open(filepath, FILE_READ);
+    if (file) {
+      char c;
+      value.Year = CalendarYrToTm(readIntB(file, 4));
+      if (c >= 0) value.Month = readIntB(file, 2);
+      if (c >= 0) value.Day = readIntB(file, 2);
+      if (c >= 0) value.Hour = readIntB(file, 2);
+      if (c >= 0) value.Minute = readIntB(file, 2);
+      if (c >= 0) value.Second = readIntB(file, 2);
+  
+      file.close();
+    }
+  
+    return value;
+  }
+  
+  int readIntB(File &file, uint8_t maxLength) {
+    String text;
+    char c = file.read();
+    int length = 1;
+    while (c >= 0 && length <= maxLength) {
+      text.append(c);
+      c = file.read();
+      length++;
+    }
+    return text.toInt();
   }
 
   void loadSettings() {

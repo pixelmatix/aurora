@@ -27,10 +27,8 @@
 #define GifPlayer_H
 
 #define DEBUG 0
-#include "Aurora.h"
-#include "pixeltypes.h"
 
-#include "Externs.h"
+#include "pixeltypes.h"
 
 class GifPlayer {
   public:
@@ -391,7 +389,7 @@ class GifPlayer {
       }
       // Don't clear matrix screen for these disposal methods
       if ((prevDisposalMethod != DISPOSAL_NONE) && (prevDisposalMethod != DISPOSAL_LEAVE)) {
-        matrix.fillScreen({ 0, 0, 0 });
+        backgroundLayer.fillScreen({ 0, 0, 0 });
       }
 
       // Process previous disposal method
@@ -688,11 +686,11 @@ the_end:
           color.blue = gifPalette[pixel].Blue;
 
           // Draw the pixel
-          matrix.drawPixel(x, y, color);
+          backgroundLayer.drawPixel(x, y, color);
         }
       }
       //// Make animation frame visible
-      //matrix.swapBuffers();
+      //backgroundLayer.swapBuffers();
     }
 
   public:

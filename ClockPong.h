@@ -36,8 +36,7 @@
 #define BAT1_X 2                         // Pong left bat x pos (this is where the ball collision occurs, the bat is drawn 1 behind these coords)
 #define BAT2_X 28
 
-#include "Aurora.h"
-#include "Externs.h"
+
 
 class ClockPong : public Drawable {
 private:
@@ -79,36 +78,35 @@ public:
   }
 
   unsigned int drawFrame() {
-    matrix.setScrollOffsetFromTop(MATRIX_HEIGHT);
-    matrix.setScrollColor(clockText.color);
-    matrix.setForegroundFont(font3x5);
-    matrix.clearForeground();
+    indexedLayer.setIndexedColor(1, clockText.color);
+    indexedLayer.setFont(font3x5);
+    indexedLayer.fillScreen(0);
 
     //draw pitch centre line
     for (byte i = 0; i < 16; i += 2) {
-      matrix.drawForegroundPixel(16, i);
+      indexedLayer.drawPixel(16, i, 1);
     }
 
     // draw hh:mm seperator colon that blinks once per second
     if (time.Second % 2 == 0) {
-      matrix.drawForegroundPixel(16, 2);
-      matrix.drawForegroundPixel(16, 4);
+      indexedLayer.drawPixel(16, 2, 1);
+      indexedLayer.drawPixel(16, 4, 1);
     }
 
-    matrix.setForegroundFont(font3x5);
+    indexedLayer.setFont(font3x5);
     char buffer[3];
 
     sprintf(buffer, "%02d", hours);
-    matrix.drawForegroundString(8, 1, buffer);
+    indexedLayer.drawString(8, 1, 1, buffer);
 
     sprintf(buffer, "%02d", mins);
-    matrix.drawForegroundString(18, 1, buffer);
+    indexedLayer.drawString(18, 1, 1, buffer);
 
     //plot the ball on the screen
     byte plot_x = (int) (ballpos_x + 0.5f);
     byte plot_y = (int) (ballpos_y + 0.5f);
 
-    matrix.drawForegroundPixel(plot_x, plot_y);
+    indexedLayer.drawPixel(plot_x, plot_y, 1);
 
     fillForegroundRectangle(BAT1_X - 1, bat1_y, BAT1_X, bat1_y + 5);
 

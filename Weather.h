@@ -105,7 +105,7 @@ class Weather : public Playlist {
     }
 
     void start() {
-      matrix.fillScreen(CRGB(CRGB::Black));
+      backgroundLayer.fillScreen(CRGB(CRGB::Black));
       openImageFile(types[type]);
     }
 
@@ -124,20 +124,20 @@ class Weather : public Playlist {
         }
       }
       else {
-        matrix.fillScreen({0, 0, 0});
+        backgroundLayer.fillScreen({0, 0, 0});
       }
 
       if (result < 0) {
         result = 30;
       }
 
-      matrix.setFont(font3x5);
+      indexedLayer.setFont(font3x5);
 
       char temp[4];
       sprintf(temp, "%d", temperature);
 
       // draw the date
-      matrix.drawString(1, 27, clockDisplay.color, temp);
+      indexedLayer.drawString(1, 27, 1, temp);
 
       return result;
     }

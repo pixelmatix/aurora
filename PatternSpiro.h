@@ -39,6 +39,8 @@ class PatternSpiro : public Drawable {
     uint8_t spirooffset = 256 / spirocount;
     boolean spiroincrement = false;
 
+    boolean handledChange = false;
+
   public:
     PatternSpiro() {
       name = (char *)"Spiro";
@@ -47,6 +49,8 @@ class PatternSpiro : public Drawable {
     unsigned int drawFrame() {
       effects.DimAll(254);
 
+      boolean change = false;
+      
       for (int i = 0; i < spirocount; i++) {
         uint8_t x = mapsin8(theta1 + i * spirooffset, minx, maxx);
         uint8_t y = mapcos8(theta1 + i * spirooffset, miny, maxy);
@@ -56,21 +60,40 @@ class PatternSpiro : public Drawable {
 
         CRGB color = effects.ColorFromCurrentPalette(hueoffset + i * spirooffset, 128);
         effects.leds[XY(x2, y2)] += color;
+        
+        if((x2 == MATRIX_CENTER_X && y2 == MATRIX_CENTER_Y) ||
+           (x2 == MATRIX_CENTRE_X && y2 == MATRIX_CENTRE_Y)) change = true;
       }
 
       theta2 += 1;
 
       EVERY_N_MILLIS(25) {
         theta1 += 1;
+      }
 
-        if (theta1 == 64 || theta1 == 192) {
-          if (spirocount == 16 || spirocount == 1) spiroincrement = !spiroincrement;
+      EVERY_N_MILLIS(100) {
+        if (change && !handledChange) {
+          handledChange = true;
+          
+          if (spirocount >= MATRIX_WIDTH || spirocount == 1) spiroincrement = !spiroincrement;
 
-          if (spiroincrement) spirocount++;
-          else spirocount--;
+          if (spiroincrement) {
+            if(spirocount >= 4)
+              spirocount *= 2;
+            else
+              spirocount += 1;
+          }
+          else {
+            if(spirocount > 4)
+              spirocount /= 2;
+            else
+              spirocount -= 1;
+          }
 
           spirooffset = 256 / spirocount;
         }
+        
+        if(!change) handledChange = false;
       }
 
       EVERY_N_MILLIS(33) {

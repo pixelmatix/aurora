@@ -77,27 +77,27 @@ public:
   unsigned int drawFrame() {
     clockDisplay.readTime();
 
-    matrix.fillScreen(black);
+    backgroundLayer.fillScreen(black);
 
     //draw pitch centre line
     for (byte i = 0; i < 16; i += 2) {
-      matrix.drawPixel(16, i, white);
+      backgroundLayer.drawPixel(16, i, white);
     }
 
     // draw hh:mm seperator colon that blinks once per second
     if (time.Second % 2 == 0) {
-      matrix.drawPixel(16, 2, gray);
-      matrix.drawPixel(16, 4, gray);
+      backgroundLayer.drawPixel(16, 2, gray);
+      backgroundLayer.drawPixel(16, 4, gray);
     }
 
-    matrix.setFont(font3x5);
+    backgroundLayer.setFont(font3x5);
     char buffer[3];
 
     sprintf(buffer, "%02d", hours);
-    matrix.drawString(8, 1, white, buffer);
+    backgroundLayer.drawString(8, 1, white, buffer);
 
     sprintf(buffer, "%02d", mins);
-    matrix.drawString(18, 1, white, buffer);
+    backgroundLayer.drawString(18, 1, white, buffer);
 
     //if restart flag is 1, setup a new game
     if (restart) {
@@ -220,7 +220,7 @@ public:
 
     //draw bat 1
     //      if (bat1_update) {
-    matrix.fillRectangle(BAT1_X - 1, bat1_y, BAT1_X, bat1_y + 5, white);
+    backgroundLayer.fillRectangle(BAT1_X - 1, bat1_y, BAT1_X, bat1_y + 5, white);
     //      }
 
     //move bat 2 towards target (dont go any further or bat will move off screen)
@@ -238,7 +238,7 @@ public:
 
     //draw bat2
     //      if (bat2_update) {
-    matrix.fillRectangle(BAT2_X + 1, bat2_y, BAT2_X + 2, bat2_y + 5, white);
+    backgroundLayer.fillRectangle(BAT2_X + 1, bat2_y, BAT2_X + 2, bat2_y + 5, white);
     //      }
 
     //update the ball position using the velocity
@@ -357,7 +357,7 @@ public:
     byte plot_x = (int) (ballpos_x + 0.5f);
     byte plot_y = (int) (ballpos_y + 0.5f);
 
-    matrix.drawPixel(plot_x, plot_y, white);
+    backgroundLayer.drawPixel(plot_x, plot_y, white);
 
     //check if a bat missed the ball. if it did, reset the game.
     if ((int) ballpos_x == 0 || (int) ballpos_x == 32) {

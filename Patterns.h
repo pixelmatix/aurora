@@ -113,7 +113,6 @@ class Patterns : public Playlist {
 
     Drawable* items[PATTERN_COUNT] = {
       //&pongClock,
-      &rainbowFlag,
       &spiro,
       &paletteSmear,
       &multipleStream8,
@@ -132,6 +131,7 @@ class Patterns : public Playlist {
       &spin,
       &simplexNoise,
       &wave,
+      &rainbowFlag,
       &attract,
       &analogClock,
       &swirl,

@@ -47,7 +47,7 @@ class SettingsAudioCalibration : public Runnable {
       audioScale = 1;
 
       while (true) {
-        matrix.fillScreen(CRGB(CRGB::Black));
+        backgroundLayer.fillScreen(CRGB(CRGB::Black));
 
         ReadAudio();
 
@@ -62,7 +62,7 @@ class SettingsAudioCalibration : public Runnable {
             if (mode == manualMode && !selectingMode) {
               char text[4];
               sprintf(text, "%d", correction[i]);
-              matrix.drawString(1, 1, { 255, 0, 0 }, text);
+              backgroundLayer.drawString(1, 1, { 255, 0, 0 }, text);
             }
           }
           else if (mode == autoMode && !selectingMode) {
@@ -74,24 +74,24 @@ class SettingsAudioCalibration : public Runnable {
             }
           }
 
-          matrix.drawLine(i * 4 + 2, MATRIX_HEIGHT - level / MATRIX_HEIGHT, i * 4 + 2, 31, color);
-          matrix.drawLine(i * 4 + 3, MATRIX_HEIGHT - level / MATRIX_HEIGHT, i * 4 + 3, 31, color);
-          matrix.drawLine(i * 4 + 4, MATRIX_HEIGHT - level / MATRIX_HEIGHT, i * 4 + 4, 31, color);
-          matrix.drawLine(i * 4 + 5, MATRIX_HEIGHT - level / MATRIX_HEIGHT, i * 4 + 5, 31, color);
+          backgroundLayer.drawLine(i * 4 + 2, MATRIX_HEIGHT - level / MATRIX_HEIGHT, i * 4 + 2, 31, color);
+          backgroundLayer.drawLine(i * 4 + 3, MATRIX_HEIGHT - level / MATRIX_HEIGHT, i * 4 + 3, 31, color);
+          backgroundLayer.drawLine(i * 4 + 4, MATRIX_HEIGHT - level / MATRIX_HEIGHT, i * 4 + 4, 31, color);
+          backgroundLayer.drawLine(i * 4 + 5, MATRIX_HEIGHT - level / MATRIX_HEIGHT, i * 4 + 5, 31, color);
         }
 
         rgb24 white = { 255, 255, 255};
 
         if (mode == manualMode && selectingMode)
-          matrix.drawString(0, 1, white, "<Manual>");
+          backgroundLayer.drawString(0, 1, white, "<Manual>");
         else if (mode == autoMode && selectingMode)
-          matrix.drawString(0, 1, white, "< Auto >");
+          backgroundLayer.drawString(0, 1, white, "< Auto >");
         else if (mode == resetMode && selectingMode)
-          matrix.drawString(0, 1, white, "<Reset >");
+          backgroundLayer.drawString(0, 1, white, "<Reset >");
         else if (mode == exitMode && selectingMode)
-          matrix.drawString(0, 1, white, "< Exit >");
+          backgroundLayer.drawString(0, 1, white, "< Exit >");
 
-        matrix.swapBuffers();
+        backgroundLayer.swapBuffers();
 
         InputCommand command = readCommand(defaultHoldDelay);
 
@@ -174,9 +174,9 @@ class SettingsAudioCalibration : public Runnable {
     }
 
     unsigned int drawFrame() {
-      matrix.fillScreen(CRGB(CRGB::Black));
-      matrix.setFont(font3x5);
-      matrix.drawString(0, 27, { 255, 255, 255 }, versionText);
+      backgroundLayer.fillScreen(CRGB(CRGB::Black));
+      backgroundLayer.setFont(font3x5);
+      backgroundLayer.drawString(0, 27, { 255, 255, 255 }, versionText);
       return 0;
     }
 

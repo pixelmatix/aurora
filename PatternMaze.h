@@ -174,7 +174,7 @@ private:
 
         Point imagePoint = createPoint(point.x * 2, point.y * 2);
 
-        //matrix.drawPixel(imagePoint.x, imagePoint.y, CRGB(CRGB::Gray));
+        //backgroundLayer.drawPixel(imagePoint.x, imagePoint.y, CRGB(CRGB::Gray));
 
         shuffleDirections();
 
@@ -190,7 +190,7 @@ private:
 
                 Point newImagePoint = imagePoint.Move(direction);
 
-                matrix.drawPixel(newImagePoint.x, newImagePoint.y, color);
+                backgroundLayer.drawPixel(newImagePoint.x, newImagePoint.y, color);
 
                 cellCount++;
                 cells[cellCount - 1] = newPoint;
@@ -203,7 +203,7 @@ private:
         if (index > -1) {
             Point finishedPoint = cells[index];
             imagePoint = createPoint(finishedPoint.x * 2, finishedPoint.y * 2);
-            matrix.drawPixel(imagePoint.x, imagePoint.y, color);
+            backgroundLayer.drawPixel(imagePoint.x, imagePoint.y, color);
 
             removeCell(index);
         }
@@ -216,7 +216,7 @@ public:
 
     unsigned int drawFrame() {
         if (cellCount < 1) {
-            matrix.fillScreen(CRGB(CRGB::Black));
+            backgroundLayer.fillScreen(CRGB(CRGB::Black));
 
             // reset the maze grid
             for (int y = 0; y < height; y++) {
@@ -250,7 +250,7 @@ public:
     }
 
     void start() {
-        matrix.fillScreen({ 0, 0, 0 });
+        backgroundLayer.fillScreen({ 0, 0, 0 });
         cellCount = 0;
         hue = 0;
     }

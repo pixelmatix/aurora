@@ -77,7 +77,7 @@ public:
 
     unsigned int drawFrame() {
         if (generation == 0) {
-            matrix.fillScreen(CRGB(CRGB::Black));
+            backgroundLayer.fillScreen(CRGB(CRGB::Black));
 
             randomFillWorld();
         }

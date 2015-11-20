@@ -318,7 +318,7 @@ class Boid {
       //vertex(r, r*2);
       //endShape();
       //popMatrix();
-      //matrix.drawPixel(location.x, location.y, CRGB::Blue);
+      //backgroundLayer.drawPixel(location.x, location.y, CRGB::Blue);
     }
 };
 
