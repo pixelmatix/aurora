@@ -102,12 +102,9 @@ class GifPlayer {
     char tempBuffer[260];
 
     File file;
-    
-    static const uint8_t WIDTH  = 32;
-    static const uint8_t HEIGHT = 32;
-    
-    byte imageData[WIDTH * HEIGHT];
-    byte imageDataBU[WIDTH * HEIGHT];
+
+    byte imageData[1024];
+    byte imageDataBU[1024];
 
     // Backup the read stream by n bytes
     void backUpStream(int n) {

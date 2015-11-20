@@ -45,7 +45,7 @@ class PatternPendulumWave : public Drawable {
 
       for (int x = 0; x < MATRIX_WIDTH; x++)
       {
-        uint8_t y = beatsin8(x + 1, 0, MATRIX_HEIGHT);
+        uint8_t y = beatsin8(x + MATRIX_WIDTH, 0, MATRIX_HEIGHT);
         backgroundLayer.drawPixel(x, y, effects.ColorFromCurrentPalette(x * 7));
       }
 

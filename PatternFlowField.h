@@ -35,6 +35,8 @@ class PatternFlowField : public Drawable {
     uint16_t speed = 1;
     uint16_t scale = 26;
 
+    static const int count = 40;
+
     byte hue = 0;
 
     void start() {
@@ -42,7 +44,7 @@ class PatternFlowField : public Drawable {
       y = random16();
       z = random16();
 
-      for (int i = 0; i < AVAILABLE_BOID_COUNT; i++) {
+      for (int i = 0; i < count; i++) {
         boids[i] = Boid(random(MATRIX_WIDTH), 0);
       }
     }
@@ -52,7 +54,7 @@ class PatternFlowField : public Drawable {
 
       // CRGB color = effects.ColorFromCurrentPalette(hue);
 
-      for (int i = 0; i < AVAILABLE_BOID_COUNT; i++) {
+      for (int i = 0; i < count; i++) {
         Boid * boid = &boids[i];
 
         int ioffset = scale * boid->location.x;
