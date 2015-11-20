@@ -36,7 +36,7 @@ class PatternRadar : public Drawable {
       effects.DimAll(254);
 
       for (int offset = 0; offset < MATRIX_CENTER_X; offset++) {
-        byte hue = 255 - (offset * (256 / MATRIX_CENTER_X) + hueoffset);
+        byte hue = 255 - (offset * 16 + hueoffset);
         CRGB color = effects.ColorFromCurrentPalette(hue);
         uint8_t x = mapcos8(theta, offset, (MATRIX_WIDTH - 1) - offset);
         uint8_t y = mapsin8(theta, offset, (MATRIX_HEIGHT - 1) - offset);

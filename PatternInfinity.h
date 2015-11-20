@@ -33,26 +33,25 @@ public:
         // to 250/255 (98%) of their current brightness
         effects.DimAll(250);
 
+        // the Effects class has some sample oscillators
+        // that move from 0 to 255 at different speeds
+        effects.MoveOscillators();
+
         // the horizontal position of the head of the infinity sign
         // oscillates from 0 to the maximum horizontal and back
-        int x = beatsin8(15, 1, MATRIX_WIDTH - 1);
+        int x = (MATRIX_WIDTH - 1) - effects.p[1];
 
         // the vertical position of the head oscillates
-        int y = (MATRIX_HEIGHT - 1) - beatsin8(30, MATRIX_HEIGHT / 4, ((MATRIX_HEIGHT / 4) * 3) - 1);
+        // from 8 to 23 and back (hard-coded for a 32x32 matrix)
+        int y = map8(sin8(effects.osci[3]), 8, 23);
 
         // the hue oscillates from 0 to 255, overflowing back to 0
-        static byte hue = 0;
-        hue++;
+        byte hue = sin8(effects.osci[5]);
 
-        CRGB color = effects.ColorFromCurrentPalette(hue);
-        
-        effects.leds[XY(x, y)] = color;
-        effects.leds[XY(x + 1, y)] = color;
-        effects.leds[XY(x, y + 1)] = color;
-        effects.leds[XY(x - 1, y)] = color;
-        effects.leds[XY(x, y - 1)] = color;
+        // draw a pixel at x,y using a color from the current palette
+        effects.Pixel(x, y, hue);
 
-        return 0;
+        return 15;
     }
 };
 

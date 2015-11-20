@@ -33,7 +33,6 @@ public:
     Random,
   };
 
-  int menuStart = MATRIX_HEIGHT / 2 - 4; // 11;
   MenuItem* currentMenuItem;
   Playlist* currentPlaylist;
   bool isPlaylist = false;
@@ -533,7 +532,7 @@ private:
         scrollingLayer.setSpeed(scrollSpeed);
         scrollingLayer.setFont(gohufont11b);
         scrollingLayer.setColor(menuColor);
-        scrollingLayer.setOffsetFromTop(menuStart);
+        scrollingLayer.setOffsetFromTop(menuY);
         scrollingLayer.start(name, -1);
       }
       else if (messageVisible) {
@@ -573,30 +572,30 @@ private:
     // account for any time spent drawing the clock, swapping buffers, etc.
     unsigned int startTime = millis();
 
-//    boolean streaming = streamingMode.handleStreaming();
-//
-//    if (streaming && !wasStreaming) {
-//      wasStreaming = true;
-//      visibleBeforeStreaming = visible;
-//    }
-//
-//    if (streaming) {
-//      visible = false;
-//      updateScrollText = true;
-//    }
-//    else {
-//      if (wasStreaming && visibleBeforeStreaming) {
-//        visible = true;
-//        updateScrollText = true;
-//      }
-//
-//      wasStreaming = false;
-//    }
+    boolean streaming = streamingMode.handleStreaming();
+
+    if (streaming && !wasStreaming) {
+      wasStreaming = true;
+      visibleBeforeStreaming = visible;
+    }
+
+    if (streaming) {
+      visible = false;
+      updateScrollText = true;
+    }
+    else {
+      if (wasStreaming && visibleBeforeStreaming) {
+        visible = true;
+        updateScrollText = true;
+      }
+
+      wasStreaming = false;
+    }
 
     // draw the current item
     unsigned int requestedDelay = 0;
 
-//    if (!streaming)
+    if (!streaming)
       requestedDelay = currentMenuItem->drawable->drawFrame();
 
     effects.ShowFrame();

@@ -27,78 +27,78 @@
 #include "Boid.h"
 #include "Attractor.h"
 
-#include "PatternPride.h"
-//#include "PatternNoiseSmearing.h"
+//#include "PatternPongClock.h"
+#include "PatternNoiseSmearing.h"
 #include "PatternSpiro.h"
 #include "PatternRadar.h"
-//#include "PatternAnalogClock.h"
+#include "PatternAnalogClock.h"
 #include "PatternSwirl.h"
 #include "PatternPendulumWave.h"
 #include "PatternFlowField.h"
 #include "PatternIncrementalDrift.h"
 #include "PatternIncrementalDrift2.h"
 #include "PatternMunch.h"
-//#include "PatternElectricMandala.h"
-//#include "PatternSpin.h"
-//#include "PatternSimplexNoise.h"
+#include "PatternElectricMandala.h"
+#include "PatternSpin.h"
+#include "PatternSimplexNoise.h"
 #include "PatternWave.h"
-//#include "PatternAttract.h"
-//#include "PatternBounce.h"
-//#include "PatternFlock.h"
+#include "PatternAttract.h"
+#include "PatternBounce.h"
+#include "PatternFlock.h"
 #include "PatternInfinity.h"
-//#include "PatternPlasma.h"
-//#include "PatternSnake.h"
-//#include "PatternInvaders.h"
-//#include "PatternCube.h"
-//#include "PatternFire.h"
-//#include "PatternLife.h"
-//#include "PatternMaze.h"
-//#include "PatternPulse.h"
-//#include "PatternRainbowSmoke.h"
-//#include "PatternSpark.h"
-//#include "PatternSpiral.h"
+#include "PatternPlasma.h"
+#include "PatternSnake.h"
+#include "PatternInvaders.h"
+#include "PatternCube.h"
+#include "PatternFire.h"
+#include "PatternLife.h"
+#include "PatternMaze.h"
+#include "PatternPulse.h"
+#include "PatternRainbowSmoke.h"
+#include "PatternSpark.h"
+#include "PatternSpiral.h"
 
 class Patterns : public Playlist {
   private:
-    PatternPride pride;
-//    PatternRainbowFlag rainbowFlag;
-//    PatternPaletteSmear paletteSmear;
-//    PatternMultipleStream multipleStream;
-//    PatternMultipleStream2 multipleStream2;
-//    PatternMultipleStream3 multipleStream3;
-//    PatternMultipleStream4 multipleStream4;
-//    PatternMultipleStream5 multipleStream5;
-//    PatternMultipleStream8 multipleStream8;
+    //PatternPongClock pongClock;
+    PatternRainbowFlag rainbowFlag;
+    PatternPaletteSmear paletteSmear;
+    PatternMultipleStream multipleStream;
+    PatternMultipleStream2 multipleStream2;
+    PatternMultipleStream3 multipleStream3;
+    PatternMultipleStream4 multipleStream4;
+    PatternMultipleStream5 multipleStream5;
+    PatternMultipleStream8 multipleStream8;
     PatternSpiro spiro;
     PatternRadar radar;
-//    PatternAnalogClock analogClock;
+    PatternAnalogClock analogClock;
     PatternSwirl swirl;
     PatternPendulumWave pendulumWave;
     PatternFlowField flowField;
     PatternIncrementalDrift incrementalDrift;
     PatternIncrementalDrift2 incrementalDrift2;
     PatternMunch munch;
-//    PatternElectricMandala electricMandala;
-//    PatternSpin spin;
-//    PatternSimplexNoise simplexNoise;
+    PatternElectricMandala electricMandala;
+    PatternSpin spin;
+    PatternSimplexNoise simplexNoise;
     PatternWave wave;
-//    PatternAttract attract;
-//    PatternBounce bounce;
-//    PatternFlock flock;
+    PatternAttract attract;
+    PatternBounce bounce;
+    PatternFlock flock;
     PatternInfinity infinity;
-//    PatternPlasma plasma;
-//    PatternInvadersSmall invadersSmall;
-//    PatternInvadersMedium invadersMedium;
-//    PatternInvadersLarge invadersLarge;
-//    PatternSnake snake;
-//    PatternCube cube;
-//    PatternFire fire;
-//    PatternLife life;
-//    PatternMaze maze;
-//    PatternPulse pulse;
-//    PatternRainbowSmoke rainbowSmoke;
-//    PatternSpark spark;
-//    PatternSpiral spiral;
+    PatternPlasma plasma;
+    PatternInvadersSmall invadersSmall;
+    PatternInvadersMedium invadersMedium;
+    PatternInvadersLarge invadersLarge;
+    PatternSnake snake;
+    PatternCube cube;
+    PatternFire fire;
+    PatternLife life;
+    PatternMaze maze;
+    PatternPulse pulse;
+    PatternRainbowSmoke rainbowSmoke;
+    PatternSpark spark;
+    PatternSpiral spiral;
 
     int currentIndex = 0;
     Drawable* currentItem;
@@ -107,49 +107,49 @@ class Patterns : public Playlist {
       return currentIndex;
     }
 
-    static const int PATTERN_COUNT = 11;
+    static const int PATTERN_COUNT = 37;
 
     Drawable* shuffledItems[PATTERN_COUNT];
 
     Drawable* items[PATTERN_COUNT] = {
-      &pride,
-//      &rainbowFlag,
+      //&pongClock,
       &spiro,
-//      &paletteSmear,
-//      &multipleStream8,
-//      &multipleStream5,
-//      &multipleStream3,
+      &paletteSmear,
+      &multipleStream8,
+      &multipleStream5,
+      &multipleStream3,
       &radar,
-//      &multipleStream4,
-//      &multipleStream2,
-//      &life,
+      &multipleStream4,
+      &multipleStream2,
+      &life,
       &flowField,
       &pendulumWave,
       &incrementalDrift,
       &incrementalDrift2,
       &munch,
-//      &electricMandala,
-//      &spin,
-//      &simplexNoise,
+      &electricMandala,
+      &spin,
+      &simplexNoise,
       &wave,
-//      &attract,
-//      &analogClock,
+      &rainbowFlag,
+      &attract,
+      &analogClock,
       &swirl,
-//      &bounce,
-//      &flock,
+      &bounce,
+      &flock,
       &infinity,
-//      &plasma,
-//      &invadersSmall,
-//      &invadersMedium,
-//      &invadersLarge,
-//      &snake,
-//      &cube,
-//      &fire,
-//      &maze,
-//      &pulse,
-//      &rainbowSmoke,
-//      &spark,
-//      &spiral,
+      &plasma,
+      &invadersSmall,
+      &invadersMedium,
+      &invadersLarge,
+      &snake,
+      &cube,
+      &fire,
+      &maze,
+      &pulse,
+      &rainbowSmoke,
+      &spark,
+      &spiral,
     };
 
   public:
@@ -188,8 +188,8 @@ class Patterns : public Playlist {
 
       moveTo(currentIndex);
 
-//      if (!isTimeAvailable && currentItem == &analogClock)
-//        move(step);
+      if (!isTimeAvailable && currentItem == &analogClock)
+        move(step);
     }
 
     void moveRandom(int step) {
@@ -209,8 +209,8 @@ class Patterns : public Playlist {
       if (currentItem)
         currentItem->start();
 
-//      if (!isTimeAvailable && currentItem == &analogClock)
-//        moveRandom(step);
+      if (!isTimeAvailable && currentItem == &analogClock)
+        moveRandom(step);
     }
 
     void shuffleItems() {

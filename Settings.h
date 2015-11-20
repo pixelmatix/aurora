@@ -31,6 +31,7 @@
 #include "SettingsClockColor.h"
 #include "SettingsClock24Hour.h"
 #include "SettingsMenuColor.h"
+#include "SettingsMoveMenu.h"
 #include "SettingsAutoplayDuration.h"
 #include "SettingsAudioCalibration.h"
 #include "SettingsUpdateFiles.h"
@@ -38,11 +39,10 @@
 
 class Settings : public Runnable {
   private:
-    Menu settingsMenu;
-
     SettingsBrightness brightness;
     SettingsBackgroundBrightness backgroundBrightness;
     SettingsMenuColor menuColor;
+    SettingsMoveMenu moveMenu;
     SettingsMoveClock moveClock;
     SettingsClockColor clockColor;
     SettingsSetTime setTime;
@@ -54,11 +54,12 @@ class Settings : public Runnable {
     //SettingsDemoMode demoMode;
     Drawable exit;
 
-    static const int itemCount = 12;
+    static const int itemCount = 13;
 
     MenuItem menuItemBrightness = MenuItem((char *)"Brightness", &brightness);
     MenuItem menuItemBgBrightness = MenuItem((char *)"BG Brightness", &backgroundBrightness);
     MenuItem menuItemMenuColor = MenuItem((char *)"Menu Color", &menuColor);
+    MenuItem menuItemMoveMenu = MenuItem((char *)"Move Menu", &moveMenu);
     MenuItem menuItemAutoplayDuration = MenuItem((char *)"Autoplay Duration", &setAutoplayDuration);
     MenuItem menuItemMoveClock = MenuItem((char *)"Move Clock", &moveClock);
     MenuItem menuItemClockColor = MenuItem((char *)"Clock Color", &clockColor);
@@ -74,6 +75,7 @@ class Settings : public Runnable {
       &menuItemBrightness,
       &menuItemBgBrightness,
       &menuItemMenuColor,
+      &menuItemMoveMenu,
       &menuItemAutoplayDuration,
       &menuItemMoveClock,
       &menuItemClockColor,
@@ -121,6 +123,8 @@ class Settings : public Runnable {
     }
 
   public:
+    Menu settingsMenu;
+    
     Settings() {
     }
 
@@ -128,6 +132,7 @@ class Settings : public Runnable {
 
     void load() {
       audioCalibration.load();
+      menuY = loadByteSetting(menuYFilename, 11);
     }
 
     void run() {
