@@ -56,7 +56,7 @@ public:
 
             boid.update();
 
-            matrix.drawPixel(boid.location.x, boid.location.y, effects.ColorFromCurrentPalette(boid.colorIndex));
+            backgroundLayer.drawPixel(boid.location.x, boid.location.y, effects.ColorFromCurrentPalette(boid.colorIndex));
 
             if (boid.location.y >= MATRIX_HEIGHT - 1) {
                 boid.location.y = MATRIX_HEIGHT - 1;

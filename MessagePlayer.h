@@ -23,8 +23,6 @@
 #ifndef MessagePlayer_H
 #define MessagePlayer_H
 
-#include "Externs.h"
-
 class MessagePlayer {
 private:
   const char* path;
@@ -239,7 +237,7 @@ public:
     }
 
     strcpy(message, "");
-    color = { 0, 0, 0 };
+    color = CRGB(CRGB::White);
     offsetFromTop = 11;
     offsetFromLeft = 0;
     fontName = gohufont11b;
@@ -257,7 +255,7 @@ public:
       readJsonFile(file);
 
     if (!colorSpecified)
-      color = { 255, 255, 255 };
+      color =  CRGB(CRGB::White);
 
     file.close();
 
@@ -367,6 +365,8 @@ public:
   }
 
   bool readJsonStream(aJsonStream &stream) {
+    bool result = false;
+
     // Serial.print(F("Parsing json..."));
     aJsonObject* root = aJson.parse(&stream);
     if (!root) {
@@ -376,7 +376,9 @@ public:
 
     // Serial.println(F(" done"));
 
-    return readJsonObject(root);
+    result = readJsonObject(root);
+    aJson.deleteItem(root);
+    return result;
   }
 
   bool readJsonObject(aJsonObject * root){
@@ -445,8 +447,6 @@ public:
       // Serial.print(F("scrollMode: "));
       // Serial.println(scrollMode);
     }
-
-    aJson.deleteItem(root);
 
     return true;
   }

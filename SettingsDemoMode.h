@@ -30,52 +30,51 @@ class SettingsDemoMode : public Runnable {
   public:
     void run() {
       while (true) {
-        matrix.fillScreen(CRGB(CRGB::Black));
+        backgroundLayer.fillScreen(CRGB(CRGB::Black));
 
-        matrix.setScrollOffsetFromTop(MATRIX_HEIGHT);
-        matrix.setForegroundFont(font3x5);
-        matrix.setScrollColor({ 255, 255, 255 });
-        matrix.clearForeground();
+        indexedLayer.setFont(font3x5);
+        indexedLayer.setIndexedColor({ 255, 255, 255 });
+        indexedLayer.fillScreen(0);
 
         switch (demoMode) {
           case 0:
-            matrix.drawForegroundString(0, 13, "None", true);
+            indexedLayer.drawString(0, 13, 1, "None");
             break;
 
           case 1:
-            matrix.drawForegroundString(0, 7, "Autoplay", true);
-            matrix.drawForegroundString(0, 13, "Audio", true);
-            matrix.drawForegroundString(0, 19, "Patterns", true);
+            indexedLayer.drawString(0, 7, 1, "Autoplay");
+            indexedLayer.drawString(0, 13, 1, "Audio");
+            indexedLayer.drawString(0, 19, 1, "Patterns");
             break;
 
           case 2:
-            matrix.drawForegroundString(0, 7, "Random", true);
-            matrix.drawForegroundString(0, 13, "Audio", true);
-            matrix.drawForegroundString(0, 19, "Patterns", true);
+            indexedLayer.drawString(0, 7, 1, "Random");
+            indexedLayer.drawString(0, 13, 1, "Audio");
+            indexedLayer.drawString(0, 19, 1, "Patterns");
             break;
 
           case 3:
-            matrix.drawForegroundString(0, 10, "Autoplay", true);
-            matrix.drawForegroundString(0, 16, "Patterns", true);
+            indexedLayer.drawString(0, 10, 1, "Autoplay");
+            indexedLayer.drawString(0, 16, 1, "Patterns");
             break;
 
           case 4:
-            matrix.drawForegroundString(0, 10, "Random", true);
-            matrix.drawForegroundString(0, 16, "Patterns", true);
+            indexedLayer.drawString(0, 10, 1, "Random");
+            indexedLayer.drawString(0, 16, 1, "Patterns");
             break;
 
           case 5:
-            matrix.drawForegroundString(0, 10, "Autoplay", true);
-            matrix.drawForegroundString(0, 16, "Animations", true);
+            indexedLayer.drawString(0, 10, 1, "Autoplay");
+            indexedLayer.drawString(0, 16, 1, "Animations");
             break;
 
           case 6:
-            matrix.drawForegroundString(0, 10, "Random", true);
-            matrix.drawForegroundString(0, 16, "Animations", true);
+            indexedLayer.drawString(0, 10, 1, "Random");
+            indexedLayer.drawString(0, 16, 1, "Animations");
             break;
         }
 
-        matrix.displayForegroundDrawing(false);
+        indexedLayer.swapBuffers();
 
         InputCommand command = readCommand(defaultHoldDelay);
 
@@ -105,9 +104,9 @@ class SettingsDemoMode : public Runnable {
     }
 
     unsigned int drawFrame() {
-      matrix.fillScreen(CRGB(CRGB::Black));
-      matrix.setFont(font3x5);
-      matrix.drawString(0, 27, { 255, 255, 255 }, versionText);
+      backgroundLayer.fillScreen(CRGB(CRGB::Black));
+      backgroundLayer.setFont(font3x5);
+      backgroundLayer.drawString(0, 27, { 255, 255, 255 }, versionText);
       return 0;
     }
 };

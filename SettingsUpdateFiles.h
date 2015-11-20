@@ -23,8 +23,6 @@
 #ifndef SettingsUpdateFiles_H
 #define SettingsUpdateFiles_H
 
-#include "Externs.h"
-
 class SettingsUpdateFiles : public Runnable {
   public:
     void run() {
@@ -32,9 +30,9 @@ class SettingsUpdateFiles : public Runnable {
     }
 
     unsigned int drawFrame() {
-      matrix.fillScreen(CRGB(CRGB::Black));
-      matrix.setFont(font3x5);
-      matrix.drawString(0, 27, { 255, 255, 255 }, versionText);
+      backgroundLayer.fillScreen(CRGB(CRGB::Black));
+      backgroundLayer.setFont(font3x5);
+      backgroundLayer.drawString(0, 27, CRGB(CRGB::White), versionText);
       return 0;
     }
 };

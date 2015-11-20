@@ -58,7 +58,7 @@ class GameSnake : public Runnable {
 
     void reset() {
       // Clear screen
-      matrix.fillScreen(black);
+      backgroundLayer.fillScreen(black);
 
       //      score = 0;
       //      sprintf(scoreText, "%d", score);
@@ -162,7 +162,7 @@ class GameSnake : public Runnable {
         segments.enqueue(newSnakeHead);
 
         // draw the new location for the snake head
-        //        matrix.drawPixel(newSnakeHead.x, newSnakeHead.y, snakeColor);
+        //        backgroundLayer.drawPixel(newSnakeHead.x, newSnakeHead.y, snakeColor);
 
         if (newSnakeHead.x == apple.x && newSnakeHead.y == apple.y) {
           segmentCount += segmentIncrement * segmentIncrementMultiplier;
@@ -179,7 +179,7 @@ class GameSnake : public Runnable {
         // trim the end of the snake if it gets too long
         while (segments.count() > segmentCount) {
           //          Point oldSnakeSegment = segments.dequeue();
-          //          matrix.drawPixel(oldSnakeSegment.x, oldSnakeSegment.y, black);
+          //          backgroundLayer.drawPixel(oldSnakeSegment.x, oldSnakeSegment.y, black);
           segments.dequeue();
         }
 
@@ -210,8 +210,8 @@ class GameSnake : public Runnable {
   public:
     void run() {
       // Turn off any text scrolling
-      matrix.scrollText("", 1);
-      matrix.setScrollMode(off);
+      scrollingLayer.start("", 1);
+      scrollingLayer.setMode(off);
 
       if (!isSetup) setup();
 
@@ -244,9 +244,9 @@ class GameSnake : public Runnable {
       if (!isPaused)
         update();
 
-      matrix.fillScreen(black);
+      backgroundLayer.fillScreen(black);
 
-      matrix.drawPixel(apple.x, apple.y, appleColor);
+      backgroundLayer.drawPixel(apple.x, apple.y, appleColor);
 
       // draw segments
       QueueArray<Point> tempSegments;
@@ -254,14 +254,14 @@ class GameSnake : public Runnable {
       while (segments.count() > 0) {
         Point segment = segments.dequeue();
         tempSegments.enqueue(segment);
-        matrix.drawPixel(segment.x, segment.y, snakeColor);
+        backgroundLayer.drawPixel(segment.x, segment.y, snakeColor);
       }
 
       while (tempSegments.count() > 0) {
         segments.enqueue(tempSegments.dequeue());
       }
 
-      matrix.swapBuffers();
+      backgroundLayer.swapBuffers();
 
       return 15;
     }

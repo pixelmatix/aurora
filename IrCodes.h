@@ -28,8 +28,6 @@
 #ifndef IrCodes_H
 #define IrCodes_H
 
-#include "Externs.h"
-
 enum class InputCommand {
   None,
   Update,
@@ -529,7 +527,7 @@ InputCommand readSerialCommand() {
   if (item && item->type == aJson_Int) {
     backgroundBrightness = item->valueint;
     boundBackgroundBrightness();
-    matrix.setBackgroundBrightness(backgroundBrightness);
+    backgroundLayer.setBrightness(backgroundBrightness);
     saveBackgroundBrightnessSetting();
     command = InputCommand::None;
   }

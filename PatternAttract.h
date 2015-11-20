@@ -61,7 +61,7 @@ public:
             boid.applyForce(force);
 
             boid.update();
-            matrix.drawPixel(boid.location.x, boid.location.y, effects.ColorFromCurrentPalette(boid.colorIndex));
+            backgroundLayer.drawPixel(boid.location.x, boid.location.y, effects.ColorFromCurrentPalette(boid.colorIndex));
 
             boids[i] = boid;
         }

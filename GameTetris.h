@@ -1025,11 +1025,11 @@ class GameTetris : public Runnable {
   public:
     void run() {
       // Turn off any text scrolling
-      matrix.scrollText("", 1);
-      matrix.setScrollMode(off);
+      scrollingLayer.start("", 1);
+      scrollingLayer.setMode(off);
 
       // Fonts are font3x5, font5x7, font6x10, font8x13
-      matrix.setFont(font3x5);
+      scrollingLayer.setFont(font3x5);
 
       if (!isSetup) setup();
 
@@ -1063,19 +1063,19 @@ class GameTetris : public Runnable {
 
       // Serial.println("clearing the screen");
       // Clear screen
-      matrix.fillScreen(COLOR_BLACK);
+      backgroundLayer.fillScreen(COLOR_BLACK);
 
       // Serial.println("drawing the border");
       // draw border
-      matrix.drawRectangle(10, 5, 21, 26, COLOR_GRAY);
+      backgroundLayer.drawRectangle(10, 5, 21, 26, COLOR_GRAY);
 
       // Serial.println("drawing the score");
       // draw score
-      matrix.drawString(0, 0, COLOR_GRAY, scoreText);
+      backgroundLayer.drawString(0, 0, COLOR_GRAY, scoreText);
 
       // Serial.println("drawing the lines cleared count");
       // draw lines cleared
-      matrix.drawString(0, 27, COLOR_GRAY, linesClearedText);
+      backgroundLayer.drawString(0, 27, COLOR_GRAY, linesClearedText);
 
       // Serial.println("drawing the next block indicator");
       // draw next block
@@ -1084,9 +1084,9 @@ class GameTetris : public Runnable {
           int b = nextBlock[x][y];
 
           if (b == 0)
-            matrix.drawPixel(x + 23, y + 6, COLOR_GRAY);
+            backgroundLayer.drawPixel(x + 23, y + 6, COLOR_GRAY);
           else
-            matrix.drawPixel(x + 23, y + 6, blockColors[b]);
+            backgroundLayer.drawPixel(x + 23, y + 6, blockColors[b]);
         }
       }
 
@@ -1139,13 +1139,13 @@ class GameTetris : public Runnable {
           // Serial.print(color.green);
           // Serial.print(", ");
           // Serial.print(color.blue);
-          matrix.drawPixel(x + left, y + top, color);
+          backgroundLayer.drawPixel(x + left, y + top, color);
           // Serial.println("... done");
         }
       }
 
       // Serial.println("swapping matrix buffers");
-      matrix.swapBuffers();
+      backgroundLayer.swapBuffers();
 
       return 15;
     }

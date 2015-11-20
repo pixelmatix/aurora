@@ -22,8 +22,7 @@
 
 #ifndef PatternSpin_H
 
-#include "Aurora.h"
-#include "Externs.h"
+
 
 class PatternSpin : public Drawable {
 public:
@@ -70,8 +69,8 @@ public:
             x = (int) (MATRIX_CENTER_X + radius * cos(radians));
             y = (int) (MATRIX_CENTER_Y - radius * sin(radians));
 
-            matrix.drawPixel(x, y, color);
-            matrix.drawPixel(y, x, color);
+            backgroundLayer.drawPixel(x, y, color);
+            backgroundLayer.drawPixel(y, x, color);
 
             tempDegrees += 1;
             if (tempDegrees >= 360)

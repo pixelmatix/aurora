@@ -22,8 +22,6 @@
 
 #ifndef PatternAnalogClock_H
 
-#include "Externs.h"
-
 class PatternAnalogClock : public Drawable {
 private:
 #define HOUR_HAND_RADIUS 15
@@ -75,8 +73,8 @@ public:
             effects.leds[XY(xm, ym)] += effects.ColorFromCurrentPalette(beat8(1));
         }
         else {
-            matrix.setFont(font3x5);
-            matrix.drawString(0, 0, { 255, 255, 255 }, "No Clock");
+            backgroundLayer.setFont(font3x5);
+            backgroundLayer.drawString(0, 0, { 255, 255, 255 }, "No Clock");
         }
 
         return 0;

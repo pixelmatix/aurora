@@ -23,8 +23,6 @@
 #ifndef SettingsAutoplayDuration_H
 #define SettingsAutoplayDuration_H
 
-#include "Externs.h"
-
 class SettingsAutoplayDuration : public Runnable {
   private:
     boolean hasChanges = false;
@@ -33,18 +31,18 @@ class SettingsAutoplayDuration : public Runnable {
 
     void run() {
       while (true) {
-        matrix.fillScreen(CRGB(CRGB::Black));
+        backgroundLayer.fillScreen(CRGB(CRGB::Black));
 
         char text[4];
         sprintf(text, "%d", autoPlayDurationSeconds);
-        matrix.setFont(font3x5);
-        matrix.drawString(1, 2, { 255, 255, 255 }, "Autoplay");
-        matrix.setFont(gohufont11b);
-        matrix.drawString(4, 11, { 255, 255, 255 }, text);
-        matrix.setFont(font3x5);
-        matrix.drawString(3, 25, { 255, 255, 255 }, "seconds");
-        matrix.swapBuffers();
-        matrix.displayForegroundDrawing(false);
+        backgroundLayer.setFont(font3x5);
+        backgroundLayer.drawString(1, 2, { 255, 255, 255 }, "Autoplay");
+        backgroundLayer.setFont(gohufont11b);
+        backgroundLayer.drawString(4, 11, { 255, 255, 255 }, text);
+        backgroundLayer.setFont(font3x5);
+        backgroundLayer.drawString(3, 25, { 255, 255, 255 }, "seconds");
+        backgroundLayer.swapBuffers();
+        indexedLayer.swapBuffers();
 
         InputCommand command = readCommand(defaultHoldDelay);
 
@@ -72,9 +70,9 @@ class SettingsAutoplayDuration : public Runnable {
     }
 
     unsigned int drawFrame() {
-      matrix.fillScreen(CRGB(CRGB::Black));
-      matrix.setFont(font3x5);
-      matrix.drawString(0, 27, { 255, 255, 255 }, versionText);
+      backgroundLayer.fillScreen(CRGB(CRGB::Black));
+      backgroundLayer.setFont(font3x5);
+      backgroundLayer.drawString(0, 27, { 255, 255, 255 }, versionText);
       return 0;
     }
 

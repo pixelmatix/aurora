@@ -53,7 +53,7 @@ class PatternIncrementalDrift2 : public Drawable {
           color = effects.ColorFromCurrentPalette((31 - i) * 14);
         }
 
-        matrix.drawPixel(x, y, color);
+        backgroundLayer.drawPixel(x, y, color);
       }
 
       return 0;

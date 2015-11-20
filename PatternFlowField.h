@@ -22,8 +22,6 @@
 
 #ifndef PatternFlowField_H
 
-#include "Externs.h"
-
 class PatternFlowField : public Drawable {
   public:
     PatternFlowField() {
@@ -68,7 +66,7 @@ class PatternFlowField : public Drawable {
         boid->velocity.y = -((float)cos8(angle) * 0.0078125 - 1.0);
         boid->update();
 
-        matrix.drawPixel(boid->location.x, boid->location.y, effects.ColorFromCurrentPalette(angle + hue)); // color
+        backgroundLayer.drawPixel(boid->location.x, boid->location.y, effects.ColorFromCurrentPalette(angle + hue)); // color
 
         if (boid->location.x < 0 || boid->location.x >= MATRIX_WIDTH ||
             boid->location.y < 0 || boid->location.y >= MATRIX_HEIGHT) {

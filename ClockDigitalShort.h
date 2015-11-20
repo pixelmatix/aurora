@@ -26,8 +26,6 @@
 #ifndef ClockDigitalShort_H
 #define ClockDigitalShort_H
 
-#include "Aurora.h"
-#include "Externs.h"
 
 
 enum SetTimeState {
@@ -65,21 +63,20 @@ class ClockDigitalShort : public Drawable {
         else if (!twentyFourHour && hour == 0)
           hour = 12;
 
-        matrix.setForegroundFont(gohufont11b);
+        indexedLayer.setFont(gohufont11b);
         sprintf(timeBuffer, "%d:%02d", hour, time.Minute);
 
         if (hour < 10)
           x = 4;
       }
       else {
-        matrix.setForegroundFont(font3x5);
+        indexedLayer.setFont(font3x5);
         sprintf(timeBuffer, "No Clock");
       }
 
-      matrix.setScrollOffsetFromTop(MATRIX_HEIGHT);
-      matrix.setScrollColor(color);
-      matrix.clearForeground();
-      matrix.drawForegroundString(x, cy, timeBuffer, true);
+      indexedLayer.setIndexedColor(1, color);
+      indexedLayer.fillScreen(0);
+      indexedLayer.drawString(x, cy, 1, timeBuffer);
 
       return 0;
     }
@@ -87,10 +84,10 @@ class ClockDigitalShort : public Drawable {
     void drawMoveClockIndicator() {
       for (int16_t x = 2; x <= 26; x += 6) {
         // upper indicators (in case the clock's at the bottom)
-        matrix.drawTriangle(x + 0, y - 1, x + 1, y - 2, x + 2, y - 1, CRGB(CRGB::SlateGray));
+        backgroundLayer.drawTriangle(x + 0, y - 1, x + 1, y - 2, x + 2, y - 1, CRGB(CRGB::SlateGray));
 
         // lower indicators (in case the clock's at the top)
-        matrix.drawTriangle(x + 0, y + 11, x + 1, y + 12, x + 2, y + 11, CRGB(CRGB::SlateGray));
+        backgroundLayer.drawTriangle(x + 0, y + 11, x + 1, y + 12, x + 2, y + 11, CRGB(CRGB::SlateGray));
       }
     }
 
