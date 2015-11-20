@@ -20,7 +20,7 @@ Features
 Demo Video
 -------------------------
 
-[![SmartMatrix Demo Video](https://i.vimeocdn.com/video/518191599_295x166.webp)](https://vimeo.com/user5888427/smartmatrixoverview)
+<a href="https://vimeo.com/user5888427/smartmatrixoverview" target="_blank">![SmartMatrix Demo Video](http://docs.pixelmatix.com/SmartMatrix/photos/GithubAuroraReadmeVimeoLink.png)</a>
 
 Installation
 ------------
@@ -36,14 +36,14 @@ More Information
 * [Aurora Wiki] on GitHub for documentation
 * [Aurora Project] on GitHub for source code
 * [Aurora Issue Tracker] on GitHub for reporting issues
-* [SmartMatrix User Community] on Google+ to ask questions, share your work, ideas, etc
+* [SmartMatrix User Community] to ask questions, share your work, ideas, etc
 
 Troubleshooting
 ---------------
 
 If you have any problems using Aurora (crashes, glitches, etc), please search the [Aurora Issue Tracker] before creating a new issue.    
     
-If you have any problems compiling Aurora, please make sure all the above libraries are properly installed.
+If you have any problems [Compiling] Aurora, please make sure all the required libraries are properly installed.
 Please refer to [Installing Additional Arduino Libraries], and [SmartMatrix External Libraries] for more troubleshooting information.
 
 Acknowledgements
@@ -78,9 +78,10 @@ Thanks to these fine game companies for allowing us to use and distribute their 
 ![Chasm](https://raw.githubusercontent.com/pixelmatix/aurora/master/sd/gifs/ChasmDaltynCrouch.gif) [Chasm] by [Discord Games]
 
 [SmartMatrix Kickstarter]:https://www.kickstarter.com/projects/pixelmatix/smartmatrix-dynamic-led-art-display-and-music-visu
-[SmartMatrix User Community]:https://plus.google.com/u/0/communities/105354523738870531811
+[SmartMatrix User Community]:http://community.pixelmatix.com
 [Aurora Project]:https://github.com/pixelmatix/aurora
 [Aurora Wiki]:https://github.com/pixelmatix/aurora/wiki
+[Compiling]:https://github.com/pixelmatix/aurora/wiki/Compiling
 [Aurora Source Code]:https://github.com/pixelmatix/aurora/archive/master.zip
 [Aurora Issue Tracker]:https://github.com/pixelmatix/aurora/issues
 [Teensyduino Software]:https://www.pjrc.com/teensy/td_download.html

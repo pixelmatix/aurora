@@ -365,6 +365,8 @@ public:
   }
 
   bool readJsonStream(aJsonStream &stream) {
+    bool result = false;
+
     // Serial.print(F("Parsing json..."));
     aJsonObject* root = aJson.parse(&stream);
     if (!root) {
@@ -374,7 +376,9 @@ public:
 
     // Serial.println(F(" done"));
 
-    return readJsonObject(root);
+    result = readJsonObject(root);
+    aJson.deleteItem(root);
+    return result;
   }
 
   bool readJsonObject(aJsonObject * root){
@@ -443,8 +447,6 @@ public:
       // Serial.print(F("scrollMode: "));
       // Serial.println(scrollMode);
     }
-
-    aJson.deleteItem(root);
 
     return true;
   }
