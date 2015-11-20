@@ -61,7 +61,6 @@ Many thanks to all of the fantastic hardware and open source software libraries 
 * [Time Library] by Paul Stoffregen
 * [DS1307RTC Library]
 * [aJson Library]
-* [Teensyduino Software]
 * [Arduino Software]
  
 A huge thank you to all of the projects and open source software that are used in and inspired Aurora!
