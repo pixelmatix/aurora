@@ -44,7 +44,7 @@ class AudioPatterns : public Playlist {
 
     AudioPatternFunctionPointer currentItem;
 
-    static const int PATTERN_COUNT = 39;
+    static const int PATTERN_COUNT = 33;
 
     AudioPatternFunctionPointer shuffledItems[PATTERN_COUNT];
 
@@ -55,16 +55,16 @@ class AudioPatterns : public Playlist {
       &AudioPatterns::radar,
       &AudioPatterns::gauge,
       &AudioPatterns::gauge2,
-      &AudioPatterns::paletteSmear,
-      &AudioPatterns::bounce,
+//      &AudioPatterns::paletteSmear,
+//      &AudioPatterns::bounce,
       &AudioPatterns::incrementalDrift,
       &AudioPatterns::incrementalDrift2,
       &AudioPatterns::pendulumWave,
       &AudioPatterns::fire,
-      &AudioPatterns::analyzerPixelsWithNoiseSmearing,
-      &AudioPatterns::analyzerColumnsWithNoiseSmearing,
-      &AudioPatterns::randomEmittersWithNoiseSmearing,
-      &AudioPatterns::lineChartWithNoiseSmearing,
+//      &AudioPatterns::analyzerPixelsWithNoiseSmearing,
+//      &AudioPatterns::analyzerColumnsWithNoiseSmearing,
+//      &AudioPatterns::randomEmittersWithNoiseSmearing,
+//      &AudioPatterns::lineChartWithNoiseSmearing,
       &AudioPatterns::analyzerPixelsWithOneLargeSpiral,
       &AudioPatterns::analyzerPixelsWithFiveSpirals,
       &AudioPatterns::analyzerPixelsWithStreamDown120,
@@ -196,15 +196,15 @@ class AudioPatterns : public Playlist {
       drawAnalyzerPixels();
     }
 
-    void analyzerPixelsWithNoiseSmearing() {
-      effects.DimAll(235);
-
-      drawAnalyzerPixels();
-
-      effects.standardNoiseSmearing();
-
-      peakDecay = 32;
-    }
+//    void analyzerPixelsWithNoiseSmearing() {
+//      effects.DimAll(235);
+//
+//      drawAnalyzerPixels();
+//
+//      effects.standardNoiseSmearing();
+//
+//      peakDecay = 32;
+//    }
 
     void drawAnalyzerPixels() {
       for (int x = 0; x < MATRIX_WIDTH; x++) {
@@ -240,15 +240,15 @@ class AudioPatterns : public Playlist {
       analyzerLinesByIntensity();
     }
 
-    void lineChartWithNoiseSmearing() {
-      effects.DimAll(235);
-
-      analyzerLinesByIntensity();
-
-      effects.standardNoiseSmearing();
-
-      peakDecay = 32;
-    }
+//    void lineChartWithNoiseSmearing() {
+//      effects.DimAll(235);
+//
+//      analyzerLinesByIntensity();
+//
+//      effects.standardNoiseSmearing();
+//
+//      peakDecay = 32;
+//    }
 
     void lineChartWithSpiral() {
       effects.SpiralStream(MATRIX_CENTRE_X, MATRIX_CENTRE_Y, MATRIX_WIDTH / 2, 120);
@@ -274,15 +274,15 @@ class AudioPatterns : public Playlist {
       analyzerColumnsByIntensity();
     }
 
-    void analyzerColumnsWithNoiseSmearing() {
-      effects.DimAll(235);
-
-      analyzerColumnsByIntensity();
-
-      effects.standardNoiseSmearing();
-
-      peakDecay = 32;
-    }
+//    void analyzerColumnsWithNoiseSmearing() {
+//      effects.DimAll(235);
+//
+//      analyzerColumnsByIntensity();
+//
+//      effects.standardNoiseSmearing();
+//
+//      peakDecay = 32;
+//    }
 
     void analyzerColumnsWithOneLargeSpiralStream() {
       effects.SpiralStream(MATRIX_CENTRE_X, MATRIX_CENTRE_Y, MATRIX_WIDTH / 2, 120);
@@ -456,15 +456,15 @@ class AudioPatterns : public Playlist {
       drawRandomEmitters();
     }
 
-    void randomEmittersWithNoiseSmearing() {
-      effects.DimAll(235);
-
-      drawRandomEmitters();
-
-      effects.standardNoiseSmearing();
-
-      peakDecay = 32;
-    }
+//    void randomEmittersWithNoiseSmearing() {
+//      effects.DimAll(235);
+//
+//      drawRandomEmitters();
+//
+//      effects.standardNoiseSmearing();
+//
+//      peakDecay = 32;
+//    }
 
     void drawRandomEmitters() {
       for (int i = 0; i < bandCount; i++) {
@@ -648,27 +648,27 @@ class AudioPatterns : public Playlist {
 
     // calculate noise matrix
     // x and y define the lower left point
-    void FillNoise() {
-      for (int i = 0; i < MATRIX_WIDTH; i++) {
-        int ioffset = scale * i;
-        for (int j = 0; j < MATRIX_HEIGHT; j++) {
-          int joffset = scale * j;
-          noise[i][j] = inoise8(x + ioffset, y + joffset, z);
-        }
-      }
-    }
+//    void FillNoise() {
+//      for (int i = 0; i < MATRIX_WIDTH; i++) {
+//        int ioffset = scale * i;
+//        for (int j = 0; j < MATRIX_HEIGHT; j++) {
+//          int joffset = scale * j;
+//          noise[i][j] = inoise8(x + ioffset, y + joffset, z);
+//        }
+//      }
+//    }
 
     // calculate noise matrix
     // x and y define the center
-    void FillNoiseCentral() {
-      for (int i = 0; i < MATRIX_WIDTH; i++) {
-        int ioffset = scale * (i - 8);
-        for (int j = 0; j < MATRIX_HEIGHT; j++) {
-          int joffset = scale * (j - 8);
-          noise[i][j] = inoise8(x + ioffset, y + joffset, z);
-        }
-      }
-    }
+//    void FillNoiseCentral() {
+//      for (int i = 0; i < MATRIX_WIDTH; i++) {
+//        int ioffset = scale * (i - 8);
+//        for (int j = 0; j < MATRIX_HEIGHT; j++) {
+//          int joffset = scale * (j - 8);
+//          noise[i][j] = inoise8(x + ioffset, y + joffset, z);
+//        }
+//      }
+//    }
 
     int band5 = (int) ((float) bandCount * 0.75);
 
@@ -984,75 +984,75 @@ class AudioPatterns : public Playlist {
       }
     }
 
-    PVector gravity = PVector(0, 0.0250);
-    PVector impulse = PVector(0, 0);
-    boolean startedAttractor = false;
-    void bounce() {
-      const int count = 32;
+//    PVector gravity = PVector(0, 0.0250);
+//    PVector impulse = PVector(0, 0);
+//    boolean startedAttractor = false;
+//    void bounce() {
+//      const int count = 32;
+//
+//      if (!startedAttractor) {
+//        startedAttractor = true;
+//
+//        int direction = random(0, 2);
+//        if (direction == 0)
+//          direction = -1;
+//
+//        for (int i = 0; i < count; i++) {
+//          Boid boid = Boid(i, MATRIX_HEIGHT - 1);
+//          boid.velocity.x = 0;
+//          boid.velocity.y = 0;
+//          boid.maxforce = 10;
+//          boid.maxspeed = 10;
+//          boids[i] = boid;
+//        }
+//      }
+//
+//      // dim all pixels on the display
+//      effects.DimAll(170);
+//
+//      for (int i = 0; i < count; i++) {
+//        Boid boid = boids[i];
+//        boid.velocity.x = 0;
+//        boid.location.x = i;
+//        boid.applyForce(gravity);
+//
+//        uint8_t bandIndex = i / 5;
+//
+//        int level = levels[bandIndex];
+//        if (drawPeaks)
+//          level = peaks[bandIndex];
+//
+//        if (boid.location.y == MATRIX_HEIGHT - 1) {
+//          impulse.y = - (float)random(level * .75, level) / 960.0F;
+//          boid.applyForce(impulse);
+//        }
+//
+//        boid.update();
+//
+//        boid.bounceOffBorders(0.2);
+//
+//        boids[i] = boid;
+//
+//        backgroundLayer.drawPixel(boid.location.x, boid.location.y, effects.ColorFromCurrentPalette(((MATRIX_HEIGHT - 1) - boid.location.y) * 7));
+//      }
+//    }
 
-      if (!startedAttractor) {
-        startedAttractor = true;
-
-        int direction = random(0, 2);
-        if (direction == 0)
-          direction = -1;
-
-        for (int i = 0; i < count; i++) {
-          Boid boid = Boid(i, MATRIX_HEIGHT - 1);
-          boid.velocity.x = 0;
-          boid.velocity.y = 0;
-          boid.maxforce = 10;
-          boid.maxspeed = 10;
-          boids[i] = boid;
-        }
-      }
-
-      // dim all pixels on the display
-      effects.DimAll(170);
-
-      for (int i = 0; i < count; i++) {
-        Boid boid = boids[i];
-        boid.velocity.x = 0;
-        boid.location.x = i;
-        boid.applyForce(gravity);
-
-        uint8_t bandIndex = i / 5;
-
-        int level = levels[bandIndex];
-        if (drawPeaks)
-          level = peaks[bandIndex];
-
-        if (boid.location.y == MATRIX_HEIGHT - 1) {
-          impulse.y = - (float)random(level * .75, level) / 960.0F;
-          boid.applyForce(impulse);
-        }
-
-        boid.update();
-
-        boid.bounceOffBorders(0.2);
-
-        boids[i] = boid;
-
-        backgroundLayer.drawPixel(boid.location.x, boid.location.y, effects.ColorFromCurrentPalette(((MATRIX_HEIGHT - 1) - boid.location.y) * 7));
-      }
-    }
-
-    void paletteSmear() {
-      effects.DimAll(170);
-
-      // draw a rainbow color palette
-      for (uint8_t y = 0; y < MATRIX_HEIGHT; y++) {
-        for (uint8_t x = 0; x < MATRIX_WIDTH; x++) {
-          int level = interpolatedLevels[x / horizontalPixelsPerBand];
-
-          effects.leds[XY(x, y)] += effects.ColorFromCurrentPalette(level / 5, y * (256 / MATRIX_HEIGHT));
-        }
-      }
-
-      effects.standardNoiseSmearing();
-
-      peakDecay = 32;
-    }
+//    void paletteSmear() {
+//      effects.DimAll(170);
+//
+//      // draw a rainbow color palette
+//      for (uint8_t y = 0; y < MATRIX_HEIGHT; y++) {
+//        for (uint8_t x = 0; x < MATRIX_WIDTH; x++) {
+//          int level = interpolatedLevels[x / horizontalPixelsPerBand];
+//
+//          effects.leds[XY(x, y)] += effects.ColorFromCurrentPalette(level / 5, y * (256 / MATRIX_HEIGHT));
+//        }
+//      }
+//
+//      effects.standardNoiseSmearing();
+//
+//      peakDecay = 32;
+//    }
 
     void gauge() {
       blur2d( effects.leds, MATRIX_WIDTH, MATRIX_HEIGHT, 10);

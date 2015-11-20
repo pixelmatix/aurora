@@ -47,7 +47,7 @@ class PatternSpiro : public Drawable {
     }
 
     unsigned int drawFrame() {
-      effects.DimAll(254);
+      effects.DimAll(250);
 
       boolean change = false;
       
@@ -65,13 +65,13 @@ class PatternSpiro : public Drawable {
            (x2 == MATRIX_CENTRE_X && y2 == MATRIX_CENTRE_Y)) change = true;
       }
 
-      theta2 += 1;
+      theta2 += 2;
 
-      EVERY_N_MILLIS(25) {
+      EVERY_N_MILLIS(12) {
         theta1 += 1;
       }
 
-      EVERY_N_MILLIS(100) {
+      EVERY_N_MILLIS(75) {
         if (change && !handledChange) {
           handledChange = true;
           
