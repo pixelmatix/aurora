@@ -109,6 +109,7 @@ char* audiosclFilename = (char*) "audioscl.txt";
 char* menuRFilename = (char*) "menuR.txt";
 char* menuGFilename = (char*) "menuG.txt";
 char* menuBFilename = (char*) "menuB.txt";
+char* menuYFilename = (char*) "menuY.txt";
 char* autoplydFilename = (char*) "autoplyd.txt";
 
 #include "AudioLogic.h"
@@ -162,6 +163,7 @@ Weather weather;
 #include "Bitmaps.h"
 
 rgb24 menuColor = CRGB(CRGB::Blue);
+int menuY = MATRIX_HEIGHT / 2 - 4;
 int autoPlayDurationSeconds = 10;
 
 #include "StreamingMode.h"

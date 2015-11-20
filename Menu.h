@@ -33,7 +33,6 @@ public:
     Random,
   };
 
-  int menuStart = MATRIX_HEIGHT / 2 - 4; // 11;
   MenuItem* currentMenuItem;
   Playlist* currentPlaylist;
   bool isPlaylist = false;
@@ -533,7 +532,7 @@ private:
         scrollingLayer.setSpeed(scrollSpeed);
         scrollingLayer.setFont(gohufont11b);
         scrollingLayer.setColor(menuColor);
-        scrollingLayer.setOffsetFromTop(menuStart);
+        scrollingLayer.setOffsetFromTop(menuY);
         scrollingLayer.start(name, -1);
       }
       else if (messageVisible) {
