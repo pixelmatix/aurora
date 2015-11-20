@@ -45,27 +45,34 @@ class PatternSwirl : public Drawable {
       // an automatic trend toward black -- by design.
       uint8_t blurAmount = beatsin8(2, 10, 255);
 
-#if FASTLED_VERSION >= 3001000
-      blur2d(effects.leds, MATRIX_WIDTH, MATRIX_HEIGHT, blurAmount);
-#else
+//#if FASTLED_VERSION >= 3001000
+//      blur2d(effects.leds, MATRIX_WIDTH, MATRIX_HEIGHT, blurAmount);
+//#else
       effects.DimAll(blurAmount);
-#endif
+//#endif
 
       // Use two out-of-sync sine waves
-      uint8_t  i = beatsin8(27, borderWidth, MATRIX_HEIGHT - borderWidth);
-      uint8_t  j = beatsin8(41, borderWidth, MATRIX_WIDTH - borderWidth);
+      uint8_t  i = beatsin8(13, borderWidth, MATRIX_HEIGHT - borderWidth);
+      uint8_t  j = beatsin8(20, borderWidth, MATRIX_WIDTH - borderWidth);
       // Also calculate some reflections
       uint8_t ni = (MATRIX_WIDTH - 1) - i;
       uint8_t nj = (MATRIX_WIDTH - 1) - j;
 
       // The color of each point shifts over time, each at a different speed.
       uint16_t ms = millis();
-      effects.leds[XY(i, j)] += effects.ColorFromCurrentPalette(ms / 11);
-      effects.leds[XY(j, i)] += effects.ColorFromCurrentPalette(ms / 13);
-      effects.leds[XY(ni, nj)] += effects.ColorFromCurrentPalette(ms / 17);
-      effects.leds[XY(nj, ni)] += effects.ColorFromCurrentPalette(ms / 29);
-      effects.leds[XY(i, nj)] += effects.ColorFromCurrentPalette(ms / 37);
-      effects.leds[XY(ni, j)] += effects.ColorFromCurrentPalette(ms / 41);
+      backgroundLayer.drawCircle(i, j, 1, effects.ColorFromCurrentPalette(ms / 11));
+      backgroundLayer.drawCircle(j, i, 1, effects.ColorFromCurrentPalette(ms / 13));
+      backgroundLayer.drawCircle(ni, nj, 1, effects.ColorFromCurrentPalette(ms / 17));
+      backgroundLayer.drawCircle(nj, ni, 1, effects.ColorFromCurrentPalette(ms / 29));
+      backgroundLayer.drawCircle(i, nj, 1, effects.ColorFromCurrentPalette(ms / 37));
+      backgroundLayer.drawCircle(ni, j, 1, effects.ColorFromCurrentPalette(ms / 41));
+      
+//      effects.leds[XY(i, j)] += effects.ColorFromCurrentPalette(ms / 11);
+//      effects.leds[XY(j, i)] += effects.ColorFromCurrentPalette(ms / 13);
+//      effects.leds[XY(ni, nj)] += effects.ColorFromCurrentPalette(ms / 17);
+//      effects.leds[XY(nj, ni)] += effects.ColorFromCurrentPalette(ms / 29);
+//      effects.leds[XY(i, nj)] += effects.ColorFromCurrentPalette(ms / 37);
+//      effects.leds[XY(ni, j)] += effects.ColorFromCurrentPalette(ms / 41);
 
       return 0;
     }

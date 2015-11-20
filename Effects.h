@@ -121,46 +121,46 @@ uint32_t noise_z;
 uint32_t noise_scale_x;
 uint32_t noise_scale_y;
 
-uint8_t noise[MATRIX_WIDTH][MATRIX_HEIGHT];
+//uint8_t noise[MATRIX_WIDTH][MATRIX_HEIGHT];
 
 uint8_t noisesmoothing;
 
 class Effects {
 public:
   CRGB *leds;
-  CRGB leds2[NUM_LEDS];
+//  CRGB leds2[NUM_LEDS];
 
-  void CircleStream(uint8_t value) {
-    DimAll(value);
-
-    for (uint8_t offset = 0; offset < MATRIX_CENTER_X; offset++) {
-      boolean hasprev = false;
-      uint16_t prevxy = 0;
-
-      for (uint8_t theta = 0; theta < 255; theta++) {
-        uint8_t x = mapcos8(theta, offset, (MATRIX_WIDTH - 1) - offset);
-        uint8_t y = mapsin8(theta, offset, (MATRIX_HEIGHT - 1) - offset);
-
-        uint16_t xy = XY(x, y);
-
-        if (hasprev) {
-          leds2[prevxy] += leds[xy];
-        }
-
-        prevxy = xy;
-        hasprev = true;
-      }
-    }
-
-    for (uint8_t x = 0; x < MATRIX_WIDTH; x++) {
-      for (uint8_t y = 0; y < MATRIX_HEIGHT; y++) {
-        uint16_t xy = XY(x, y);
-        leds[xy] = leds2[xy];
-        leds[xy].nscale8(value);
-        leds2[xy].nscale8(value);
-      }
-    }
-  }
+//  void CircleStream(uint8_t value) {
+//    DimAll(value);
+//
+//    for (uint8_t offset = 0; offset < MATRIX_CENTER_X; offset++) {
+//      boolean hasprev = false;
+//      uint16_t prevxy = 0;
+//
+//      for (uint8_t theta = 0; theta < 255; theta++) {
+//        uint8_t x = mapcos8(theta, offset, (MATRIX_WIDTH - 1) - offset);
+//        uint8_t y = mapsin8(theta, offset, (MATRIX_HEIGHT - 1) - offset);
+//
+//        uint16_t xy = XY(x, y);
+//
+//        if (hasprev) {
+//          leds2[prevxy] += leds[xy];
+//        }
+//
+//        prevxy = xy;
+//        hasprev = true;
+//      }
+//    }
+//
+//    for (uint8_t x = 0; x < MATRIX_WIDTH; x++) {
+//      for (uint8_t y = 0; y < MATRIX_HEIGHT; y++) {
+//        uint16_t xy = XY(x, y);
+//        leds[xy] = leds2[xy];
+//        leds[xy].nscale8(value);
+//        leds2[xy].nscale8(value);
+//      }
+//    }
+//  }
 
   // palettes
   static const int paletteCount = 10;
@@ -717,159 +717,159 @@ public:
     noise_scale_y = 6000;
   }
 
-  void FillNoise() {
-    for (uint8_t i = 0; i < MATRIX_WIDTH; i++) {
-      uint32_t ioffset = noise_scale_x * (i - MATRIX_CENTRE_Y);
+//  void FillNoise() {
+//    for (uint8_t i = 0; i < MATRIX_WIDTH; i++) {
+//      uint32_t ioffset = noise_scale_x * (i - MATRIX_CENTRE_Y);
+//
+//      for (uint8_t j = 0; j < MATRIX_HEIGHT; j++) {
+//        uint32_t joffset = noise_scale_y * (j - MATRIX_CENTRE_Y);
+//
+//        byte data = inoise16(noise_x + ioffset, noise_y + joffset, noise_z) >> 8;
+//
+//        uint8_t olddata = noise[i][j];
+//        uint8_t newdata = scale8(olddata, noisesmoothing) + scale8(data, 256 - noisesmoothing);
+//        data = newdata;
+//
+//        noise[i][j] = data;
+//      }
+//    }
+//  }
 
-      for (uint8_t j = 0; j < MATRIX_HEIGHT; j++) {
-        uint32_t joffset = noise_scale_y * (j - MATRIX_CENTRE_Y);
+//  void MoveX(byte delta) {
+//    for (int y = 0; y < MATRIX_HEIGHT; y++) {
+//      for (int x = 0; x < MATRIX_WIDTH - delta; x++) {
+//        leds2[XY(x, y)] = leds[XY(x + delta, y)];
+//      }
+//      for (int x = MATRIX_WIDTH - delta; x < MATRIX_WIDTH; x++) {
+//        leds2[XY(x, y)] = leds[XY(x + delta - MATRIX_WIDTH, y)];
+//      }
+//    }
+//
+//    // write back to leds
+//    for (uint8_t y = 0; y < MATRIX_HEIGHT; y++) {
+//      for (uint8_t x = 0; x < MATRIX_WIDTH; x++) {
+//        leds[XY(x, y)] = leds2[XY(x, y)];
+//      }
+//    }
+//  }
 
-        byte data = inoise16(noise_x + ioffset, noise_y + joffset, noise_z) >> 8;
+//  void MoveY(byte delta) {
+//    for (int x = 0; x < MATRIX_WIDTH; x++) {
+//      for (int y = 0; y < MATRIX_HEIGHT - delta; y++) {
+//        leds2[XY(x, y)] = leds[XY(x, y + delta)];
+//      }
+//      for (int y = MATRIX_HEIGHT - delta; y < MATRIX_HEIGHT; y++) {
+//        leds2[XY(x, y)] = leds[XY(x, y + delta - MATRIX_HEIGHT)];
+//      }
+//    }
+//
+//    // write back to leds
+//    for (uint8_t y = 0; y < MATRIX_HEIGHT; y++) {
+//      for (uint8_t x = 0; x < MATRIX_WIDTH; x++) {
+//        leds[XY(x, y)] = leds2[XY(x, y)];
+//      }
+//    }
+//  }
 
-        uint8_t olddata = noise[i][j];
-        uint8_t newdata = scale8(olddata, noisesmoothing) + scale8(data, 256 - noisesmoothing);
-        data = newdata;
+//  void MoveFractionalNoiseX(byte amt = 16) {
+//    // move delta pixelwise
+//    for (int y = 0; y < MATRIX_HEIGHT; y++) {
+//      uint16_t amount = noise[0][y] * amt;
+//      byte delta = 31 - (amount / 256);
+//
+//      for (int x = 0; x < MATRIX_WIDTH - delta; x++) {
+//        leds2[XY(x, y)] = leds[XY(x + delta, y)];
+//      }
+//      for (int x = MATRIX_WIDTH - delta; x < MATRIX_WIDTH; x++) {
+//        leds2[XY(x, y)] = leds[XY(x + delta - MATRIX_WIDTH, y)];
+//      }
+//    }
+//
+//    //move fractions
+//    CRGB PixelA;
+//    CRGB PixelB;
+//
+//    for (uint8_t y = 0; y < MATRIX_HEIGHT; y++) {
+//      uint16_t amount = noise[0][y] * amt;
+//      byte delta = 31 - (amount / 256);
+//      byte fractions = amount - (delta * 256);
+//
+//      for (uint8_t x = 1; x < MATRIX_WIDTH; x++) {
+//        PixelA = leds2[XY(x, y)];
+//        PixelB = leds2[XY(x - 1, y)];
+//
+//        PixelA %= 255 - fractions;
+//        PixelB %= fractions;
+//
+//        leds[XY(x, y)] = PixelA + PixelB;
+//      }
+//
+//      PixelA = leds2[XY(0, y)];
+//      PixelB = leds2[XY(MATRIX_WIDTH - 1, y)];
+//
+//      PixelA %= 255 - fractions;
+//      PixelB %= fractions;
+//
+//      leds[XY(0, y)] = PixelA + PixelB;
+//    }
+//  }
 
-        noise[i][j] = data;
-      }
-    }
-  }
+//  void MoveFractionalNoiseY(byte amt = 16) {
+//    // move delta pixelwise
+//    for (int x = 0; x < MATRIX_WIDTH; x++) {
+//      uint16_t amount = noise[x][0] * amt;
+//      byte delta = 31 - (amount / 256);
+//
+//      for (int y = 0; y < MATRIX_WIDTH - delta; y++) {
+//        leds2[XY(x, y)] = leds[XY(x, y + delta)];
+//      }
+//      for (int y = MATRIX_WIDTH - delta; y < MATRIX_WIDTH; y++) {
+//        leds2[XY(x, y)] = leds[XY(x, y + delta - MATRIX_WIDTH)];
+//      }
+//    }
+//
+//    //move fractions
+//    CRGB PixelA;
+//    CRGB PixelB;
+//
+//    for (uint8_t x = 0; x < MATRIX_HEIGHT; x++) {
+//      uint16_t amount = noise[x][0] * amt;
+//      byte delta = 31 - (amount / 256);
+//      byte fractions = amount - (delta * 256);
+//
+//      for (uint8_t y = 1; y < MATRIX_WIDTH; y++) {
+//        PixelA = leds2[XY(x, y)];
+//        PixelB = leds2[XY(x, y - 1)];
+//
+//        PixelA %= 255 - fractions;
+//        PixelB %= fractions;
+//
+//        leds[XY(x, y)] = PixelA + PixelB;
+//      }
+//
+//      PixelA = leds2[XY(x, 0)];
+//      PixelB = leds2[XY(x, MATRIX_WIDTH - 1)];
+//
+//      PixelA %= 255 - fractions;
+//      PixelB %= fractions;
+//
+//      leds[XY(x, 0)] = PixelA + PixelB;
+//    }
+//  }
 
-  void MoveX(byte delta) {
-    for (int y = 0; y < MATRIX_HEIGHT; y++) {
-      for (int x = 0; x < MATRIX_WIDTH - delta; x++) {
-        leds2[XY(x, y)] = leds[XY(x + delta, y)];
-      }
-      for (int x = MATRIX_WIDTH - delta; x < MATRIX_WIDTH; x++) {
-        leds2[XY(x, y)] = leds[XY(x + delta - MATRIX_WIDTH, y)];
-      }
-    }
-
-    // write back to leds
-    for (uint8_t y = 0; y < MATRIX_HEIGHT; y++) {
-      for (uint8_t x = 0; x < MATRIX_WIDTH; x++) {
-        leds[XY(x, y)] = leds2[XY(x, y)];
-      }
-    }
-  }
-
-  void MoveY(byte delta) {
-    for (int x = 0; x < MATRIX_WIDTH; x++) {
-      for (int y = 0; y < MATRIX_HEIGHT - delta; y++) {
-        leds2[XY(x, y)] = leds[XY(x, y + delta)];
-      }
-      for (int y = MATRIX_HEIGHT - delta; y < MATRIX_HEIGHT; y++) {
-        leds2[XY(x, y)] = leds[XY(x, y + delta - MATRIX_HEIGHT)];
-      }
-    }
-
-    // write back to leds
-    for (uint8_t y = 0; y < MATRIX_HEIGHT; y++) {
-      for (uint8_t x = 0; x < MATRIX_WIDTH; x++) {
-        leds[XY(x, y)] = leds2[XY(x, y)];
-      }
-    }
-  }
-
-  void MoveFractionalNoiseX(byte amt = 16) {
-    // move delta pixelwise
-    for (int y = 0; y < MATRIX_HEIGHT; y++) {
-      uint16_t amount = noise[0][y] * amt;
-      byte delta = 31 - (amount / 256);
-
-      for (int x = 0; x < MATRIX_WIDTH - delta; x++) {
-        leds2[XY(x, y)] = leds[XY(x + delta, y)];
-      }
-      for (int x = MATRIX_WIDTH - delta; x < MATRIX_WIDTH; x++) {
-        leds2[XY(x, y)] = leds[XY(x + delta - MATRIX_WIDTH, y)];
-      }
-    }
-
-    //move fractions
-    CRGB PixelA;
-    CRGB PixelB;
-
-    for (uint8_t y = 0; y < MATRIX_HEIGHT; y++) {
-      uint16_t amount = noise[0][y] * amt;
-      byte delta = 31 - (amount / 256);
-      byte fractions = amount - (delta * 256);
-
-      for (uint8_t x = 1; x < MATRIX_WIDTH; x++) {
-        PixelA = leds2[XY(x, y)];
-        PixelB = leds2[XY(x - 1, y)];
-
-        PixelA %= 255 - fractions;
-        PixelB %= fractions;
-
-        leds[XY(x, y)] = PixelA + PixelB;
-      }
-
-      PixelA = leds2[XY(0, y)];
-      PixelB = leds2[XY(MATRIX_WIDTH - 1, y)];
-
-      PixelA %= 255 - fractions;
-      PixelB %= fractions;
-
-      leds[XY(0, y)] = PixelA + PixelB;
-    }
-  }
-
-  void MoveFractionalNoiseY(byte amt = 16) {
-    // move delta pixelwise
-    for (int x = 0; x < MATRIX_WIDTH; x++) {
-      uint16_t amount = noise[x][0] * amt;
-      byte delta = 31 - (amount / 256);
-
-      for (int y = 0; y < MATRIX_WIDTH - delta; y++) {
-        leds2[XY(x, y)] = leds[XY(x, y + delta)];
-      }
-      for (int y = MATRIX_WIDTH - delta; y < MATRIX_WIDTH; y++) {
-        leds2[XY(x, y)] = leds[XY(x, y + delta - MATRIX_WIDTH)];
-      }
-    }
-
-    //move fractions
-    CRGB PixelA;
-    CRGB PixelB;
-
-    for (uint8_t x = 0; x < MATRIX_HEIGHT; x++) {
-      uint16_t amount = noise[x][0] * amt;
-      byte delta = 31 - (amount / 256);
-      byte fractions = amount - (delta * 256);
-
-      for (uint8_t y = 1; y < MATRIX_WIDTH; y++) {
-        PixelA = leds2[XY(x, y)];
-        PixelB = leds2[XY(x, y - 1)];
-
-        PixelA %= 255 - fractions;
-        PixelB %= fractions;
-
-        leds[XY(x, y)] = PixelA + PixelB;
-      }
-
-      PixelA = leds2[XY(x, 0)];
-      PixelB = leds2[XY(x, MATRIX_WIDTH - 1)];
-
-      PixelA %= 255 - fractions;
-      PixelB %= fractions;
-
-      leds[XY(x, 0)] = PixelA + PixelB;
-    }
-  }
-
-  void standardNoiseSmearing() {
-    noise_x += 1000;
-    noise_y += 1000;
-    noise_scale_x = 4000;
-    noise_scale_y = 4000;
-    FillNoise();
-
-    MoveX(3);
-    MoveFractionalNoiseY(4);
-
-    MoveY(3);
-    MoveFractionalNoiseX(4);
-  }
+//  void standardNoiseSmearing() {
+//    noise_x += 1000;
+//    noise_y += 1000;
+//    noise_scale_x = 4000;
+//    noise_scale_y = 4000;
+//    FillNoise();
+//
+//    MoveX(3);
+//    MoveFractionalNoiseY(4);
+//
+//    MoveY(3);
+//    MoveFractionalNoiseX(4);
+//  }
 };
 
 #endif

@@ -572,30 +572,30 @@ private:
     // account for any time spent drawing the clock, swapping buffers, etc.
     unsigned int startTime = millis();
 
-    boolean streaming = streamingMode.handleStreaming();
-
-    if (streaming && !wasStreaming) {
-      wasStreaming = true;
-      visibleBeforeStreaming = visible;
-    }
-
-    if (streaming) {
-      visible = false;
-      updateScrollText = true;
-    }
-    else {
-      if (wasStreaming && visibleBeforeStreaming) {
-        visible = true;
-        updateScrollText = true;
-      }
-
-      wasStreaming = false;
-    }
+//    boolean streaming = streamingMode.handleStreaming();
+//
+//    if (streaming && !wasStreaming) {
+//      wasStreaming = true;
+//      visibleBeforeStreaming = visible;
+//    }
+//
+//    if (streaming) {
+//      visible = false;
+//      updateScrollText = true;
+//    }
+//    else {
+//      if (wasStreaming && visibleBeforeStreaming) {
+//        visible = true;
+//        updateScrollText = true;
+//      }
+//
+//      wasStreaming = false;
+//    }
 
     // draw the current item
     unsigned int requestedDelay = 0;
 
-    if (!streaming)
+//    if (!streaming)
       requestedDelay = currentMenuItem->drawable->drawFrame();
 
     effects.ShowFrame();
