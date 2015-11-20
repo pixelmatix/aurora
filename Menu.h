@@ -112,12 +112,7 @@ public:
 
       while (true) {
         if (!hasExternalPower()) {
-          matrix.setBrightness(0);
-          backgroundLayer.setBrightness(1);
-        }
-        else {
-          matrix.setBrightness(brightness);
-          backgroundLayer.setBrightness(backgroundBrightness);
+          restartAndJumpToApp();
         }
 
         updateStatusLed();
