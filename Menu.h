@@ -467,7 +467,7 @@ private:
         char text[4];
         sprintf(text, "%3d%%", level);
 
-        indexedLayer.drawString(4, 11, 1, text);
+        indexedLayer.drawString(4, kMatrixHeight / 2 - 5, 1, text);
       }
       else if (audioScaleChanged || showingAudioScaleIndicator) {
         audioScaleChanged = false;
@@ -487,7 +487,7 @@ private:
         indexedLayer.setFont(font3x5);
         indexedLayer.setIndexedColor(1, menuColor);
 
-        indexedLayer.drawString(0, 14, 1, effects.currentPaletteName);
+        indexedLayer.drawString(0, kMatrixHeight / 2 - 2, 1, effects.currentPaletteName);
       }
       else if (showingPatternIndicator) {
         if (isPlaylist) {
@@ -498,7 +498,7 @@ private:
           char currentItemName[10];
           itoa(currentIndex, currentItemName, 10);
 
-          indexedLayer.drawString(1, 14, 1, currentItemName);
+          indexedLayer.drawString(1, kMatrixHeight / 2 - 2, 1, currentItemName);
         }
       }
       else if (playModeChanged || showingPlayModeIndicator) {
@@ -508,16 +508,16 @@ private:
 
         switch (playMode) {
           case Paused:
-            indexedLayer.drawMonoBitmap(12, 10, pauseBitmapWidth, pauseBitmapHeight, 1, pauseBitmap);
-            indexedLayer.drawString(0, 18, 1, "  Pause");
+            indexedLayer.drawMonoBitmap(12, kMatrixHeight / 2 - 6, pauseBitmapWidth, pauseBitmapHeight, 1, pauseBitmap);
+            indexedLayer.drawString(0, kMatrixHeight / 2 + 2, 1, "  Pause");
             break;
           case Autoplay:
             indexedLayer.drawMonoBitmap(12, 10, playBitmapWidth, playBitmapHeight, 1, playBitmap);
-            indexedLayer.drawString(0, 18, 1, "Autoplay");
+            indexedLayer.drawString(0, kMatrixHeight / 2 + 2, 1, "Autoplay");
             break;
           case Random:
             indexedLayer.drawMonoBitmap(12, 10, playBitmapWidth, playBitmapHeight, 1, playBitmap);
-            indexedLayer.drawString(0, 18, 1, " Random");
+            indexedLayer.drawString(0, kMatrixHeight / 2 + 2, 1, " Random");
             break;
         }
       }
