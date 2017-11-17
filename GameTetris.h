@@ -1075,7 +1075,7 @@ class GameTetris : public Runnable {
 
       // Serial.println("drawing the lines cleared count");
       // draw lines cleared
-      backgroundLayer.drawString(0, 27, COLOR_GRAY, linesClearedText);
+      backgroundLayer.drawString(0, MATRIX_HEIGHT - 5, COLOR_GRAY, linesClearedText);
 
       // Serial.println("drawing the next block indicator");
       // draw next block

@@ -152,7 +152,7 @@ unsigned long readIRCode() {
   while (decodeIRCode() == code) {
     ;
   }
-  // Serial.println(code);
+  Serial.println(code);
   return code;
 }
 

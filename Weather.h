@@ -137,7 +137,7 @@ class Weather : public Playlist {
       sprintf(temp, "%d", temperature);
 
       // draw the date
-      indexedLayer.drawString(1, 27, 1, temp);
+      indexedLayer.drawString(1, MATRIX_HEIGHT - 5, 1, temp);
 
       return result;
     }

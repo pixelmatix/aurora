@@ -56,12 +56,12 @@ class PatternInvadersSmall : public Drawable {
       }
 
       x += 6;
-      if (x > 25) {
+      if (x > MATRIX_WIDTH - 7) {
         x = 1;
         y += 6;
       }
 
-      if (y > 25) y = x = 1;
+      if (y > MATRIX_HEIGHT - 7) y = x = 1;
 
       return 125;
     }
@@ -98,12 +98,12 @@ class PatternInvadersMedium : public Drawable {
       }
 
       x += 11;
-      if (x > 22) {
+      if (x > MATRIX_WIDTH - 12) {
         x = 0;
         y += 11;
       }
 
-      if (y > 22) y = x = 0;
+      if (y > MATRIX_HEIGHT - 12) y = x = 0;
 
       return 500;
     }

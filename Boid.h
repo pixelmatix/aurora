@@ -259,10 +259,10 @@ class Boid {
     void avoidBorders() {
       PVector desired = velocity;
 
-      if (location.x < 8) desired = PVector(maxspeed, velocity.y);
-      if (location.x >= MATRIX_WIDTH - 8) desired = PVector(-maxspeed, velocity.y);
-      if (location.y < 8) desired = PVector(velocity.x, maxspeed);
-      if (location.y >= MATRIX_HEIGHT - 8) desired = PVector(velocity.x, -maxspeed);
+      if (location.x < MATRIX_WIDTH / 4) desired = PVector(maxspeed, velocity.y);
+      if (location.x >= MATRIX_WIDTH - MATRIX_WIDTH / 4) desired = PVector(-maxspeed, velocity.y);
+      if (location.y < MATRIX_HEIGHT / 4) desired = PVector(velocity.x, maxspeed);
+      if (location.y >= MATRIX_HEIGHT - MATRIX_HEIGHT / 4) desired = PVector(velocity.x, -maxspeed);
 
       if (desired != velocity) {
         PVector steer = desired - velocity;
@@ -322,5 +322,5 @@ class Boid {
     }
 };
 
-static const uint8_t AVAILABLE_BOID_COUNT = 40;
+static const uint8_t AVAILABLE_BOID_COUNT = 64;
 Boid boids[AVAILABLE_BOID_COUNT];

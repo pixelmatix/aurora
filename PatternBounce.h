@@ -24,7 +24,7 @@
 
 class PatternBounce : public Drawable {
 private:
-    static const int count = 32;
+    static const int count = MATRIX_WIDTH;
     PVector gravity = PVector(0, 0.0125);
 
 public:
@@ -35,7 +35,7 @@ public:
     void start() {
         unsigned int colorWidth = 256 / count;
         for (int i = 0; i < count; i++) {
-            Boid boid = Boid(i, 0);
+            Boid boid = Boid(i, MATRIX_HEIGHT / 8);
             boid.velocity.x = 0;
             boid.velocity.y = i * -0.01;
             boid.colorIndex = colorWidth * i;
@@ -54,14 +54,29 @@ public:
 
             boid.applyForce(gravity);
 
-            boid.update();
+            float oldY = boid.location.y;
 
+            boid.update();
+            
+            if(boid.location.y > oldY) {
+              for(float y = oldY; y < boid.location.y; y++) {
+                backgroundLayer.drawPixel(boid.location.x, y, effects.ColorFromCurrentPalette(boid.colorIndex));
+              }
+            } else {
+              for(float y = boid.location.y; y < oldY; y++) {
+                backgroundLayer.drawPixel(boid.location.x, y, effects.ColorFromCurrentPalette(boid.colorIndex));
+              }
+            }
+            
             backgroundLayer.drawPixel(boid.location.x, boid.location.y, effects.ColorFromCurrentPalette(boid.colorIndex));
 
             if (boid.location.y >= MATRIX_HEIGHT - 1) {
                 boid.location.y = MATRIX_HEIGHT - 1;
                 boid.velocity.y *= -1.0;
             }
+//            else if (boid.location.y <= 0) {
+//                boid.location.y = 0;
+//            }
 
             boids[i] = boid;
         }

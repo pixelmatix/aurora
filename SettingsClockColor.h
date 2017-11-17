@@ -34,7 +34,7 @@ class SettingsClockColor : public Runnable {
     void start() {
       CHSV chsv;
       CRGB crgb;
-      for (int x = 0; x < MATRIX_WIDTH - 1; x += 1) {
+      for (uint8_t x = 0; x < MATRIX_WIDTH; x++) {
         uint8_t hue = x * 8;
 
         for (int y = 0; y < MATRIX_HEIGHT; y += 1) {
@@ -172,7 +172,7 @@ class SettingsClockColor : public Runnable {
     unsigned int drawFrame() {
       backgroundLayer.fillScreen(CRGB(CRGB::Black));
       backgroundLayer.setFont(font3x5);
-      backgroundLayer.drawString(0, 27, { 255, 255, 255 }, versionText);
+      backgroundLayer.drawString(0, MATRIX_HEIGHT - 5, { 255, 255, 255 }, versionText);
       return 0;
     }
 

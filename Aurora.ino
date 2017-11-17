@@ -27,8 +27,8 @@
 #include <SmartMatrix3.h>
 
 #define COLOR_DEPTH 24                  // known working: 24, 48 - If the sketch uses type `rgb24` directly, COLOR_DEPTH must be 24
-const uint8_t kMatrixWidth = 32;        // known working: 32, 64, 96, 128
-const uint8_t kMatrixHeight = 32;       // known working: 16, 32, 48, 64
+const uint8_t kMatrixWidth = 64;        // known working: 32, 64, 96, 128
+const uint8_t kMatrixHeight = 64;       // known working: 16, 32, 48, 64
 const uint8_t kRefreshDepth = 36;       // known working: 24, 36, 48
 const uint8_t kDmaBufferRows = 4;       // known working: 2-4, use 2 to save memory, more to keep from dropping frames and automatically lowering refresh rate
 const uint8_t kPanelType = SMARTMATRIX_HUB75_32ROW_MOD16SCAN;   // use SMARTMATRIX_HUB75_16ROW_MOD8SCAN for common 16x32 panels
@@ -68,6 +68,8 @@ char* auroraPath = (char *) "/aurora/";
 #include <Wire.h>
 #include <Time.h>
 #include <DS1307RTC.h>
+
+#include <GifDecoder.h>
 
 #include <aJSON.h>
 
@@ -166,8 +168,7 @@ Effects effects;
 
 #include "IrCodes.h"
 
-#include "GifPlayer.h"
-GifPlayer gifPlayer;
+GifDecoder<kMatrixWidth, kMatrixHeight, 12> gifDecoder;
 
 #include "Drawable.h"
 #include "Playlist.h"
@@ -265,6 +266,27 @@ time_t getTeensy3Time()
   return Teensy3Clock.get();
 }
 
+void screenClearCallback(void) {
+  backgroundLayer.fillScreen({0, 0, 0});
+}
+
+void updateScreenCallback(void) {
+  // backgroundLayer.swapBuffers();
+}
+
+void drawPixelCallback(int16_t x, int16_t y, uint8_t red, uint8_t green, uint8_t blue) {
+  if (gifDecoder.lsdWidth == 32 && gifDecoder.lsdHeight == 32) {
+    int16_t nx = x * 2;
+    int16_t ny = y * 2;
+    backgroundLayer.drawPixel(nx, ny, {red, green, blue});
+    backgroundLayer.drawPixel(nx + 1, ny, {red, green, blue});
+    backgroundLayer.drawPixel(nx, ny + 1, {red, green, blue});
+    backgroundLayer.drawPixel(nx + 1, ny + 1, {red, green, blue});
+  } else {
+    backgroundLayer.drawPixel(x, y, {red, green, blue});
+  }
+}
+
 void setup()
 {
 #ifdef STATUS_LED
@@ -347,6 +369,15 @@ void setup()
 
   // set date time callback function
   SdFile::dateTimeCallback(dateTime);
+
+  gifDecoder.setScreenClearCallback(screenClearCallback);
+  gifDecoder.setUpdateScreenCallback(updateScreenCallback);
+  gifDecoder.setDrawPixelCallback(drawPixelCallback);
+
+  gifDecoder.setFileSeekCallback(fileSeekCallback);
+  gifDecoder.setFilePositionCallback(filePositionCallback);
+  gifDecoder.setFileReadCallback(fileReadCallback);
+  gifDecoder.setFileReadBlockCallback(fileReadBlockCallback);
 
   // default to patterns
   menu.currentIndex = 1;
@@ -463,7 +494,7 @@ bool setPattern(int index) {
 }
 
 void listAnimations() {
-  animations.listFiles();
+  // animations.listFiles();
 }
 
 void reloadAnimations() {
@@ -471,20 +502,20 @@ void reloadAnimations() {
 }
 
 bool setAnimation(String name) {
-  if (animations.setAnimation(name)) {
-    menu.currentIndex = 2;
-    menu.visible = false;
-    return true;
-  }
+//  if (animations.setAnimation(name)) {
+//    menu.currentIndex = 2;
+//    menu.visible = false;
+//    return true;
+//  }
   return false;
 }
 
 bool setAnimation(int index) {
-  if (animations.setAnimation(index)) {
-    menu.currentIndex = 2;
-    menu.visible = false;
-    return true;
-  }
+//  if (animations.setAnimation(index)) {
+//    menu.currentIndex = 2;
+//    menu.visible = false;
+//    return true;
+//  }
 
   return false;
 }

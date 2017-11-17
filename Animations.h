@@ -26,13 +26,15 @@
 #ifndef Animations_H
 #define Animations_H
 
+#include <FilenameFunctions.h>
+
 class Animations : public Playlist {
   public:
 
     char* Drawable::name = (char *)"Animations";
   
     int currentIndex = 0;
-    int imageCount = 1;
+    int imageCount = 0;
 
     int getCurrentIndex() {
       return currentIndex;
@@ -43,8 +45,8 @@ class Animations : public Playlist {
 
       if (currentIndex >= imageCount) currentIndex = 0;
       else if (currentIndex < 0) currentIndex = imageCount - 1;
-
-      openImageFile(false);
+      
+      openGifFilenameByIndex(path, currentIndex);
     }
 
     void moveRandom(int step) {
@@ -53,63 +55,19 @@ class Animations : public Playlist {
 
       if (currentIndex >= imageCount) currentIndex = 0;
       else if (currentIndex < 0) currentIndex = imageCount - 1;
-
-      openImageFile(false);
+      
+      openGifFilenameByIndex(path, currentIndex);
     }
 
-    bool setAnimation(int index) {
-      if (index >= imageCount || index < 0)
-        return false;
+    void setup(char* directoryName) {
+      path = directoryName;
 
-      currentIndex = index;
-      openImageFile(false);
-
-      return true;
-    }
-
-    bool setAnimation(String name) {
-      if (!SD.exists(path))
-        return false;
-
-      File directory = SD.open(path, FILE_READ);
-      if (!directory)
-        return -1;
-
-      int index = -1;
-      bool foundMatch = false;
-
-      File file = directory.openNextFile();
-      while (file) {
-        if (!file.isDirectory()) {
-          if (isAnimationFile(file.name())) {
-            index++;
-          }
-
-          if (name.compareTo(file.name()) == 0) {
-            foundMatch = true;
-            currentIndex = index;
-            break;
-          }
-        }
-
-        file.close();
-        file = directory.openNextFile();
+      if (!SD.exists(directoryName)) {
+        SD.mkdir(directoryName);
       }
-      file.close();
-      directory.close();
-
-      if (foundMatch) {
-        currentIndex = index;
-
-        if (currentIndex >= imageCount) currentIndex = 0;
-        else if (currentIndex < 0) currentIndex = imageCount - 1;
-
-        openImageFile(false);
-
-        return true;
-      }
-
-      return false;
+      
+      imageCount = enumerateGIFFiles(directoryName, true);
+      currentIndex = 0;
     }
 
     unsigned int drawFrame() {
@@ -132,201 +90,27 @@ class Animations : public Playlist {
         return 30;
       }
 
-      unsigned long result = gifPlayer.drawFrame();
-      if (result == ERROR_FINISHED) {
-        openImageFile(true);
-        isCurrentItemFinished = true;
-      }
-      else if (result < 0) {
-        return 0;
-      }
-
-      return result;
+      gifDecoder.decodeFrame();
+      
+      return gifDecoder.frameDelay * 10;
     }
 
     void start() {
-      openImageFile(false);
+      openGifFilenameByIndex(path, currentIndex);
     }
 
     void stop() {
-      if (imageFile)
-        imageFile.close();
-    }
-
-    void setup(char* directoryName) {
-      path = directoryName;
-
-      if (!SD.exists(directoryName)) {
-        SD.mkdir(directoryName);
-      }
-      
-      imageCount = countFiles(directoryName);
-      currentIndex = 0;
-    }
-
-    bool isAnimationFile(const char filename []) {
-      if (filename[0] == '_')
-        return false;
-
-      if (filename[0] == '~')
-        return false;
-
-      if (filename[0] == '.')
-        return false;
-
-      String filenameString = String(filename).toUpperCase();
-      if (filenameString.endsWith(".GIF") != 1)
-        return false;
-
-      return true;
-    }
-
-    void listFiles() {
-      Serial.println(F("{"));
-      Serial.print(F("  \"count\": "));
-      Serial.print(imageCount);
-      Serial.println(",");
-      Serial.println(F("  \"results\": ["));
-
-      int i = 0;
-
-      if (SD.exists(path)) {
-        File directory = SD.open(path, FILE_READ);
-        if (directory) {
-
-          File file = directory.openNextFile();
-          while (file) {
-            if (!file.isDirectory()) {
-              if (isAnimationFile(file.name())) {
-                Serial.print(F("    \""));
-                Serial.print(file.name());
-                if (i == imageCount - 1)
-                  Serial.println(F("\""));
-                else
-                  Serial.println(F("\","));
-                i++;
-              }
-            }
-
-            file.close();
-            file = directory.openNextFile();
-          }
-          file.close();
-          directory.close();
-        }
-      }
-
-      Serial.println("  ]");
-      Serial.println("}");
+      fileClose();
     }
 
   private:
 
     char* path;
 
-    File imageFile;
-
     int animationDurationSeconds = 3;
 
     bool paused = true;
 
-    char filepath[255];
-
-    // count the number of files
-    int countFiles(char* directoryName) {
-      int count = 0;
-
-      if (!SD.exists(directoryName))
-        return -1;
-
-      File directory = SD.open(directoryName, FILE_READ);
-      if (!directory)
-        return -1;
-
-      File file = directory.openNextFile();
-      while (file) {
-        if (!file.isDirectory()) {
-          if (isAnimationFile(file.name())) {
-            count++;
-          }
-        }
-
-        file.close();
-        file = directory.openNextFile();
-      }
-      file.close();
-      directory.close();
-
-      return count;
-    }
-
-    void openImageFile(boolean reopen) {
-      if (!sdAvailable || imageCount < 1)
-        return;
-
-      if (reopen) {
-        imageFile.seek(0);
-      }
-      else {
-        if (imageFile)
-          imageFile.close();
-
-        char name[13];
-        getNameByIndex(path, currentIndex, name, imageCount);
-
-        strcpy(filepath, path);
-        strcat(filepath, name);
-
-        imageFile = SD.open(filepath, FILE_READ);
-        if (!imageFile)
-          return;
-
-        gifPlayer.setFile(imageFile);
-        isCurrentItemFinished = false;
-      }
-
-      if (!gifPlayer.parseGifHeader()) {
-        imageFile.close();
-        return;
-      }
-
-      gifPlayer.parseLogicalScreenDescriptor();
-      gifPlayer.parseGlobalColorTable();
-    }
-
-    // Get the name of the GIF file with specified index
-    void getNameByIndex(const char *directoryName, int index, char *nameBuffer, int numberOfFiles) {
-      // Make sure index is in range
-      if ((index < 0) || (index >= numberOfFiles))
-        return;
-
-      File directory = SD.open(directoryName, FILE_READ);
-      if (!directory)
-        return;
-
-      // Make sure file is closed before starting
-      File file = directory.openNextFile();
-
-      while (file && (index >= 0)) {
-        if (file.isDirectory()) {
-          file.close();
-          continue;
-        }
-
-        if (isAnimationFile(file.name())) {
-          index--;
-
-          // Copy the filename name into the buffer
-          strcpy(nameBuffer, file.name());
-        }
-
-        file.close();
-        file = directory.openNextFile();
-      }
-
-      file.close();
-      directory.close();
-    }
 };
 
 #endif

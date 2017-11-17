@@ -45,8 +45,8 @@ class PatternPulse : public Drawable {
       effects.DimAll(235);
 
       if (step == -1) {
-        centerX = random(32);
-        centerY = random(32);
+        centerX = random(MATRIX_WIDTH);
+        centerY = random(MATRIX_HEIGHT);
         hue = random(256); // 170;
         step = 0;
       }

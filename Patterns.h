@@ -31,7 +31,7 @@
 #include "PatternNoiseSmearing.h"
 #include "PatternSpiro.h"
 #include "PatternRadar.h"
-#include "PatternAnalogClock.h"
+//#include "PatternAnalogClock.h"
 #include "PatternSwirl.h"
 #include "PatternPendulumWave.h"
 #include "PatternFlowField.h"
@@ -39,7 +39,7 @@
 #include "PatternIncrementalDrift2.h"
 #include "PatternMunch.h"
 #include "PatternElectricMandala.h"
-#include "PatternSpin.h"
+//#include "PatternSpin.h"
 #include "PatternSimplexNoise.h"
 #include "PatternWave.h"
 #include "PatternAttract.h"
@@ -61,17 +61,17 @@
 class Patterns : public Playlist {
   private:
     //PatternPongClock pongClock;
-    PatternRainbowFlag rainbowFlag;
-    PatternPaletteSmear paletteSmear;
-    PatternMultipleStream multipleStream;
-    PatternMultipleStream2 multipleStream2;
-    PatternMultipleStream3 multipleStream3;
-    PatternMultipleStream4 multipleStream4;
-    PatternMultipleStream5 multipleStream5;
-    PatternMultipleStream8 multipleStream8;
+//    PatternRainbowFlag rainbowFlag;
+//    PatternPaletteSmear paletteSmear;
+//    PatternMultipleStream multipleStream;
+//    PatternMultipleStream2 multipleStream2;
+//    PatternMultipleStream3 multipleStream3;
+//    PatternMultipleStream4 multipleStream4;
+//    PatternMultipleStream5 multipleStream5;
+//    PatternMultipleStream8 multipleStream8;
     PatternSpiro spiro;
     PatternRadar radar;
-    PatternAnalogClock analogClock;
+//    PatternAnalogClock analogClock;
     PatternSwirl swirl;
     PatternPendulumWave pendulumWave;
     PatternFlowField flowField;
@@ -79,7 +79,7 @@ class Patterns : public Playlist {
     PatternIncrementalDrift2 incrementalDrift2;
     PatternMunch munch;
     PatternElectricMandala electricMandala;
-    PatternSpin spin;
+//    PatternSpin spin;
     PatternSimplexNoise simplexNoise;
     PatternWave wave;
     PatternAttract attract;
@@ -114,13 +114,13 @@ class Patterns : public Playlist {
     Drawable* items[PATTERN_COUNT] = {
       //&pongClock,
       &spiro,
-      &paletteSmear,
-      &multipleStream8,
-      &multipleStream5,
-      &multipleStream3,
+//      &paletteSmear,
+//      &multipleStream8,
+//      &multipleStream5,
+//      &multipleStream3,
       &radar,
-      &multipleStream4,
-      &multipleStream2,
+//      &multipleStream4,
+//      &multipleStream2,
       &life,
       &flowField,
       &pendulumWave,
@@ -128,12 +128,12 @@ class Patterns : public Playlist {
       &incrementalDrift2,
       &munch,
       &electricMandala,
-      &spin,
+      // &spin,
       &simplexNoise,
       &wave,
-      &rainbowFlag,
+//      &rainbowFlag,
       &attract,
-      &analogClock,
+      // &analogClock,
       &swirl,
       &bounce,
       &flock,
@@ -188,8 +188,8 @@ class Patterns : public Playlist {
 
       moveTo(currentIndex);
 
-      if (!isTimeAvailable && currentItem == &analogClock)
-        move(step);
+//      if (!isTimeAvailable && currentItem == &analogClock)
+//        move(step);
     }
 
     void moveRandom(int step) {
@@ -209,8 +209,8 @@ class Patterns : public Playlist {
       if (currentItem)
         currentItem->start();
 
-      if (!isTimeAvailable && currentItem == &analogClock)
-        moveRandom(step);
+//      if (!isTimeAvailable && currentItem == &analogClock)
+//        moveRandom(step);
     }
 
     void shuffleItems() {

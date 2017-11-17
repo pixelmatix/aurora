@@ -50,20 +50,18 @@ class PatternFlock : public Drawable {
 
     void start() {
       for (int i = 0; i < boidCount; i++) {
-        boids[i] = Boid(15, 15);
+        boids[i] = Boid(MATRIX_CENTRE_X, MATRIX_CENTRE_Y);
         boids[i].maxspeed = 0.380;
         boids[i].maxforce = 0.015;
       }
 
       predatorPresent = random(0, 2) >= 1;
-      if (predatorPresent) {
-        predator = Boid(31, 31);
-        predatorPresent = true;
-        predator.maxspeed = 0.385;
-        predator.maxforce = 0.020;
-        predator.neighbordist = 16.0;
-        predator.desiredseparation = 0.0;
-      }
+      predator = Boid(MATRIX_CENTER_X / 2, MATRIX_CENTER_Y / 2);
+      predatorPresent = true;
+      predator.maxspeed = 0.385;
+      predator.maxforce = 0.020;
+      predator.neighbordist = 16.0;
+      predator.desiredseparation = 0.0;
     }
 
     unsigned int drawFrame() {
@@ -86,7 +84,8 @@ class PatternFlock : public Drawable {
         }
 
         boid->run(boids, boidCount);
-        boid->wrapAroundBorders();
+        // boid->wrapAroundBorders();
+        boid->avoidBorders();
         PVector location = boid->location;
         // PVector velocity = boid->velocity;
         // backgroundLayer.drawLine(location.x, location.y, location.x - velocity.x, location.y - velocity.y, color);
@@ -101,7 +100,8 @@ class PatternFlock : public Drawable {
 
       if (predatorPresent) {
         predator.run(boids, boidCount);
-        predator.wrapAroundBorders();
+        // predator.wrapAroundBorders();
+        predator.avoidBorders();
         color = effects.ColorFromCurrentPalette(hue + 128);
         PVector location = predator.location;
         // PVector velocity = predator.velocity;

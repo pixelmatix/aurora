@@ -35,7 +35,7 @@ class PatternFlowField : public Drawable {
     uint16_t speed = 1;
     uint16_t scale = 26;
 
-    static const int count = 40;
+    static const int count = 64;
 
     byte hue = 0;
 
@@ -45,7 +45,7 @@ class PatternFlowField : public Drawable {
       z = random16();
 
       for (int i = 0; i < count; i++) {
-        boids[i] = Boid(random(MATRIX_WIDTH), 0);
+        boids[i] = Boid(random(MATRIX_WIDTH), random(MATRIX_HEIGHT));
       }
     }
 

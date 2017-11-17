@@ -32,7 +32,7 @@ class SettingsUpdateFiles : public Runnable {
     unsigned int drawFrame() {
       backgroundLayer.fillScreen(CRGB(CRGB::Black));
       backgroundLayer.setFont(font3x5);
-      backgroundLayer.drawString(0, 27, CRGB(CRGB::White), versionText);
+      backgroundLayer.drawString(0, MATRIX_HEIGHT - 5, CRGB(CRGB::White), versionText);
       return 0;
     }
 };
