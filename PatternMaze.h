@@ -92,7 +92,7 @@ private:
 
     Point point;
 
-    Point cells[256];
+    Point cells[NUM_LEDS / 4];
     int cellCount = 0;
 
     int algorithm = 0;

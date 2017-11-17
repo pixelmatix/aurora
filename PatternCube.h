@@ -163,7 +163,7 @@ class PatternCube : public Drawable {
       effects.DimAll(blurAmount);
 #endif
 
-      zCamera = beatsin8(2, MATRIX_WIDTH * 3, 255);
+      zCamera = beatsin8(2, MATRIX_WIDTH * 2.5, 220);
       AngxSpeed = beatsin8(3, 1, 5) / 100.0f;
       AngySpeed = beatcos8(5, 1, 5) / 100.0f;
 

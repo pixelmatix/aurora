@@ -107,7 +107,7 @@ class Patterns : public Playlist {
       return currentIndex;
     }
 
-    static const int PATTERN_COUNT = 37;
+    static const int PATTERN_COUNT = 28;
 
     Drawable* shuffledItems[PATTERN_COUNT];
 

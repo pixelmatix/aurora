@@ -27,8 +27,8 @@
 
 class PatternInvadersSmall : public Drawable {
   private:
-    uint8_t x = 1;
-    uint8_t y = 1;
+    uint8_t x = 2;
+    uint8_t y = 2;
 
   public:
     PatternInvadersSmall() {
@@ -57,11 +57,11 @@ class PatternInvadersSmall : public Drawable {
 
       x += 6;
       if (x > MATRIX_WIDTH - 7) {
-        x = 1;
+        x = 2;
         y += 6;
       }
 
-      if (y > MATRIX_HEIGHT - 7) y = x = 1;
+      if (y > MATRIX_HEIGHT - 7) y = x = 2;
 
       return 125;
     }
@@ -69,8 +69,8 @@ class PatternInvadersSmall : public Drawable {
 
 class PatternInvadersMedium : public Drawable {
   private:
-    uint8_t x = 0;
-    uint8_t y = 0;
+    uint8_t x = 1;
+    uint8_t y = 1;
 
   public:
     PatternInvadersMedium() {
@@ -97,13 +97,13 @@ class PatternInvadersMedium : public Drawable {
         }
       }
 
-      x += 11;
-      if (x > MATRIX_WIDTH - 12) {
-        x = 0;
-        y += 11;
+      x += 13;
+      if (x > MATRIX_WIDTH - 11) {
+        x = 1;
+        y += 13;
       }
 
-      if (y > MATRIX_HEIGHT - 12) y = x = 0;
+      if (y > MATRIX_HEIGHT - 11) y = x = 1;
 
       return 500;
     }
@@ -111,7 +111,7 @@ class PatternInvadersMedium : public Drawable {
 
 class PatternInvadersLarge : public Drawable {
   private:
-
+  
   public:
     PatternInvadersLarge() {
       name = (char *)"Invaders Large";
