@@ -26,7 +26,7 @@
 #ifndef Animations_H
 #define Animations_H
 
-#include <FilenameFunctions.h>
+#include "FilenameFunctions.h"
 
 class Animations : public Playlist {
   public:

@@ -53,6 +53,7 @@ Many thanks to all of the fantastic hardware and open source software libraries 
 
 * [SmartMatrix SD Shield] by Louis Beaudoin
 * [SmartMatrix Library] by Louis Beaudoin
+* [GifDecoder Library] by Craig A. Lindley
 * [FastLED Library] by Daniel Garcia and Mark Kriegsman
 * [IR Remote Library] by Ken Shirriff
 * [SD Library] by Bill Greiman
@@ -87,6 +88,7 @@ Thanks to these fine game companies for allowing us to use and distribute their 
 [Installing Additional Arduino Libraries]:http://arduino.cc/en/Guide/Libraries
 [Arduino Software]:http://www.arduino.cc/en/Main/Software
 [SmartMatrix Library]:https://github.com/pixelmatix/SmartMatrix
+[GifDecoder Library]:https://github.com/pixelmatix/GifDecoder
 [SmartMatrix SD Shield]:http://docs.pixelmatix.com/SmartMatrix/shield-sd.html
 [SmartMatrix External Libraries]:http://docs.pixelmatix.com/SmartMatrix/#external-libraries
 [FastLED Library]:https://github.com/FastLED/FastLED
