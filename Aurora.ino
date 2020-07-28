@@ -275,7 +275,9 @@ void updateScreenCallback(void) {
 }
 
 void drawPixelCallback(int16_t x, int16_t y, uint8_t red, uint8_t green, uint8_t blue) {
-  if (gifDecoder.lsdWidth == 32 && gifDecoder.lsdHeight == 32) {
+  uint16_t gifWidth, gifHeight;
+  gifDecoder.getSize(&gifWidth, &gifHeight);
+  if (gifWidth == 32 && gifHeight == 32) {
     int16_t nx = x * 2;
     int16_t ny = y * 2;
     backgroundLayer.drawPixel(nx, ny, {red, green, blue});

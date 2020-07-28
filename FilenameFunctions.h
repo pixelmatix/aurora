@@ -5,6 +5,8 @@ int enumerateGIFFiles(const char *directoryName, bool displayFilenames);
 void getGIFFilenameByIndex(const char *directoryName, int index, char *pnBuffer);
 int openGifFilenameByIndex(const char *directoryName, int index);
 int initFileSystem(int chipSelectPin);
+void fileClose();
+int openGifFilename(const char *pathname);
 
 bool fileSeekCallback(unsigned long position);
 unsigned long filePositionCallback(void);

@@ -40,6 +40,11 @@ int initFileSystem(int chipSelectPin) {
     return 0;
 }
 
+void fileClose() {
+  if(file)
+    file.close();
+}
+
 bool isAnimationFile(const char filename []) {
     String filenameString(filename);
 
@@ -158,6 +163,22 @@ int openGifFilenameByIndex(const char *directoryName, int index) {
     return 0;
 }
 
+int openGifFilename(const char *pathname) {
+    Serial.print("Pathname: ");
+    Serial.println(pathname);
+
+    if(file)
+        file.close();
+
+    // Attempt to open the file for reading
+    file = SD.open(pathname);
+    if (!file) {
+        Serial.println("Error opening GIF file");
+        return -1;
+    }
+
+    return 0;
+}
 
 // Return a random animated gif path/filename from the specified directory
 void chooseRandomGIFFilename(const char *directoryName, char *pnBuffer) {

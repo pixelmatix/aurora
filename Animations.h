@@ -92,7 +92,7 @@ class Animations : public Playlist {
 
       gifDecoder.decodeFrame();
       
-      return gifDecoder.frameDelay * 10;
+      return gifDecoder.getFrameDelay_ms();
     }
 
     void start() {
